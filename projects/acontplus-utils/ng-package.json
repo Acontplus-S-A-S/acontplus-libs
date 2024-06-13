@@ -3,5 +3,6 @@
   "dest": "../../dist/acontplus-utils",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "assets": ["./styles/*.*","./assets/**/*.*"]
 }
