@@ -49,5 +49,9 @@
     "url": "https://github.com/Acontplus-S-A-S/acontplus-libs/issues"
   },
   "homepage": "https://github.com/Acontplus-S-A-S/acontplus-libs#readme",
-  "main": "index.js"
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Acontplus-S-A-S/acontplus-libs.git"
+  }
 }
