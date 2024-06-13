@@ -7,6 +7,8 @@ import {
 
 import { finalize } from 'rxjs/operators';
 import { hideLoader, showLoader } from '../utils/loader';
+// import { inject } from '@angular/core';
+// import { ENVIRONMENT } from '../environments/environment.token';
 
 const isLoader = new HttpContextToken<boolean>(() => true);
 
@@ -16,6 +18,9 @@ export function getNoLoader() {
 
 export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
   let requests: HttpRequest<any>[] = [];
+  // let env = inject(ENVIRONMENT)
+
+  // console.log(env)
 
   if (!req.context.get(isLoader)) {
     return next(req);
