@@ -1,5 +1,5 @@
 {
-  "name": "acontplus-utils",
+  "name": "@iferpaz7/acontplus-utils",
   "version": "0.0.2",
   "peerDependencies": {
     "@angular/common": "^18.0.0",
