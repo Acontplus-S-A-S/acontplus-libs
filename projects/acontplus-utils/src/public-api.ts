@@ -13,3 +13,7 @@ export * from './lib/environments/environment';
 export * from './lib/environments/environment.token';
 export * from './lib/services/jwt-token.service';
 export * from './lib/interceptors/inject-session.interceptor';
+export * from './lib/models/mat-table-models/column-definition.model';
+export * from './lib/models/mat-table-models/field-definition.model';
+export * from './lib/models/mat-table-models/option-search-config.model';
+export * from './lib/models/mat-table-models/table-cell-index.model';
