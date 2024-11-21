@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'lib-acontplus-utils',
-  standalone: true,
-  imports: [],
-  template: `
+    selector: 'lib-acontplus-utils',
+    imports: [],
+    template: `
     <p>
       acontplus-utils works!
     </p>
   `,
-  styles: ``
+    styles: ``
 })
 export class AcontplusUtilsComponent {
 
