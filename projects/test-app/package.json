@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "acontplus-utils": "file:../dist/acontplus-utils"
+  }
+}
