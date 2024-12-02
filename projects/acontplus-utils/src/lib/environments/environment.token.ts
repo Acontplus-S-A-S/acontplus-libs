@@ -9,7 +9,3 @@ import { Environment } from './environment';
 export const ENVIRONMENT: InjectionToken<Environment> = new InjectionToken(
   'ENVIRONMENT',
 );
-
-export const STORAGE_KEY: InjectionToken<string> = new InjectionToken(
-  'STORAGE_KEY',
-);

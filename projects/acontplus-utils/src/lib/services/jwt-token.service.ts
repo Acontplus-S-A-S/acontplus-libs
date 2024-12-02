@@ -1,15 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
-import { STORAGE_KEY } from '../environments';
+import { ENVIRONMENT } from '../environments';
 
 @Injectable({
   providedIn: 'root',
 })
 export class JwtTokenService {
-  #storageKey = inject(STORAGE_KEY);
+  #environment = inject(ENVIRONMENT);
 
   getToken(): string | null {
-    return localStorage.getItem(this.#storageKey);
+    return localStorage.getItem(this.#environment.storageKey);
   }
 
   isAuthenticated = () => {
