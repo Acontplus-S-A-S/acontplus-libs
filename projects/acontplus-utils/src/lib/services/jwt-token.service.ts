@@ -1,13 +1,15 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
+import { STORAGE_KEY } from '../environments';
 
 @Injectable({
   providedIn: 'root',
 })
 export class JwtTokenService {
+  #storageKey = inject(STORAGE_KEY);
 
   getToken(): string | null {
-    return localStorage.getItem('access_token');
+    return localStorage.getItem(this.#storageKey);
   }
 
   isAuthenticated = () => {
@@ -24,6 +26,6 @@ export class JwtTokenService {
     } else {
       expired = true;
     }
-    return !expired ? true : false;
+    return !expired;
   };
 }
