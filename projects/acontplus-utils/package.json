@@ -1,6 +1,6 @@
 {
   "name": "acontplus-utils",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "peerDependencies": {
     "@angular/common": "^19.0.0",
     "@angular/core": "^19.0.0"
