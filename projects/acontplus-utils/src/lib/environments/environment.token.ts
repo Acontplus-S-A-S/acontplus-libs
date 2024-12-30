@@ -8,4 +8,12 @@ import { Environment } from './environment';
  */
 export const ENVIRONMENT: InjectionToken<Environment> = new InjectionToken(
   'ENVIRONMENT',
+  {
+    factory: () => ({
+      apiBaseUrl: '',
+      isProduction: false,
+      storageKey: 'app_storage',
+      clientId: 'default_client',
+    }),
+  }
 );
