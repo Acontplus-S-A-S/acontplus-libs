@@ -1,15 +1,15 @@
 {
-  "name": "@iferpaz7/acontplus-utils",
-  "version": "0.0.2",
+  "name": "acontplus-utils",
+  "version": "0.0.14",
   "peerDependencies": {
-    "@angular/common": "^18.0.0",
-    "@angular/core": "^18.0.0"
+    "@angular/common": "^19.2.2",
+    "@angular/core": "^19.2.2"
   },
   "dependencies": {
     "jwt-decode": "^4.0.0",
     "ngx-toastr": "^19.0.0",
-    "rxjs": "^7.8.1",
-    "tslib": "^2.6.3"
+    "rxjs": "^7.8.2",
+    "tslib": "^2.8.1"
   },
   "sideEffects": false
 }

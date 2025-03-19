@@ -1,11 +1,9 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
-  "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "acontplus-utils": [
-        "./dist/acontplus-utils"
-      ]
+      "acontplus-utils": ["./dist/acontplus-utils"],
+      "acontplus-utils/*": ["./dist/acontplus-utils/*"]
     },
     "outDir": "./dist/out-tsc",
     "strict": true,
@@ -23,10 +21,7 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
-    "lib": [
-      "ES2022",
-      "dom"
-    ]
+    "lib": ["ES2022", "dom"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

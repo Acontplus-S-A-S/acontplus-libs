@@ -16,7 +16,8 @@ export function customUrl() {
 export const injectSessionInterceptor: HttpInterceptorFn = (request, next) => {
   let jwtTokenService = inject(JwtTokenService);
   const authToken = jwtTokenService.getToken();
-  const baseUrl = inject(ENVIRONMENT).API_URL;
+  const baseUrl = inject(ENVIRONMENT).apiBaseUrl;
+  const clientId = inject(ENVIRONMENT).clientId;
   let isCustomUrl = false;
   if (request.context.get(CUSTOM_URL)) {
     isCustomUrl = true;
@@ -27,6 +28,7 @@ export const injectSessionInterceptor: HttpInterceptorFn = (request, next) => {
     url,
     setHeaders: {
       Authorization: 'Bearer ' + authToken,
+      'X-Client-Id': clientId,
     },
   });
   return next(request);
