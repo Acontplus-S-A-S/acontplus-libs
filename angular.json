@@ -88,7 +88,13 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "projects/test-app/src/environments/environment.ts",
+                  "with": "projects/test-app/src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -127,6 +133,39 @@
               "projects/test-app/src/styles.scss"
             ],
             "scripts": []
+          }
+        }
+      }
+    },
+    "acontplus-material": {
+      "projectType": "library",
+      "root": "projects/acontplus-material",
+      "sourceRoot": "projects/acontplus-material/src",
+      "prefix": "apm",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/acontplus-material/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/acontplus-material/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/acontplus-material/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/acontplus-material/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }

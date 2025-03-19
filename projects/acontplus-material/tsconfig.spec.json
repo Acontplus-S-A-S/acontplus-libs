@@ -3,13 +3,13 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../out-tsc/app",
-    "paths": {
-      "acontplus-material": ["dist/acontplus-utils"],
-      "acontplus-utils": ["dist/acontplus-utils"]
-    },
-    "types": []
+    "outDir": "../../out-tsc/spec",
+    "types": [
+      "jasmine"
+    ]
   },
-  "files": ["src/main.ts"],
-  "include": ["src/**/*.d.ts"]
+  "include": [
+    "**/*.spec.ts",
+    "**/*.d.ts"
+  ]
 }
