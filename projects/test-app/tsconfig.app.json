@@ -4,10 +4,6 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/app",
-    "paths": {
-      "acontplus-material": ["dist/acontplus-utils"],
-      "acontplus-utils": ["dist/acontplus-utils"]
-    },
     "types": []
   },
   "files": ["src/main.ts"],

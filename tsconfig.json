@@ -1,15 +1,9 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compilerOptions": {
-    "baseUrl": "./",
     "paths": {
-      "acontplus-material/*": ["dist/acontplus-material/*"],
-      "acontplus-material/lib/*": ["dist/acontplus-material/lib/*"],
-      "acontplus-material/services/*": [
-        "dist/acontplus-material/lib/services/*"
-      ],
-      "acontplus-utils": ["dist/acontplus-utils"],
-      "acontplus-utils/*": ["dist/acontplus-utils/*"]
+      "acontplus-utils": ["./dist/acontplus-utils"],
+      "acontplus-utils/*": ["./dist/acontplus-utils/*"]
     },
     "outDir": "./dist/out-tsc",
     "strict": true,

@@ -1,3 +1,3 @@
 export * from './error.interceptor';
 export * from './inject-session.interceptor';
-export * from './loader.interceptor';
+export * from './spinner.interceptor';

@@ -7,7 +7,7 @@ import {
 
 import { finalize } from 'rxjs/operators';
 import { inject } from '@angular/core';
-import { hideLoader, showLoader } from '../utils';
+import { OverlayService } from '../services';
 
 const isLoader = new HttpContextToken<boolean>(() => true);
 
@@ -15,9 +15,9 @@ export function getNoLoader() {
   return new HttpContext().set(isLoader, false);
 }
 
-export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
+export const spinnerInterceptor: HttpInterceptorFn = (req, next) => {
   let requests: HttpRequest<any>[] = [];
-  // const overlayService = inject(OverlayService);
+  const overlayService = inject(OverlayService);
 
   // let env = inject(ENVIRONMENT)
 
@@ -34,14 +34,13 @@ export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
   // console.log("No of requests--->" + requests.length);
 
   if (requests.length === 1) {
-    // overlayService.showSpinner();
-    showLoader();
+    overlayService.showSpinner();
   }
 
   return next(req).pipe(
     finalize(() => {
       removeRequest(req);
-    })
+    }),
   );
 
   function removeRequest(req: HttpRequest<any>): void {
@@ -51,8 +50,7 @@ export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
     }
 
     if (requests.length === 0) {
-      // overlayService.hideSpinner();
-      hideLoader();
+      overlayService.hideSpinner();
     }
   }
 };

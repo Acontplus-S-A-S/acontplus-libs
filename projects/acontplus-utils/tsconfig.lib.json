@@ -1,23 +1,12 @@
-/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
-/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "../../out-tsc/lib",
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
     "types": []
   },
-  "exclude": ["**/*.spec.ts"],
-  "include": ["src/**/*.ts"],
-  "paths": {
-    "@acontplus-utils/*": ["src/lib/*"],
-    "@acontplus-utils/environments/*": ["src/lib/environments/*"],
-    "@acontplus-utils/interceptors/*": ["src/lib/interceptors/*"],
-    "@acontplus-utils/models/*": ["src/lib/models/*"],
-    "@acontplus-utils/services/*": ["src/lib/services/*"],
-    "@acontplus-utils/utils/*": ["src/lib/utils/*"]
-  }
+
+  "exclude": ["**/*.spec.ts"]
 }
