@@ -7,50 +7,76 @@ import {
 
 import { finalize } from 'rxjs/operators';
 import { inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { OverlayService } from '../services';
 
-const isLoader = new HttpContextToken<boolean>(() => true);
+/**
+ * Token to determine if a request should show spinner
+ * Default is true (show spinner for all requests)
+ */
+const SHOW_SPINNER = new HttpContextToken<boolean>(() => true);
 
-export function getNoLoader() {
-  return new HttpContext().set(isLoader, false);
+/**
+ * Helper function to disable spinner for specific requests
+ * @returns HttpContext with spinner disabled
+ */
+export function withoutSpinner() {
+  return new HttpContext().set(SHOW_SPINNER, false);
 }
 
+/**
+ * Service to track active HTTP requests
+ */
+@Injectable({
+  providedIn: 'root',
+})
+export class ActiveRequestsTracker {
+  private requests: HttpRequest<any>[] = [];
+
+  get count(): number {
+    return this.requests.length;
+  }
+
+  add(request: HttpRequest<any>): void {
+    this.requests.push(request);
+  }
+
+  remove(request: HttpRequest<any>): void {
+    const index = this.requests.indexOf(request);
+    if (index >= 0) {
+      this.requests.splice(index, 1);
+    }
+  }
+}
+
+/**
+ * Interceptor that shows/hides a loading spinner based on active HTTP requests
+ */
 export const spinnerInterceptor: HttpInterceptorFn = (req, next) => {
-  let requests: HttpRequest<any>[] = [];
+  // Track active requests requiring spinner
+  const activeRequests = inject(ActiveRequestsTracker);
   const overlayService = inject(OverlayService);
 
-  // let env = inject(ENVIRONMENT)
-
-  // console.log(env)
-
-  if (!req.context.get(isLoader)) {
+  // Skip spinner if disabled for this request
+  if (!req.context.get(SHOW_SPINNER)) {
     return next(req);
   }
 
-  // console.log('is loader', req.context.get(isLoader))
+  // Add request to tracking
+  activeRequests.add(req);
 
-  requests.push(req);
-
-  // console.log("No of requests--->" + requests.length);
-
-  if (requests.length === 1) {
+  // Show spinner if this is the first active request
+  if (activeRequests.count === 1) {
     overlayService.showSpinner();
   }
 
   return next(req).pipe(
     finalize(() => {
-      removeRequest(req);
+      // Remove request and hide spinner if no more active requests
+      activeRequests.remove(req);
+      if (activeRequests.count === 0) {
+        overlayService.hideSpinner();
+      }
     }),
   );
-
-  function removeRequest(req: HttpRequest<any>): void {
-    const i = requests.indexOf(req);
-    if (i >= 0) {
-      requests.splice(i, 1);
-    }
-
-    if (requests.length === 0) {
-      overlayService.hideSpinner();
-    }
-  }
 };

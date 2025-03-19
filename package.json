@@ -9,7 +9,8 @@
     "test": "ng test",
     "build-library": "ng build acontplus-utils",
     "pack-acontplus-utils": "cd dist/acontplus-utils && npm pack",
-    "build:sass": "sass styles/styles.scss assets/styles.css"
+    "build:sass": "sass styles/styles.scss assets/styles.css",
+    "lint": "ng lint"
   },
   "private": false,
   "dependencies": {
@@ -34,12 +35,15 @@
     "@angular/cli": "^19.2.3",
     "@angular/compiler-cli": "^19.2.2",
     "@types/jasmine": "^5.1.7",
+    "angular-eslint": "19.2.1",
+    "eslint": "^9.22.0",
     "jasmine-core": "^5.6.0",
     "karma": "^6.4.4",
     "karma-chrome-launcher": "~3.2.0",
     "karma-jasmine": "~5.1.0",
     "ng-packagr": "^19.2.0",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "typescript-eslint": "8.26.0"
   },
   "description": "Acontplus utils for angular projects development",
   "keywords": [
