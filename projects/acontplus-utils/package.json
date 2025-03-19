@@ -2,8 +2,8 @@
   "name": "acontplus-utils",
   "version": "0.0.13",
   "peerDependencies": {
-    "@angular/common": "^19.0.0",
-    "@angular/core": "^19.0.0"
+    "@angular/common": "^19.2.2",
+    "@angular/core": "^19.2.2"
   },
   "dependencies": {
     "jwt-decode": "^4.0.0",
