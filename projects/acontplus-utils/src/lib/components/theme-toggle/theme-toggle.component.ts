@@ -6,7 +6,7 @@ import { AsyncPipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'lib-theme-toggle',
+  selector: 'apm-theme-toggle',
   imports: [MatIconButton, MatIcon, AsyncPipe],
   templateUrl: './theme-toggle.component.html',
   styleUrl: './theme-toggle.component.css',
