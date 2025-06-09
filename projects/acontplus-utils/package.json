@@ -1,6 +1,6 @@
 {
   "name": "acontplus-utils",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "dependencies": {
     "jwt-decode": "^4.0.0",
     "ngx-toastr": "^19.0.0",
