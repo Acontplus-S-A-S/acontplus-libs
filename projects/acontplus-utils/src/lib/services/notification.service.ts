@@ -3,13 +3,13 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 type SnackbarType = 'success' | 'warning' | 'info' | 'error';
 
-type SnackbarProps = {
+interface SnackbarProps {
   type: SnackbarType;
   message: string;
   title?: string;
   action?: string;
   config?: Partial<MatSnackBarConfig>;
-};
+}
 
 @Injectable({
   providedIn: 'root',
@@ -75,7 +75,7 @@ export class NotificationService {
   showSuccess(
     message: string,
     title?: string,
-    config?: Partial<MatSnackBarConfig>,
+    config?: Partial<MatSnackBarConfig>
   ) {
     return this.show({ type: 'success', message, title, config });
   }
@@ -83,7 +83,7 @@ export class NotificationService {
   showWarning(
     message: string,
     title?: string,
-    config?: Partial<MatSnackBarConfig>,
+    config?: Partial<MatSnackBarConfig>
   ) {
     return this.show({ type: 'warning', message, title, config });
   }
@@ -91,7 +91,7 @@ export class NotificationService {
   showInfo(
     message: string,
     title?: string,
-    config?: Partial<MatSnackBarConfig>,
+    config?: Partial<MatSnackBarConfig>
   ) {
     return this.show({ type: 'info', message, title, config });
   }
@@ -99,7 +99,7 @@ export class NotificationService {
   showError(
     message: string,
     title?: string,
-    config?: Partial<MatSnackBarConfig>,
+    config?: Partial<MatSnackBarConfig>
   ) {
     // Errors typically should have longer duration
     const errorConfig: Partial<MatSnackBarConfig> = {

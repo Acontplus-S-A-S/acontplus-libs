@@ -1,18 +1,7 @@
-// Your existing ApiResponse (Legacy - keep for backward compatibility)
 export class ApiResponse<T = unknown> {
   code: string;
   message: string;
   payload: T | null;
-
-  constructor(code = '0', message = '', payload: T | null = null) {
-    this.code = code;
-    this.message = message;
-    this.payload = payload;
-  }
-}
-
-// Enhanced ApiResponse with additional properties
-export class EnhancedApiResponse<T = unknown> extends ApiResponse<T> {
   success: boolean;
   statusCode: number;
   errors?: string[];
@@ -28,7 +17,9 @@ export class EnhancedApiResponse<T = unknown> extends ApiResponse<T> {
     errors?: string[],
     metadata?: ResponseMetadata
   ) {
-    super(code, message, payload);
+    this.code = code;
+    this.message = message;
+    this.payload = payload;
     this.success = success ?? (statusCode >= 200 && statusCode < 300);
     this.statusCode = statusCode;
     this.errors = errors;
@@ -47,33 +38,31 @@ export interface ResponseMetadata {
   version?: string;
 }
 
-// Type guards
-export function isApiResponse<T = unknown>(
-  object: unknown
-): object is ApiResponse<T> {
-  return (
-    typeof object === 'object' &&
-    object !== null &&
-    'code' in object &&
-    'message' in object &&
-    'payload' in object
-  );
+export interface BaseEntity {
+  id: number;
+  createdAt?: string;
+  createdByUserId?: number;
+  updatedAt?: string;
+  updatedByUserId?: number;
+  isActive?: boolean;
+}
+export interface PaginationParams {
+  page: number;
+  pageSize: number;
+  sortBy?: string;
+  sortDirection?: 'asc' | 'desc';
 }
 
-export function isEnhancedApiResponse<T = unknown>(
-  object: unknown
-): object is EnhancedApiResponse<T> {
-  return (
-    isApiResponse<T>(object) &&
-    'success' in object &&
-    'statusCode' in object &&
-    'timestamp' in object
-  );
+export interface FilterParams {
+  search?: string;
+  role?: string;
+  isActive?: boolean;
+  dateFrom?: string;
+  dateTo?: string;
 }
 
-// ============= OPERATION RESULT TYPES =============
-
-export interface OperationResult<T = unknown> {
+// Domain Result Types
+export interface OperationResult<T = any> {
   success: boolean;
   data: T | null;
   message: string;
@@ -89,17 +78,7 @@ export interface PaginatedResult<T> {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
 }
-
-// ============= ENTITY INTERFACES =============
-
-export interface BaseEntity {
-  id: number;
-  createdAt?: string;
-  createdByUserId?: number;
-  updatedAt?: string;
-  updatedByUserId?: number;
-  isActive?: boolean;
-  isDeleted?: boolean;
-  deletedAt?: string;
-  deletedByUserId?: number;
+export interface SortParams {
+  sortBy?: string;
+  sortDirection?: 'asc' | 'desc';
 }
