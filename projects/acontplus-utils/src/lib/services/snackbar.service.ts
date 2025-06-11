@@ -1,10 +1,5 @@
 import { inject, Injectable, InjectionToken } from '@angular/core';
-import {
-  MatSnackBar,
-  MatSnackBarConfig,
-  MatSnackBarRef,
-  SimpleSnackBar,
-} from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 
 export type SnackbarType = 'success' | 'warning' | 'info' | 'error';
 
@@ -23,25 +18,22 @@ export interface NotificationCallProps {
 }
 
 // Configuration token for dependency injection
-export const NOTIFICATION_CONFIG = new InjectionToken<MatSnackBarConfig>(
-  'notification-config',
-  {
-    providedIn: 'root',
-    factory: () => ({
-      duration: 5000,
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      panelClass: [],
-    }),
-  }
-);
+export const SNACKBAR_CONFIG = new InjectionToken<MatSnackBarConfig>('snackbar-config', {
+  providedIn: 'root',
+  factory: () => ({
+    duration: 5000,
+    horizontalPosition: 'center',
+    verticalPosition: 'bottom',
+    panelClass: [],
+  }),
+});
 
 @Injectable({
   providedIn: 'root',
 })
-export class NotificationService {
+export class SnackbarService {
   private readonly snackBar = inject(MatSnackBar);
-  private readonly defaultConfig = inject(NOTIFICATION_CONFIG);
+  private readonly defaultConfig = inject(SNACKBAR_CONFIG);
   private readonly defaultAction = 'Close';
 
   /**
@@ -92,7 +84,7 @@ export class NotificationService {
     this.show({
       type: 'error',
       ...props,
-      config: errorConfig,
+      config: errorConfig
     });
   }
 
@@ -115,9 +107,7 @@ export class NotificationService {
     const classes = [typeClass];
 
     if (userClasses) {
-      const normalizedClasses = Array.isArray(userClasses)
-        ? userClasses
-        : [userClasses];
+      const normalizedClasses = Array.isArray(userClasses) ? userClasses : [userClasses];
       classes.push(...normalizedClasses);
     }
 
