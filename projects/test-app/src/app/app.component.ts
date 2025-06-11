@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ApplicationService } from './application.service';
-import { NotificationService } from 'acontplus-utils';
+import { SnackbarService } from '../../../acontplus-utils/src/lib/services';
 
 @Component({
   selector: 'app-root',
@@ -13,10 +13,9 @@ export class AppComponent {
   title = 'test-app';
 
   private readonly _appService = inject(ApplicationService);
-  private readonly _notification = inject(NotificationService);
+  private readonly _notification = inject(SnackbarService);
   ngOnInit() {
-    this._notification.show({
-      type: 'success',
+    this._notification.warning({
       message: 'New message received',
       title: 'Notification',
     });
