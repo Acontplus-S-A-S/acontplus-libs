@@ -1,38 +1,53 @@
-import { Injectable } from '@angular/core';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { inject, Injectable, InjectionToken } from '@angular/core';
+import {
+  MatSnackBar,
+  MatSnackBarConfig,
+  MatSnackBarRef,
+  SimpleSnackBar,
+} from '@angular/material/snack-bar';
 
-type SnackbarType = 'success' | 'warning' | 'info' | 'error';
+export type SnackbarType = 'success' | 'warning' | 'info' | 'error';
 
-interface SnackbarProps {
-  type: SnackbarType;
-  message: string;
-  title?: string;
-  action?: string;
-  config?: Partial<MatSnackBarConfig>;
+export interface SnackbarProps {
+  readonly type: SnackbarType;
+  readonly message: string;
+  readonly title?: string;
+  readonly action?: string;
+  readonly config?: Partial<MatSnackBarConfig>;
 }
+
+export interface NotificationCallProps {
+  readonly message: string;
+  readonly title?: string;
+  readonly config?: Partial<MatSnackBarConfig>;
+}
+
+// Configuration token for dependency injection
+export const NOTIFICATION_CONFIG = new InjectionToken<MatSnackBarConfig>(
+  'notification-config',
+  {
+    providedIn: 'root',
+    factory: () => ({
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      panelClass: [],
+    }),
+  }
+);
 
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationService {
-  // Default configuration - can be customized per instance
-  private readonly defaultConfig: MatSnackBarConfig = {
-    duration: 5000,
-    horizontalPosition: 'center',
-    verticalPosition: 'bottom',
-    panelClass: [],
-  };
-
-  // Default action text
-  private readonly defaultAction = 'x';
-
-  constructor(private snackBar: MatSnackBar) {}
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly defaultConfig = inject(NOTIFICATION_CONFIG);
+  private readonly defaultAction = 'Close';
 
   /**
    * Displays a Material snackbar with a specific type and configurable options.
-   * @param props - Configuration object for the snackbar
    */
-  show(props: SnackbarProps) {
+  show(props: SnackbarProps): MatSnackBarRef<SimpleSnackBar> {
     const {
       type,
       message,
@@ -41,91 +56,71 @@ export class NotificationService {
       config = {},
     } = props;
 
-    // Create the type-specific CSS class
     const typeClass = `snackbar-${type}`;
+    const panelClasses = this.buildPanelClasses(typeClass, config.panelClass);
 
-    // Build the panel classes array
-    const panelClasses: string[] = [typeClass];
-
-    // If user provided additional panelClass, merge them
-    if (config.panelClass) {
-      if (Array.isArray(config.panelClass)) {
-        panelClasses.push(...config.panelClass);
-      } else {
-        panelClasses.push(config.panelClass);
-      }
-    }
-
-    // Merge default config with user-provided config
     const finalConfig: MatSnackBarConfig = {
       ...this.defaultConfig,
       ...config,
-      panelClass: panelClasses, // Always override to include our type class
+      panelClass: panelClasses,
     };
 
-    // Build the final message
     const fullMessage = title ? `${title}: ${message}` : message;
-
     return this.snackBar.open(fullMessage, action, finalConfig);
   }
 
   /**
-   * Quick methods for common notification types with sensible defaults
+   * Quick methods for common notification types
    */
-  showSuccess(
-    message: string,
-    title?: string,
-    config?: Partial<MatSnackBarConfig>
-  ) {
-    return this.show({ type: 'success', message, title, config });
+  success(props: NotificationCallProps): void {
+    this.show({ type: 'success', ...props });
   }
 
-  showWarning(
-    message: string,
-    title?: string,
-    config?: Partial<MatSnackBarConfig>
-  ) {
-    return this.show({ type: 'warning', message, title, config });
+  warning(props: NotificationCallProps): void {
+    this.show({ type: 'warning', ...props });
   }
 
-  showInfo(
-    message: string,
-    title?: string,
-    config?: Partial<MatSnackBarConfig>
-  ) {
-    return this.show({ type: 'info', message, title, config });
+  info(props: NotificationCallProps): void {
+    this.show({ type: 'info', ...props });
   }
 
-  showError(
-    message: string,
-    title?: string,
-    config?: Partial<MatSnackBarConfig>
-  ) {
-    // Errors typically should have longer duration
+  error(props: NotificationCallProps): void {
     const errorConfig: Partial<MatSnackBarConfig> = {
       duration: 8000,
-      ...config,
+      ...props.config,
     };
-
-    return this.show({ type: 'error', message, title, config: errorConfig });
+    this.show({
+      type: 'error',
+      ...props,
+      config: errorConfig,
+    });
   }
 
   /**
-   * Update default configuration for all future notifications
-   * @param newDefaults - Partial configuration to merge with existing defaults
+   * Show notification without automatic styling
    */
-  updateDefaults(newDefaults: Partial<MatSnackBarConfig>) {
-    Object.assign(this.defaultConfig, newDefaults);
-  }
-
-  /**
-   * Show notification without automatic styling (uses default Material styling)
-   * @param message - The message to display
-   * @param action - Action button text
-   * @param config - Full MatSnackBarConfig
-   */
-  showRaw(message: string, action?: string, config?: MatSnackBarConfig) {
-    const finalConfig = config || this.defaultConfig;
+  showRaw(
+    message: string,
+    action?: string,
+    config?: MatSnackBarConfig
+  ): MatSnackBarRef<SimpleSnackBar> {
+    const finalConfig = config ?? this.defaultConfig;
     return this.snackBar.open(message, action, finalConfig);
+  }
+
+  private buildPanelClasses(
+    typeClass: string,
+    userClasses?: string | string[]
+  ): string[] {
+    const classes = [typeClass];
+
+    if (userClasses) {
+      const normalizedClasses = Array.isArray(userClasses)
+        ? userClasses
+        : [userClasses];
+      classes.push(...normalizedClasses);
+    }
+
+    return classes;
   }
 }
