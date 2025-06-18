@@ -2,6 +2,9 @@
 {
   "compilerOptions": {
     "paths": {
+      "acontplus-ui-components": [
+        "./dist/acontplus-ui-components"
+      ],
       "acontplus-utils": ["./dist/acontplus-utils"],
       "acontplus-utils/*": ["./dist/acontplus-utils/*"]
     },
@@ -28,5 +31,13 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "references": [
+    {
+      "path": "./projects/acontplus-ui-components/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/acontplus-ui-components/tsconfig.spec.json"
+    }
+  ]
 }

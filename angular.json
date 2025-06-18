@@ -153,6 +153,36 @@
           }
         }
       }
+    },
+    "acontplus-ui-components": {
+      "projectType": "library",
+      "root": "projects/acontplus-ui-components",
+      "sourceRoot": "projects/acontplus-ui-components/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/acontplus-ui-components/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/acontplus-ui-components/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/acontplus-ui-components/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {
