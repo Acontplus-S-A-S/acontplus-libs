@@ -9,8 +9,8 @@ import {
   ENVIRONMENT,
   errorInterceptor,
   injectSessionInterceptor,
-  spinnerInterceptor,
-} from 'acontplus-utils';
+} from '@acontplus-utils';
+import { spinnerInterceptor } from '@acontplus-ui-components';
 
 export const appConfig: ApplicationConfig = {
   providers: [

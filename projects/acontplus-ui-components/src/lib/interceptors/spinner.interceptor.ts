@@ -9,7 +9,6 @@ import { finalize } from 'rxjs/operators';
 import { inject } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { OverlayService } from '../services';
-
 /**
  * Token to determine if a request should show spinner
  * Default is true (show spinner for all requests)

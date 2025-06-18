@@ -1,4 +1,4 @@
-import { SnackbarType } from '../../models/snackbar.model';
+import { SnackbarType } from '../models';
 
 export const SNACKBAR_MESSAGES = {
   SUCCESS: {

@@ -1,5 +1,4 @@
 import { Component, inject, signal } from '@angular/core';
-import { SNACKBAR_MESSAGES } from '../../../utils';
 import { SnackbarService } from '../../../services';
 import { NotificationDemo, SnackbarType } from '../../../models';
 import { MatCardModule } from '@angular/material/card';
@@ -9,9 +8,10 @@ import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
+import { SNACKBAR_MESSAGES } from '../../../constants';
 
 @Component({
-  selector: 'apm-snackbar-notification',
+  selector: 'apu-snackbar-notification',
   imports: [
     MatCardModule,
     MatButton,

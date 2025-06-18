@@ -1,4 +1,3 @@
-export * from './lib/components';
 export * from './lib/environments';
 export * from './lib/interceptors';
 export * from './lib/models';

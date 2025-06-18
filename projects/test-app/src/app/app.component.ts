@@ -1,8 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ApplicationService } from './application.service';
-import { SnackbarService } from '../../../acontplus-utils/src/lib/services';
-
+import { SnackbarService } from '@acontplus-ui-components';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
@@ -19,8 +18,8 @@ export class AppComponent {
       message: 'New message received',
       title: 'Notification',
     });
-    // this._appService.get().subscribe((app) => {
-    //   console.log(app);
-    // });
+    this._appService.get().subscribe((app) => {
+      console.log(app);
+    });
   }
 }

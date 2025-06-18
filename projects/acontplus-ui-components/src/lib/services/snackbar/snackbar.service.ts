@@ -1,9 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SNACKBAR_CONFIG } from './snackbar.config';
+import { SNACKBAR_DURATIONS } from '../../constants';
 import { NotificationCallProps, SnackbarProps } from '../../models';
-import { SNACKBAR_DURATIONS } from '../../utils';
-
 @Injectable({
   providedIn: 'root',
 })

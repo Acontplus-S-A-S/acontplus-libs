@@ -3,5 +3,6 @@
   "dest": "../../dist/acontplus-ui-components",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "assets": ["src/assets/**/*", "src/styles/**/*"]
 }
