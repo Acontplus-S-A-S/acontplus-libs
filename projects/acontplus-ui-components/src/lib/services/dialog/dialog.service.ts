@@ -1,64 +1,211 @@
-import { inject, Injectable } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DialogConfig } from './dialog.config';
+import { inject, Injectable, TemplateRef } from '@angular/core';
+import {
+  MatDialog,
+  MatDialogConfig,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { DialogConfig, DialogSize } from './dialog.config';
 import { Overlay } from '@angular/cdk/overlay';
+import { map, Observable } from 'rxjs';
+import { ComponentType } from '@angular/cdk/portal';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DialogService {
-  private readonly _dialog = inject(MatDialog);
-  private readonly _overlay = inject(Overlay);
+  private readonly dialog = inject(MatDialog);
+  private readonly overlay = inject(Overlay);
+  private readonly breakpointObserver = inject(BreakpointObserver);
 
-  open(component: any, config: DialogConfig) {
-    const dialogConfig = new MatDialogConfig();
+  // Check if device is mobile
+  private readonly isMobile$ = this.breakpointObserver
+    .observe([Breakpoints.Handset])
+    .pipe(map((result) => result.matches));
 
-    if (config.isFullScreen) {
-      dialogConfig.width = '100%';
-      dialogConfig.height = '100%';
-      dialogConfig.maxWidth = '100vw';
-      dialogConfig.maxHeight = '100vh';
-      dialogConfig.panelClass = ['full-screen-dialog'];
-      dialogConfig.position = {
-        top: '0',
-        left: '0',
-      };
-    } else {
-      dialogConfig.width = this.getDialogWidth(config.size);
-      dialogConfig.maxWidth = '90vw';
-      dialogConfig.height = 'auto';
-    }
-
-    dialogConfig.data = config.data;
-    dialogConfig.hasBackdrop = true;
-    dialogConfig.autoFocus = false;
-    dialogConfig.scrollStrategy = this._overlay.scrollStrategies.noop();
-    dialogConfig.disableClose = config.disableClose ?? true;
-    dialogConfig.enterAnimationDuration = config.enterAnimationDuration ?? 500;
-    dialogConfig.exitAnimationDuration = config.exitAnimationDuration ?? 700;
-
-    const dialogRef = this._dialog.open(component, dialogConfig);
-
-    return dialogRef.afterClosed();
+  /**
+   * Opens a dialog with the specified component and configuration
+   */
+  open<T, D = any, R = any>(
+    component: ComponentType<T>,
+    config: DialogConfig<D> = {},
+  ): MatDialogRef<T, R> {
+    const dialogConfig = this.buildDialogConfig(config);
+    return this.dialog.open(component, dialogConfig);
   }
 
-  private getDialogWidth(
-    size?: 'default' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl',
-  ): string {
-    switch (size) {
-      case 'sm':
-        return '300px';
-      case 'md':
-        return '600px';
-      case 'lg':
-        return '800px';
-      case 'xl':
-        return '1200px';
+  /**
+   * Opens a dialog and returns only the result observable
+   */
+  openAndGetResult<T, D = any, R = any>(
+    component: ComponentType<T>,
+    config: DialogConfig<D> = {},
+  ): Observable<R | undefined> {
+    return this.open(component, config).afterClosed();
+  }
 
-      case 'xxl':
-        return '1400px';
-      default:
-        return '600px';
+  /**
+   * Opens a confirmation dialog (helper method)
+   */
+  openConfirmation<T>(
+    component: ComponentType<T>,
+    data?: any,
+    config: Partial<DialogConfig> = {},
+  ): Observable<boolean> {
+    const confirmConfig: DialogConfig = {
+      size: 'sm',
+      backdropClickClosable: false,
+      escapeKeyClosable: false,
+      autoFocus: 'dialog',
+      role: 'alertdialog',
+      ...config,
+      data,
+    };
+
+    return this.openAndGetResult(component, confirmConfig).pipe(
+      map((result) => Boolean(result)),
+    );
+  }
+
+  /**
+   * Closes all open dialogs
+   */
+  closeAll(): void {
+    this.dialog.closeAll();
+  }
+
+  /**
+   * Gets all open dialogs
+   */
+  getOpenDialogs(): MatDialogRef<any>[] {
+    return this.dialog.openDialogs;
+  }
+
+  private buildDialogConfig<D>(config: DialogConfig<D>): MatDialogConfig<D> {
+    const dialogConfig = new MatDialogConfig<D>();
+
+    // Handle full screen mode
+    if (config.size === 'full') {
+      this.applyFullScreenConfig(dialogConfig);
+    } else {
+      this.applyStandardConfig(dialogConfig, config);
     }
+
+    // Apply common configurations
+    this.applyCommonConfig(dialogConfig, config);
+
+    return dialogConfig;
+  }
+
+  private applyFullScreenConfig(dialogConfig: MatDialogConfig): void {
+    dialogConfig.width = '100vw';
+    dialogConfig.height = '100vh';
+    dialogConfig.maxWidth = '100vw';
+    dialogConfig.maxHeight = '100vh';
+    dialogConfig.panelClass = ['full-screen-dialog'];
+    dialogConfig.position = {
+      top: '0',
+      left: '0',
+    };
+  }
+
+  private applyStandardConfig<D>(
+    dialogConfig: MatDialogConfig<D>,
+    config: DialogConfig<D>,
+  ): void {
+    // Set dimensions
+    dialogConfig.width = config.width || this.getDialogWidth(config.size);
+    dialogConfig.height = config.height || 'auto';
+    dialogConfig.minWidth = config.minWidth;
+    dialogConfig.minHeight = config.minHeight;
+    dialogConfig.maxWidth = config.maxWidth || '95vw';
+    dialogConfig.maxHeight = config.maxHeight || '90vh';
+
+    // Handle mobile full screen option
+    if (config.isMobileFullScreen) {
+      this.isMobile$.subscribe((isMobile) => {
+        if (isMobile) {
+          this.applyFullScreenConfig(dialogConfig);
+        }
+      });
+    }
+
+    // Set position
+    if (config.position) {
+      dialogConfig.position = config.position;
+    }
+  }
+
+  private applyCommonConfig<D>(
+    dialogConfig: MatDialogConfig<D>,
+    config: DialogConfig<D>,
+  ): void {
+    // Data
+    dialogConfig.data = config.data;
+
+    // Backdrop
+    dialogConfig.hasBackdrop = config.hasBackdrop ?? true;
+    dialogConfig.backdropClass = config.backdropClass;
+
+    // Panel styling
+    const panelClasses = Array.isArray(config.panelClass)
+      ? config.panelClass
+      : config.panelClass
+        ? [config.panelClass]
+        : [];
+
+    // Add responsive class based on size
+    if (config.size) {
+      panelClasses.push(`dialog-${config.size}`);
+    }
+
+    dialogConfig.panelClass = panelClasses;
+
+    // Behavior
+    dialogConfig.disableClose =
+      !(config.backdropClickClosable ?? true) ||
+      !(config.escapeKeyClosable ?? true);
+
+    // Focus management
+    dialogConfig.autoFocus = config.autoFocus ?? 'first-tabbable';
+    dialogConfig.restoreFocus = config.restoreFocus ?? true;
+
+    // Scroll strategy
+    dialogConfig.scrollStrategy =
+      config.scrollStrategy || this.overlay.scrollStrategies.block();
+
+    // Animation
+    dialogConfig.enterAnimationDuration =
+      config.enterAnimationDuration ?? '300ms';
+    dialogConfig.exitAnimationDuration =
+      config.exitAnimationDuration ?? '200ms';
+
+    // Accessibility
+    if (config.ariaLabel) {
+      dialogConfig.ariaLabel = config.ariaLabel;
+    }
+    if (config.ariaLabelledBy) {
+      dialogConfig.ariaLabelledBy = config.ariaLabelledBy;
+    }
+    if (config.ariaDescribedBy) {
+      dialogConfig.ariaDescribedBy = config.ariaDescribedBy;
+    }
+    if (config.role) {
+      dialogConfig.role = config.role;
+    }
+  }
+
+  private getDialogWidth(size: DialogSize = 'md'): string {
+    const sizeMap: Record<DialogSize, string> = {
+      xs: '280px',
+      sm: '400px',
+      md: '600px',
+      lg: '800px',
+      xl: '1200px',
+      xxl: '1400px',
+      full: '100vw',
+    };
+
+    return sizeMap[size];
   }
 }

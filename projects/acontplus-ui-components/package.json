@@ -1,6 +1,6 @@
 {
   "name": "acontplus-ui-components",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "peerDependencies": {
     "@angular/common": "^20.0.0",
     "@angular/core": "^20.0.0"
@@ -13,11 +13,15 @@
       "sass": "./styles/index.scss"
     },
     "./styles": "./styles/_index.scss",
-    "./styles/buttons": "./styles/_custom-buttons.scss"
+    "./styles/buttons": "./styles/_custom-buttons.scss",
+    "./styles/dialog": "./styles/_custom-dialog.scss",
+    "./styles/snackbar": "./styles/_snackbar-themes.scss"
   },
   "sassExports": {
     "./styles": "./styles/_index.scss",
-    "./styles/buttons": "./styles/_custom-buttons.scss"
+    "./styles/buttons": "./styles/_custom-buttons.scss",
+    "./styles/dialog": "./styles/_custom-buttons.scss",
+    "./styles/snackbar": "./styles/_snackbar-themes.scss"
   },
   "sideEffects": false,
   "keywords": [
