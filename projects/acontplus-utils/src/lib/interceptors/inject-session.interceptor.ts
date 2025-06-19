@@ -4,8 +4,8 @@ import {
   HttpContext,
   HttpInterceptorFn,
 } from '@angular/common/http';
-import { ENVIRONMENT } from '../environments/environment.token';
-import { JwtTokenService } from '../services/jwt-token.service';
+import { ENVIRONMENT } from '../environments';
+import { JwtTokenService } from '../services';
 
 const CUSTOM_URL = new HttpContextToken<boolean>(() => false);
 

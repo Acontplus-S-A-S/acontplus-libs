@@ -1,4 +1,4 @@
-# `@acontplus/utils`
+# `acontplus/utils`
 
 A collection of utility functions, components, services, and other common functionalities for Acontplus applications. This library aims to provide reusable modules to streamline development and maintain consistency across projects.
 
@@ -7,7 +7,7 @@ A collection of utility functions, components, services, and other common functi
 You can install this library using npm:
 
 ```bash
-npm install @acontplus/utils
+npm install acontplus/utils
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ This library exports various modules for different purposes. Below are some comm
 The `environments` directory likely contains configuration files for different deployment environments (e.g., development, production). You might import these to get API endpoints or other environment-specific settings.
 
 ```typescript
-import { environment } from '@acontplus/utils/environments';
+import { environment } from 'acontplus/utils/environments';
 
 console.log(environment.apiUrl);
 ```
@@ -30,9 +30,9 @@ If there are reusable UI components, you can import them directly.
 
 ```typescript
 // Assuming a 'Button' component exists
-import { Button } from '@acontplus/utils/lib/components';
+import { Button } from 'acontplus/utils/lib/components';
 // or if directly exposed via public-api.ts
-// import { Button } from '@acontplus/utils';
+// import { Button } from 'acontplus/utils';
 
 function MyComponent() {
   return <Button onClick={() => console.log('Clicked!')}>Click Me</Button>;
@@ -45,9 +45,9 @@ Common services (e.g., API calls, data manipulation) can be imported and injecte
 
 ```typescript
 // Assuming an 'UserService' exists
-import { UserService } from '@acontplus/utils/lib/services';
+import { UserService } from 'acontplus/utils/lib/services';
 // or if directly exposed via public-api.ts
-// import { UserService } from '@acontplus/utils';
+// import { UserService } from 'acontplus/utils';
 
 const userService = new UserService();
 userService.getUsers().then(users => {
@@ -61,9 +61,9 @@ General utility functions are available from the `utils` directory.
 
 ```typescript
 // Assuming a 'formatDate' utility exists
-import { formatDate } from '@acontplus/utils/lib/utils';
+import { formatDate } from 'acontplus/utils/lib/utils';
 // or if directly exposed via public-api.ts
-// import { formatDate } from '@acontplus/utils';
+// import { formatDate } from 'acontplus/utils';
 
 const formattedDate = formatDate(new Date(), 'YYYY-MM-DD');
 console.log(formattedDate);
@@ -75,9 +75,9 @@ Type definitions and interfaces for data structures.
 
 ```typescript
 // Assuming a 'User' model exists
-import { User } from '@acontplus/utils/lib/models';
+import { User } from 'acontplus/utils/lib/models';
 // or if directly exposed via public-api.ts
-// import { User } from '@acontplus/utils';
+// import { User } from 'acontplus/utils';
 
 const user: User = {
   id: 1,
@@ -92,7 +92,7 @@ If the library includes HTTP interceptors (common in Angular/React contexts for 
 
 ```typescript
 // Example for Angular (conceptual)
-// import { AuthInterceptor } from '@acontplus/utils/lib/interceptors';
+// import { AuthInterceptor } from 'acontplus/utils/lib/interceptors';
 // providers: [
 //   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
 // ]
@@ -104,7 +104,7 @@ If the library contains pipes (common in Angular for template-based data transfo
 
 ```typescript
 // Example for Angular (conceptual)
-// import { TruncatePipe } from '@acontplus/utils/lib/pipes';
+// import { TruncatePipe } from 'acontplus/utils/lib/pipes';
 // {{ myText | truncate:100 }}
 ```
 
@@ -114,7 +114,7 @@ Reusable styles, mixins, or theming variables.
 
 ```scss
 /* In your SCSS/CSS file */
-@import '@acontplus/utils/lib/styles/variables.scss';
+@import 'acontplus/utils/lib/styles/variables.scss';
 
 .my-component {
   color: $primary-color;

@@ -1,11 +1,21 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ApplicationService } from './application.service';
-import { SnackbarService } from '../../../acontplus-utils/src/lib/services';
-
+import {
+  MatThemeButtonComponent,
+  SnackbarService,
+} from '@acontplus-ui-components';
+import { MatCustomDialogComponent } from '@acontplus-ui-components';
+import { MatDialogActions, MatDialogContent } from '@angular/material/dialog';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [
+    RouterOutlet,
+    MatCustomDialogComponent,
+    MatDialogContent,
+    MatDialogActions,
+    MatThemeButtonComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
