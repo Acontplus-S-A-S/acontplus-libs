@@ -23,6 +23,8 @@ export class FieldDefinition {
   errorMessage?: string;
   width?: string;
   valueChangeCallback?: Function;
+  columnType?: ColumnType;
+  body?: any;
 
   constructor(
     options: {
@@ -111,4 +113,8 @@ export declare type FieldType =
   | 'url'
   | 'week'
   | 'search'
-  | 'reset';
+  | 'reset'
+  | 'template'
+  | 'custom';
+
+export declare type ColumnType = 'text' | 'component' | 'html' | 'template';
