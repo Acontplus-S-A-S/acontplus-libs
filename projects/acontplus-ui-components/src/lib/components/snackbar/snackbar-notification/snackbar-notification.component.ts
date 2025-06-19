@@ -11,7 +11,7 @@ import { MatSelect } from '@angular/material/select';
 import { SNACKBAR_MESSAGES } from '../../../constants';
 
 @Component({
-  selector: 'apu-snackbar-notification',
+  selector: 'acp-snackbar-notification',
   imports: [
     MatCardModule,
     MatButton,

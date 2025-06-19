@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "acontplus-utils": "file:../../dist/acontplus-utils",
-    "acontplus-ui-components": "file:../../dist/acontplus-ui-components"
+    "acontplus-ui-components": "file:../../dist/acontplus-ui-components",
+    "acontplus-utils": "file:../../dist/acontplus-utils"
   }
 }
