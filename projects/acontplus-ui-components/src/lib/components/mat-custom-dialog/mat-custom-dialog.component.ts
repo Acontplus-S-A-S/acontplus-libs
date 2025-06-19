@@ -1,13 +1,4 @@
-import { OverlayContainer } from '@angular/cdk/overlay';
-import {
-  Component,
-  ElementRef,
-  inject,
-  Input,
-  input,
-  output,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, input, output, ViewChild } from '@angular/core';
 import {
   MatDialogActions,
   MatDialogContent,
@@ -16,7 +7,7 @@ import {
 import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
-import { MatThemeButtonComponent } from '../mat-theme-button/mat-theme-button.component';
+import { MatThemeButtonComponent } from '../mat-theme-button';
 import { MatIconButton } from '@angular/material/button';
 
 export interface MatCustomDialogOptions {
