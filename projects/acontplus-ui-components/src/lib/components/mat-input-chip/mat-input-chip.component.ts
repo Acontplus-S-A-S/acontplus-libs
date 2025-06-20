@@ -12,7 +12,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 @Component({
-  selector: 'lib-mat-input-chip',
+  selector: 'acp-mat-input-chip',
   imports: [MatFormField, MatLabel, MatChipRow, MatIcon, MatHint, MatChipGrid, MatChipInput],
   templateUrl: './mat-input-chip.component.html',
   styleUrl: './mat-input-chip.component.css',

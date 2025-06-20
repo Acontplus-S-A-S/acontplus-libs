@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 
 @Component({
-  selector: 'lib-svg-icon',
+  selector: 'acp-svg-icon',
   imports: [],
   templateUrl: './svg-icon.component.html',
   styleUrl: './svg-icon.component.css',
