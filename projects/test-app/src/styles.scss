@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 //@import "acontplus-utils/src/styles";
 
-@use "acontplus-ui-components/src/styles/snackbar-themes";
+@use "acontplus-ui-components/src/styles/snackbar-theme";
 @use "acontplus-ui-components/src/styles/custom-buttons" as buttons;
 @use "acontplus-ui-components/src/styles/custom-dialog";
 @use "@angular/material" as mat;
