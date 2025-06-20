@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ApplicationService } from './application.service';
 import {
+  IconUserComponent,
   MatThemeButtonComponent,
   SnackbarService,
 } from '@acontplus-ui-components';
@@ -15,6 +16,7 @@ import { MatDialogActions, MatDialogContent } from '@angular/material/dialog';
     MatDialogContent,
     MatDialogActions,
     MatThemeButtonComponent,
+    IconUserComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
