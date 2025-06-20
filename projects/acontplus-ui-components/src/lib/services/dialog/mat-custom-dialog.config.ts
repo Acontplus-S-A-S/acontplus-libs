@@ -10,7 +10,7 @@ export interface DialogPosition {
   right?: string;
 }
 
-export interface DialogConfig<T = any> {
+export interface MatCustomDialogConfig<T = any> {
   // Size and dimensions
   size?: DialogSize;
   width?: string;

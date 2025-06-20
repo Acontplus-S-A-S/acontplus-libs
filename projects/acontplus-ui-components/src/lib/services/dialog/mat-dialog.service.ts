@@ -1,10 +1,10 @@
-import { inject, Injectable, TemplateRef } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   MatDialog,
   MatDialogConfig,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { DialogConfig, DialogSize } from './dialog.config';
+import { MatCustomDialogConfig, DialogSize } from './mat-custom-dialog.config';
 import { Overlay } from '@angular/cdk/overlay';
 import { map, Observable } from 'rxjs';
 import { ComponentType } from '@angular/cdk/portal';
@@ -13,7 +13,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 @Injectable({
   providedIn: 'root',
 })
-export class DialogService {
+export class MatDialogService {
   private readonly dialog = inject(MatDialog);
   private readonly overlay = inject(Overlay);
   private readonly breakpointObserver = inject(BreakpointObserver);
@@ -28,7 +28,7 @@ export class DialogService {
    */
   open<T, D = any, R = any>(
     component: ComponentType<T>,
-    config: DialogConfig<D> = {},
+    config: MatCustomDialogConfig<D> = {},
   ): MatDialogRef<T, R> {
     const dialogConfig = this.buildDialogConfig(config);
     return this.dialog.open(component, dialogConfig);
@@ -39,7 +39,7 @@ export class DialogService {
    */
   openAndGetResult<T, D = any, R = any>(
     component: ComponentType<T>,
-    config: DialogConfig<D> = {},
+    config: MatCustomDialogConfig<D> = {},
   ): Observable<R | undefined> {
     return this.open(component, config).afterClosed();
   }
@@ -50,9 +50,9 @@ export class DialogService {
   openConfirmation<T>(
     component: ComponentType<T>,
     data?: any,
-    config: Partial<DialogConfig> = {},
+    config: Partial<MatCustomDialogConfig> = {},
   ): Observable<boolean> {
-    const confirmConfig: DialogConfig = {
+    const confirmConfig: MatCustomDialogConfig = {
       size: 'sm',
       backdropClickClosable: false,
       escapeKeyClosable: false,
@@ -81,7 +81,9 @@ export class DialogService {
     return this.dialog.openDialogs;
   }
 
-  private buildDialogConfig<D>(config: DialogConfig<D>): MatDialogConfig<D> {
+  private buildDialogConfig<D>(
+    config: MatCustomDialogConfig<D>,
+  ): MatDialogConfig<D> {
     const dialogConfig = new MatDialogConfig<D>();
 
     // Handle full screen mode
@@ -111,7 +113,7 @@ export class DialogService {
 
   private applyStandardConfig<D>(
     dialogConfig: MatDialogConfig<D>,
-    config: DialogConfig<D>,
+    config: MatCustomDialogConfig<D>,
   ): void {
     // Set dimensions
     dialogConfig.width = config.width || this.getDialogWidth(config.size);
@@ -138,7 +140,7 @@ export class DialogService {
 
   private applyCommonConfig<D>(
     dialogConfig: MatDialogConfig<D>,
-    config: DialogConfig<D>,
+    config: MatCustomDialogConfig<D>,
   ): void {
     // Data
     dialogConfig.data = config.data;
