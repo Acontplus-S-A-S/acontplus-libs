@@ -6,13 +6,11 @@ import {
   MatThemeButtonComponent,
   SnackbarService,
 } from '@acontplus-ui-components';
-import { MatCustomDialogComponent } from '@acontplus-ui-components';
 import { MatDialogActions, MatDialogContent } from '@angular/material/dialog';
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    MatCustomDialogComponent,
     MatDialogContent,
     MatDialogActions,
     MatThemeButtonComponent,

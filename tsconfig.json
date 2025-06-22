@@ -4,7 +4,6 @@
     "baseUrl": "./",
     "paths": {
       "@acontplus-ui-components": ["./dist/acontplus-ui-components"],
-      "@acontplus-ui-components/*": ["./dist/acontplus-ui-components/*"],
       "@acontplus-utils": ["./dist/acontplus-utils"]
     },
     "outDir": "./dist/out-tsc",
@@ -37,7 +36,13 @@
   },
   "files": [],
   "include": ["src/**/*.ts", "src/**/*.tsx", "projects/**/*.ts"],
-  "exclude": ["node_modules", "dist", "**/*.spec.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.ts",
+    "projects/**/node_modules"
+  ],
+
   "references": [
     {
       "path": "./projects/acontplus-ui-components/tsconfig.lib.json"

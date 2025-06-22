@@ -1,2 +1,2 @@
-export * from './dialog.config';
-export * from './dialog.service';
+export * from './dialog.interfaces';
+export * from './advanced-dialog.service';
