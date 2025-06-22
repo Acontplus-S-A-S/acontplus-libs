@@ -1,5 +1,5 @@
 export * from './icons';
-export * from './mat-custom-dialog';
+export * from './dialog-wrapper';
 export * from './mat-input-chip';
 export * from './mat-theme-button';
 export * from './spinner';
