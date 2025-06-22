@@ -1,19 +1,26 @@
 import { Component, inject } from '@angular/core';
-import { MatCustomDialogComponent } from "@acontplus-ui-components";
-import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
-import { MatButton } from "@angular/material/button";
+import { DialogWrapperComponent } from '@acontplus-ui-components';
+import {
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { MatButton } from '@angular/material/button';
+import { MatThemeButtonComponent } from '@acontplus-ui-components';
 
 @Component({
   selector: 'app-test-dialog',
   imports: [
-    MatCustomDialogComponent,
     MatDialogTitle,
     MatDialogContent,
     MatButton,
-    MatDialogActions
+    MatDialogActions,
+    DialogWrapperComponent,
+    MatThemeButtonComponent,
   ],
   templateUrl: './test-dialog.component.html',
-  styleUrl: './test-dialog.component.scss'
+  styleUrl: './test-dialog.component.scss',
 })
 export class TestDialogComponent {
   private readonly _dialogRef = inject(MatDialogRef<TestDialogComponent>);
@@ -23,8 +30,4 @@ export class TestDialogComponent {
   confirmDialog() {
     throw new Error('Method not implemented.');
   }
-  closeDialog() {
-    throw new Error('Method not implemented.');
-  }
-
 }

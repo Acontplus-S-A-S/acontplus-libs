@@ -1,2 +1,2 @@
-export * from './mat-custom-dialog.config';
-export * from './mat-dialog.service';
+export * from './dialog.interfaces';
+export * from './advanced-dialog.service';

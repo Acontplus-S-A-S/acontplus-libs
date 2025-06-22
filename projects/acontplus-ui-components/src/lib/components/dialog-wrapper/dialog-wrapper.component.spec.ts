@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MatCustomDialogComponent } from './mat-custom-dialog.component';
+import { DialogWrapperComponent } from './dialog-wrapper.component';
 
-describe('MatCustomDialogComponent', () => {
-  let component: MatCustomDialogComponent;
-  let fixture: ComponentFixture<MatCustomDialogComponent>;
+describe('DialogWrapperComponent', () => {
+  let component: DialogWrapperComponent;
+  let fixture: ComponentFixture<DialogWrapperComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatCustomDialogComponent]
+      imports: [DialogWrapperComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MatCustomDialogComponent);
+    fixture = TestBed.createComponent(DialogWrapperComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
