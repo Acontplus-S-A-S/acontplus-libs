@@ -40,7 +40,8 @@ export declare type FieldType =
   | 'search'
   | 'reset'
   | 'template'
-  | 'custom';
+  | 'custom'
+  | 'expand';
 
 export declare type ColumnType = 'text' | 'component' | 'html' | 'template';
 

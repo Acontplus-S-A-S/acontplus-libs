@@ -76,7 +76,7 @@ import { ColumnDefinition, Pagination, TableContext } from '../../../models';
       state('expanded', style({ height: '*' })),
       transition(
         'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
       ),
     ]),
   ],
@@ -85,12 +85,9 @@ import { ColumnDefinition, Pagination, TableContext } from '../../../models';
 export class MatDynamicTableComponent<T extends Record<string, any>>
   implements AfterContentInit, OnChanges, OnInit, OnDestroy
 {
-  // private viewContainerRef = inject(ViewContainerRef);
-  // private injector = inject(Injector);
   private componentRefs: ComponentRef<any>[] = [];
   private embeddedViews: EmbeddedViewRef<any>[] = [];
 
-  // Inputs
   @Input() showExpand = false;
   @Input() showFooter = false;
   @Input() locale = 'en-US';
@@ -99,35 +96,32 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
   @Input() columnDefinitions: ColumnDefinition<T>[] = [];
   @Input() showSelectBox = false;
   @Input() tableData: T[] = [];
-  // FIX: Changed SafeTemplateRef<T> to TemplateRef<TableContext<T>>
   @Input() rowTemplate: TemplateRef<TableContext<T>> | null = null;
-  // FIX: Changed SafeTemplateRef<T> to TemplateRef<TableContext<T>>
   @Input() expandedDetail: TemplateRef<TableContext<T>> | null = null;
   @Input() enablePagination = false;
   @Input() paginationConfig: Pagination | null = null;
   @Input() isLoadingData = false;
 
-  // Outputs
   @Output() rowSelected = new EventEmitter<T[]>();
   @Output() copyRow = new EventEmitter<T>();
   @Output() showExpanded = new EventEmitter<T>();
   @Output() hideExpanded = new EventEmitter<T>();
   @Output() pageEvent = new EventEmitter<PageEvent>();
 
-  // Internal state
+  isNormalRow = (_: number, row: T) => this.expandedElement !== row;
+  isExpandedRow = (_: number, row: T) => this.expandedElement === row;
+
   dataSource = new MatTableDataSource<T>([]);
   selection = new SelectionModel<T>(true, []);
   expandedElement: T | null = null;
   columnsToDisplayWithExpand: string[] = [];
 
-  // Content children
   @ContentChildren(MatHeaderRowDef) headerRowDefs!: QueryList<MatHeaderRowDef>;
   @ContentChildren(MatRowDef) rowDefs!: QueryList<MatRowDef<T>>;
   @ContentChildren(MatFooterRowDef) footerRowDefs!: QueryList<MatFooterRowDef>;
   @ContentChildren(MatColumnDef) columnDefs!: QueryList<MatColumnDef>;
   @ContentChild(MatNoDataRow) noDataRow!: MatNoDataRow;
 
-  // View children
   @ViewChild(MatTable, { static: true }) table!: MatTable<T>;
   @ContentChildren(ViewContainerRef) rows!: QueryList<ViewContainerRef>;
 
@@ -165,13 +159,31 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
       this.columnDefinitions.forEach((col, index) => (col.index = index));
     }
 
-    if (this.showSelectBox && !this.visibleColumns.includes('select')) {
-      this.visibleColumns = ['select', ...this.visibleColumns];
+    const newColumns: string[] = [...this.visibleColumns];
+
+    if (this.showSelectBox && !newColumns.includes('select')) {
+      newColumns.unshift('select');
     }
 
-    this.columnsToDisplayWithExpand = this.showExpand
-      ? [...this.visibleColumns, 'expand']
-      : this.visibleColumns;
+    if (this.showExpand && this.expandedDetail) {
+      if (!this.columnDefinitions?.some((col) => col.key === 'expand')) {
+        this.columnDefinitions = [
+          ...(this.columnDefinitions || []),
+          {
+            key: 'expand',
+            label: '',
+            type: 'expand',
+            index: this.columnDefinitions?.length || 0,
+          },
+        ];
+      }
+
+      if (!newColumns.includes('expand')) {
+        newColumns.push('expand');
+      }
+    }
+
+    this.columnsToDisplayWithExpand = newColumns;
   }
 
   private initializeSelection(): void {
@@ -182,16 +194,16 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
     this.columnDefs.forEach((columnDef) => this.table.addColumnDef(columnDef));
     this.rowDefs.forEach((rowDef) => this.table.addRowDef(rowDef));
     this.headerRowDefs.forEach((headerRowDef) =>
-      this.table.addHeaderRowDef(headerRowDef),
+      this.table.addHeaderRowDef(headerRowDef)
     );
 
     if (this.showFooter) {
       this.footerRowDefs.forEach((footerRowDef) =>
-        this.table.addFooterRowDef(footerRowDef),
+        this.table.addFooterRowDef(footerRowDef)
       );
     } else {
       this.footerRowDefs.forEach((footerRowDef) =>
-        this.table.removeFooterRowDef(footerRowDef),
+        this.table.removeFooterRowDef(footerRowDef)
       );
     }
 
@@ -209,7 +221,6 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
     this.embeddedViews.forEach((view) => view.destroy());
   }
 
-  // Selection methods
   isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
@@ -230,7 +241,6 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row`;
   }
 
-  // Row interaction methods
   selectRow(row: T): void {
     this.selection.toggle(row);
     this.rowSelected.emit(this.selection.selected);
