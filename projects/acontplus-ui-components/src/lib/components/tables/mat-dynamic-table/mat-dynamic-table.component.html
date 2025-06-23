@@ -1,59 +1,56 @@
 <div class="mat-table-container">
-  <!--  <app-custom-mat-spinner [isLoadingResults]="isLoadingData()" />-->
   <div class="table-container small-table">
     <table #sort="matSort" [dataSource]="dataSource.data" mat-table matSort>
-      <!-- (matSortChange)="sortData($event)" -->
-
       @if (columnDefinitions) {
-        <!-- Checkbox Column (optional) -->
-        <ng-container matColumnDef="select">
-          <th *matHeaderCellDef mat-header-cell>
-            <mat-checkbox
-              (change)="$event ? masterToggle() : null"
-              (click)="$event.stopPropagation()"
-              [aria-label]="checkboxLabel()"
-              [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()"
-            >
-            </mat-checkbox>
-          </th>
-          <td *matCellDef="let row" mat-cell>
-            <mat-checkbox
-              (change)="$event ? selection.toggle(row) : null; selectRow(row)"
-              (click)="$event.stopPropagation()"
-              [aria-label]="checkboxLabel(row)"
-              [checked]="selection.isSelected(row)"
-            >
-            </mat-checkbox>
-          </td>
-          <td *matFooterCellDef mat-footer-cell></td>
-        </ng-container>
+        <!-- Checkbox Column -->
+        @if (showSelectBox) {
+          <ng-container matColumnDef="select">
+            <th *matHeaderCellDef mat-header-cell>
+              <mat-checkbox
+                (change)="$event ? masterToggle() : null"
+                (click)="$event.stopPropagation()"
+                [aria-label]="checkboxLabel()"
+                [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()"
+              >
+              </mat-checkbox>
+            </th>
+            <td *matCellDef="let row" mat-cell>
+              <mat-checkbox
+                (change)="$event ? selection.toggle(row) : null"
+                (click)="$event.stopPropagation()"
+                [aria-label]="checkboxLabel(row)"
+                [checked]="selection.isSelected(row)"
+              >
+              </mat-checkbox>
+            </td>
+            <td *matFooterCellDef mat-footer-cell></td>
+          </ng-container>
+        }
 
-        <!-- Dynamic columns based on column definitions -->
-        @for (col of columnDefinitions; track $index) {
-          <!-- Column header -->
+        <!-- Dynamic columns -->
+        @for (col of columnDefinitions; track col.key) {
           <ng-container [matColumnDef]="col.key">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>
+            <th *matHeaderCellDef mat-header-cell>
               {{ col.label }}
             </th>
 
-            <!-- Column cell -->
             <td
               mat-cell
               *matCellDef="let element; let i = index"
               [ngClass]="{ highlighted: highlightRowIndex === i }"
             >
-              <!-- Operations column with custom template -->
               @if (col.key === "op") {
                 <div class="d-flex flex-row gap-1">
                   <ng-container
-                    [ngTemplateOutlet]="templateOp"
-                    [ngTemplateOutletContext]="{ $implicit: element }"
+                    *ngTemplateOutlet="
+                      rowTemplate;
+                      context: { $implicit: element, index: i }
+                    "
                   ></ng-container>
                 </div>
               }
 
-              <!-- Expandable row toggle button -->
               @if (showExpand && col.key === "expand") {
                 <button
                   mat-icon-button
@@ -67,6 +64,7 @@
                   }
                 </button>
               }
+
               @switch (col.type) {
                 @case ("image") {
                   <img
@@ -86,32 +84,13 @@
                   <ng-container
                     *ngTemplateOutlet="
                       col.templateOutlet;
-                      context: { $implicit: element }
+                      context: { $implicit: element, index: i }
                     "
                   />
                 }
                 @case ("custom") {
-                  <!-- Dynamic component column -->
-                  @if (col.columnType === "component") {
-<!--                    <ng-container-->
-<!--                      [ngComponentOutlet]="col.body"-->
-<!--                      [ngComponentOutletInjector]="createInjector(element)"-->
-<!--                    />-->
-                  }
-                  @if (col.columnType === "html") {
-                    <!-- HTML content column -->
-                    <div [innerHTML]="col.body(element)"></div>
-                  }
-                  @if (col.columnType === "template") {
-                    <ng-container
-                      *ngTemplateOutlet="
-                        col.body;
-                        context: { $implicit: element }
-                      "
-                    />
-                  }
+                  <ng-container #dynamicContent></ng-container>
                 }
-
                 @default {
                   <div>{{ element[col.key] }}</div>
                 }
@@ -119,25 +98,23 @@
             </td>
 
             <td *matFooterCellDef mat-footer-cell>
-              @if (!col.index) {
+              @if (col.index === 0) {
                 <div>Total</div>
-                <!-- col.index === 0 -->
               }
-              @if (col.index && col.hasFooter) {
-                <div>{{ col.key | getTotal: this.dataSource.data }}</div>
+              @if (col.hasFooter) {
+                <div>{{ col.key | getTotal: dataSource.data }}</div>
               }
-              <!-- col.index !== 0 -->
             </td>
           </ng-container>
         }
 
         <!-- Expanded Content Column -->
-        @if (showExpand) {
+        @if (showExpand && expandedDetail) {
           <ng-container matColumnDef="expandedDetail">
             <td
               mat-cell
-              *matCellDef="let element"
-              [attr.colspan]="visibleColumns.length"
+              *matCellDef="let element; let i = index"
+              [attr.colspan]="columnsToDisplayWithExpand.length"
             >
               <div
                 class="m-0 p-0"
@@ -146,26 +123,33 @@
                 "
               >
                 <ng-container
-                  *ngTemplateOutlet="expandedDetail; context: { row: element }"
+                  *ngTemplateOutlet="
+                    expandedDetail;
+                    context: { $implicit: element, index: i }
+                  "
                 ></ng-container>
               </div>
             </td>
           </ng-container>
         }
 
-        <!-- Rows -->
+        <!-- Header row -->
         <tr
           mat-header-row
-          *matHeaderRowDef="visibleColumns; sticky: true"
+          *matHeaderRowDef="columnsToDisplayWithExpand; sticky: true"
           class="small-header"
         ></tr>
+
+        <!-- Data rows -->
         <tr
           mat-row
-          *matRowDef="let row; columns: visibleColumns"
+          *matRowDef="let row; columns: columnsToDisplayWithExpand"
           [class.example-expanded-row]="expandedElement === row"
           (click)="selectRow(row)"
-          [style]="getRowColor(row) || {}"
+          [style]="getRowColor(row)"
         ></tr>
+
+        <!-- Expanded row -->
         @if (showExpand) {
           <tr
             mat-row
@@ -174,34 +158,34 @@
           ></tr>
         }
 
-        <!-- No Data Row -->
+        <!-- No data row -->
         <tr class="mat-row" *matNoDataRow>
           <td
             class="mat-cell text-center"
-            [attr.colspan]="visibleColumns.length"
+            [attr.colspan]="columnsToDisplayWithExpand.length"
           >
-            Sin Registro
+            No records found
           </td>
         </tr>
 
-        <!-- Footer Row -->
+        <!-- Footer row -->
         @if (showFooter && dataSource.data.length > 0) {
-          <tr mat-footer-row *matFooterRowDef="visibleColumns"></tr>
+          <tr mat-footer-row *matFooterRowDef="columnsToDisplayWithExpand"></tr>
         }
       }
     </table>
   </div>
 
-  @if (enablePagination() && paginationConfig()) {
+  @if (enablePagination && paginationConfig) {
     <mat-paginator
       #paginator
-      [disabled]="isLoadingData()"
+      [disabled]="isLoadingData"
       (page)="handlePageEvent($event)"
-      [length]="paginationConfig()?.totalRecords"
-      [pageSize]="paginationConfig()?.pageSize"
-      [pageSizeOptions]="paginationConfig()?.pageSizeOptions ?? []"
+      [length]="paginationConfig.totalRecords"
+      [pageSize]="paginationConfig.pageSize"
+      [pageSizeOptions]="paginationConfig.pageSizeOptions || []"
       [showFirstLastButtons]="true"
-      [pageIndex]="paginationConfig()?.pageIndex"
+      [pageIndex]="paginationConfig.pageIndex"
       aria-label="Select page"
     >
     </mat-paginator>

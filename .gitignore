@@ -42,3 +42,4 @@ testem.log
 Thumbs.db
 projects/**/node_modules/
 libs/**/node_modules/
+projects/test-app/node_modules/.package-lock.json
