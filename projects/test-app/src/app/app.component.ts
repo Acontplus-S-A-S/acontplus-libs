@@ -10,6 +10,7 @@ import { MatDynamicCardComponent } from '@acontplus-ui-components';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { StatusDisplayPipe } from '@acontplus-ui-components';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-root',
   imports: [
@@ -29,7 +30,6 @@ export class AppComponent {
   title = 'test-app';
 
   isActive = true;
-
   private readonly _appService = inject(ApplicationService);
   private readonly _notification = inject(SnackbarService);
   ngOnInit() {
