@@ -6,7 +6,11 @@
 </acp-mat-dynamic-card>
 
 <!-- 2. Card with Header -->
-<acp-mat-dynamic-card [cardTitle]="'User Profile'" [cardSubtitle]="'Personal Information'" [isHeaderVisible]="true">
+<acp-mat-dynamic-card
+  [cardTitle]="'User Profile'"
+  [cardSubtitle]="'Personal Information'"
+  [isHeaderVisible]="true"
+>
   <div class="profile-content">
     <p><strong>Name:</strong> John Doe</p>
     <p><strong>Email:</strong> example.com</p>
@@ -14,9 +18,16 @@
 </acp-mat-dynamic-card>
 
 <!-- 3. Card with Avatar and Actions -->
-<acp-mat-dynamic-card [cardTitle]="'Settings'" [avatarImageUrl]="'assets/user-avatar.png'" [isHeaderVisible]="true"
-  [areActionsVisible]="true" [primaryButtonText]="'Save Changes'" [secondaryButtonText]="'Discard'"
-  (primaryButtonClicked)="saveSettings()" (secondaryButtonClicked)="discardChanges()">
+<acp-mat-dynamic-card
+  [cardTitle]="'Settings'"
+  [avatarImageUrl]="'assets/user-avatar.png'"
+  [isHeaderVisible]="true"
+  [areActionsVisible]="true"
+  [primaryButtonText]="'Save Changes'"
+  [secondaryButtonText]="'Discard'"
+  (primaryButtonClicked)="saveSettings()"
+  (secondaryButtonClicked)="discardChanges()"
+>
   <mat-form-field appearance="outline">
     <mat-label>Theme</mat-label>
     <mat-select>
@@ -27,26 +38,151 @@
 </acp-mat-dynamic-card>
 
 <!-- 4. Compact Card with Icons -->
-<acp-mat-dynamic-card [contentPadding]="'0.5rem'" [areActionsVisible]="true" [primaryButtonText]="'Accept'"
-  [primaryButtonIcon]="'check'" [secondaryButtonText]="'Decline'" [secondaryButtonIcon]="'close'"
-  [buttonsPosition]="'end'">
+<acp-mat-dynamic-card
+  [contentPadding]="'0.5rem'"
+  [areActionsVisible]="true"
+  [primaryButtonText]="'Accept'"
+  [primaryButtonIcon]="'check'"
+  [secondaryButtonText]="'Decline'"
+  [secondaryButtonIcon]="'close'"
+  [buttonsPosition]="'end'"
+>
   <p style="text-align: center">Do you accept the terms and conditions?</p>
 </acp-mat-dynamic-card>
 
-<!-- Basic usage (neutral gender) -->
-<div [innerHTML]="isActive | primaryStatus"></div>
+<!-- Shows "Active" with green check icon or "Inactive" with red cancel icon -->
+<div [innerHTML]="isActive | statusDisplay"></div>
 
-<!-- Female gender (for Spanish "Activa") -->
-<div [innerHTML]="isActive | primaryStatus: { gender: 'female' }"></div>
+<!-- Male gender (e.g., "Activo" in Spanish) -->
+<div [innerHTML]="isActive | statusDisplay: { gender: 'male' }"></div>
 
-<!-- Male gender (for Spanish "Activo") -->
-<div [innerHTML]="isActive | primaryStatus: { gender: 'male' }"></div>
+<!-- Female gender (e.g., "Activa" in Spanish) -->
+<div [innerHTML]="isActive | statusDisplay: { gender: 'female' }"></div>
+
+<!-- Bold uppercase text -->
+<div
+  [innerHTML]="
+    isActive
+      | statusDisplay
+        : {
+            textClass: 'font-bold uppercase',
+          }
+  "
+></div>
+
+<!-- With custom colors -->
+<div
+  [innerHTML]="
+    isActive
+      | statusDisplay
+        : {
+            textClass: isActive ? 'text-blue-600' : 'text-gray-500',
+          }
+  "
+></div>
+
+<!-- Custom labels without translation -->
+<div
+  [innerHTML]="
+    isActive
+      | statusDisplay
+        : {
+            customActiveText: 'Enabled',
+            customInactiveText: 'Disabled',
+          }
+  "
+></div>
 
 <!-- Without icon -->
-<div [innerHTML]="isActive | primaryStatus: { showIcon: false }"></div>
+<div [innerHTML]="isActive | statusDisplay: { showIcon: false }"></div>
 
-<!-- Custom texts -->
-<div [innerHTML]="isActive | primaryStatus: {
-  customActiveText: 'Enabled',
-  customInactiveText: 'Disabled'
-}"></div>
+<!-- With different icons -->
+<div
+  [innerHTML]="
+    isActive
+      | statusDisplay
+        : {
+            textClass: isActive ? 'text-green-600' : 'text-red-600',
+          }
+  "
+></div>
+
+<!-- Female gender, no icon, custom styling -->
+<div
+  [innerHTML]="
+    isActive
+      | statusDisplay
+        : {
+            gender: 'female',
+            showIcon: false,
+            textClass: 'text-lg font-medium',
+          }
+  "
+></div>
+
+<!-- Custom text with icon -->
+<div
+  [innerHTML]="
+    isActive
+      | statusDisplay
+        : {
+            customActiveText: 'Operational',
+            customInactiveText: 'Maintenance',
+            textClass: 'font-semibold',
+          }
+  "
+></div>
+
+<!--<tr *ngFor="let item of items">-->
+<!--    <td [innerHTML]="item.isActive | statusDisplay"></td>-->
+<!--</tr>-->
+
+<!--<mat-list>-->
+<!--    <mat-list-item *ngFor="let user of users">-->
+<!--        <span [innerHTML]="user.isActive | statusDisplay: { gender: user.gender }"></span>-->
+<!--    </mat-list-item>-->
+<!--</mat-list>-->
+
+<!-- Automatically adapts to current language -->
+<div [innerHTML]="isActive | statusDisplay"></div>
+
+<!-- Force specific language (when not using ngx-translate) -->
+<!--<div-->
+<!--  [innerHTML]="-->
+<!--    isActive-->
+<!--      | statusDisplay-->
+<!--        : {-->
+<!--            customActiveText: translate.instant('ACTIVE'),-->
+<!--            customInactiveText: translate.instant('INACTIVE'),-->
+<!--          }-->
+<!--  "-->
+<!--&gt;</div>-->
+
+<!-- Neutral gender (default) -->
+<div [innerHTML]="isActive | statusDisplay: { gender: 'neutral' }"></div>
+
+<!-- For companies/organizations (female gender in Spanish) -->
+<div
+  [innerHTML]="
+    isActive
+      | statusDisplay
+        : {
+            gender: 'female',
+            textClass: 'company-status',
+          }
+  "
+></div>
+
+<div
+  [innerHTML]="
+    isActive
+      | statusDisplay
+        : {
+            textClass: 'sr-only',
+            showIcon: true,
+          }
+  "
+></div>
+<span class="visually-hidden">
+  Status: {{ isActive ? "Active" : "Inactive" }}
+</span>

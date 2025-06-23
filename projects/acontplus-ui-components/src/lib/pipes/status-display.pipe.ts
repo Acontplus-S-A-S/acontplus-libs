@@ -33,30 +33,61 @@ interface StatusOptions {
   textClass?: string;
 }
 
+type LanguageCode = 'en' | 'es';
+
+interface StatusTranslations {
+  active: string;
+  inactive: string;
+  'active.male': string;
+  'active.female': string;
+  'inactive.male': string;
+  'inactive.female': string;
+}
+
 @Pipe({
   name: 'statusDisplay',
+  standalone: true,
 })
 export class StatusDisplayPipe implements PipeTransform {
   private sanitizer = inject(DomSanitizer);
   private translate = inject(TranslateService);
 
-  transform(
-    isActive: boolean,
-    options: StatusOptions = {},
-  ): SafeHtml {
+  private readonly defaultTranslations: Record<
+    LanguageCode,
+    StatusTranslations
+  > = {
+    en: {
+      active: 'Active',
+      inactive: 'Inactive',
+      'active.male': 'Active',
+      'active.female': 'Active',
+      'inactive.male': 'Inactive',
+      'inactive.female': 'Inactive',
+    },
+    es: {
+      active: 'Activo',
+      inactive: 'Inactivo',
+      'active.male': 'Activo',
+      'active.female': 'Activa',
+      'inactive.male': 'Inactivo',
+      'inactive.female': 'Inactiva',
+    },
+  };
+
+  transform(isActive: boolean, options: StatusOptions = {}): SafeHtml {
     const {
       gender = 'neutral',
       showIcon = true,
       customActiveText,
       customInactiveText,
-      textClass = ''
+      textClass = '',
     } = options;
 
-    const [text, translationKey] = this.getStatusText(
+    const [text] = this.getStatusText(
       isActive,
       gender,
       customActiveText,
-      customInactiveText
+      customInactiveText,
     );
 
     const icon = isActive ? 'check_circle' : 'cancel';
@@ -78,28 +109,42 @@ export class StatusDisplayPipe implements PipeTransform {
     isActive: boolean,
     gender: StatusGender,
     customActive?: string,
-    customInactive?: string
+    customInactive?: string,
   ): [string, string] {
     // Return custom texts if provided
     if (customActive && isActive) return [customActive, 'custom'];
     if (customInactive && !isActive) return [customInactive, 'custom'];
 
+    const key = isActive ? 'active' : 'inactive';
+    const genderKey = gender !== 'neutral' ? `${key}.${gender}` : key;
+
+    // First try app-specific translation
+    const translation = this.translate.instant(`status.${genderKey}`);
+    if (translation !== `status.${genderKey}`) {
+      return [translation, genderKey];
+    }
+
+    // Fallback to library defaults
+    return [this.getDefaultTranslation(isActive, gender), genderKey];
+  }
+
+  private getDefaultTranslation(
+    isActive: boolean,
+    gender: StatusGender,
+  ): string {
     const lang = this.translate.currentLang || 'en';
-    const isSpanish = lang.startsWith('es');
+    const baseLang = lang.split('-')[0] as LanguageCode;
+    const translations =
+      this.defaultTranslations[baseLang] || this.defaultTranslations.en;
 
-    if (!isSpanish) {
-      return isActive ? ['Active', 'active'] : ['Inactive', 'inactive'];
-    }
+    const key = (
+      gender !== 'neutral'
+        ? `${isActive ? 'active' : 'inactive'}.${gender}`
+        : isActive
+          ? 'active'
+          : 'inactive'
+    ) as keyof StatusTranslations;
 
-    // Spanish gendered variants
-    if (isActive) {
-      return gender === 'female'
-        ? ['Activa', 'active.female']
-        : ['Activo', 'active.male'];
-    } else {
-      return gender === 'female'
-        ? ['Inactiva', 'inactive.female']
-        : ['Inactivo', 'inactive.male'];
-    }
+    return translations[key] || (isActive ? 'Active' : 'Inactive');
   }
 }

@@ -9,6 +9,7 @@ import {
 import { MatDynamicCardComponent } from '@acontplus-ui-components';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { StatusDisplayPipe } from '@acontplus-ui-components';
 @Component({
   selector: 'app-root',
   imports: [
@@ -18,6 +19,8 @@ import { MatSelect, MatSelectModule } from '@angular/material/select';
     MatFormField,
     MatLabel,
     MatSelectModule,
+    StatusDisplayPipe,
+    StatusDisplayPipe,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
