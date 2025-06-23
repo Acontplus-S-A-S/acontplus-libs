@@ -23,7 +23,6 @@ type TranslationKey =
 
 @Pipe({
   name: 'statusDisplay',
-  standalone: true,
 })
 export class StatusDisplayPipe implements PipeTransform {
   private sanitizer = inject(DomSanitizer);

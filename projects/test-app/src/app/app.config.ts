@@ -33,9 +33,12 @@ export const appConfig: ApplicationConfig = {
     ),
     provideTransloco({
       config: {
-        availableLangs: ['es', 'en'],
+        availableLangs: ['en', 'es'],
         defaultLang: 'es',
         reRenderOnLangChange: true,
+        missingHandler: {
+          useFallbackTranslation: true,
+        },
       },
       loader: TranslocoHttpLoader,
     }),
