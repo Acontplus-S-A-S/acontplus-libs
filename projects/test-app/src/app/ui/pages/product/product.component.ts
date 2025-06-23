@@ -25,6 +25,7 @@ interface Product {
     MatIconButton,
     JsonPipe,
     DatePipe,
+    MatDynamicTableComponent,
   ], // Import your table component
   template: `
     <h2>Product List</h2>

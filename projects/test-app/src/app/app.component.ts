@@ -6,21 +6,26 @@ import {
   MatThemeButtonComponent,
   SnackbarService,
 } from '@acontplus-ui-components';
-import { MatDialogActions, MatDialogContent } from '@angular/material/dialog';
+import { MatDynamicCardComponent } from '@acontplus-ui-components';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    MatDialogContent,
-    MatDialogActions,
-    MatThemeButtonComponent,
     IconUserComponent,
+    MatDynamicCardComponent,
+    MatFormField,
+    MatLabel,
+    MatSelectModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'test-app';
+
+  isActive = true;
 
   private readonly _appService = inject(ApplicationService);
   private readonly _notification = inject(SnackbarService);
@@ -32,5 +37,15 @@ export class AppComponent {
     // this._appService.get().subscribe((app) => {
     //   console.log(app);
     // });
+  }
+
+  saveSettings() {
+    console.log('Settings saved!');
+    // Add your save logic here
+  }
+
+  discardChanges() {
+    console.log('Changes discarded!');
+    // Add your discard logic here
   }
 }

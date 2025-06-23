@@ -1,2 +1,52 @@
 <acp-icon-user></acp-icon-user>
 <router-outlet />
+<!-- 1. Simple Card with Content -->
+<acp-mat-dynamic-card>
+  <p>This is a basic card with just content.</p>
+</acp-mat-dynamic-card>
+
+<!-- 2. Card with Header -->
+<acp-mat-dynamic-card [cardTitle]="'User Profile'" [cardSubtitle]="'Personal Information'" [isHeaderVisible]="true">
+  <div class="profile-content">
+    <p><strong>Name:</strong> John Doe</p>
+    <p><strong>Email:</strong> example.com</p>
+  </div>
+</acp-mat-dynamic-card>
+
+<!-- 3. Card with Avatar and Actions -->
+<acp-mat-dynamic-card [cardTitle]="'Settings'" [avatarImageUrl]="'assets/user-avatar.png'" [isHeaderVisible]="true"
+  [areActionsVisible]="true" [primaryButtonText]="'Save Changes'" [secondaryButtonText]="'Discard'"
+  (primaryButtonClicked)="saveSettings()" (secondaryButtonClicked)="discardChanges()">
+  <mat-form-field appearance="outline">
+    <mat-label>Theme</mat-label>
+    <mat-select>
+      <mat-option value="light">Light</mat-option>
+      <mat-option value="dark">Dark</mat-option>
+    </mat-select>
+  </mat-form-field>
+</acp-mat-dynamic-card>
+
+<!-- 4. Compact Card with Icons -->
+<acp-mat-dynamic-card [contentPadding]="'0.5rem'" [areActionsVisible]="true" [primaryButtonText]="'Accept'"
+  [primaryButtonIcon]="'check'" [secondaryButtonText]="'Decline'" [secondaryButtonIcon]="'close'"
+  [buttonsPosition]="'end'">
+  <p style="text-align: center">Do you accept the terms and conditions?</p>
+</acp-mat-dynamic-card>
+
+<!-- Basic usage (neutral gender) -->
+<div [innerHTML]="isActive | primaryStatus"></div>
+
+<!-- Female gender (for Spanish "Activa") -->
+<div [innerHTML]="isActive | primaryStatus: { gender: 'female' }"></div>
+
+<!-- Male gender (for Spanish "Activo") -->
+<div [innerHTML]="isActive | primaryStatus: { gender: 'male' }"></div>
+
+<!-- Without icon -->
+<div [innerHTML]="isActive | primaryStatus: { showIcon: false }"></div>
+
+<!-- Custom texts -->
+<div [innerHTML]="isActive | primaryStatus: {
+  customActiveText: 'Enabled',
+  customInactiveText: 'Disabled'
+}"></div>
