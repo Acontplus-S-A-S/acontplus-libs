@@ -4,7 +4,6 @@ import {
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideTransloco } from '@ngneat/transloco';
 import { TranslocoHttpLoader } from './transloco-loader';
 
 import { routes } from './app.routes';
@@ -21,6 +20,7 @@ import {
   injectSessionInterceptor,
 } from '@acontplus-utils';
 import { spinnerInterceptor } from '@acontplus-ui-components';
+import { provideTransloco } from '@jsverse/transloco';
 
 export const appConfig: ApplicationConfig = {
   providers: [
