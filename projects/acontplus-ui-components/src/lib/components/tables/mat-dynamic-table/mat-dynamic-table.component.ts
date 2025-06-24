@@ -4,25 +4,22 @@ import {
   Component,
   ContentChild,
   ContentChildren,
-  EmbeddedViewRef,
   EventEmitter,
   inject,
   Injector,
-  input,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
-  output,
   Output,
   QueryList,
   SimpleChanges,
   TemplateRef,
   ViewChild,
-  ViewChildren,
   ViewContainerRef,
+  ComponentRef,
+  EmbeddedViewRef,
 } from '@angular/core';
-import { ColumnDefinition, Pagination, TableCellIndex } from '../../../models';
 import {
   MatColumnDef,
   MatFooterRowDef,
@@ -46,7 +43,6 @@ import {
   DatePipe,
   DecimalPipe,
   NgClass,
-  NgComponentOutlet,
   NgTemplateOutlet,
 } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -54,10 +50,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { GetTotalPipe } from '../../../pipes';
-import { DYNAMIC_INPUT } from '../../../inputs';
+import { ColumnDefinition, Pagination, TableContext } from '../../../models';
 
 @Component({
   selector: 'acp-mat-dynamic-table',
+  standalone: true,
   imports: [
     MatTableModule,
     MatCheckboxModule,
@@ -70,7 +67,6 @@ import { DYNAMIC_INPUT } from '../../../inputs';
     DatePipe,
     DecimalPipe,
     NgTemplateOutlet,
-    NgComponentOutlet,
   ],
   templateUrl: './mat-dynamic-table.component.html',
   styleUrl: './mat-dynamic-table.component.css',
@@ -80,40 +76,45 @@ import { DYNAMIC_INPUT } from '../../../inputs';
       state('expanded', style({ height: '*' })),
       transition(
         'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
       ),
     ]),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MatDynamicTableComponent<T>
+export class MatDynamicTableComponent<T extends Record<string, any>>
   implements AfterContentInit, OnChanges, OnInit, OnDestroy
 {
-  private viewContainerRef = inject(ViewContainerRef);
-  private injector = inject(Injector);
+  private componentRefs: ComponentRef<any>[] = [];
   private embeddedViews: EmbeddedViewRef<any>[] = [];
 
   @Input() showExpand = false;
-  @Input() showFooter: boolean = false;
-  @Input() locale: string = '';
-  @Input() highlightRowIndex: number = 0;
-
+  @Input() showFooter = false;
+  @Input() locale = 'en-US';
+  @Input() highlightRowIndex = 0;
   @Input() visibleColumns: string[] = [];
-  @Input() columnDefinitions: ColumnDefinition[] = [];
-
-  columnsToDisplayWithExpand = this.showExpand
-    ? [...this.visibleColumns, 'expand']
-    : this.visibleColumns;
-
-  @Input() showSelectBox: boolean = false;
+  @Input() columnDefinitions: ColumnDefinition<T>[] = [];
+  @Input() showSelectBox = false;
   @Input() tableData: T[] = [];
+  @Input() rowTemplate: TemplateRef<TableContext<T>> | null = null;
+  @Input() expandedDetail: TemplateRef<TableContext<T>> | null = null;
+  @Input() enablePagination = false;
+  @Input() paginationConfig: Pagination | null = null;
+  @Input() isLoadingData = false;
+
   @Output() rowSelected = new EventEmitter<T[]>();
   @Output() copyRow = new EventEmitter<T>();
-  showExpanded = output<T>();
-  hideExpanded = output<T>();
+  @Output() showExpanded = new EventEmitter<T>();
+  @Output() hideExpanded = new EventEmitter<T>();
+  @Output() pageEvent = new EventEmitter<PageEvent>();
+
+  isNormalRow = (_: number, row: T) => this.expandedElement !== row;
+  isExpandedRow = (_: number, row: T) => this.expandedElement === row;
 
   dataSource = new MatTableDataSource<T>([]);
-  selection: SelectionModel<T> = new SelectionModel<T>(true, []);
+  selection = new SelectionModel<T>(true, []);
+  expandedElement: T | null = null;
+  columnsToDisplayWithExpand: string[] = [];
 
   @ContentChildren(MatHeaderRowDef) headerRowDefs!: QueryList<MatHeaderRowDef>;
   @ContentChildren(MatRowDef) rowDefs!: QueryList<MatRowDef<T>>;
@@ -122,182 +123,144 @@ export class MatDynamicTableComponent<T>
   @ContentChild(MatNoDataRow) noDataRow!: MatNoDataRow;
 
   @ViewChild(MatTable, { static: true }) table!: MatTable<T>;
-
-  // @ViewChildren('matrow', { read: ViewContainerRef })
-  @ContentChildren(ViewContainerRef)
-  rows!: QueryList<ViewContainerRef>;
-  // Query for ViewContainerRefs
-
-  @Input() templateOp!: any | null;
-  @Input() expandedDetail!: any | null;
-
-  expandedElement!: T | null;
-
-  enablePagination = input(false);
-  pageEvent = output<PageEvent>();
-  paginationConfig = input<Pagination>();
-
-  handlePageEvent(e: PageEvent) {
-    this.pageEvent.emit(e);
-  }
-
-  isLoadingData = input<boolean>(false);
-
-  ngAfterContentInit(): void {
-    this.columnDefs.forEach((columnDef) => this.table.addColumnDef(columnDef));
-    this.rowDefs.forEach((rowDef) => this.table.addRowDef(rowDef));
-    this.headerRowDefs.forEach((headerRowDef) =>
-      this.table.addHeaderRowDef(headerRowDef),
-    );
-
-    if (this.showFooter) {
-      this.footerRowDefs.forEach((footerRowDef) =>
-        this.table.addFooterRowDef(footerRowDef),
-      );
-    } else {
-      this.footerRowDefs.forEach((footerRowDef) =>
-        this.table.removeFooterRowDef(footerRowDef),
-      );
-    }
-    // init grid state
-    this.selection = new SelectionModel<T>(true, []);
-    this.table.setNoDataRow(this.noDataRow);
-  }
+  @ContentChildren(ViewContainerRef) rows!: QueryList<ViewContainerRef>;
 
   ngOnInit(): void {
-    if (!this.visibleColumns) {
+    this.updateColumnsToDisplay();
+    this.initializeSelection();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['tableData']) {
+      this.dataSource.data = this.tableData || [];
+    }
+
+    if (
+      changes['showExpand'] ||
+      changes['visibleColumns'] ||
+      changes['columnDefinitions']
+    ) {
+      this.updateColumnsToDisplay();
+    }
+  }
+
+  ngAfterContentInit(): void {
+    this.registerTableContent();
+    this.initializeTable();
+  }
+
+  ngOnDestroy(): void {
+    this.cleanupDynamicComponents();
+  }
+
+  private updateColumnsToDisplay(): void {
+    if (!this.visibleColumns.length && this.columnDefinitions) {
       this.visibleColumns = this.columnDefinitions.map((col) => col.key);
       this.columnDefinitions.forEach((col, index) => (col.index = index));
     }
 
-    if (this.showSelectBox && this.visibleColumns.indexOf('select') < 0) {
-      this.visibleColumns = ['select', ...this.visibleColumns];
+    const newColumns: string[] = [...this.visibleColumns];
+
+    if (this.showSelectBox && !newColumns.includes('select')) {
+      newColumns.unshift('select');
+    }
+
+    if (this.showExpand && this.expandedDetail) {
+      if (!this.columnDefinitions?.some((col) => col.key === 'expand')) {
+        this.columnDefinitions = [
+          ...(this.columnDefinitions || []),
+          {
+            key: 'expand',
+            label: '',
+            type: 'expand',
+            index: this.columnDefinitions?.length || 0,
+          },
+        ];
+      }
+
+      if (!newColumns.includes('expand')) {
+        newColumns.push('expand');
+      }
+    }
+
+    this.columnsToDisplayWithExpand = newColumns;
+  }
+
+  private initializeSelection(): void {
+    this.selection = new SelectionModel<T>(true, []);
+  }
+
+  private registerTableContent(): void {
+    this.columnDefs.forEach((columnDef) => this.table.addColumnDef(columnDef));
+    this.rowDefs.forEach((rowDef) => this.table.addRowDef(rowDef));
+    this.headerRowDefs.forEach((headerRowDef) =>
+      this.table.addHeaderRowDef(headerRowDef)
+    );
+
+    if (this.showFooter) {
+      this.footerRowDefs.forEach((footerRowDef) =>
+        this.table.addFooterRowDef(footerRowDef)
+      );
+    } else {
+      this.footerRowDefs.forEach((footerRowDef) =>
+        this.table.removeFooterRowDef(footerRowDef)
+      );
+    }
+
+    if (this.noDataRow) {
+      this.table.setNoDataRow(this.noDataRow);
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['tableData']?.currentValue && changes['tableData']) {
-      this.dataSource = new MatTableDataSource<T>(this.tableData);
-    }
+  private initializeTable(): void {
+    this.dataSource = new MatTableDataSource<T>(this.tableData || []);
   }
 
-  public createInjector = (element: any): Injector =>
-    Injector.create({
-      providers: [
-        {
-          //please note that the STATUS_INPUT is a token that we define in the status-input.ts file
-          provide: DYNAMIC_INPUT,
-          // here we pass the element that we want to use
-          useValue: element,
-        },
-      ],
-      parent: this.injector,
-    });
-
-  createEmbeddedView(column: any, element: any): void {
-    console.log(column);
-    const templateRef = column.body as TemplateRef<any>;
-
-    // Create context for the template
-    const context = {
-      $implicit: element,
-      ...column.body,
-    };
-
-    // Create the embedded view
-    const viewRef = templateRef.createEmbeddedView(context);
-    this.embeddedViews.push(viewRef);
-
-    // Attach to the view container
-    this.viewContainerRef.insert(viewRef);
+  private cleanupDynamicComponents(): void {
+    this.componentRefs.forEach((ref) => ref.destroy());
+    this.embeddedViews.forEach((view) => view.destroy());
   }
 
-  moveNextRow(cell: TableCellIndex): void {
-    console.log('moveNextRow(): ' + JSON.stringify(cell));
-  }
-
-  selectRow(row: T): void {
-    // this.rowSelected.emit(row);
-    this.rowSelected.emit(this.selection.selected);
-  }
-
-  // ----START CHECKBOX LOGIC
-
-  /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle(): void {
     this.isAllSelected()
       ? this.selection.clear()
       : this.dataSource.data.forEach((row) => this.selection.select(row));
+    this.rowSelected.emit(this.selection.selected);
   }
 
-  /** The label for the checkbox on the passed row */
   checkboxLabel(row?: T): string {
     if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row`; //  ${row.id + 1}
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row`;
   }
 
-  // ----END CHECKBOX LOGIC
-
-  showElement(index: number, height: number): void {
-    const row = this.rows.toArray()[index]; // .find(row => row.element.nativeElement.getAttribute('position') === indexstr);
-    if (row != null) {
-      const rect = row.element.nativeElement.getBoundingClientRect();
-      if (rect.y <= 0 || rect.y + rect.height > height) {
-        row.element.nativeElement.scrollIntoView(false, {
-          behavior: 'instant',
-        });
-      }
-      return;
-    }
-    console.log('not found');
+  selectRow(row: T): void {
+    this.selection.toggle(row);
+    this.rowSelected.emit(this.selection.selected);
   }
 
-  onHighlightedRowChange(event: KeyboardEvent): void {
-    // let rect     = event.target.getBoundingClientRect();
-    let focused = this.dataSource.data[this.highlightRowIndex];
-    const x: number = this.dataSource.data.indexOf(focused);
-    const l: number = this.dataSource.data.length;
-    if (event.keyCode === 38) {
-      // Up
-      if (x > 0) {
-        focused = this.dataSource.data[x - 1];
-      }
-    } else if (event.keyCode === 40) {
-      // Down
-      if (x < l - 1) {
-        focused = this.dataSource.data[x + 1];
-      }
-    }
-    if (focused != null) {
-      this.showElement(this.highlightRowIndex, 35); // $table-row-height = 35px // rect.height
-    }
-  }
-
-  getRowColor(element: any): string {
-    return element.colorRow ? element.colorRow : ''; // Return empty string if no color is defined
-  }
-
-  onExpand($event: any, element: T) {
-    $event.stopPropagation();
+  onExpand(event: Event, element: T): void {
+    event.stopPropagation();
     this.expandedElement = this.expandedElement === element ? null : element;
-    if (this.expandedElement) {
-      this.showExpanded.emit(element);
-    } else {
-      this.hideExpanded.emit(element);
-    }
+    this.expandedElement
+      ? this.showExpanded.emit(element)
+      : this.hideExpanded.emit(element);
   }
 
-  ngOnDestroy(): void {
-    // Clean up components and views to prevent memory leaks
-    this.embeddedViews.forEach((view) => view.destroy());
+  getRowColor(element: T): { [key: string]: string } {
+    return element['colorRow']
+      ? { 'background-color': element['colorRow '] }
+      : {};
+  }
+
+  handlePageEvent(e: PageEvent): void {
+    this.pageEvent.emit(e);
   }
 }
