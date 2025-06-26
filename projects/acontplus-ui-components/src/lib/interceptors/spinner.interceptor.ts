@@ -15,6 +15,8 @@ import { OverlayService } from '../services';
  */
 const SHOW_SPINNER = new HttpContextToken<boolean>(() => true);
 
+const requests: HttpRequest<any>[] = [];
+
 /**
  * Helper function to disable spinner for specific requests
  * @returns HttpContext with spinner disabled
@@ -30,20 +32,18 @@ export function withoutSpinner() {
   providedIn: 'root',
 })
 export class ActiveRequestsTracker {
-  private requests: HttpRequest<any>[] = [];
-
   get count(): number {
-    return this.requests.length;
+    return requests.length;
   }
 
   add(request: HttpRequest<any>): void {
-    this.requests.push(request);
+    requests.push(request);
   }
 
   remove(request: HttpRequest<any>): void {
-    const index = this.requests.indexOf(request);
+    const index = requests.indexOf(request);
     if (index >= 0) {
-      this.requests.splice(index, 1);
+      requests.splice(index, 1);
     }
   }
 }
@@ -53,6 +53,7 @@ export class ActiveRequestsTracker {
  */
 export const spinnerInterceptor: HttpInterceptorFn = (req, next) => {
   // Track active requests requiring spinner
+  console.log(requests);
   const activeRequests = inject(ActiveRequestsTracker);
   const overlayService = inject(OverlayService);
 

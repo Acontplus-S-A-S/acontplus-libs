@@ -10,7 +10,7 @@ import { MatDynamicCardComponent } from '@acontplus-ui-components';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { StatusDisplayPipe } from '@acontplus-ui-components';
-import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-root',
   imports: [
@@ -37,6 +37,9 @@ export class AppComponent {
       message: 'New message received',
       title: 'Notification',
     });
+    // this._appService.get().subscribe((app) => {
+    //   console.log(app);
+    // });
     // this._appService.get().subscribe((app) => {
     //   console.log(app);
     // });
