@@ -5,11 +5,13 @@ import {
   IconUserComponent,
   MatThemeButtonComponent,
   SnackbarService,
+  ThemeService,
 } from '@acontplus-ui-components';
 import { MatDynamicCardComponent } from '@acontplus-ui-components';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { StatusDisplayPipe } from '@acontplus-ui-components';
+import { ThemeToggleComponent } from '@acontplus-ui-components';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +24,7 @@ import { StatusDisplayPipe } from '@acontplus-ui-components';
     MatSelectModule,
     StatusDisplayPipe,
     StatusDisplayPipe,
+    ThemeToggleComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -32,7 +35,9 @@ export class AppComponent {
   isActive = true;
   private readonly _appService = inject(ApplicationService);
   private readonly _notification = inject(SnackbarService);
+  private readonly themeService = inject(ThemeService);
   ngOnInit() {
+    this.themeService.loadMode();
     this._notification.warning({
       message: 'New message received',
       title: 'Notification',

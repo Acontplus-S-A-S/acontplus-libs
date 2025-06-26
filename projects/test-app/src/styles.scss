@@ -1,29 +1,78 @@
 /* You can add global styles to this file, and also import other style files */
-//@import "acontplus-utils/src/styles";
 
+// Import Angular Material
+@use "@angular/material" as mat;
+
+// Import your custom theme palettes (assuming these are defined in _theme-colors.scss)
+@use "theme-colors" as custom-theme;
+
+// Import your UI components' styles
 @use "acontplus-ui-components/src/styles/snackbar-theme";
 @use "acontplus-ui-components/src/styles/custom-buttons" as buttons;
 @use "acontplus-ui-components/src/styles/custom-dialog";
-@use "@angular/material" as mat;
 
-// Your app theme
-$app-primary: mat.m2-define-palette(mat.$m2-blue-palette);
-$app-accent: mat.m2-define-palette(mat.$m2-amber-palette);
-$app-warn: mat.m2-define-palette(mat.$m2-red-palette);
+// Optional: If you had a utils file and wanted to use it
+// @use "acontplus-utils/src/styles" as utils;
 
-$app-theme: mat.m2-define-light-theme(
+// Include Angular Material Core foundational styles.
+// This should typically come first after your @use statements.
+@include mat.core();
+
+// Define light and dark themes
+$light-theme: mat.define-theme(
   (
     color: (
-      primary: $app-primary,
-      accent: $app-accent,
-      warn: $app-warn,
+      theme-type: light,
+      primary: custom-theme.$primary-palette,
+      accent: custom-theme.$accent-palette,
+      // Make sure custom-theme has an accent palette
+      warn: custom-theme.$warn-palette,
+      // Make sure custom-theme has a warn palette
+    ),
+    density: (
+      scale: 0,
+    ),
+    typography: (
+      plain-family: Roboto,
+      brand-family: Open Sans,
     ),
   )
 );
-//@include mat.all-component-themes($app-theme);
 
-// Include your custom button styles
-@include buttons.custom-button-theme($app-theme);
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: custom-theme.$primary-palette,
+      accent: custom-theme.$accent-palette,
+      // Make sure custom-theme has an accent palette
+      warn: custom-theme.$warn-palette,
+      // Make sure custom-theme has a warn palette
+    ),
+    density: (
+      scale: 0,
+    ),
+    typography: (
+      plain-family: Roboto,
+      brand-family: Open Sans,
+    ),
+  )
+);
+
+// Define a compact density theme if you only want to apply density scale selectively
+$compact-theme: mat.define-theme(
+  (
+    density: (
+      scale: -4,
+    ),
+  )
+);
+
+// Include your custom button styles (apply to both themes if they need to adapt)
+// You might only need to include this once globally if your custom-button-theme mixin
+// handles theme-awareness itself and takes a theme argument.
+@include buttons.custom-button-theme($light-theme);
+
 html,
 body {
   height: 100%;
@@ -31,4 +80,34 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// Default theme for the application (applied to the root)
+:root {
+  @include mat.all-component-themes($light-theme);
+  // Apply compact density specifically to form fields (overrides default density from $light-theme)
+  @include mat.form-field-density($compact-theme);
+
+  // Add backwards compatibility styles for color variants
+  @include mat.color-variants-backwards-compatibility($light-theme);
+}
+
+// Dark theme class (applied when the .dark-theme class is present on body or a parent)
+.dark-theme {
+  // Apply only the color styles for all components from the dark theme
+  @include mat.all-component-colors($dark-theme);
+  // Apply the default app background color for the dark theme
+  @include mat.app-background();
+  // Apply elevation classes for proper shadows in dark mode
+  @include mat.elevation-classes();
+  // Ensure custom buttons also adapt to the dark theme colors
+  @include buttons.custom-button-theme($dark-theme);
+  // Add backwards compatibility styles for color variants for dark theme
+  @include mat.color-variants-backwards-compatibility($dark-theme);
+
+  // You might also need to explicitly include typography and density
+  // if you want them to change with the dark theme class.
+  // For example, if your dark theme uses a different font size or family.
+  // @include mat.all-component-typography($dark-theme);
+  // @include mat.all-component-density($dark-theme);
 }
