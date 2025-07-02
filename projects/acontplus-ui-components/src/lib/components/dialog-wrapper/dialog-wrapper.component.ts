@@ -18,6 +18,21 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { DialogWrapperConfig } from '../../services';
 
+/**
+ * A wrapper component for Angular Material dialogs that provides a consistent look and feel,
+ * including a draggable header and the ability to dynamically create components inside the dialog.
+ * 
+ * This component is typically used with the AdvancedDialogService's openInWrapper method.
+ * 
+ * @example
+ * // In your service or component:
+ * this.dialogService.openInWrapper({
+ *   component: YourDialogContentComponent,
+ *   title: 'Dialog Title',
+ *   icon: 'info',
+ *   data: { message: 'This is some data passed to the dialog content component' }
+ * });
+ */
 @Component({
   selector: 'acp-dialog-wrapper',
   standalone: true,
@@ -34,20 +49,40 @@ import { DialogWrapperConfig } from '../../services';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DialogWrapperComponent implements AfterViewInit {
-  // A template reference that acts as an anchor for dynamic content.
+  /**
+   * A template reference that acts as an anchor for dynamic content.
+   * This is where the component specified in the config will be rendered.
+   */
   @ViewChild('contentHost', { read: ViewContainerRef, static: true })
   contentHost!: ViewContainerRef;
 
-  // A reference to the header element for the z-index focus logic.
+  /**
+   * A reference to the header element for the z-index focus logic.
+   * Used to bring the dialog to the front when clicked.
+   */
   @ViewChild('dialogHeader', { static: false }) header?: ElementRef;
 
+  /**
+   * Static counter to track the highest z-index for multiple dialogs.
+   * Ensures that the most recently clicked dialog appears on top.
+   */
   private static lastZIndex = 1000;
 
+  /**
+   * Creates an instance of DialogWrapperComponent.
+   * 
+   * @param dialogRef Reference to the dialog opened via the Material Dialog service
+   * @param config Configuration for the dialog wrapper, injected from MAT_DIALOG_DATA
+   */
   constructor(
     public dialogRef: MatDialogRef<DialogWrapperComponent>,
     @Inject(MAT_DIALOG_DATA) public config: DialogWrapperConfig, // Injects the wrapper-specific config
   ) {}
 
+  /**
+   * Lifecycle hook that initializes the dynamic content after the view is ready.
+   * Creates the component specified in the config and passes data to it.
+   */
   ngAfterViewInit(): void {
     // Dynamically create the content component after the view is ready.
     this.contentHost.clear();
@@ -62,10 +97,18 @@ export class DialogWrapperComponent implements AfterViewInit {
     }
   }
 
+  /**
+   * Closes the dialog.
+   * Called when the close button in the header is clicked.
+   */
   onClose(): void {
     this.dialogRef.close();
   }
 
+  /**
+   * Brings the dialog to the front by adjusting its z-index.
+   * Called when the dialog header is clicked.
+   */
   bringToFront(): void {
     const pane = this.header?.nativeElement.closest(
       '.cdk-overlay-pane',

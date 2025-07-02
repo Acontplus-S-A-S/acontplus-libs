@@ -42,9 +42,9 @@ export class AppComponent {
       message: 'New message received',
       title: 'Notification',
     });
-    // this._appService.get().subscribe((app) => {
-    //   console.log(app);
-    // });
+    this._appService.get().subscribe((app) => {
+      console.log(app);
+    });
     // this._appService.get().subscribe((app) => {
     //   console.log(app);
     // });

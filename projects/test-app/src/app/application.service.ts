@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
-import { ApiResponse } from 'acontplus-utils';
+import { ApiResponse } from '@acontplus-core';
 
 @Injectable({
   providedIn: 'root',
