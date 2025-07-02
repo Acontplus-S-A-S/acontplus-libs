@@ -159,10 +159,10 @@ If you wish to contribute to this library or run it locally:
 
 ## Contributing
 
-Contributions are welcome\! Please read our [contributing guidelines](https://www.google.com/search?q=CONTRIBUTING.md) for details on how to submit pull requests, report bugs, and suggest features.
+Contributions are welcome! Please read our [contributing guidelines](../../CONTRIBUTING.md) for details on how to submit pull requests, report bugs, and suggest features.
 
 ## License
 
-This project is licensed under the [MIT License](https://www.google.com/search?q=LICENSE).
+This project is licensed under the [MIT License](../../LICENSE).
 
 -----

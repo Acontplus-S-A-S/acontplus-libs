@@ -49,13 +49,48 @@ export interface MatCustomDialogConfig<T = any> {
 }
 
 /**
+ * Configuration interface for opening a dialog inside the custom `DialogWrapperComponent`.
+ * This interface defines the properties needed to configure the dialog wrapper.
+ * 
  * @interface DialogWrapperConfig
- * Configuration specific to opening a dialog inside our custom `DialogWrapperComponent`.
+ * @template T The type of data to pass to the content component
+ * 
+ * @example
+ * const config: DialogWrapperConfig = {
+ *   component: YourDialogContentComponent,
+ *   title: 'Dialog Title',
+ *   icon: 'info',
+ *   data: { message: 'This is some data passed to the dialog content component' },
+ *   hideHeader: false
+ * };
  */
 export interface DialogWrapperConfig<T = any> {
-  component: Type<any>; // The actual content component to render inside the wrapper.
-  title: string; // The title to display in the wrapper's header.
-  icon?: string; // An optional icon for the header.
-  data?: T; // Data to be passed to the content component's instance.
-  hideHeader?: boolean; // Whether to show the header section.
+  /**
+   * The component type to render inside the dialog wrapper.
+   * This component will be dynamically created and inserted into the dialog.
+   */
+  component: Type<any>;
+
+  /**
+   * The title text to display in the dialog header.
+   */
+  title: string;
+
+  /**
+   * Optional Material icon name to display in the dialog header.
+   */
+  icon?: string;
+
+  /**
+   * Optional data to pass to the content component's instance.
+   * This will be accessible via the `data` property on the component instance.
+   */
+  data?: T;
+
+  /**
+   * Whether to hide the dialog header section.
+   * If true, the title, icon, and close button will not be displayed.
+   * @default false
+   */
+  hideHeader?: boolean;
 }
