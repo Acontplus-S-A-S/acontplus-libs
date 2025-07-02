@@ -4,7 +4,7 @@
     "baseUrl": "./",
     "paths": {
       "@acontplus-ui-components": ["./dist/acontplus-ui-components"],
-      "@acontplus-utils": ["./dist/acontplus-utils"]
+      "@acontplus-core": ["./dist/acontplus-core"]
     },
     "outDir": "./dist/out-tsc",
     "strict": true,
@@ -51,10 +51,10 @@
       "path": "./projects/acontplus-ui-components/tsconfig.spec.json"
     },
     {
-      "path": "./projects/acontplus-utils/tsconfig.lib.json"
+      "path": "./projects/acontplus-core/tsconfig.lib.json"
     },
     {
-      "path": "./projects/acontplus-utils/tsconfig.spec.json"
+      "path": "./projects/acontplus-core/tsconfig.spec.json"
     }
   ]
 }

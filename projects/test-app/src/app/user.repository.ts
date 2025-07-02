@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
-import { BaseRepository } from '../../../acontplus-utils/src/lib/services/base.repository';
-import { OperationResult } from '../../../acontplus-utils/src/public-api';
+import { BaseRepository } from '../../../acontplus-core/src/lib/repositories/base.repository';
+import { OperationResult } from '../../../acontplus-core/src/public-api';
 import { User } from './user';
 
 export abstract class UserRepository extends BaseRepository<User> {

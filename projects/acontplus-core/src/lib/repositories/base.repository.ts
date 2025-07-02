@@ -4,7 +4,7 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import {
-  ApiResponse,
+  LegacyApiResponse,
   BaseEntity,
   FilterParams,
   OperationResult,
@@ -34,7 +34,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
 
   // Shared response handling methods
   protected handleSingleResponse(
-    response: HttpResponse<ApiResponse<T>>
+    response: HttpResponse<LegacyApiResponse<T>>
   ): OperationResult<T> {
     const body = response.body;
 
@@ -70,7 +70,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
   }
 
   protected handlePaginatedResponse(
-    response: HttpResponse<ApiResponse<PaginatedResult<T>>>
+    response: HttpResponse<LegacyApiResponse<PaginatedResult<T>>>
   ): OperationResult<PaginatedResult<T>> {
     const body = response.body;
 
@@ -115,7 +115,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
   }
 
   protected handleDeleteResponse(
-    response: HttpResponse<ApiResponse<any>>
+    response: HttpResponse<LegacyApiResponse<any>>
   ): OperationResult<boolean> {
     const body = response.body;
 
@@ -152,7 +152,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
 
     // Extract error information from ApiResponse
     if (error.error && typeof error.error === 'object') {
-      const errorResponse = error.error as ApiResponse<any>;
+      const errorResponse = error.error as LegacyApiResponse<any>;
       if (errorResponse.message) {
         message = errorResponse.message;
       }
