@@ -4,220 +4,142 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import {
-  LegacyApiResponse,
+  ApiResponse,
+  ApiError,
   BaseEntity,
   FilterParams,
-  OperationResult,
   PaginatedResult,
   PaginationParams,
 } from '../models';
 import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 export abstract class BaseRepository<T extends BaseEntity> {
-  constructor(protected http: HttpClient, protected baseUrl: string) {}
+  constructor(
+    protected http: HttpClient,
+    protected baseUrl: string,
+  ) {}
 
   abstract getAll(
     pagination: PaginationParams,
-    filters?: FilterParams
-  ): Observable<OperationResult<PaginatedResult<T>>>;
-  abstract getById(id: number): Observable<OperationResult<T>>;
-  abstract create(entity: Omit<T, 'id'>): Observable<OperationResult<T>>;
-  abstract update(
-    id: number,
-    entity: Partial<T>
-  ): Observable<OperationResult<T>>;
-  abstract delete(id: number): Observable<OperationResult<boolean>>;
+    filters?: FilterParams,
+  ): Observable<PaginatedResult<T>>;
+
+  abstract getById(id: number): Observable<T>;
+
+  abstract create(entity: Omit<T, 'id'>): Observable<T>;
+
+  abstract update(id: number, entity: Partial<T>): Observable<T>;
+
+  abstract delete(id: number): Observable<boolean>;
+
   abstract search(
     query: string,
-    pagination: PaginationParams
-  ): Observable<OperationResult<PaginatedResult<T>>>;
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<T>>;
 
-  // Shared response handling methods
-  protected handleSingleResponse(
-    response: HttpResponse<LegacyApiResponse<T>>
-  ): OperationResult<T> {
-    const body = response.body;
-
-    switch (response.status) {
-      case 200: // OK
-      case 201: // Created
-        return {
-          success: true,
-          data: body?.payload || null,
-          message: body?.message || this.getSuccessMessage(response.status),
-          errors: [],
-          statusCode: response.status,
-        };
-
-      case 204: // No Content
-        return {
-          success: true,
-          data: null,
-          message: 'Operation completed successfully',
-          errors: [],
-          statusCode: 204,
-        };
-
-      default:
-        return {
-          success: false,
-          data: null,
-          message: body?.message || 'Unexpected response',
-          errors: body?.errors || [],
-          statusCode: response.status,
-        };
-    }
+  // Protected helper methods for HTTP operations
+  protected get<R>(url: string, params?: any): Observable<R> {
+    return this.http.get<ApiResponse<R>>(url, { params }).pipe(
+      map((response) => this.extractData<R>(response)),
+      catchError((error) => this.handleHttpError<R>(error)),
+    );
   }
 
-  protected handlePaginatedResponse(
-    response: HttpResponse<LegacyApiResponse<PaginatedResult<T>>>
-  ): OperationResult<PaginatedResult<T>> {
-    const body = response.body;
+  protected post<R>(url: string, body: any): Observable<R> {
+    return this.http.post<ApiResponse<R>>(url, body).pipe(
+      map((response) => this.extractData<R>(response)),
+      catchError((error) => this.handleHttpError<R>(error)),
+    );
+  }
 
-    const defaultPagination: PaginatedResult<T> = {
-      items: [],
-      totalCount: 0,
-      pageNumber: 1,
-      pageSize: 10,
-      hasNextPage: false,
-      hasPreviousPage: false,
+  protected put<R>(url: string, body: any): Observable<R> {
+    return this.http.put<ApiResponse<R>>(url, body).pipe(
+      map((response) => this.extractData<R>(response)),
+      catchError((error) => this.handleHttpError<R>(error)),
+    );
+  }
+
+  protected patch<R>(url: string, body: any): Observable<R> {
+    return this.http.patch<ApiResponse<R>>(url, body).pipe(
+      map((response) => this.extractData<R>(response)),
+      catchError((error) => this.handleHttpError<R>(error)),
+    );
+  }
+
+  protected deleteHttp<R>(url: string): Observable<R> {
+    return this.http.delete<ApiResponse<R>>(url).pipe(
+      map((response) => this.extractData<R>(response)),
+      catchError((error) => this.handleHttpError<R>(error)),
+    );
+  }
+
+  // Helper methods for building URLs
+  protected buildUrl(endpoint: string): string {
+    return `${this.baseUrl}/${endpoint}`.replace(/\/+/g, '/');
+  }
+
+  protected buildQueryParams(
+    pagination: PaginationParams,
+    filters?: FilterParams,
+  ): any {
+    const params: any = {
+      page: pagination.page.toString(),
+      pageSize: pagination.pageSize.toString(),
     };
 
-    switch (response.status) {
-      case 200:
-        return {
-          success: true,
-          data: body?.payload || defaultPagination,
-          message:
-            body?.message || `Found ${body?.payload?.totalCount || 0} items`,
-          errors: [],
-          statusCode: 200,
-        };
-
-      case 204:
-        return {
-          success: true,
-          data: defaultPagination,
-          message: 'No items found',
-          errors: [],
-          statusCode: 204,
-        };
-
-      default:
-        return {
-          success: false,
-          data: defaultPagination,
-          message: body?.message || 'Failed to retrieve items',
-          errors: body?.errors || [],
-          statusCode: response.status,
-        };
+    if (pagination.sortBy) {
+      params.sortBy = pagination.sortBy;
     }
+
+    if (pagination.sortDirection) {
+      params.sortDirection = pagination.sortDirection;
+    }
+
+    if (filters) {
+      Object.keys(filters).forEach((key) => {
+        const value = (filters as any)[key];
+        if (value !== undefined && value !== null && value !== '') {
+          params[key] = value.toString();
+        }
+      });
+    }
+
+    return params;
   }
 
-  protected handleDeleteResponse(
-    response: HttpResponse<LegacyApiResponse<any>>
-  ): OperationResult<boolean> {
-    const body = response.body;
-
-    switch (response.status) {
-      case 200:
-      case 204:
-      case 202: // Accepted (async delete)
-        return {
-          success: true,
-          data: true,
-          message: body?.message || 'Item deleted successfully',
-          errors: [],
-          statusCode: response.status,
-        };
-
-      default:
-        return {
-          success: false,
-          data: false,
-          message: body?.message || 'Delete operation failed',
-          errors: body?.errors || [],
-          statusCode: response.status,
-        };
+  // Private helper methods
+  private extractData<R>(response: ApiResponse<R>): R {
+    // The interceptor already extracts the data from ApiResponse
+    // If data is null/undefined, we might want to handle it differently based on the operation
+    if (response.data === undefined || response.data === null) {
+      // For operations that might legitimately return null (like delete)
+      return response.data as R;
     }
+    return response.data;
   }
 
-  protected handleError<R>(
-    error: HttpErrorResponse
-  ): Observable<OperationResult<R>> {
-    console.error(`Repository Error [${error.status}]:`, error);
+  private handleHttpError<R>(error: any): Observable<R> {
+    // The interceptor already handles error display and transforms the error
+    // We just need to re-throw it for the consuming code to handle
 
-    let message = 'An unexpected error occurred';
-    let errors: string[] = [];
-
-    // Extract error information from ApiResponse
-    if (error.error && typeof error.error === 'object') {
-      const errorResponse = error.error as LegacyApiResponse<any>;
-      if (errorResponse.message) {
-        message = errorResponse.message;
-      }
-      if (errorResponse.errors) {
-        errors = errorResponse.errors;
-      }
+    // If it's an ApiResponse error (transformed by interceptor)
+    if (error?.status && error?.code) {
+      throw error;
     }
 
-    // Default messages based on status code
-    if (message === 'An unexpected error occurred') {
-      message = this.getErrorMessage(error.status);
+    // If it's a raw HttpErrorResponse (shouldn't happen with interceptor, but safety net)
+    if (error instanceof HttpErrorResponse) {
+      const apiError: ApiError = {
+        code: error.status?.toString() || 'UNKNOWN_ERROR',
+        message: error.message || 'An unexpected error occurred',
+        severity: 'error',
+        category: 'HTTP',
+      };
+      throw apiError;
     }
 
-    const result: OperationResult<R> = {
-      success: false,
-      data: null as R,
-      message,
-      errors,
-      statusCode: error.status,
-    };
-
-    return of(result);
-  }
-
-  private getSuccessMessage(statusCode: number): string {
-    switch (statusCode) {
-      case 200:
-        return 'Operation completed successfully';
-      case 201:
-        return 'Item created successfully';
-      case 202:
-        return 'Request accepted for processing';
-      case 204:
-        return 'Operation completed';
-      default:
-        return 'Success';
-    }
-  }
-
-  private getErrorMessage(statusCode: number): string {
-    switch (statusCode) {
-      case 400:
-        return 'Invalid request data';
-      case 401:
-        return 'Authentication required';
-      case 403:
-        return 'Access denied';
-      case 404:
-        return 'Item not found';
-      case 409:
-        return 'Conflict with existing data';
-      case 422:
-        return 'Validation failed';
-      case 429:
-        return 'Too many requests';
-      case 500:
-        return 'Internal server error';
-      case 502:
-        return 'Bad gateway';
-      case 503:
-        return 'Service unavailable';
-      case 504:
-        return 'Gateway timeout';
-      default:
-        return 'An unexpected error occurred';
-    }
+    // Re-throw any other errors
+    throw error;
   }
 }
