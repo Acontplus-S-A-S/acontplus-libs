@@ -22,6 +22,8 @@ import {
 import { spinnerInterceptor } from '@acontplus-ui-components';
 import { provideTransloco } from '@jsverse/transloco';
 import { BaseRepository } from '../../../acontplus-core/src/lib/repositories';
+import { provideToastr } from 'ngx-toastr';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -44,6 +46,8 @@ export const appConfig: ApplicationConfig = {
       loader: TranslocoHttpLoader,
     }),
 
+    provideToastr(),
+    provideAnimationsAsync(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     { provide: ENVIRONMENT, useValue: environment },

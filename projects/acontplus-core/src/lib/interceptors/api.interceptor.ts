@@ -8,10 +8,10 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
 import { TranslocoService } from '@jsverse/transloco';
 import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { ToastrNotificationService } from '../services';
 
 type ApiTranslationKey =
   | `api.errors.${string}`
@@ -21,7 +21,7 @@ type ApiTranslationKey =
   | 'api.errors.network';
 
 export const apiInterceptor: HttpInterceptorFn = (req, next) => {
-  const toastr = inject(ToastrService);
+  const toastr = inject(ToastrNotificationService);
   const transloco = inject(TranslocoService, { optional: true });
 
   return next(req).pipe(
@@ -39,7 +39,7 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
 
 function handleSuccessResponse(
   event: HttpResponse<any>,
-  toastr: ToastrService,
+  toastr: ToastrNotificationService,
   transloco?: TranslocoService | null,
 ): HttpResponse<any> {
   const body = event.body;
@@ -56,7 +56,7 @@ function handleSuccessResponse(
       body.details,
     );
 
-    toastr.warning(message);
+    toastr.warning({ message });
   }
 
   return event.clone({ body: body.data ?? body });
@@ -64,7 +64,7 @@ function handleSuccessResponse(
 
 function handleErrorResponse(
   error: HttpErrorResponse,
-  toastr: ToastrService,
+  toastr: ToastrNotificationService,
   transloco?: TranslocoService | null,
 ) {
   const apiError = error.error;
@@ -82,14 +82,14 @@ function handleErrorResponse(
       primaryError.details,
     );
 
-    toastr.error(message);
+    toastr.error({message});
   } else {
     const message = getTranslatedMessage(
       transloco,
       'api.errors.network',
       error.message,
     );
-    toastr.error(message);
+    toastr.error({ message });
   }
 
   return throwError(() => apiError ?? error);
