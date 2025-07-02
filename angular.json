@@ -28,7 +28,10 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/acontplus-utils/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         },
         "lint": {
@@ -60,7 +63,9 @@
             "outputPath": "dist/test-app",
             "index": "projects/test-app/src/index.html",
             "browser": "projects/test-app/src/main.ts",
-            "polyfills": ["zone.js"],
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "projects/test-app/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -128,7 +133,10 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "projects/test-app/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -142,68 +150,6 @@
               "projects/test-app/src/styles.scss"
             ],
             "scripts": []
-          }
-        }
-      }
-    },
-    "acontplus-ui-components": {
-      "projectType": "library",
-      "root": "projects/acontplus-ui-components",
-      "sourceRoot": "projects/acontplus-ui-components/src",
-      "prefix": "lib",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
-      "architect": {
-        "build": {
-          "builder": "@angular/build:ng-packagr",
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/acontplus-ui-components/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/acontplus-ui-components/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "tsConfig": "projects/acontplus-ui-components/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
-          }
-        }
-      }
-    },
-    "acontplus-core": {
-      "projectType": "library",
-      "root": "projects/acontplus-core",
-      "sourceRoot": "projects/acontplus-core/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular/build:ng-packagr",
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/acontplus-core/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/acontplus-core/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "tsConfig": "projects/acontplus-core/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
           }
         }
       }

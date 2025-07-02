@@ -1,7 +1,11 @@
+// @ts-check
+const eslint = require("@eslint/js");
+const tseslint = require("typescript-eslint");
+const angular = require("angular-eslint");
+
 module.exports = tseslint.config(
   {
     files: ["**/*.ts"],
-    ignores: ["**/node_modules/*", "projects/**/node_modules/*"],
     extends: [
       eslint.configs.recommended,
       ...tseslint.configs.recommended,
@@ -14,7 +18,7 @@ module.exports = tseslint.config(
         "error",
         {
           type: "attribute",
-          prefix: "apm",
+          prefix: "lib",
           style: "camelCase",
         },
       ],
@@ -22,7 +26,7 @@ module.exports = tseslint.config(
         "error",
         {
           type: "element",
-          prefix: "apm",
+          prefix: "lib",
           style: "kebab-case",
         },
       ],
@@ -30,7 +34,6 @@ module.exports = tseslint.config(
   },
   {
     files: ["**/*.html"],
-    ignores: ["**/node_modules/*", "projects/**/node_modules/*"],
     extends: [
       ...angular.configs.templateRecommended,
       ...angular.configs.templateAccessibility,
