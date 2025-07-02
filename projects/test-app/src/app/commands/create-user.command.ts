@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
+import {
+  BaseRepository,
+  CreateCommand,
+  UseCaseResult,
+  ValidationError,
+} from '@acontplus-core';
+import { User } from '../user';
 
 @Injectable()
 export class CreateUserCommand extends CreateCommand<User> {
   constructor(
     private userRepository: BaseRepository<User>,
-    private emailService: EmailService, // Domain service
-    private userValidator: UserValidator, // Domain service
-    private authService: AuthService,
+    // private emailService: EmailService, // Domain service
+    // private userValidator: UserValidator, // Domain service
+    // private authService: AuthService,
   ) {
     super();
   }
@@ -16,7 +23,7 @@ export class CreateUserCommand extends CreateCommand<User> {
     return this.userRepository.create(request).pipe(
       map((user) => {
         // Send welcome email as side effect
-        this.sendWelcomeEmail(user);
+        // this.sendWelcomeEmail(user);
         return user;
       }),
       catchError((error) => {
@@ -26,24 +33,24 @@ export class CreateUserCommand extends CreateCommand<User> {
     );
   }
 
-  protected validate(request: Omit<User, 'id'>): ValidationError[] {
-    return this.userValidator.validateForCreation(request);
-  }
+  // protected validate(request: Omit<User, 'id'>): ValidationError[] {
+  //   return this.userValidator.validateForCreation(request);
+  // }
 
-  protected async checkAuthorization(
-    request: Omit<User, 'id'>,
-  ): Promise<boolean> {
-    return this.authService.hasPermission('users.create');
-  }
+  // protected async checkAuthorization(
+  //   request: Omit<User, 'id'>,
+  // ): Promise<boolean> {
+  //   return this.authService.hasPermission('users.create');
+  // }
 
-  private sendWelcomeEmail(user: User): void {
-    try {
-      this.emailService.sendWelcomeEmail(user.email, user.name);
-    } catch (error) {
-      // Log but don't fail the operation
-      console.warn('Failed to send welcome email:', error);
-    }
-  }
+  // private sendWelcomeEmail(user: User): void {
+  //   try {
+  //     this.emailService.sendWelcomeEmail(user.email, user.name);
+  //   } catch (error) {
+  //     // Log but don't fail the operation
+  //     console.warn('Failed to send welcome email:', error);
+  //   }
+  // }
 
   private mapRepositoryError(error: any): UseCaseResult<User> {
     // Map specific .NET backend error codes to domain errors

@@ -16,21 +16,18 @@ import {
 import { environment } from '../environments/environment';
 import {
   ENVIRONMENT,
-  errorInterceptor,
+  apiInterceptor,
   injectSessionInterceptor,
-} from '@acontplus-utils';
+} from '@acontplus-core';
 import { spinnerInterceptor } from '@acontplus-ui-components';
 import { provideTransloco } from '@jsverse/transloco';
 import { BaseRepository } from '../../../acontplus-core/src/lib/repositories';
-import { UserRepository } from './user.repository';
-import { CreateUserCommand } from './commands/create-user.command';
-import { GetUsersQuery } from './queries/user.query';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(
       withInterceptors([
-        errorInterceptor,
+        apiInterceptor,
         spinnerInterceptor,
         injectSessionInterceptor,
       ]),
@@ -50,7 +47,5 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     { provide: ENVIRONMENT, useValue: environment },
-
-    { provide: BaseRepository, UseClass: UserRepository },
   ],
 };

@@ -1,4 +1,13 @@
 import { Injectable } from '@angular/core';
+import { CreateUserCommand } from '../commands/create-user.command';
+import { GetUsersQuery } from '../queries/user.query';
+import { User } from '../user';
+import { Observable } from 'rxjs';
+import {
+  FilterParams,
+  PaginatedResult,
+  PaginationParams,
+} from '@acontplus-core';
 
 @Injectable({
   providedIn: 'root',
@@ -7,8 +16,8 @@ export class UserUseCases {
   constructor(
     private createUserCommand: CreateUserCommand,
     private getUsersQuery: GetUsersQuery,
-    private getUserByIdQuery: GetUserByIdQuery,
-    private updateUserCommand: UpdateUserCommand,
+    private getUserByIdQuery: GetUsersQuery,
+    private updateUserCommand: CreateUserCommand,
     private deleteUserCommand: DeleteUserCommand,
   ) {}
 
