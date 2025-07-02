@@ -2,12 +2,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserRepository } from './user.repository';
 import {
-  ApiResponse,
+  LegacyApiResponse,
   FilterParams,
   OperationResult,
   PaginatedResult,
   PaginationParams,
-} from '../../../acontplus-utils/src/public-api';
+} from '../../../acontplus-core/src/public-api';
 import { catchError, map, Observable } from 'rxjs';
 import { User } from './user';
 
@@ -45,7 +45,7 @@ export class UserWebRepository extends UserRepository {
     }
 
     return this.http
-      .get<ApiResponse<PaginatedResult<User>>>(this.baseUrl, {
+      .get<LegacyApiResponse<PaginatedResult<User>>>(this.baseUrl, {
         params,
         observe: 'response',
       })
@@ -57,7 +57,7 @@ export class UserWebRepository extends UserRepository {
 
   getById(id: number): Observable<OperationResult<User>> {
     return this.http
-      .get<ApiResponse<User>>(`${this.baseUrl}/${id}`, { observe: 'response' })
+      .get<LegacyApiResponse<User>>(`${this.baseUrl}/${id}`, { observe: 'response' })
       .pipe(
         map((response) => this.handleSingleResponse(response)),
         catchError((error) => this.handleError<User>(error))
@@ -66,7 +66,7 @@ export class UserWebRepository extends UserRepository {
 
   create(entity: Omit<User, 'id'>): Observable<OperationResult<User>> {
     return this.http
-      .post<ApiResponse<User>>(this.baseUrl, entity, { observe: 'response' })
+      .post<LegacyApiResponse<User>>(this.baseUrl, entity, { observe: 'response' })
       .pipe(
         map((response) => this.handleSingleResponse(response)),
         catchError((error) => this.handleError<User>(error))
@@ -75,7 +75,7 @@ export class UserWebRepository extends UserRepository {
 
   update(id: number, entity: Partial<User>): Observable<OperationResult<User>> {
     return this.http
-      .put<ApiResponse<User>>(`${this.baseUrl}/${id}`, entity, {
+      .put<LegacyApiResponse<User>>(`${this.baseUrl}/${id}`, entity, {
         observe: 'response',
       })
       .pipe(
@@ -86,7 +86,7 @@ export class UserWebRepository extends UserRepository {
 
   delete(id: number): Observable<OperationResult<boolean>> {
     return this.http
-      .delete<ApiResponse<any>>(`${this.baseUrl}/${id}`, {
+      .delete<LegacyApiResponse<any>>(`${this.baseUrl}/${id}`, {
         observe: 'response',
       })
       .pipe(
@@ -105,7 +105,7 @@ export class UserWebRepository extends UserRepository {
       .set('pageSize', pagination.pageSize.toString());
 
     return this.http
-      .get<ApiResponse<PaginatedResult<User>>>(`${this.baseUrl}/search`, {
+      .get<LegacyApiResponse<PaginatedResult<User>>>(`${this.baseUrl}/search`, {
         params,
         observe: 'response',
       })
@@ -118,7 +118,7 @@ export class UserWebRepository extends UserRepository {
   // User-specific operations
   getUserByEmail(email: string): Observable<OperationResult<User>> {
     return this.http
-      .get<ApiResponse<User>>(
+      .get<LegacyApiResponse<User>>(
         `${this.baseUrl}/by-email/${encodeURIComponent(email)}`,
         { observe: 'response' }
       )
@@ -133,7 +133,7 @@ export class UserWebRepository extends UserRepository {
     role: string
   ): Observable<OperationResult<User>> {
     return this.http
-      .patch<ApiResponse<User>>(
+      .patch<LegacyApiResponse<User>>(
         `${this.baseUrl}/${userId}/role`,
         { role },
         { observe: 'response' }
@@ -146,7 +146,7 @@ export class UserWebRepository extends UserRepository {
 
   activateUser(userId: number): Observable<OperationResult<boolean>> {
     return this.http
-      .patch<ApiResponse<any>>(
+      .patch<LegacyApiResponse<any>>(
         `${this.baseUrl}/${userId}/activate`,
         {},
         { observe: 'response' }
@@ -169,7 +169,7 @@ export class UserWebRepository extends UserRepository {
 
   deactivateUser(userId: number): Observable<OperationResult<boolean>> {
     return this.http
-      .patch<ApiResponse<any>>(
+      .patch<LegacyApiResponse<any>>(
         `${this.baseUrl}/${userId}/deactivate`,
         {},
         { observe: 'response' }
@@ -192,7 +192,7 @@ export class UserWebRepository extends UserRepository {
 
   bulkDelete(userIds: number[]): Observable<OperationResult<number>> {
     return this.http
-      .delete<ApiResponse<{ deletedCount: number }>>(`${this.baseUrl}/bulk`, {
+      .delete<LegacyApiResponse<{ deletedCount: number }>>(`${this.baseUrl}/bulk`, {
         body: { ids: userIds },
         observe: 'response',
       })

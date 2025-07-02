@@ -177,6 +177,36 @@
           }
         }
       }
+    },
+    "acontplus-core": {
+      "projectType": "library",
+      "root": "projects/acontplus-core",
+      "sourceRoot": "projects/acontplus-core/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/acontplus-core/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/acontplus-core/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/acontplus-core/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {
