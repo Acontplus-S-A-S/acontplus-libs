@@ -124,7 +124,7 @@ export class AdvancedDialogService {
     dialogConfig.height = config.height;
     dialogConfig.minWidth = config.minWidth;
     dialogConfig.maxWidth = config.maxWidth ?? '95vw';
-    dialogConfig.maxHeight = config.maxHeight ?? '90vh';
+    dialogConfig.maxHeight = config.maxHeight ?? 'auto';
     dialogConfig.position = config.position;
   }
 
