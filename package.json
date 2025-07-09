@@ -12,6 +12,7 @@
     "pack-acontplus-ui-components": "cd dist/acontplus-ui-components && npm pack",
     "build-and-pack": "npm run build-library && npm run pack-acontplus-core && npm run pack-acontplus-ui-components",
     "build:sass": "sass styles/styles.scss assets/styles.css",
+    "publish": "npm publish dist/acontplus-ui-components/acontplus-ui-components-0.0.13.tgz",
     "lint": "ng lint"
   },
   "private": false,
