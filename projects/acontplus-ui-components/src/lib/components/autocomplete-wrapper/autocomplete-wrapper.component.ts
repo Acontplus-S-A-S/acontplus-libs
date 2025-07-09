@@ -26,10 +26,10 @@ import {
   AutocompleteWrapperConfig,
   AutocompleteWrapperFilters,
   AutocompleteWrapperItem, AutocompleteWrapperSearchFunction, AutocompleteWrapperSearchResult, AutocompleteWrapperState
-} from "../../models/autocomplete-wrapper.model";
-import {AutocompleteWrapperService} from "../../services/autocomplete-wrapper.service";
+} from "../../models";
+import {AutocompleteWrapperService} from "../../services";
 @Component({
-  selector: 'app-reusable-autocomplete',
+  selector: 'acp-autocomplete-wrapper',
   imports: [
     MatIcon,
     NgTemplateOutlet,
