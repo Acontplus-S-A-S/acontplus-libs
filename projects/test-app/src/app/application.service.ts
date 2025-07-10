@@ -7,15 +7,15 @@ import { ApiResponse } from '@acontplus-core';
   providedIn: 'root',
 })
 export class ApplicationService {
-  #http = inject(HttpClient);
-  #url = `Aplicacion`;
+  private http = inject(HttpClient);
+  private url = `aplicaciones`;
 
   get() {
-    return this.#http.get<ApiResponse>(this.#url).pipe(
+    return this.http.get(this.url).pipe(
       map((response) => {
         console.log(response);
-        if (response.code) {
-        }
+        // if (response.code) {
+        // }
       }),
     );
   }
