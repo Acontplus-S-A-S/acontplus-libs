@@ -2,18 +2,74 @@
 
 ## Overview
 
-The API interceptor has been improved to handle different response scenarios while maintaining DDD principles. This document explains how different types of API responses are processed and how to handle them in your use cases.
+The API interceptor now **standardizes all responses** to follow a consistent `ApiResponse<T>` structure, making the handling more predictable and robust. This approach ensures that regardless of how your backend returns data, the frontend always receives a consistent format.
+
+## Response Standardization
+
+### What the Interceptor Does
+
+The interceptor automatically standardizes all HTTP responses:
+
+1. **Wraps raw data** into proper `ApiResponse` structure
+2. **Handles different response formats** from various backends
+3. **Standardizes error responses** for consistent error handling
+4. **Manages toast notifications** based on response type and request method
+5. **Transforms responses** for consumers (repositories, use cases)
+
+### Standardization Rules
+
+```typescript
+// Raw data response → Standardized
+{ id: 1, name: "John" } 
+// ↓
+{
+  status: 'success',
+  code: '200',
+  message: 'Operation completed successfully',
+  data: { id: 1, name: "John" },
+  timestamp: '2024-01-01T00:00:00Z'
+}
+
+// Primitive value → Standardized
+true
+// ↓
+{
+  status: 'success',
+  code: '200',
+  message: 'Operation completed successfully',
+  data: true,
+  timestamp: '2024-01-01T00:00:00Z'
+}
+
+// Already standardized → Unchanged
+{
+  status: 'success',
+  code: '200',
+  message: 'User created successfully',
+  data: { id: 1, name: "John" }
+}
+// ↓ (remains unchanged)
+```
 
 ## Response Scenarios
 
 ### 1. Success with Data
 
-**API Response:**
+**Backend Response (any format):**
+```json
+{
+  "id": 1,
+  "name": "John Doe",
+  "email": "john@example.com"
+}
+```
+
+**Interceptor Standardization:**
 ```json
 {
   "status": "success",
   "code": "200",
-  "message": "User created successfully.",
+  "message": "Operation completed successfully",
   "data": {
     "id": 1,
     "name": "John Doe",
@@ -23,101 +79,62 @@ The API interceptor has been improved to handle different response scenarios whi
 }
 ```
 
-**Interceptor Behavior:**
-- Shows success toastr notification with the message (if enabled)
-- Extracts and returns only the `data` object
-- Repository receives the user entity directly
-
-**Use Case Usage:**
+**Repository Receives:**
 ```typescript
-// Repository returns User entity directly
+// Direct data object (interceptor extracts data)
 const user = await this.userRepository.create(userData);
 // user is User entity, not ApiResponse<User>
 ```
 
-### 2. Success with Message Only (No Data)
+### 2. Success with Message Only
 
-**API Response:**
+**Backend Response:**
 ```json
 {
   "status": "success",
   "code": "200",
-  "message": "User deleted successfully.",
-  "timestamp": "2024-01-01T00:00:00Z"
+  "message": "User deleted successfully"
 }
 ```
 
-**Interceptor Behavior:**
-- Shows success toastr notification with the message (if enabled)
-- Returns the full response object (preserves metadata, correlationId, etc.)
-- Repository receives the full ApiResponse structure
-
-**Use Case Usage:**
+**Repository Receives:**
 ```typescript
-// Repository returns full response
+// Full ApiResponse (interceptor preserves for context)
 const response = await this.userRepository.delete(userId);
-
-// Check if response has data or just message
-if (this.hasDataInResponse(response)) {
-  // Handle data
-  const data = this.extractData(response);
-} else if (this.hasMessageInResponse(response)) {
-  // Handle success message
-  const message = this.extractMessage(response);
-  // Return custom result
-  return { success: true, message, userId };
-}
+// response is ApiResponse structure with message
 ```
 
 ### 3. Warning Response
 
-**API Response:**
+**Backend Response:**
 ```json
 {
   "status": "warning",
-  "code": "200",
-  "message": "Operation completed with warnings.",
-  "data": {
-    "id": 1,
-    "name": "John Doe",
-    "email": "john@example.com"
-  },
-  "warnings": [
-    {
-      "code": "FIELD_IGNORED",
-      "message": "Some fields were ignored during update"
-    }
-  ],
-  "timestamp": "2024-01-01T00:00:00Z"
+  "message": "Operation completed with warnings",
+  "data": { "id": 1, "name": "John" },
+  "warnings": [{"code": "FIELD_IGNORED", "message": "Some fields ignored"}]
 }
 ```
 
 **Interceptor Behavior:**
-- Shows warning toastr notification
-- Returns the data if present, otherwise the full response
+- Shows warning toast notification
+- Returns data if present, otherwise full response
 
 ### 4. Error Response
 
-**API Response:**
+**Backend Response:**
 ```json
 {
   "status": "error",
   "code": "400",
-  "message": "An error occurred.",
-  "errors": [
-    {
-      "code": "EMAIL_INVALID",
-      "message": "Email format is invalid",
-      "target": "email"
-    }
-  ],
-  "timestamp": "2024-01-01T00:00:00Z"
+  "message": "Validation failed",
+  "errors": [{"code": "EMAIL_INVALID", "message": "Invalid email"}]
 }
 ```
 
 **Interceptor Behavior:**
-- Shows error toastr notification
-- Throws the error for use case handling
+- Shows error toast notification
+- Throws standardized error for use case handling
 
 ## Toast Control
 
@@ -144,100 +161,37 @@ The interceptor automatically determines whether to show success toast notificat
 - URLs containing `/page`, `/paginated`
 - URLs containing `/health`, `/status`, `/ping`
 
-### Customizing Toast Behavior
-
-If you need to customize toast behavior for specific cases, you can:
-
-1. **Handle at the use case level** - Suppress toasts in your use case logic
-2. **Use different endpoint patterns** - Structure your API to follow the automatic detection
-3. **Create custom interceptors** - For very specific requirements
-
-### Example Usage
-
-```typescript
-// Commands - toasts shown automatically
-create(entity: Omit<User, 'id'>): Observable<User> {
-  return this.post<User>(this.buildUrl(''), entity);
-  // ✅ Shows "User created successfully"
-}
-
-update(id: number, entity: Partial<User>): Observable<User> {
-  return this.put<User>(this.buildUrl(id.toString()), entity);
-  // ✅ Shows "User updated successfully"
-}
-
-delete(id: number): Observable<boolean> {
-  return this.deleteHttp<boolean>(this.buildUrl(id.toString()));
-  // ✅ Shows "User deleted successfully"
-}
-
-// Queries - toasts hidden automatically
-getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<User>> {
-  const params = this.buildQueryParams(pagination, filters);
-  return this.get<PaginatedResult<User>>(this.buildUrl(''), params);
-  // ✅ No toast (GET request)
-}
-
-getById(id: number): Observable<User> {
-  return this.get<User>(this.buildUrl(id.toString()));
-  // ✅ No toast (GET request)
-}
-
-search(query: string, pagination: PaginationParams): Observable<PaginatedResult<User>> {
-  const params = { ...this.buildQueryParams(pagination), search: query };
-  return this.get<PaginatedResult<User>>(this.buildUrl('search'), params);
-  // ✅ No toast (GET request with search endpoint)
-}
-```
-
-### Handling Special Cases
-
-For operations that might need custom toast behavior:
-
-```typescript
-// In your use case, you can handle custom messaging
-@Injectable()
-export class BulkDeleteCommand extends DeleteCommand {
-  execute(request: { ids: number[] }): Observable<DeleteResult> {
-    return this.userRepository.bulkDelete(request.ids).pipe(
-      map((response) => {
-        // Custom handling for bulk operations
-        return {
-          success: true,
-          message: `Successfully deleted ${request.ids.length} users`,
-          deletedCount: request.ids.length
-        };
-      }),
-      catchError((error) => {
-        return throwError(() => this.mapRepositoryError(error));
-      }),
-    );
-  }
-}
-```
-
 ## Implementation Examples
 
-### Command with Data Response
+### Repository (Simplified)
 
 ```typescript
-@Injectable()
-export class CreateUserCommand extends CreateCommand<User> {
-  execute(request: Omit<User, 'id'>): Observable<User> {
-    return this.userRepository.create(request).pipe(
-      map((user) => {
-        // user is already the User entity (data extracted by interceptor)
-        return user;
-      }),
-      catchError((error) => {
-        return throwError(() => this.mapRepositoryError(error));
-      }),
-    );
+export class UserRepository extends BaseRepository<User> {
+  constructor(http: HttpClient) {
+    super(http, '/api/users');
+  }
+
+  // The interceptor handles all standardization - repository is very simple
+  getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<User>> {
+    const params = this.buildQueryParams(pagination, filters);
+    return this.get<PaginatedResult<User>>(this.buildUrl(''), params);
+  }
+
+  create(entity: Omit<User, 'id'>): Observable<User> {
+    return this.post<User>(this.buildUrl(''), entity);
+  }
+
+  update(id: number, entity: Partial<User>): Observable<User> {
+    return this.put<User>(this.buildUrl(id.toString()), entity);
+  }
+
+  delete(id: number): Observable<boolean> {
+    return this.deleteHttp<boolean>(this.buildUrl(id.toString()));
   }
 }
 ```
 
-### Command with Message Response
+### Use Case (Handles Different Response Types)
 
 ```typescript
 @Injectable()
@@ -274,79 +228,71 @@ export class DeleteUserCommand extends DeleteCommand {
 }
 ```
 
-### Query with Data Response (No Toast)
+## Benefits of Standardization
 
-```typescript
-@Injectable()
-export class GetUsersQuery extends Query<GetUsersRequest, PaginatedResult<User>> {
-  execute(request: GetUsersRequest): Observable<PaginatedResult<User>> {
-    return this.userRepository.getAll(request.pagination, request.filters).pipe(
-      map((result) => {
-        // result is already PaginatedResult<User> (data extracted by interceptor)
-        // No success toast shown for list operations
-        return result;
-      }),
-      catchError((error) => {
-        return throwError(() => this.mapRepositoryError(error));
-      }),
-    );
-  }
-}
-```
+### 1. **Consistent Response Format**
+- All responses follow the same structure
+- No need to handle different response formats in repositories
+- Predictable data flow throughout the application
+
+### 2. **Backend Flexibility**
+- Works with any backend response format
+- Automatically wraps raw data into proper structure
+- Handles legacy APIs that don't follow standard format
+
+### 3. **Simplified Repositories**
+- Repository methods are much simpler
+- No complex response extraction logic
+- Focus on business logic, not HTTP details
+
+### 4. **Better Error Handling**
+- Consistent error format across all endpoints
+- Proper error categorization and severity levels
+- Centralized error display logic
+
+### 5. **Automatic Toast Management**
+- Smart toast notifications based on operation type
+- No manual toast configuration needed
+- Consistent user experience
 
 ## Backend Integration
 
-### C# Backend Automatic Messages
+### C# Backend (Your Current Setup)
 
-Your C# backend automatically generates messages when none are provided:
+Your C# backend's automatic message generation works perfectly:
 
 ```csharp
-// Success with data - shows "Operation completed successfully."
-ApiResponse<User> response = ApiResponse<User>.Success(user);
-
-// Success with custom message
-ApiResponse<User> response = ApiResponse<User>.Success(user, new ApiResponseOptions 
-{ 
+// These are automatically handled by the interceptor
+ApiResponse<User>.Success(user); // "Operation completed successfully."
+ApiResponse.Success(); // "Operation completed successfully."
+ApiResponse<User>.Success(user, new ApiResponseOptions { 
     Message = "User created successfully" 
 });
-
-// Success without data - shows "Operation completed successfully."
-ApiResponse response = ApiResponse.Success();
 ```
 
-### Frontend Handling
+### Other Backend Formats
 
-The interceptor handles these automatic messages appropriately:
+The interceptor handles various backend response formats:
 
-- **List/Query Operations**: Automatic messages are suppressed (no toast shown)
-- **Command Operations**: Automatic messages are shown as success toasts
-- **Custom Messages**: Always shown regardless of operation type
+```typescript
+// Raw data (no wrapper)
+{ id: 1, name: "John" }
 
-## Helper Methods
+// Simple success response
+{ success: true, data: {...} }
 
-The `BaseUseCase` class provides helper methods for response handling:
+// Custom format
+{ result: {...}, message: "Success" }
 
-- `extractData<T>(response)`: Extracts data from response
-- `extractMessage(response)`: Extracts message from response
-- `hasDataInResponse(response)`: Checks if response contains data
-- `hasMessageInResponse(response)`: Checks if response contains message
-
-## Benefits
-
-1. **Consistent Error Handling**: All HTTP errors are handled centrally
-2. **Smart Success Notifications**: Success messages are shown automatically for appropriate operations
-3. **Flexible Response Handling**: Supports both data and message-only responses
-4. **DDD Compliance**: Maintains separation of concerns
-5. **Type Safety**: Proper TypeScript types for different response scenarios
-6. **Backend Integration**: Works seamlessly with C# automatic message generation
+// All are standardized to ApiResponse format
+```
 
 ## Best Practices
 
-1. **Use data responses** for operations that return entities (GET, POST, PUT)
-2. **Use message responses** for operations that don't return data (DELETE, some PATCH)
-3. **Rely on automatic detection** - The interceptor handles toast behavior intelligently
-4. **Structure your API consistently** - Use standard HTTP methods and URL patterns
-5. **Handle special cases at use case level** - For custom messaging requirements
-6. **Handle both scenarios** in your use cases using the helper methods
-7. **Preserve metadata** when needed by checking response structure
-8. **Map domain errors** appropriately in your error handling 
+1. **Rely on automatic standardization** - The interceptor handles everything
+2. **Keep repositories simple** - Focus on business logic, not HTTP details
+3. **Use consistent HTTP methods** - Follow REST conventions for automatic detection
+4. **Handle special cases at use case level** - For custom messaging requirements
+5. **Structure your API consistently** - Use standard URL patterns for automatic detection
+6. **Let the interceptor handle errors** - Centralized error handling and display
+7. **Trust the standardization** - All responses are guaranteed to follow ApiResponse format 

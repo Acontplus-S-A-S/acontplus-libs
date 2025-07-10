@@ -8,6 +8,7 @@ import { inject } from '@angular/core';
 import { catchError, map, retry } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ToastrNotificationService } from '../services';
+import { ApiResponse, ApiError } from '../models';
 
 export const apiInterceptor: HttpInterceptorFn = (req, next) => {
   const toastr = inject(ToastrNotificationService);
@@ -33,39 +34,14 @@ function handleSuccessResponse(
 ): HttpResponse<any> {
   const body = event.body;
 
-  // Handle warning status
-  if (body?.status === 'warning') {
-    const message = body.message || body.details || 'Warning occurred';
-    toastr.warning({ message });
-  }
+  // Standardize the response to always have ApiResponse structure
+  const standardizedResponse = standardizeApiResponse(body, req);
 
-  // Handle success status
-  if (body?.status === 'success') {
-    const message = body.message;
-    const shouldShowToast = shouldShowSuccessToast(req, body);
+  // Handle toast notifications based on standardized response
+  handleToastNotifications(standardizedResponse, toastr, req);
 
-    // Only show success toast if it's not a list/query operation or if explicitly requested
-    if (message && shouldShowToast) {
-      toastr.success({ message });
-    }
-
-    // If data exists, return the data (for operations that return entities)
-    if (body.data !== undefined && body.data !== null) {
-      return event.clone({ body: body.data });
-    }
-
-    // If no data but has message, return the full response for context
-    // This allows the calling code to access metadata, correlationId, etc.
-    if (message) {
-      return event.clone({ body: body });
-    }
-
-    // If just success status with no data and no message, return the body as is
-    return event.clone({ body: body });
-  }
-
-  // For non-standard responses or responses without status, return as is
-  return event.clone({ body: body.data ?? body });
+  // Return the appropriate data based on response type
+  return transformResponseForConsumers(standardizedResponse, event);
 }
 
 function handleErrorResponse(
@@ -74,24 +50,151 @@ function handleErrorResponse(
 ) {
   const apiError = error.error;
 
-  if (apiError?.status === 'error') {
-    const primaryError = apiError.errors?.[0] || apiError;
-    const message =
-      primaryError.message || primaryError.details || 'Error occurred';
-    toastr.error({ message });
-  } else {
-    const message = error.message || 'Network error occurred';
-    toastr.error({ message });
+  // Standardize error response
+  const standardizedError = standardizeErrorResponse(apiError, error);
+
+  // Show error toast
+  const message = standardizedError.message || 'An error occurred';
+  toastr.error({ message });
+
+  return throwError(() => standardizedError);
+}
+
+/**
+ * Standardizes any response to follow the ApiResponse structure
+ */
+function standardizeApiResponse(body: any, req: any): ApiResponse<any> {
+  // If it's already a proper ApiResponse, return as is
+  if (isValidApiResponse(body)) {
+    return body;
   }
 
-  return throwError(() => apiError ?? error);
+  // If it's a raw data response (no wrapper), wrap it
+  if (body && typeof body === 'object' && !('status' in body)) {
+    return {
+      status: 'success',
+      code: '200',
+      message: 'Operation completed successfully',
+      data: body,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  // If it's a primitive value, wrap it
+  if (body !== null && body !== undefined && typeof body !== 'object') {
+    return {
+      status: 'success',
+      code: '200',
+      message: 'Operation completed successfully',
+      data: body,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  // If it's null/undefined, create a success response without data
+  return {
+    status: 'success',
+    code: '200',
+    message: 'Operation completed successfully',
+    timestamp: new Date().toISOString(),
+  };
+}
+
+/**
+ * Standardizes error responses
+ */
+function standardizeErrorResponse(apiError: any, httpError: HttpErrorResponse): ApiError {
+  if (apiError?.status === 'error' && apiError?.errors?.length > 0) {
+    // Already a proper API error
+    return apiError.errors[0];
+  }
+
+  if (apiError?.code && apiError?.message) {
+    // Has error structure but not in array format
+    return {
+      code: apiError.code,
+      message: apiError.message,
+      target: apiError.target,
+      details: apiError.details,
+      severity: apiError.severity || 'error',
+      category: apiError.category || 'http',
+    };
+  }
+
+  // Fallback to HTTP error information
+  return {
+    code: httpError.status?.toString() || 'UNKNOWN_ERROR',
+    message: apiError?.message || httpError.message || 'An unexpected error occurred',
+    severity: 'error',
+    category: 'http',
+  };
+}
+
+/**
+ * Handles toast notifications based on standardized response
+ */
+function handleToastNotifications(
+  response: ApiResponse<any>,
+  toastr: ToastrNotificationService,
+  req: any,
+): void {
+  const shouldShowToast = shouldShowSuccessToast(req, response);
+
+  switch (response.status) {
+    case 'success':
+      if (response.message && shouldShowToast) {
+        toastr.success({ message: response.message });
+      }
+      break;
+    case 'warning':
+      if (response.message) {
+        toastr.warning({ message: response.message });
+      }
+      break;
+    case 'error':
+      if (response.message) {
+        toastr.error({ message: response.message });
+      }
+      break;
+  }
+}
+
+/**
+ * Transforms the standardized response for consumers
+ */
+function transformResponseForConsumers(
+  response: ApiResponse<any>,
+  originalEvent: HttpResponse<any>,
+): HttpResponse<any> {
+  switch (response.status) {
+    case 'success':
+      // For success responses, return the data if it exists, otherwise the full response
+      if (response.data !== undefined && response.data !== null) {
+        return originalEvent.clone({ body: response.data });
+      }
+      // For message-only success responses, return the full response
+      return originalEvent.clone({ body: response });
+
+    case 'warning':
+      // For warnings, return data if it exists, otherwise the full response
+      if (response.data !== undefined && response.data !== null) {
+        return originalEvent.clone({ body: response.data });
+      }
+      return originalEvent.clone({ body: response });
+
+    case 'error':
+      // Errors should be thrown, not returned
+      throw response;
+
+    default:
+      return originalEvent.clone({ body: response });
+  }
 }
 
 /**
  * Determines whether to show success toast notifications based on the request type
- * and response content.
  */
-function shouldShowSuccessToast(req: any, response: any): boolean {
+function shouldShowSuccessToast(req: any, response: ApiResponse<any>): boolean {
   const url = req.url?.toLowerCase() || '';
   const method = req.method?.toLowerCase() || '';
 
@@ -116,11 +219,23 @@ function shouldShowSuccessToast(req: any, response: any): boolean {
   }
 
   // Show success toast for POST, PUT, PATCH, DELETE operations by default
-  // These are typically commands that modify data
   if (['post', 'put', 'patch', 'delete'].includes(method)) {
     return true;
   }
 
   // Default: show for non-GET requests, don't show for GET requests
   return method !== 'get';
+}
+
+/**
+ * Checks if a response is a valid ApiResponse
+ */
+function isValidApiResponse(response: any): response is ApiResponse<any> {
+  return (
+    response &&
+    typeof response === 'object' &&
+    'status' in response &&
+    'code' in response &&
+    ['success', 'error', 'warning'].includes(response.status)
+  );
 }
