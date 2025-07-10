@@ -8,14 +8,14 @@ import { ApiResponse } from '@acontplus-core';
 })
 export class ApplicationService {
   private http = inject(HttpClient);
-  private r url = `aplicaciones`;
+  private url = `aplicaciones`;
 
   get() {
-    return this.http.get<ApiResponse>(this.url).pipe(
+    return this.http.get(this.url).pipe(
       map((response) => {
         console.log(response);
-        if (response.code) {
-        }
+        // if (response.code) {
+        // }
       }),
     );
   }
