@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, InjectionToken } from '@angular/core'; // Import InjectionToken
 import {
   HttpContextToken,
   HttpContext,
@@ -54,7 +54,7 @@ export interface HttpContextConfig {
 // Default configuration
 const DEFAULT_CONFIG: Required<HttpContextConfig> = {
   enableCorrelationTracking: true,
-  enableRequestLogging: !inject(ENVIRONMENT).isProduction,
+  enableRequestLogging: false, // This will be overridden by environment.isProduction
   enableErrorLogging: true,
   customHeaders: {},
   clientVersion: '1.0.0',
@@ -67,8 +67,13 @@ const DEFAULT_CONFIG: Required<HttpContextConfig> = {
   baseUrlInjection: true,
 };
 
-// Injection token for configuration
-export const HTTP_CONTEXT_CONFIG = 'HTTP_CONTEXT_CONFIG';
+// Injection token for configuration - FIXED
+export const HTTP_CONTEXT_CONFIG = new InjectionToken<HttpContextConfig>(
+  'HTTP_CONTEXT_CONFIG',
+  {
+    factory: () => DEFAULT_CONFIG, // Provide a default factory in case it's not provided
+  },
+);
 
 export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
   const jwtTokenService = inject(JwtTokenService);
@@ -77,10 +82,12 @@ export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
   const loggingService = inject(LoggingService);
   const environment = inject(ENVIRONMENT);
 
-  // Get configuration (with fallback to default)
+  // Get configuration (with fallback to default) - FIXED
   const config: Required<HttpContextConfig> = {
     ...DEFAULT_CONFIG,
-    enableRequestLogging: !inject(ENVIRONMENT).isProduction,
+    // The default enableRequestLogging needs to be set based on environment here,
+    // as it's dynamic, and DEFAULT_CONFIG is static.
+    enableRequestLogging: !environment.isProduction,
     ...inject(HTTP_CONTEXT_CONFIG, { optional: true }),
   };
 
@@ -206,7 +213,7 @@ export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
           errorDetails: error.error,
           environment: environment.clientId,
           isCustomUrl,
-          headers: [],
+          headers: [], // Headers are not included in HttpErrorResponse by default, adjust if needed
         });
       }
 
