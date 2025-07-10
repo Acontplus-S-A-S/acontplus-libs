@@ -1,6 +1,6 @@
 {
   "name": "acontplus-core",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "dependencies": {
     "jwt-decode": "^4.0.0",
     "ngx-toastr": "^19.0.0",
