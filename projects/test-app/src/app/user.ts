@@ -1,4 +1,4 @@
-import { BaseEntity } from '../../../acontplus-core/src/public-api';
+import { BaseEntity } from '@acontplus-core';
 
 export interface User extends BaseEntity {
   name: string;
