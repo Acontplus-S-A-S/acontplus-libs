@@ -5,7 +5,7 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, retry } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ToastrNotificationService } from '../services';
 
@@ -13,6 +13,7 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
   const toastr = inject(ToastrNotificationService);
 
   return next(req).pipe(
+    retry({ count: 2, delay: 1000 }),
     map((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {
         return handleSuccessResponse(event, toastr);

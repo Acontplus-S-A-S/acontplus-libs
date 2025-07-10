@@ -84,12 +84,12 @@ The session interceptor injects authentication and client information into reque
 
 ```typescript
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { injectSessionInterceptor, customUrl } from 'acontplus-core';
+import { httpContextInterceptor, customUrl } from 'acontplus-core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(
-      withInterceptors([injectSessionInterceptor])
+      withInterceptors([httpContextInterceptor])
     )
   ]
 };

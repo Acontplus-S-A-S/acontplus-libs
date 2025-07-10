@@ -12,8 +12,9 @@ export const ENVIRONMENT: InjectionToken<Environment> = new InjectionToken(
     factory: () => ({
       apiBaseUrl: '',
       isProduction: false,
-      storageKey: 'app_storage',
-      clientId: 'default_client',
+      tokenKey: 'auth-token',
+      refreshTokenKey: 'refresh-token',
+      clientId: 'default-client',
     }),
-  }
+  },
 );

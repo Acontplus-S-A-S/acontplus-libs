@@ -1,6 +1,7 @@
 export interface Environment {
   apiBaseUrl: string;
   isProduction: boolean;
-  storageKey: string;
+  tokenKey: string;
+  refreshTokenKey: string;
   clientId: string;
 }
