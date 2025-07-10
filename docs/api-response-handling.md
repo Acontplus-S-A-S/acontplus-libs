@@ -295,4 +295,4 @@ The interceptor handles various backend response formats:
 4. **Handle special cases at use case level** - For custom messaging requirements
 5. **Structure your API consistently** - Use standard URL patterns for automatic detection
 6. **Let the interceptor handle errors** - Centralized error handling and display
-7. **Trust the standardization** - All responses are guaranteed to follow ApiResponse format 
+7. **Trust the standardization** - All responses are guaranteed to follow ApiResponse format
