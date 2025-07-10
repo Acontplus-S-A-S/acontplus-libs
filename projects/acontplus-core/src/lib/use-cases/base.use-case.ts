@@ -6,10 +6,13 @@ import {
   UseCaseResult,
   ValidationError,
 } from '../models';
+import { ResponseHandlerService } from '../services';
 
 export abstract class BaseUseCase<TRequest = void, TResponse = void>
   implements UseCase<TRequest, TResponse>
 {
+  protected responseHandler = new ResponseHandlerService();
+
   abstract execute(request: TRequest): Observable<TResponse>;
 
   // Helper method for validation
@@ -187,6 +190,21 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
       console.warn(`Use Case Warning [${response.code}]:`, response.message);
     }
 
-    return response.data as T;
+    return this.responseHandler.extractData<T>(response);
+  }
+
+  // Helper to extract message from ApiResponse (for operations that return success messages)
+  protected extractMessageFromApiResponse(response: any): string | undefined {
+    return this.responseHandler.extractMessage(response);
+  }
+
+  // Helper to check if response has data
+  protected hasDataInResponse(response: any): boolean {
+    return this.responseHandler.hasData(response);
+  }
+
+  // Helper to check if response has message
+  protected hasMessageInResponse(response: any): boolean {
+    return this.responseHandler.hasMessage(response);
   }
 }

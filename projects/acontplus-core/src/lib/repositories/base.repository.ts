@@ -110,13 +110,34 @@ export abstract class BaseRepository<T extends BaseEntity> {
 
   // Private helper methods
   private extractData<R>(response: ApiResponse<R>): R {
-    // The interceptor already extracts the data from ApiResponse
-    // If data is null/undefined, we might want to handle it differently based on the operation
-    if (response.data === undefined || response.data === null) {
-      // For operations that might legitimately return null (like delete)
-      return response.data as R;
+    // Handle different response scenarios based on the interceptor's behavior
+
+    // If the interceptor already extracted data (success with data)
+    if (response && typeof response === 'object' && !('status' in response)) {
+      return response as R;
     }
-    return response.data;
+
+    // If it's a full ApiResponse structure (success without data but with message)
+    if (response?.status === 'success') {
+      // For operations that might legitimately return null/undefined data
+      if (response.data !== undefined && response.data !== null) {
+        return response.data;
+      }
+
+      // For message-only responses, we might want to return a different type
+      // or handle it differently based on the operation
+      if (response.message) {
+        // You could return the message or a success indicator
+        // For now, we'll return the full response to preserve context
+        return response as any;
+      }
+
+      // For success with no data and no message, return the response as is
+      return response as any;
+    }
+
+    // For non-standard responses, return as is
+    return response as R;
   }
 
   private handleHttpError<R>(error: any): Observable<R> {
