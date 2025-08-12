@@ -1,16 +1,23 @@
-import { Routes } from '@angular/router';
+import {Route, Routes} from '@angular/router';
+import {MenuItemList, menuItems} from "./layout/app-layout/menu-items";
 
+
+const itemToRoute = (i: MenuItemList):Route=>{
+  const route = {} as Route;
+  if(i.route){
+    route.path = i.route;
+    route.component = i.component;
+  }
+  if(i.subItems){
+    route.children = i.subItems.map(s => itemToRoute(s))
+  }
+  return route;
+}
 export const routes: Routes = [
   {
-    path: 'test',
-    loadComponent: () =>
-      import('./ui/pages/test/test.component').then((m) => m.TestComponent),
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'dashboard'
   },
-  {
-    path: 'products',
-    loadComponent: () =>
-      import('./ui/pages/product/product.component').then(
-        (m) => m.ProductComponent
-      ),
-  },
+  ...menuItems.map((i)=>itemToRoute(i))
 ];
