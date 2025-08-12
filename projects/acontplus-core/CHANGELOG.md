@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
+
 - Enhanced error handling with structured error types
 - Performance optimizations for large datasets
 - Additional utility functions for common operations
@@ -19,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚀 **Major Architecture Improvements**
 
 #### **Repository Pattern Enhancement**
+
 - **BREAKING CHANGE**: Updated `BaseRepository` to use modern Angular dependency injection
 - **BREAKING CHANGE**: Replaced constructor parameters with `inject()` function and abstract properties
 - Added `entityName` and `baseUrl` abstract properties for better URL building
@@ -26,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved type safety and testability with proper DI patterns
 
 #### **Use Case Pattern Enhancement**
+
 - **BREAKING CHANGE**: Changed execution pattern from `execute()` to `executeInternal()`
 - **BREAKING CHANGE**: Validation is now the default execution path
 - Improved separation of concerns with internal execution method
@@ -33,30 +36,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced authorization and validation hooks
 
 #### **New Services Added**
+
 - **CoreConfigService**: Centralized configuration management with runtime updates
 - **RepositoryFactory**: Centralized repository management and registration system
 - Enhanced error handling with domain-specific error types and categorization
 - Better configuration management across multiple applications
 
 #### **Enhanced Error Handling**
+
 - Added `ErrorCategory` enum for structured error classification
 - New error types: `BusinessRuleError`, `ValidationError`, `AuthorizationError`, `NotFoundError`, `ConflictError`
 - Enhanced error properties: `recoverable`, `retryable`, `userActionable`
 - Better error categorization for improved debugging and user experience
 
 #### **Configuration Management**
+
 - Dynamic configuration updates at runtime
 - Environment-specific configuration overrides
 - Feature flags and custom headers support
 - Centralized configuration for multi-application support
 
 #### **Repository Factory Pattern**
+
 - Centralized repository registration and management
 - Dynamic repository creation and lookup
 - Entity-based repository discovery
 - Better scalability for multiple applications
 
 ### 🔧 **Technical Improvements**
+
 - Modern Angular dependency injection patterns
 - Improved TypeScript generics and type safety
 - Better separation of concerns in architecture
@@ -64,6 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved error handling and validation flow
 
 ### 📚 **Documentation**
+
 - Comprehensive README with complete usage examples
 - Advanced patterns and best practices documentation
 - Testing strategies and examples
@@ -72,18 +81,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Performance optimization techniques
 
 ### 🧪 **Testing & Examples**
+
 - Moved examples to test-app for better organization
 - Comprehensive testing patterns for repositories and use cases
 - Example implementations for all major features
 - Testing strategies for the new architecture
 
 ### ⚠️ **Breaking Changes**
+
 - **BaseRepository**: Constructor parameters removed, use `inject(HttpClient)` instead
 - **BaseRepository**: Must implement `entityName` and `baseUrl` abstract properties
 - **BaseUseCase**: `execute()` method now calls `executeInternal()`, override `executeInternal()` instead
 - **Use Cases**: Validation is now automatic, no need to call `executeWithValidation()` manually
 
 ### 🔄 **Migration Guide**
+
 - Add `@Injectable()` decorator to repositories
 - Replace constructor parameters with `inject()` function
 - Add `entityName` and `baseUrl` abstract properties
@@ -94,6 +106,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.5] - 2025-08-XX
 
 ### Added
+
 - Initial release of acontplus-core library
 - JWT token management service with automatic validation
 - HTTP interceptors for API response handling and standardization
@@ -110,6 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Response handler service for standardized error handling
 
 ### Changed
+
 - Updated to Angular 20+ compatibility
 - Functional interceptor pattern using HttpInterceptorFn
 - Enhanced TypeScript configuration with ES2022 and bundler module resolution
@@ -118,6 +132,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Signal-based correlation ID management for reactive updates
 
 ### Technical Improvements
+
 - Angular 20+ dependency injection patterns
 - Strict TypeScript configuration with noImplicitOverride
 - Bundler module resolution for build tools
@@ -128,6 +143,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-07-XX
 
 ### Initial Release
+
 - Core library foundation
 - Basic service architecture
 - HTTP interceptor framework

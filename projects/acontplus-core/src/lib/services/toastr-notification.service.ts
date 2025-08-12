@@ -5,8 +5,9 @@ export type ToastrType = 'success' | 'error' | 'warning' | 'info';
 
 export type ToastrNotificationConfig = Partial<IndividualConfig>;
 
-export const TOASTR_NOTIFICATION_CONFIG =
-  new InjectionToken<ToastrNotificationConfig>('toastr-notification-config', {
+export const TOASTR_NOTIFICATION_CONFIG = new InjectionToken<ToastrNotificationConfig>(
+  'toastr-notification-config',
+  {
     providedIn: 'root',
     factory: () => ({
       positionClass: 'toast-bottom-center',
@@ -15,7 +16,8 @@ export const TOASTR_NOTIFICATION_CONFIG =
       closeButton: true,
       newestOnTop: true,
     }),
-  });
+  },
+);
 
 export interface ToastrCallProps {
   readonly message: string;
@@ -28,7 +30,7 @@ export interface ToastrShowProps extends ToastrCallProps {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ToastrNotificationService {
   private readonly toastrService = inject(ToastrService);

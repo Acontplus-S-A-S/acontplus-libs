@@ -14,8 +14,7 @@
   --snackbar-line-height: 1.5;
   --snackbar-font-weight: 500;
 
-  --snackbar-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.15);
+  --snackbar-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.15);
 
   --snackbar-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -125,8 +124,7 @@
     --snackbar-info-bg: linear-gradient(135deg, #40c4ff 0%, #0091ea 100%);
     --snackbar-error-bg: linear-gradient(135deg, #ff5252 0%, #d32f2f 100%);
     --snackbar-default-bg: linear-gradient(135deg, #616161 0%, #424242 100%);
-    --snackbar-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
-      0 4px 16px rgba(0, 0, 0, 0.2);
+    --snackbar-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.2);
   }
 }
 

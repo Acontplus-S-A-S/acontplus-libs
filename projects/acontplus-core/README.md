@@ -46,6 +46,7 @@ yarn add acontplus-core
 ## 🏗️ **Architecture Overview**
 
 ### **Repository Pattern**
+
 The library provides a modern, scalable repository pattern:
 
 ```typescript
@@ -54,9 +55,12 @@ export abstract class BaseRepository<T extends BaseEntity> {
   protected http = inject(HttpClient);
   protected abstract entityName: string;
   protected abstract baseUrl: string;
-  
+
   // Standard CRUD operations with pagination and filtering
-  abstract getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<T>>;
+  abstract getAll(
+    pagination: PaginationParams,
+    filters?: FilterParams,
+  ): Observable<PaginatedResult<T>>;
   abstract getById(id: number): Observable<T>;
   abstract create(entity: Omit<T, 'id'>): Observable<T>;
   abstract update(id: number, entity: Partial<T>): Observable<T>;
@@ -66,6 +70,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
 ```
 
 ### **Use Case Pattern**
+
 Business logic components with built-in validation and authorization:
 
 ```typescript
@@ -75,19 +80,24 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void> {
   execute(request: TRequest): Observable<TResponse> {
     return this.executeWithValidation(request);
   }
-  
+
   // Override this method in concrete classes
   protected abstract executeInternal(request: TRequest): Observable<TResponse>;
-  
+
   // Override for custom validation
-  protected validate(request: TRequest): ValidationError[] { return []; }
-  
+  protected validate(request: TRequest): ValidationError[] {
+    return [];
+  }
+
   // Override for authorization checks
-  protected async checkAuthorization(request: TRequest): Promise<boolean> { return true; }
+  protected async checkAuthorization(request: TRequest): Promise<boolean> {
+    return true;
+  }
 }
 ```
 
 ### **Configuration Management**
+
 Centralized configuration with environment overrides:
 
 ```typescript
@@ -101,12 +111,18 @@ export class CoreConfigService {
 ```
 
 ### **Repository Factory**
+
 Centralized repository management for better scalability:
 
 ```typescript
 @Injectable()
 export class RepositoryFactory {
-  register<T>(key: string, repository: Type<BaseRepository<T>>, entityName: string, baseUrl?: string): void;
+  register<T>(
+    key: string,
+    repository: Type<BaseRepository<T>>,
+    entityName: string,
+    baseUrl?: string,
+  ): void;
   get<T>(key: string): BaseRepository<T> | undefined;
   getByEntityName<T>(entityName: string): BaseRepository<T> | undefined;
 }
@@ -121,19 +137,21 @@ import { provideCoreConfig, createCoreConfig } from 'acontplus-core';
 
 @NgModule({
   providers: [
-    provideCoreConfig(createCoreConfig({
-      apiBaseUrl: 'https://api.example.com',
-      enableCorrelationTracking: true,
-      enableRequestLogging: true,
-      customHeaders: {
-        'Client-Version': '1.0.0',
-        'Client-Id': 'web-app',
-      },
-      excludeUrls: ['/health', '/metrics'],
-    })),
+    provideCoreConfig(
+      createCoreConfig({
+        apiBaseUrl: 'https://api.example.com',
+        enableCorrelationTracking: true,
+        enableRequestLogging: true,
+        customHeaders: {
+          'Client-Version': '1.0.0',
+          'Client-Id': 'web-app',
+        },
+        excludeUrls: ['/health', '/metrics'],
+      }),
+    ),
   ],
 })
-export class AppModule { }
+export class AppModule {}
 ```
 
 ### **2. Register Repositories**
@@ -144,16 +162,11 @@ import { provideRepositoryRegistrations, createRepositoryRegistration } from 'ac
 @NgModule({
   providers: [
     provideRepositoryRegistrations([
-      createRepositoryRegistration(
-        'user',
-        UserRepository,
-        'users',
-        '/api/users'
-      ),
+      createRepositoryRegistration('user', UserRepository, 'users', '/api/users'),
     ]),
   ],
 })
-export class AppModule { }
+export class AppModule {}
 ```
 
 ### **3. Implement Repository**
@@ -212,7 +225,7 @@ export class CreateUserCommand extends CreateCommand<User> {
       errors.push({
         field: 'email',
         message: 'Email is required',
-        code: 'EMAIL_REQUIRED'
+        code: 'EMAIL_REQUIRED',
       });
     }
 
@@ -220,7 +233,7 @@ export class CreateUserCommand extends CreateCommand<User> {
       errors.push({
         field: 'name',
         message: 'Name is required',
-        code: 'NAME_REQUIRED'
+        code: 'NAME_REQUIRED',
       });
     }
 
@@ -251,6 +264,7 @@ export class UserService {
 ### **6. Advanced Repository Patterns**
 
 #### **Custom Repository Methods**
+
 ```typescript
 @Injectable()
 export class UserRepository extends BaseRepository<User> {
@@ -261,7 +275,7 @@ export class UserRepository extends BaseRepository<User> {
   getUsersByRole(role: string, pagination: PaginationParams): Observable<PaginatedResult<User>> {
     const params = {
       ...this.buildQueryParams(pagination),
-      role: role
+      role: role,
     };
     return this.get<PaginatedResult<User>>(`${this.buildEntityUrl()}/by-role`, params);
   }
@@ -275,29 +289,27 @@ export class UserRepository extends BaseRepository<User> {
   uploadAvatar(userId: number, file: File): Observable<{ avatarUrl: string }> {
     const formData = new FormData();
     formData.append('avatar', file);
-    
-    return this.post<{ avatarUrl: string }>(
-      `${this.buildEntityUrl()}/${userId}/avatar`,
-      formData
-    );
+
+    return this.post<{ avatarUrl: string }>(`${this.buildEntityUrl()}/${userId}/avatar`, formData);
   }
 }
 ```
 
 #### **Repository with Caching**
+
 ```typescript
 @Injectable()
 export class CachedUserRepository extends BaseRepository<User> {
   protected entityName = 'users';
   protected baseUrl = '/api/users';
-  
+
   private cache = new Map<string, { data: any; timestamp: number }>();
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
   getById(id: number): Observable<User> {
     const cacheKey = `user-${id}`;
     const cached = this.cache.get(cacheKey);
-    
+
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL) {
       return of(cached.data);
     }
@@ -305,7 +317,7 @@ export class CachedUserRepository extends BaseRepository<User> {
     return this.get<User>(this.buildEntityUrl(id.toString())).pipe(
       tap(user => {
         this.cache.set(cacheKey, { data: user, timestamp: Date.now() });
-      })
+      }),
     );
   }
 
@@ -318,50 +330,60 @@ export class CachedUserRepository extends BaseRepository<User> {
 ### **7. Advanced Use Case Patterns**
 
 #### **Composite Use Cases**
+
 ```typescript
 @Injectable()
 export class CreateUserWithProfileCommand extends CreateCommand<User> {
   constructor(
     private userRepository: UserRepository,
     private profileRepository: ProfileRepository,
-    private emailService: EmailService
+    private emailService: EmailService,
   ) {
     super();
   }
 
   protected executeInternal(request: CreateUserWithProfileRequest): Observable<User> {
-    return this.userRepository.create(request.user).pipe(
-      switchMap(user => 
-        this.profileRepository.create({ ...request.profile, userId: user.id }).pipe(
-          switchMap(profile => 
-            this.emailService.sendWelcomeEmail(user.email).pipe(
-              map(() => ({ ...user, profile }))
-            )
-          )
-        )
-      )
-    );
+    return this.userRepository
+      .create(request.user)
+      .pipe(
+        switchMap(user =>
+          this.profileRepository
+            .create({ ...request.profile, userId: user.id })
+            .pipe(
+              switchMap(profile =>
+                this.emailService
+                  .sendWelcomeEmail(user.email)
+                  .pipe(map(() => ({ ...user, profile }))),
+              ),
+            ),
+        ),
+      );
   }
 
   protected validate(request: CreateUserWithProfileRequest): ValidationError[] {
     const errors: ValidationError[] = [];
-    
+
     // Validate user data
     if (!request.user.email) {
       errors.push({ field: 'user.email', message: 'Email is required', code: 'EMAIL_REQUIRED' });
     }
-    
+
     // Validate profile data
     if (!request.profile.firstName) {
-      errors.push({ field: 'profile.firstName', message: 'First name is required', code: 'FIRST_NAME_REQUIRED' });
+      errors.push({
+        field: 'profile.firstName',
+        message: 'First name is required',
+        code: 'FIRST_NAME_REQUIRED',
+      });
     }
-    
+
     return errors;
   }
 }
 ```
 
 #### **Use Case with Retry Logic**
+
 ```typescript
 @Injectable()
 export class ResilientUserQuery extends GetByIdQuery<User> {
@@ -377,7 +399,7 @@ export class ResilientUserQuery extends GetByIdQuery<User> {
           throw new NotFoundError('User not found', request.id);
         }
         throw error;
-      })
+      }),
     );
   }
 }
@@ -395,7 +417,7 @@ const myEnvironment: Environment = {
   apiBaseUrl: 'https://api.example.com',
   isProduction: false,
   storageKey: 'my_app_storage',
-  clientId: 'my_client_id'
+  clientId: 'my_client_id',
 };
 
 // Provide the environment configuration in your app config
@@ -403,9 +425,9 @@ export const appConfig: ApplicationConfig = {
   providers: [
     {
       provide: ENVIRONMENT,
-      useValue: myEnvironment
-    }
-  ]
+      useValue: myEnvironment,
+    },
+  ],
 };
 ```
 
@@ -420,11 +442,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { apiInterceptor } from 'acontplus-core';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideHttpClient(
-      withInterceptors([apiInterceptor])
-    )
-  ]
+  providers: [provideHttpClient(withInterceptors([apiInterceptor]))],
 };
 ```
 
@@ -437,11 +455,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { httpContextInterceptor, customUrl } from 'acontplus-core';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideHttpClient(
-      withInterceptors([httpContextInterceptor])
-    )
-  ]
+  providers: [provideHttpClient(withInterceptors([httpContextInterceptor]))],
 };
 
 // In your service, use customUrl() for requests that should use their own URL
@@ -449,25 +463,26 @@ this.http.get('https://external-api.com/data', { context: customUrl() });
 ```
 
 #### **Advanced Interceptor Usage**
+
 ```typescript
-import { 
-  httpContextInterceptor, 
-  customUrl, 
-  skipContextHeaders, 
-  withCustomHeaders 
+import {
+  httpContextInterceptor,
+  customUrl,
+  skipContextHeaders,
+  withCustomHeaders,
 } from 'acontplus-core';
 
 // Skip context headers for specific requests
-this.http.get('/api/public/data', { 
-  context: skipContextHeaders() 
+this.http.get('/api/public/data', {
+  context: skipContextHeaders(),
 });
 
 // Add custom headers for specific requests
 this.http.post('/api/sensitive/operation', data, {
   context: withCustomHeaders({
     'X-Special-Header': 'special-value',
-    'X-Request-Type': 'sensitive'
-  })
+    'X-Request-Type': 'sensitive',
+  }),
 });
 
 // Combine multiple context options
@@ -475,7 +490,7 @@ this.http.get('/api/external/service', {
   context: new HttpContext()
     .set(customUrl(), true)
     .set(skipContextHeaders(), true)
-    .set(withCustomHeaders({ 'X-External': 'true' }), {})
+    .set(withCustomHeaders({ 'X-External': 'true' }), {}),
 });
 ```
 
@@ -526,13 +541,13 @@ const pagination: PaginationParams = {
   page: 1,
   pageSize: 10,
   sortBy: 'name',
-  sortDirection: 'asc'
+  sortDirection: 'asc',
 };
 
 // Create filter parameters
 const filters: FilterParams = {
   search: 'john',
-  isActive: true
+  isActive: true,
 };
 
 // Example of a paginated result
@@ -543,6 +558,7 @@ function displayUsers(result: PaginatedResult<User>) {
 ```
 
 #### **Advanced Filtering and Sorting**
+
 ```typescript
 // Complex filter parameters
 const advancedFilters: FilterParams = {
@@ -551,7 +567,7 @@ const advancedFilters: FilterParams = {
   dateFrom: '2024-01-01',
   dateTo: '2024-12-31',
   role: 'admin',
-  department: 'engineering'
+  department: 'engineering',
 };
 
 // Dynamic sorting
@@ -559,7 +575,7 @@ const dynamicSorting: PaginationParams = {
   page: 1,
   pageSize: 20,
   sortBy: 'lastLoginDate',
-  sortDirection: 'desc'
+  sortDirection: 'desc',
 };
 
 // Multi-field sorting (custom implementation)
@@ -567,8 +583,8 @@ const multiSortFilters = {
   ...dynamicSorting,
   sortFields: [
     { field: 'lastLoginDate', direction: 'desc' },
-    { field: 'createdAt', direction: 'asc' }
-  ]
+    { field: 'createdAt', direction: 'asc' },
+  ],
 };
 ```
 
@@ -588,7 +604,7 @@ export enum ErrorCategory {
   CONFLICT = 'conflict',
   TIMEOUT = 'timeout',
   NETWORK = 'network',
-  UNKNOWN = 'unknown'
+  UNKNOWN = 'unknown',
 }
 
 export interface DomainError extends ApiError {
@@ -600,6 +616,7 @@ export interface DomainError extends ApiError {
 ```
 
 #### **Custom Error Handling**
+
 ```typescript
 @Injectable()
 export class CustomErrorHandler {
@@ -619,7 +636,7 @@ export class CustomErrorHandler {
     // Show field-specific validation messages
     this.toastr.error({
       message: `Validation error in ${error.field}: ${error.message}`,
-      title: 'Validation Error'
+      title: 'Validation Error',
     });
   }
 
@@ -632,7 +649,7 @@ export class CustomErrorHandler {
     // Show business-specific error messages
     this.toastr.warning({
       message: error.message,
-      title: 'Business Rule Violation'
+      title: 'Business Rule Violation',
     });
   }
 }
@@ -650,34 +667,34 @@ import { ToastrNotificationService } from 'acontplus-core';
 
 @Component({
   selector: 'app-example',
-  template: '<button (click)="showNotification()">Show Notification</button>'
+  template: '<button (click)="showNotification()">Show Notification</button>',
 })
 export class ExampleComponent {
   private toastr = inject(ToastrNotificationService);
 
   showNotification() {
     // Success notification
-    this.toastr.success({ 
+    this.toastr.success({
       message: 'Operation completed successfully!',
-      title: 'Success'
+      title: 'Success',
     });
 
     // Error notification
-    this.toastr.error({ 
+    this.toastr.error({
       message: 'An error occurred!',
-      title: 'Error'
+      title: 'Error',
     });
 
     // Warning notification
-    this.toastr.warning({ 
+    this.toastr.warning({
       message: 'This action may have consequences!',
-      title: 'Warning'
+      title: 'Warning',
     });
 
     // Info notification
-    this.toastr.info({ 
+    this.toastr.info({
       message: 'Here is some information.',
-      title: 'Info'
+      title: 'Info',
     });
   }
 }
@@ -697,10 +714,10 @@ export const appConfig: ApplicationConfig = {
       useValue: {
         positionClass: 'toast-top-right',
         timeOut: 3000,
-        closeButton: true
-      }
-    }
-  ]
+        closeButton: true,
+      },
+    },
+  ],
 };
 ```
 
@@ -732,13 +749,14 @@ export class AuthExampleComponent {
 #### **Additional Core Services**
 
 ##### **Correlation Service**
+
 ```typescript
 import { Component, inject } from '@angular/core';
 import { CorrelationService } from 'acontplus-core';
 
 @Component({
   selector: 'app-correlation-example',
-  template: '<div>Correlation ID: {{ correlationId }}</div>'
+  template: '<div>Correlation ID: {{ correlationId }}</div>',
 })
 export class CorrelationExampleComponent {
   private correlationService = inject(CorrelationService);
@@ -754,13 +772,14 @@ export class CorrelationExampleComponent {
 ```
 
 ##### **Tenant Service**
+
 ```typescript
 import { Component, inject } from '@angular/core';
 import { TenantService } from 'acontplus-core';
 
 @Component({
   selector: 'app-tenant-example',
-  template: '<div>Current Tenant: {{ currentTenant }}</div>'
+  template: '<div>Current Tenant: {{ currentTenant }}</div>',
 })
 export class TenantExampleComponent {
   private tenantService = inject(TenantService);
@@ -776,13 +795,14 @@ export class TenantExampleComponent {
 ```
 
 ##### **Logging Service**
+
 ```typescript
 import { Component, inject } from '@angular/core';
 import { LoggingService } from 'acontplus-core';
 
 @Component({
   selector: 'app-logging-example',
-  template: '<button (click)="logExample()">Log Example</button>'
+  template: '<button (click)="logExample()">Log Example</button>',
 })
 export class LoggingExampleComponent {
   private loggingService = inject(LoggingService);
@@ -791,7 +811,7 @@ export class LoggingExampleComponent {
     this.loggingService.info('User clicked the button');
     this.loggingService.warn('This is a warning message');
     this.loggingService.error('This is an error message');
-    
+
     // Log with context
     this.loggingService.logHttpRequest({
       method: 'GET',
@@ -801,20 +821,21 @@ export class LoggingExampleComponent {
       tenantId: 'tenant-1',
       timestamp: new Date().toISOString(),
       headers: ['Authorization', 'Content-Type'],
-      isCustomUrl: false
+      isCustomUrl: false,
     });
   }
 }
 ```
 
 ##### **Response Handler Service**
+
 ```typescript
 import { Component, inject } from '@angular/core';
 import { ResponseHandlerService } from 'acontplus-core';
 
 @Component({
   selector: 'app-response-handler-example',
-  template: '<div>Response Handler Example</div>'
+  template: '<div>Response Handler Example</div>',
 })
 export class ResponseHandlerExampleComponent {
   private responseHandler = inject(ResponseHandlerService);
@@ -844,18 +865,18 @@ export class ResponseHandlerExampleComponent {
 The library provides base classes for implementing the Use Case pattern:
 
 ```typescript
-import { 
-  BaseUseCase, 
-  Command, 
-  CreateCommand, 
-  UpdateCommand, 
+import {
+  BaseUseCase,
+  Command,
+  CreateCommand,
+  UpdateCommand,
   DeleteCommand,
   GetByIdQuery,
   GetAllQuery,
   SearchQuery,
   PaginationParams,
   FilterParams,
-  PaginatedResult
+  PaginatedResult,
 } from 'acontplus-core';
 import { Observable } from 'rxjs';
 import { inject } from '@angular/core';
@@ -868,7 +889,7 @@ interface User extends BaseEntity {
 
 // Example of a GetById query
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 class GetUserByIdQuery extends GetByIdQuery<User> {
   private userRepository = inject(UserRepository);
@@ -880,7 +901,7 @@ class GetUserByIdQuery extends GetByIdQuery<User> {
 
 // Example of a Create command
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 class CreateUserCommand extends CreateCommand<User> {
   private userRepository = inject(UserRepository);
@@ -897,7 +918,7 @@ class CreateUserCommand extends CreateCommand<User> {
       errors.push({
         field: 'username',
         message: 'Username is required',
-        code: 'REQUIRED'
+        code: 'REQUIRED',
       });
     }
 
@@ -905,7 +926,7 @@ class CreateUserCommand extends CreateCommand<User> {
       errors.push({
         field: 'email',
         message: 'Email is required',
-        code: 'REQUIRED'
+        code: 'REQUIRED',
       });
     }
 
@@ -916,7 +937,7 @@ class CreateUserCommand extends CreateCommand<User> {
 // Using the use cases in a component
 @Component({
   selector: 'app-user-example',
-  template: '<div>User Example</div>'
+  template: '<div>User Example</div>',
 })
 export class UserExampleComponent {
   private getUserByIdQuery = inject(GetUserByIdQuery);
@@ -924,15 +945,15 @@ export class UserExampleComponent {
 
   getUser(id: number): void {
     this.getUserByIdQuery.execute({ id }).subscribe({
-      next: (user) => console.log('User:', user),
-      error: (error) => console.error('Error:', error)
+      next: user => console.log('User:', user),
+      error: error => console.error('Error:', error),
     });
   }
 
   createUser(userData: Omit<User, 'id'>): void {
     this.createUserCommand.execute(userData).subscribe({
-      next: (user) => console.log('Created user:', user),
-      error: (error) => console.error('Error:', error)
+      next: user => console.log('Created user:', user),
+      error: error => console.error('Error:', error),
     });
   }
 }
@@ -941,12 +962,13 @@ export class UserExampleComponent {
 #### **Advanced Use Case Patterns**
 
 ##### **Use Case with Event Publishing**
+
 ```typescript
 @Injectable()
 export class CreateUserCommand extends CreateCommand<User> {
   constructor(
     private userRepository: UserRepository,
-    private eventBus: EventBus
+    private eventBus: EventBus,
   ) {
     super();
   }
@@ -956,26 +978,27 @@ export class CreateUserCommand extends CreateCommand<User> {
       tap(user => {
         // Publish domain event
         this.eventBus.publish(new UserCreatedEvent(user));
-      })
+      }),
     );
   }
 }
 ```
 
 ##### **Use Case with Caching**
+
 ```typescript
 @Injectable()
 export class GetUserByIdQuery extends GetByIdQuery<User> {
   constructor(
     private userRepository: UserRepository,
-    private cacheService: CacheService
+    private cacheService: CacheService,
   ) {
     super();
   }
 
   protected executeInternal(request: { id: number }): Observable<User> {
     const cacheKey = `user-${request.id}`;
-    
+
     // Try to get from cache first
     const cached = this.cacheService.get<User>(cacheKey);
     if (cached) {
@@ -984,7 +1007,7 @@ export class GetUserByIdQuery extends GetByIdQuery<User> {
 
     // If not in cache, get from repository and cache it
     return this.userRepository.getById(request.id).pipe(
-      tap(user => this.cacheService.set(cacheKey, user, 300000)) // 5 minutes
+      tap(user => this.cacheService.set(cacheKey, user, 300000)), // 5 minutes
     );
   }
 }
@@ -1011,6 +1034,7 @@ console.log(hexColor); // e.g., "#7b2d43"
 ## 🔧 **Advanced Configuration**
 
 ### **Dynamic Configuration Updates**
+
 ```typescript
 @Injectable()
 export class ConfigurationManager {
@@ -1028,13 +1052,14 @@ export class ConfigurationManager {
   addCustomHeader(key: string, value: string): void {
     const currentHeaders = this.coreConfig.get('customHeaders');
     this.coreConfig.updateConfig({
-      customHeaders: { ...currentHeaders, [key]: value }
+      customHeaders: { ...currentHeaders, [key]: value },
     });
   }
 }
 ```
 
 ### **Environment-Specific Configuration**
+
 ```typescript
 // environment.development.ts
 export const environment = {
@@ -1042,7 +1067,7 @@ export const environment = {
   apiBaseUrl: 'http://localhost:3000/api',
   enableRequestLogging: true,
   enableErrorLogging: true,
-  logLevel: 'debug'
+  logLevel: 'debug',
 };
 
 // environment.production.ts
@@ -1051,25 +1076,28 @@ export const environment = {
   apiBaseUrl: 'https://api.production.com',
   enableRequestLogging: false,
   enableErrorLogging: true,
-  logLevel: 'error'
+  logLevel: 'error',
 };
 
 // app.config.ts
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideCoreConfig(createCoreConfig({
-      apiBaseUrl: environment.apiBaseUrl,
-      enableRequestLogging: environment.enableRequestLogging,
-      enableErrorLogging: environment.enableErrorLogging,
-      logLevel: environment.logLevel
-    }))
-  ]
+    provideCoreConfig(
+      createCoreConfig({
+        apiBaseUrl: environment.apiBaseUrl,
+        enableRequestLogging: environment.enableRequestLogging,
+        enableErrorLogging: environment.enableErrorLogging,
+        logLevel: environment.logLevel,
+      }),
+    ),
+  ],
 };
 ```
 
 ## 🧪 **Testing Patterns**
 
 ### **Testing Repositories**
+
 ```typescript
 describe('UserRepository', () => {
   let repository: UserRepository;
@@ -1078,7 +1106,7 @@ describe('UserRepository', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [UserRepository]
+      providers: [UserRepository],
     });
 
     repository = TestBed.inject(UserRepository);
@@ -1101,6 +1129,7 @@ describe('UserRepository', () => {
 ```
 
 ### **Testing Use Cases**
+
 ```typescript
 describe('CreateUserCommand', () => {
   let command: CreateUserCommand;
@@ -1108,12 +1137,9 @@ describe('CreateUserCommand', () => {
 
   beforeEach(() => {
     const spy = jasmine.createSpyObj('UserRepository', ['create']);
-    
+
     TestBed.configureTestingModule({
-      providers: [
-        CreateUserCommand,
-        { provide: UserRepository, useValue: spy }
-      ]
+      providers: [CreateUserCommand, { provide: UserRepository, useValue: spy }],
     });
 
     command = TestBed.inject(CreateUserCommand);
@@ -1122,34 +1148,37 @@ describe('CreateUserCommand', () => {
 
   it('should validate required fields', () => {
     const invalidRequest = { name: '', email: '' };
-    
+
     command.execute(invalidRequest).subscribe({
-      error: (error) => {
-        expect(error.errors).toContain(jasmine.objectContaining({
-          field: 'name',
-          code: 'NAME_REQUIRED'
-        }));
-      }
+      error: error => {
+        expect(error.errors).toContain(
+          jasmine.objectContaining({
+            field: 'name',
+            code: 'NAME_REQUIRED',
+          }),
+        );
+      },
     });
   });
 });
 ```
 
 ### **Testing with Repository Factory**
+
 ```typescript
 describe('RepositoryFactory', () => {
   let factory: RepositoryFactory;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [RepositoryFactory]
+      providers: [RepositoryFactory],
     });
     factory = TestBed.inject(RepositoryFactory);
   });
 
   it('should register and retrieve repository', () => {
     factory.register('user', UserRepository, 'users', '/api/users');
-    
+
     const repository = factory.get<User>('user');
     expect(repository).toBeDefined();
     expect(repository.entityName).toBe('users');
@@ -1162,20 +1191,22 @@ describe('RepositoryFactory', () => {
 ### **Common Issues and Solutions**
 
 #### **1. Repository Not Found Error**
+
 ```typescript
 // Error: Repository with key 'user' not found
 // Solution: Make sure to register the repository
 @NgModule({
   providers: [
     provideRepositoryRegistrations([
-      createRepositoryRegistration('user', UserRepository, 'users', '/api/users')
-    ])
-  ]
+      createRepositoryRegistration('user', UserRepository, 'users', '/api/users'),
+    ]),
+  ],
 })
-export class AppModule { }
+export class AppModule {}
 ```
 
 #### **2. Validation Not Working**
+
 ```typescript
 // Error: Validation errors not being caught
 // Solution: Make sure to override executeInternal, not execute
@@ -1183,13 +1214,14 @@ export class AppModule { }
 export class CreateUserCommand extends CreateCommand<User> {
   // ❌ Wrong - this won't trigger validation
   // execute(request: Omit<User, 'id'>): Observable<User> { ... }
-  
+
   // ✅ Correct - this will trigger validation
   protected executeInternal(request: Omit<User, 'id'>): Observable<User> { ... }
 }
 ```
 
 #### **3. HTTP Context Headers Not Working**
+
 ```typescript
 // Error: Custom headers not being sent
 // Solution: Make sure to use the correct context
@@ -1197,12 +1229,13 @@ export class CreateUserCommand extends CreateCommand<User> {
 this.http.get('/api/data', { headers: { 'Custom-Header': 'value' } });
 
 // ✅ Correct
-this.http.get('/api/data', { 
-  context: withCustomHeaders({ 'Custom-Header': 'value' })
+this.http.get('/api/data', {
+  context: withCustomHeaders({ 'Custom-Header': 'value' }),
 });
 ```
 
 #### **4. Configuration Not Loading**
+
 ```typescript
 // Error: Configuration values are undefined
 // Solution: Make sure to provide configuration before using services
@@ -1218,38 +1251,46 @@ export class AppModule { }
 ```
 
 ### **Debug Mode**
+
 ```typescript
 // Enable debug logging
-provideCoreConfig(createCoreConfig({
-  enableRequestLogging: true,
-  enableErrorLogging: true,
-  logLevel: 'debug'
-}))
+provideCoreConfig(
+  createCoreConfig({
+    enableRequestLogging: true,
+    enableErrorLogging: true,
+    logLevel: 'debug',
+  }),
+);
 ```
 
 ## 🎯 **Benefits for Multiple Angular Applications**
 
 ### **1. Consistent Architecture**
+
 - Same patterns across all applications
 - Shared business logic and validation
 - Unified error handling
 
 ### **2. Easy Configuration**
+
 - Environment-specific settings
 - Runtime configuration updates
 - Feature flags for gradual rollouts
 
 ### **3. Scalable Repository Management**
+
 - Centralized registration
 - Dynamic repository creation
 - Entity-based lookups
 
 ### **4. Better Testing**
+
 - Dependency injection for mocking
 - Isolated components
 - Factory pattern for test data
 
 ### **5. Developer Experience**
+
 - Clear patterns to follow
 - Consistent API design
 - Better error messages and debugging
@@ -1257,17 +1298,20 @@ provideCoreConfig(createCoreConfig({
 ## 🔄 **Migration Guide**
 
 ### **For Existing Repositories:**
+
 1. Add `@Injectable()` decorator
 2. Remove constructor parameters
 3. Add `entityName` and `baseUrl` abstract properties
 4. Use `buildEntityUrl()` for URL construction
 
 ### **For Existing Use Cases:**
+
 1. Rename `execute()` method to `executeInternal()`
 2. Remove manual validation calls (now automatic)
 3. Update to use new error types if needed
 
 ### **For Application Configuration:**
+
 1. Add `provideCoreConfig()` to your providers
 2. Configure environment-specific settings
 3. Register repositories using the factory pattern
@@ -1282,6 +1326,7 @@ provideCoreConfig(createCoreConfig({
 ## 📚 **Examples**
 
 For complete working examples, see the `test-app` project in this repository, which demonstrates:
+
 - Repository implementation
 - Use case implementation
 - Configuration setup
@@ -1312,6 +1357,7 @@ ng test acontplus-core
 Once the project is built, you can publish your library by following these steps:
 
 1. Navigate to the `dist` directory:
+
    ```bash
    cd dist/acontplus-core
    ```

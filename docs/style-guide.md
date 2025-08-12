@@ -1,6 +1,8 @@
 # Acontplus UI Components Style Guide
 
-This document provides guidelines for consistent design and usage of components in the acontplus-ui-components library. Following these guidelines will ensure a cohesive user experience across applications that use these components.
+This document provides guidelines for consistent design and usage of components
+in the acontplus-ui-components library. Following these guidelines will ensure a
+cohesive user experience across applications that use these components.
 
 ## Table of Contents
 
@@ -23,15 +25,18 @@ This document provides guidelines for consistent design and usage of components 
 
 The design of acontplus-ui-components is guided by the following principles:
 
-1. **Consistency**: Components should look and behave consistently across the application.
+1. **Consistency**: Components should look and behave consistently across the
+   application.
 2. **Simplicity**: Components should be intuitive and easy to use.
 3. **Flexibility**: Components should be customizable to meet different needs.
-4. **Accessibility**: Components should be accessible to all users, including those with disabilities.
+4. **Accessibility**: Components should be accessible to all users, including
+   those with disabilities.
 5. **Performance**: Components should be optimized for performance.
 
 ## Color System
 
-The color system is based on Angular Material's theming system, with primary, accent, and warn palettes. The default theme includes:
+The color system is based on Angular Material's theming system, with primary,
+accent, and warn palettes. The default theme includes:
 
 ### Primary Palette
 
@@ -43,7 +48,8 @@ $primary-palette: mat.define-palette(mat.$indigo-palette);
 
 ### Accent Palette
 
-The accent palette is used for secondary actions and highlighting important elements.
+The accent palette is used for secondary actions and highlighting important
+elements.
 
 ```scss
 $accent-palette: mat.define-palette(mat.$pink-palette, A200, A100, A400);
@@ -69,7 +75,8 @@ Components should use the theme colors consistently:
 
 ## Typography
 
-Typography follows the Angular Material typography system, with a hierarchy of styles for different text elements.
+Typography follows the Angular Material typography system, with a hierarchy of
+styles for different text elements.
 
 ### Font Family
 
@@ -93,7 +100,8 @@ Use the appropriate typography level for each text element:
 
 ## Spacing
 
-Spacing should be consistent throughout the application, using a base unit of 8px (0.5rem).
+Spacing should be consistent throughout the application, using a base unit of
+8px (0.5rem).
 
 ### Spacing Scale
 
@@ -134,7 +142,8 @@ Cards should be used to group related content and actions.
   [isHeaderVisible]="true"
   [contentPadding]="'1rem'"
   [areActionsVisible]="true"
-  [primaryButtonText]="'Primary Action'">
+  [primaryButtonText]="'Primary Action'"
+>
   Card content goes here
 </acp-mat-dynamic-card>
 ```
@@ -158,7 +167,9 @@ this.dialogService.openInWrapper({
   component: YourDialogContentComponent,
   title: 'Dialog Title',
   icon: 'info',
-  data: { /* dialog data */ }
+  data: {
+    /* dialog data */
+  },
 });
 ```
 
@@ -251,10 +262,11 @@ animations: [
   trigger('fadeIn', [
     transition(':enter', [
       style({ opacity: 0 }),
-      animate('300ms ease-in', style({ opacity: 1 }))
-    ])
-  ])
-]
+      animate('300ms ease-in', style({ opacity: 1 })),
+    ]),
+  ]),
+];
 ```
 
-By following these guidelines, you'll create a consistent, accessible, and user-friendly experience with the acontplus-ui-components library.
+By following these guidelines, you'll create a consistent, accessible, and
+user-friendly experience with the acontplus-ui-components library.

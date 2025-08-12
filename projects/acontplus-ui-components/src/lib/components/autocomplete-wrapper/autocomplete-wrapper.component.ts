@@ -8,26 +8,30 @@ import {
   signal,
   inject,
   output,
-  input
+  input,
+  OnInit,
+  OnDestroy,
 } from '@angular/core';
-import {Subject, takeUntil, debounceTime, Observable, of } from 'rxjs';
+import { Subject, takeUntil, debounceTime, Observable, of } from 'rxjs';
 
-
-import {MatIcon} from "@angular/material/icon";
-import {NgTemplateOutlet} from "@angular/common";
-import {OverlayModule} from "@angular/cdk/overlay";
-import {MatProgressBarModule} from "@angular/material/progress-bar";
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {FormsModule} from "@angular/forms";
-import {MatIconButton} from "@angular/material/button";
-import {catchError, switchMap} from "rxjs/operators";
+import { MatIcon } from '@angular/material/icon';
+import { NgTemplateOutlet } from '@angular/common';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { FormsModule } from '@angular/forms';
+import { MatIconButton } from '@angular/material/button';
+import { catchError, switchMap } from 'rxjs/operators';
 import {
   AUTOCOMPLETE_WRAPPER_DEFAULT_CONFIG,
   AutocompleteWrapperConfig,
   AutocompleteWrapperFilters,
-  AutocompleteWrapperItem, AutocompleteWrapperSearchFunction, AutocompleteWrapperSearchResult, AutocompleteWrapperState
-} from "../../models";
-import {AutocompleteWrapperService} from "../../services";
+  AutocompleteWrapperItem,
+  AutocompleteWrapperSearchFunction,
+  AutocompleteWrapperSearchResult,
+  AutocompleteWrapperState,
+} from '../../models';
+import { AutocompleteWrapperService } from '../../services';
 @Component({
   selector: 'acp-autocomplete-wrapper',
   imports: [
@@ -37,12 +41,12 @@ import {AutocompleteWrapperService} from "../../services";
     MatProgressBarModule,
     MatProgressSpinner,
     FormsModule,
-    MatIconButton
+    MatIconButton,
   ],
   templateUrl: './autocomplete-wrapper.component.html',
-  styleUrl: './autocomplete-wrapper.component.scss'
+  styleUrl: './autocomplete-wrapper.component.scss',
 })
-export class ReusableAutocompleteComponent {
+export class ReusableAutocompleteComponent implements OnInit, OnDestroy {
   @Input() dataSource: AutocompleteWrapperItem[] = []; // Para búsqueda local
   @Input() config: AutocompleteWrapperConfig = AUTOCOMPLETE_WRAPPER_DEFAULT_CONFIG;
   @Input() itemTemplate?: TemplateRef<any>;
@@ -50,13 +54,12 @@ export class ReusableAutocompleteComponent {
 
   @Input() notFoundTemplate?: TemplateRef<any>;
 
-
   overlayWidth = input('auto');
   overlayMaxHeight = input('400px');
 
   itemSelected = output<AutocompleteWrapperItem>();
   searchChanged = output<string>();
-  searchRequested = output<{query: string, filters: AutocompleteWrapperFilters, page: number}>(); // Nuevo evento
+  searchRequested = output<{ query: string; filters: AutocompleteWrapperFilters; page: number }>(); // Nuevo evento
   pageChanged = output<number>();
   filterChanged = output<AutocompleteWrapperFilters>();
   advancedSearchClicked = output<void>();
@@ -79,12 +82,12 @@ export class ReusableAutocompleteComponent {
   // Filters
   filters: AutocompleteWrapperFilters = {
     searchBy: 'name',
-    stockFilter: 'all'
+    stockFilter: 'all',
   };
 
   // Computed properties
   isHistoryVisible = computed(() => {
-    return this.query.length < (this.config.minSearchLength || 2) && this.historyList().length > 0  ;
+    return this.query.length < (this.config.minSearchLength || 2) && this.historyList().length > 0;
   });
 
   totalItems = computed(() => this.filteredItems().length);
@@ -123,7 +126,11 @@ export class ReusableAutocompleteComponent {
   });
 
   isNoResults = computed(() => {
-    return    this.totalItems() === 0 &&  !this.isLoading() && this.query.length >= (this.config.minSearchLength || 2)
+    return (
+      this.totalItems() === 0 &&
+      !this.isLoading() &&
+      this.query.length >= (this.config.minSearchLength || 2)
+    );
   });
 
   // Private
@@ -149,7 +156,7 @@ export class ReusableAutocompleteComponent {
   }
 
   private setupSearch() {
-    this.filteredItems.set([])
+    this.filteredItems.set([]);
     this.searchSubject
       .pipe(
         debounceTime(this.config.debounceTime || 300),
@@ -165,7 +172,7 @@ export class ReusableAutocompleteComponent {
         //
         //  ),
         takeUntil(this.destroy$),
-        switchMap(({query}) => this.performSearch(query))
+        switchMap(({ query }) => this.performSearch(query)),
       )
       .subscribe(result => {
         this.filteredItems.set(result.items);
@@ -181,8 +188,12 @@ export class ReusableAutocompleteComponent {
 
     // ESTRATEGIA A: Función de búsqueda personalizada
     if (this.searchFunction) {
-      return this.searchFunction(query, this.filters, this.currentPage(), this.config.itemsPerPage || 10)
-        .pipe(catchError(() => of({ items: [], totalCount: 0 })));
+      return this.searchFunction(
+        query,
+        this.filters,
+        this.currentPage(),
+        this.config.itemsPerPage || 10,
+      ).pipe(catchError(() => of({ items: [], totalCount: 0 })));
     }
 
     // ESTRATEGIA B: Emit evento para que el padre maneje
@@ -190,7 +201,7 @@ export class ReusableAutocompleteComponent {
       this.searchRequested.emit({
         query,
         filters: this.filters,
-        page: this.currentPage()
+        page: this.currentPage(),
       });
       return of({ items: [], totalCount: 0 }); // El padre actualizará los datos
     }
@@ -199,22 +210,18 @@ export class ReusableAutocompleteComponent {
     return this.autocompleteService.searchLocal(this.dataSource, query, this.filters, this.config);
   }
 
-
   private loadHistory() {
-    this.autocompleteService.history$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(history => {
+    this.autocompleteService.history$.pipe(takeUntil(this.destroy$)).subscribe(history => {
       this.historyList.set(history);
     });
   }
 
-  private searchSubjectNext(){
+  private searchSubjectNext() {
     this.searchSubject.next({
       query: this.query,
       filters: this.filters,
-      page: this.currentPage()
+      page: this.currentPage(),
     });
-
   }
 
   // Event Handlers
@@ -291,11 +298,10 @@ export class ReusableAutocompleteComponent {
     this.currentPage.set(1);
     if (this.query.length >= (this.config.minSearchLength || 2)) {
       this.performSearch(this.query);
-      this.searchSubjectNext()
+      this.searchSubjectNext();
     }
     // this.filterChanged.emit(this.filters);
   }
-
 
   // Método público para actualizar resultados desde el padre
   public updateSearchResults(result: AutocompleteWrapperSearchResult) {
@@ -303,7 +309,6 @@ export class ReusableAutocompleteComponent {
     this.totalCount.set(result.totalCount);
     this.isLoading.set(false);
   }
-
 
   // Overlay Methods
   showOverlay() {
@@ -321,9 +326,9 @@ export class ReusableAutocompleteComponent {
 
   // Selection Methods
   selectItem(item: AutocompleteWrapperItem) {
-    if(this.config.clearInput){
+    if (this.config.clearInput) {
       this.query = '';
-    }else{
+    } else {
       this.query = this.getItemDisplayText(item);
     }
     this.hideOverlay();
@@ -334,8 +339,6 @@ export class ReusableAutocompleteComponent {
     setTimeout(() => {
       this.searchInput?.nativeElement?.focus();
     }, 100);
-
-
   }
 
   clearSearch() {
@@ -365,7 +368,7 @@ export class ReusableAutocompleteComponent {
       this.currentPage.set(page);
       this.selectedIndex.set(-1);
       this.pageChanged.emit(page);
-      this.searchSubjectNext()
+      this.searchSubjectNext();
     } else {
       target.value = this.currentPage().toString();
     }
@@ -376,7 +379,7 @@ export class ReusableAutocompleteComponent {
       this.currentPage.set(1);
       this.selectedIndex.set(-1);
       this.pageChanged.emit(1);
-      this.searchSubjectNext()
+      this.searchSubjectNext();
     }
   }
 
@@ -386,7 +389,7 @@ export class ReusableAutocompleteComponent {
       this.currentPage.set(prevPage);
       this.selectedIndex.set(-1);
       this.pageChanged.emit(prevPage);
-      this.searchSubjectNext()
+      this.searchSubjectNext();
     }
   }
 
@@ -396,7 +399,7 @@ export class ReusableAutocompleteComponent {
       this.currentPage.set(nextPage);
       this.selectedIndex.set(-1);
       this.pageChanged.emit(nextPage);
-      this.searchSubjectNext()
+      this.searchSubjectNext();
     }
   }
 
@@ -406,12 +409,12 @@ export class ReusableAutocompleteComponent {
       this.currentPage.set(lastPage);
       this.selectedIndex.set(-1);
       this.pageChanged.emit(lastPage);
-      this.searchSubjectNext()
+      this.searchSubjectNext();
     }
   }
 
   // Footer Actions
-  onCreateNew($event:MouseEvent) {
+  onCreateNew($event: MouseEvent) {
     //$event.stopPropagation();
     // this.hideOverlay();
     this.createClicked.emit(this.query);
@@ -446,7 +449,7 @@ export class ReusableAutocompleteComponent {
       if (selectedElement) {
         selectedElement.scrollIntoView({
           block: 'nearest',
-          behavior: 'smooth'
+          behavior: 'smooth',
         });
       }
     }
@@ -467,13 +470,12 @@ export class ReusableAutocompleteComponent {
         startItem: this.startItem(),
         endItem: this.endItem(),
         hasNextPage: this.currentPage() < this.totalPages(),
-        hasPreviousPage: this.currentPage() > 1
+        hasPreviousPage: this.currentPage() > 1,
       },
       hasResults: this.totalItems() > 0,
       isHistoryVisible: this.isHistoryVisible(),
       historyCount: this.historyList().length,
       filters: this.filters,
-
     };
   }
 

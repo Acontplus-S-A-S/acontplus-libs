@@ -7,7 +7,6 @@ export interface TableContext<T = any> {
   index?: number;
 }
 
-
 export class ColumnDefinition<T = any> extends FieldDefinition<T> {
   index?: number; // if the list of columns will be displayed in material edit-grid (angular material grid), index must be given
   format?: any; // it could be: { style: 'currency', currency: 'EUR' }, { date: 'short' }

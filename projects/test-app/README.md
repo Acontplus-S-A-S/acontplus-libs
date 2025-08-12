@@ -58,38 +58,45 @@ We follow a clear naming convention for repositories to indicate their transport
 ## 🎯 Layer Responsibilities
 
 ### Domain Layer
+
 - Contains core business logic
 - Defines entities, value objects, and domain models
 - Independent of external concerns
 
 ### Application Layer
+
 - Orchestrates domain objects
 - Implements use cases
 - Handles commands and queries
 - Coordinates between layers
 
 ### Data Layer
+
 - Implements data access patterns
 - Contains repositories and data sources
 - Handles external data integration
 - **Repository Naming**: Uses `-http` suffix for HTTP-based repositories
 
 ### Providers Layer
+
 - Provides application-wide services
 - Implements interceptors and guards
 - Manages cross-cutting concerns
 
 ### UI Layer
+
 - Contains all user interface components
 - Separates pages from reusable components
 - Follows Angular component architecture
 
 ### Constants Layer
+
 - Centralizes application constants
 - Provides type-safe configuration
 - Easy to maintain and update
 
 ### Shared Layer
+
 - Contains cross-cutting utilities
 - Implements reusable pipes and directives
 - Shared across all layers
@@ -107,20 +114,24 @@ We follow a clear naming convention for repositories to indicate their transport
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js (version 16 or higher)
 - Angular CLI (version 15 or higher)
 
 ### Installation
+
 ```bash
 npm install
 ```
 
 ### Development Server
+
 ```bash
 ng serve
 ```
 
 ### Build
+
 ```bash
 ng build
 ```
@@ -128,28 +139,33 @@ ng build
 ## 📋 Development Guidelines
 
 ### Adding New Repositories
+
 Follow the naming convention:
+
 ```typescript
 // ✅ Good
-customer-http.repository.ts
-order-http.repository.ts
-payment-http.repository.ts
+customer - http.repository.ts;
+order - http.repository.ts;
+payment - http.repository.ts;
 
 // ❌ Avoid
-customer.repository.ts
-order-web.repository.ts
-payment-impl.repository.ts
+customer.repository.ts;
+order - web.repository.ts;
+payment - impl.repository.ts;
 ```
 
 ### Adding New Transport Methods
+
 When adding different transport mechanisms:
+
 ```typescript
-user-grpc.repository.ts      // gRPC communication
-user-websocket.repository.ts // WebSocket communication
-user-local.repository.ts     // Local storage
+user - grpc.repository.ts; // gRPC communication
+user - websocket.repository.ts; // WebSocket communication
+user - local.repository.ts; // Local storage
 ```
 
 ### Layer Dependencies
+
 - **Domain Layer**: No dependencies on other layers
 - **Application Layer**: Depends only on Domain Layer
 - **Data Layer**: Depends only on Domain Layer
@@ -159,11 +175,13 @@ user-local.repository.ts     // Local storage
 ## 🧪 Testing
 
 ### Unit Tests
+
 ```bash
 ng test
 ```
 
 ### E2E Tests
+
 ```bash
 ng e2e
 ```
@@ -183,11 +201,12 @@ ng e2e
 ✅ **Repository Consolidation**: All repositories use `-http` naming convention  
 ✅ **No Duplicates**: Single implementation per domain entity  
 ✅ **Clean Architecture**: Clear separation of concerns  
-✅ **Documentation**: Comprehensive project structure documented  
+✅ **Documentation**: Comprehensive project structure documented
 
 ## 📞 Support
 
 For questions about the architecture or development guidelines, please refer to:
+
 - Angular documentation: https://angular.io/docs
 - Domain-Driven Design resources: https://martinfowler.com/bliki/DomainDrivenDesign.html
 

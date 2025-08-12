@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, delay, map } from 'rxjs';
 import {
@@ -7,12 +6,11 @@ import {
   AutocompleteWrapperFilters,
   AutocompleteWrapperItem,
   AutocompleteWrapperSearchFunction,
-  AutocompleteWrapperSearchResult
+  AutocompleteWrapperSearchResult,
 } from '../models/autocomplete-wrapper.model';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AutocompleteWrapperService {
   private historySubject = new BehaviorSubject<AutocompleteWrapperItem[]>([]);
@@ -27,7 +25,7 @@ export class AutocompleteWrapperService {
     items: AutocompleteWrapperItem[],
     query: string,
     filters: AutocompleteWrapperFilters,
-    config: AutocompleteWrapperConfig
+    config: AutocompleteWrapperConfig,
   ): Observable<AutocompleteWrapperSearchResult> {
     const filtered = this.filterItems(items, query, filters, config);
     const page = 1; // Para búsqueda local, asumimos página 1
@@ -38,7 +36,7 @@ export class AutocompleteWrapperService {
     return of({
       items: pageItems,
       totalCount: filtered.length,
-      hasMore: filtered.length > startIndex + pageSize
+      hasMore: filtered.length > startIndex + pageSize,
     });
   }
 
@@ -47,7 +45,7 @@ export class AutocompleteWrapperService {
     items: AutocompleteWrapperItem[],
     query: string,
     filters: AutocompleteWrapperFilters,
-    config: AutocompleteWrapperConfig = AUTOCOMPLETE_WRAPPER_DEFAULT_CONFIG
+    config: AutocompleteWrapperConfig = AUTOCOMPLETE_WRAPPER_DEFAULT_CONFIG,
   ): AutocompleteWrapperItem[] {
     if (!query || query.length < (config.minSearchLength || 2)) {
       return [];
@@ -83,7 +81,7 @@ export class AutocompleteWrapperService {
     items: AutocompleteWrapperItem[],
     query: string,
     filters: AutocompleteWrapperFilters,
-    config: AutocompleteWrapperConfig = AUTOCOMPLETE_WRAPPER_DEFAULT_CONFIG
+    config: AutocompleteWrapperConfig = AUTOCOMPLETE_WRAPPER_DEFAULT_CONFIG,
   ): Observable<AutocompleteWrapperItem[]> {
     const results = this.filterItems(items, query, filters, config);
     return of(results).pipe(delay(100)); // Simular delay de API
@@ -93,7 +91,7 @@ export class AutocompleteWrapperService {
   private getSearchValue(
     item: AutocompleteWrapperItem,
     searchBy: string,
-    config: AutocompleteWrapperConfig
+    config: AutocompleteWrapperConfig,
   ): string {
     const searchField = config.searchFields?.find(field => field.value === searchBy);
     if (searchField) {
@@ -103,19 +101,19 @@ export class AutocompleteWrapperService {
     // Fallback a la lógica anterior
     switch (searchBy) {
       case 'description':
-        return item["description"] || '';
+        return item['description'] || '';
       case 'code':
-        return item["code"] || item.id?.toString() || '';
+        return item['code'] || item.id?.toString() || '';
       case 'barcode':
-        return item["barcode"] || '';
+        return item['barcode'] || '';
       case 'auxCode':
-        return item["auxCode"] || '';
+        return item['auxCode'] || '';
       case 'email':
-        return item["email"] || '';
+        return item['email'] || '';
       case 'phone':
-        return item["phone"] || '';
+        return item['phone'] || '';
       case 'document':
-        return item["document"] || '';
+        return item['document'] || '';
       case 'name':
       default:
         return item.name || item.value || '';
@@ -230,7 +228,7 @@ export class AutocompleteWrapperService {
         [config.searchByParam || 'searchBy']: searchBy,
         [config.pageParam || 'page']: page,
         [config.pageSizeParam || 'pageSize']: pageSize,
-        ...rest
+        ...rest,
       };
 
       return config.search(params).pipe(
@@ -245,9 +243,9 @@ export class AutocompleteWrapperService {
           return {
             items,
             totalCount: totalRecords,
-            hasMore: response.hasMore || false
+            hasMore: response.hasMore || false,
           };
-        })
+        }),
       );
     };
   }
@@ -275,7 +273,7 @@ export class AutocompleteWrapperService {
             currency: 'USD',
             includesTax: true,
             isDefault: true,
-            isActive: true
+            isActive: true,
           },
           {
             id: 2,
@@ -285,7 +283,7 @@ export class AutocompleteWrapperService {
             currency: 'USD',
             minQuantity: 5,
             includesTax: false,
-            isActive: true
+            isActive: true,
           },
           {
             id: 3,
@@ -294,7 +292,7 @@ export class AutocompleteWrapperService {
             value: 899,
             currency: 'USD',
             includesTax: true,
-            isActive: true
+            isActive: true,
           },
           {
             id: 4,
@@ -305,9 +303,9 @@ export class AutocompleteWrapperService {
             validFrom: new Date('2024-11-24'),
             validTo: new Date('2024-11-30'),
             includesTax: true,
-            isActive: true
-          }
-        ]
+            isActive: true,
+          },
+        ],
       },
       {
         id: 2,
@@ -328,7 +326,7 @@ export class AutocompleteWrapperService {
             alt: 'Samsung Galaxy S23 frontal',
             type: 'main',
             isPrimary: true,
-            order: 1
+            order: 1,
           },
           {
             id: 2,
@@ -336,13 +334,10 @@ export class AutocompleteWrapperService {
             thumbnailUrl: 'https://images.unsplash.com/photo-1574755393849-623942496936?w=200',
             alt: 'Samsung Galaxy S23 trasero',
             type: 'gallery',
-            order: 2
-          }
+            order: 2,
+          },
         ],
-        badges: [
-          { type: 'new', text: 'NUEVO' },
-          { type: 'bestseller' }
-        ],
+        badges: [{ type: 'new', text: 'NUEVO' }, { type: 'bestseller' }],
         prices: [
           {
             id: 5,
@@ -352,7 +347,7 @@ export class AutocompleteWrapperService {
             currency: 'USD',
             includesTax: true,
             isDefault: true,
-            isActive: true
+            isActive: true,
           },
           {
             id: 6,
@@ -362,22 +357,22 @@ export class AutocompleteWrapperService {
             currency: 'USD',
             minQuantity: 3,
             includesTax: false,
-            isActive: true
-          }
-        ]
-      }
+            isActive: true,
+          },
+        ],
+      },
     ];
   }
 
   // Métodos específicos para diferentes tipos de búsqueda
   searchProducts(
     query: string,
-    filters: Partial<AutocompleteWrapperFilters> = {}
+    filters: Partial<AutocompleteWrapperFilters> = {},
   ): Observable<AutocompleteWrapperSearchResult> {
     const defaultFilters: AutocompleteWrapperFilters = {
       searchBy: 'description',
       stockFilter: 'all',
-      ...filters
+      ...filters,
     };
 
     const mockData = this.createMockData();
@@ -395,8 +390,8 @@ export class AutocompleteWrapperService {
         { value: 'description', label: 'Descripción', property: 'description' },
         { value: 'code', label: 'Código', property: 'code' },
         { value: 'barcode', label: 'Código de Barras', property: 'barcode' },
-        { value: 'auxCode', label: 'Código Auxiliar', property: 'auxCode' }
-      ]
+        { value: 'auxCode', label: 'Código Auxiliar', property: 'auxCode' },
+      ],
     });
   }
 
@@ -410,8 +405,8 @@ export class AutocompleteWrapperService {
         { value: 'name', label: 'Nombre', property: 'name' },
         { value: 'email', label: 'Email', property: 'email' },
         { value: 'phone', label: 'Teléfono', property: 'phone' },
-        { value: 'document', label: 'Documento', property: 'document' }
-      ]
+        { value: 'document', label: 'Documento', property: 'document' },
+      ],
     });
   }
 }

@@ -51,10 +51,10 @@ export interface MatCustomDialogConfig<T = any> {
 /**
  * Configuration interface for opening a dialog inside the custom `DialogWrapperComponent`.
  * This interface defines the properties needed to configure the dialog wrapper.
- * 
+ *
  * @interface DialogWrapperConfig
  * @template T The type of data to pass to the content component
- * 
+ *
  * @example
  * const config: DialogWrapperConfig = {
  *   component: YourDialogContentComponent,

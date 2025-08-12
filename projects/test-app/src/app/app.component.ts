@@ -1,18 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ApplicationService } from './providers/application.service';
-import {
-  SnackbarService,
-  ThemeService,
-} from '@acontplus-ui-components';
-import {AppLayoutComponent} from "./layout/app-layout/app-layout.component";
+import { SnackbarService, ThemeService } from '@acontplus-ui-components';
+import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    RouterOutlet,
-    AppLayoutComponent,
-  ],
+  imports: [RouterOutlet, AppLayoutComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

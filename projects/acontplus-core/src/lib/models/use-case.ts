@@ -16,7 +16,7 @@ export interface UseCaseResult<T> {
   message?: string;
   data?: T;
   errors?: ApiError[];
-  metadata?: { [key: string]: any };
+  metadata?: Record<string, any>;
   timestamp: string;
   correlationId?: string;
   traceId?: string;
@@ -38,7 +38,7 @@ export enum ErrorCategory {
   CONFLICT = 'conflict',
   TIMEOUT = 'timeout',
   NETWORK = 'network',
-  UNKNOWN = 'unknown'
+  UNKNOWN = 'unknown',
 }
 
 export interface DomainError extends ApiError {

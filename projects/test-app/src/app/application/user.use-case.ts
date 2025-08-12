@@ -3,11 +3,7 @@ import { CreateUserCommand } from '../commands/create-user.command';
 import { GetUsersQuery } from '../queries/user.query';
 import { User } from '../user';
 import { Observable } from 'rxjs';
-import {
-  FilterParams,
-  PaginatedResult,
-  PaginationParams,
-} from '@acontplus-core';
+import { FilterParams, PaginatedResult, PaginationParams } from '@acontplus-core';
 
 @Injectable({
   providedIn: 'root',

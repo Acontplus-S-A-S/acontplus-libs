@@ -4,7 +4,7 @@ import { ENVIRONMENT } from '../environments';
 import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class JwtTokenService {
   private environment = inject(ENVIRONMENT);
@@ -24,7 +24,7 @@ export class JwtTokenService {
     );
   }
 
-  setToken(token: string, rememberMe: boolean = false): void {
+  setToken(token: string, rememberMe = false): void {
     if (rememberMe) {
       localStorage.setItem(this.environment.tokenKey, token);
     } else {
@@ -32,7 +32,7 @@ export class JwtTokenService {
     }
   }
 
-  setRefreshToken(refreshToken: string, rememberMe: boolean = false): void {
+  setRefreshToken(refreshToken: string, rememberMe = false): void {
     if (rememberMe) {
       localStorage.setItem(this.environment.refreshTokenKey, refreshToken);
     } else {

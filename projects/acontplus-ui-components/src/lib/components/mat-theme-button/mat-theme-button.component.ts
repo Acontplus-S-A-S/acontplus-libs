@@ -1,11 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
-import {
-  MatButton,
-  MatFabButton,
-  MatIconButton,
-  MatMiniFabButton,
-} from '@angular/material/button';
+import { MatButton, MatFabButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
 import { NgClass } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 
@@ -32,14 +27,7 @@ export type MaterialButtonStyle =
 
 @Component({
   selector: 'acp-mat-theme-button',
-  imports: [
-    MatButton,
-    NgClass,
-    MatIcon,
-    MatMiniFabButton,
-    MatIconButton,
-    MatFabButton,
-  ],
+  imports: [MatButton, NgClass, MatIcon, MatMiniFabButton, MatIconButton, MatFabButton],
   templateUrl: './mat-theme-button.component.html',
   styleUrl: './mat-theme-button.component.css',
 })

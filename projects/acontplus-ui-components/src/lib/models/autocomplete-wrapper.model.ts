@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { Observable } from 'rxjs';
 
 export interface AutocompleteWrapperItem {
   id?: string | number;
@@ -18,7 +18,7 @@ export type AutocompleteWrapperSearchFunction = (
   query: string,
   filters: AutocompleteWrapperFilters,
   page?: number,
-  pageSize?: number
+  pageSize?: number,
 ) => Observable<AutocompleteWrapperSearchResult>;
 
 export interface AutocompleteWrapperConfig {
@@ -188,13 +188,13 @@ export const AUTOCOMPLETE_WRAPPER_DEFAULT_CONFIG: AutocompleteWrapperConfig = {
     { value: 'description', label: 'Descripción', property: 'description' },
     { value: 'code', label: 'Código', property: 'code' },
     { value: 'barcode', label: 'Código de Barras', property: 'barcode' },
-    { value: 'auxCode', label: 'Código Auxiliar', property: 'auxCode' }
+    { value: 'auxCode', label: 'Código Auxiliar', property: 'auxCode' },
   ],
   stockOptions: [
     { value: 'all', label: 'Todos' },
     { value: 'with-stock', label: 'Con Stock' },
-    { value: 'without-stock', label: 'Sin Stock' }
-  ]
+    { value: 'without-stock', label: 'Sin Stock' },
+  ],
 };
 
 export const AUTOCOMPLETE_WRAPPER_PRODUCT_CONFIG: AutocompleteWrapperConfig = {
@@ -203,7 +203,7 @@ export const AUTOCOMPLETE_WRAPPER_PRODUCT_CONFIG: AutocompleteWrapperConfig = {
   enableStockFilter: true,
   enableFooterActions: true,
   sectionTitle: 'Productos',
-  noResultsText: 'No se encontraron productos'
+  noResultsText: 'No se encontraron productos',
 };
 
 export const AUTOCOMPLETE_WRAPPER_CUSTOMER_CONFIG: AutocompleteWrapperConfig = {
@@ -217,8 +217,8 @@ export const AUTOCOMPLETE_WRAPPER_CUSTOMER_CONFIG: AutocompleteWrapperConfig = {
     { value: 'name', label: 'Nombre', property: 'name' },
     { value: 'email', label: 'Email', property: 'email' },
     { value: 'phone', label: 'Teléfono', property: 'phone' },
-    { value: 'document', label: 'Documento', property: 'document' }
-  ]
+    { value: 'document', label: 'Documento', property: 'document' },
+  ],
 };
 
 export const AUTOCOMPLETE_WRAPPER_SIMPLE_CONFIG: AutocompleteWrapperConfig = {
@@ -230,7 +230,7 @@ export const AUTOCOMPLETE_WRAPPER_SIMPLE_CONFIG: AutocompleteWrapperConfig = {
   enablePagination: false,
   itemsPerPage: 50,
   sectionTitle: 'Resultados',
-  overlayMaxHeight: '300px'
+  overlayMaxHeight: '300px',
 };
 
 // Configuración para búsqueda local
@@ -238,7 +238,7 @@ export const AUTOCOMPLETE_WRAPPER_LOCAL_CONFIG: AutocompleteWrapperConfig = {
   ...AUTOCOMPLETE_WRAPPER_SIMPLE_CONFIG,
   searchMode: 'local',
   debounceTime: 150, // Menos tiempo para búsqueda local
-  minSearchLength: 1
+  minSearchLength: 1,
 };
 
 // Configuración para listas grandes con paginación
@@ -246,16 +246,16 @@ export const AUTOCOMPLETE_WRAPPER_PAGINATED_CONFIG: AutocompleteWrapperConfig = 
   ...AUTOCOMPLETE_WRAPPER_DEFAULT_CONFIG,
   itemsPerPage: 20,
   enablePagination: true,
-  overlayMaxHeight: '400px'
+  overlayMaxHeight: '400px',
 };
 
 // Helper para crear configuración personalizada
 export function createAutocompleteWrapperConfig(
-  overrides: Partial<AutocompleteWrapperConfig>
+  overrides: Partial<AutocompleteWrapperConfig>,
 ): AutocompleteWrapperConfig {
   return {
     ...AUTOCOMPLETE_WRAPPER_DEFAULT_CONFIG,
-    ...overrides
+    ...overrides,
   };
 }
 

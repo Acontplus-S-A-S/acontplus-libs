@@ -8,9 +8,8 @@ describe('MatThemeButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatThemeButtonComponent]
-    })
-    .compileComponents();
+      imports: [MatThemeButtonComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MatThemeButtonComponent);
     component = fixture.componentInstance;

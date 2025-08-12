@@ -62,7 +62,7 @@ export const CORE_CONFIG = new InjectionToken<CoreConfig>('CORE_CONFIG', {
 });
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CoreConfigService {
   private config: Required<CoreConfig>;
@@ -131,8 +131,8 @@ export class CoreConfigService {
    * Check if a URL should be excluded from processing
    */
   shouldExcludeUrl(url: string): boolean {
-    return this.config.excludeUrls.some(excludePattern =>
-      url.includes(excludePattern) || new RegExp(excludePattern).test(url)
+    return this.config.excludeUrls.some(
+      excludePattern => url.includes(excludePattern) || new RegExp(excludePattern).test(url),
     );
   }
 
@@ -140,8 +140,8 @@ export class CoreConfigService {
    * Check if a method should be excluded from processing
    */
   shouldExcludeMethod(method: string): boolean {
-    return this.config.excludeMethods.some(excludeMethod =>
-      excludeMethod.toLowerCase() === method.toLowerCase()
+    return this.config.excludeMethods.some(
+      excludeMethod => excludeMethod.toLowerCase() === method.toLowerCase(),
     );
   }
 

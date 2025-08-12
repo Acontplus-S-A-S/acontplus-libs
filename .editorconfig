@@ -1,16 +1,84 @@
-# Editor configuration, see https://editorconfig.org
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
 root = true
 
+# Unix-style newlines with a newline ending every file
 [*]
 charset = utf-8
-indent_style = space
-indent_size = 2
+end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
 
-[*.ts]
-quote_type = single
+# TypeScript and JavaScript files
+[*.{ts,js,tsx,jsx}]
+indent_size = 2
+max_line_length = 100
 
+# HTML files
+[*.html]
+indent_size = 2
+max_line_length = 100
+
+# CSS, SCSS, and SASS files
+[*.{css,scss,sass}]
+indent_size = 2
+max_line_length = 100
+
+# JSON files
+[*.json]
+indent_size = 2
+max_line_length = 80
+
+# YAML files
+[*.{yml,yaml}]
+indent_size = 2
+max_line_length = 100
+
+# Markdown files
 [*.md]
-max_line_length = off
+indent_size = 2
+max_line_length = 80
 trim_trailing_whitespace = false
+
+# XML files
+[*.xml]
+indent_size = 2
+max_line_length = 100
+
+# Shell scripts
+[*.sh]
+indent_size = 2
+end_of_line = lf
+
+# PowerShell scripts
+[*.ps1]
+indent_size = 2
+end_of_line = crlf
+
+# Batch files
+[*.{bat,cmd}]
+indent_size = 2
+end_of_line = crlf
+
+# Package files
+[package.json]
+indent_size = 2
+max_line_length = 80
+
+# Angular configuration files
+[angular.json]
+indent_size = 2
+max_line_length = 100
+
+# ESLint configuration
+[eslint.config.js]
+indent_size = 2
+max_line_length = 100
+
+# Prettier configuration
+[.prettierrc]
+indent_size = 2
+max_line_length = 80

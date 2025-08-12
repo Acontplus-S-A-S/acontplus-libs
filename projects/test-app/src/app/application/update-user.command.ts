@@ -1,9 +1,4 @@
-import {
-  BaseRepository,
-  UpdateCommand,
-  UseCaseResult,
-  ValidationError,
-} from '@acontplus-core';
+import { BaseRepository, UpdateCommand, UseCaseResult, ValidationError } from '@acontplus-core';
 import { Injectable } from '@angular/core';
 import { User } from '../user';
 import { Observable, switchMap, tap, throwError } from 'rxjs';
@@ -22,12 +17,12 @@ export class UpdateUserCommand extends UpdateCommand<User> {
 
   execute(request: { id: number; data: Partial<User> }): Observable<User> {
     return this.userRepository.getById(request.id).pipe(
-      switchMap((existingUser) => {
+      switchMap(existingUser => {
         // Apply business rules for updates
         const updatedData = this.applyBusinessRules(existingUser, request.data);
 
         return this.userRepository.update(request.id, updatedData).pipe(
-          tap((updatedUser) => {
+          tap(updatedUser => {
             // Log the update for audit purposes
             // this.auditService.logUserUpdate(
             //   existingUser,
@@ -42,9 +37,7 @@ export class UpdateUserCommand extends UpdateCommand<User> {
           }),
         );
       }),
-      catchError((error) =>
-        throwError(() => this.mapRepositoryError(error, request.id)),
-      ),
+      catchError(error => throwError(() => this.mapRepositoryError(error, request.id))),
     );
   }
 
@@ -78,13 +71,10 @@ export class UpdateUserCommand extends UpdateCommand<User> {
     const allowedFields = ['name', 'email'];
     const updatedFields = Object.keys(data);
 
-    return updatedFields.every((field) => allowedFields.includes(field));
+    return updatedFields.every(field => allowedFields.includes(field));
   }
 
-  private applyBusinessRules(
-    existingUser: User,
-    updateData: Partial<User>,
-  ): Partial<User> {
+  private applyBusinessRules(existingUser: User, updateData: Partial<User>): Partial<User> {
     const result = { ...updateData };
 
     // Business rule: Email changes require verification
@@ -112,42 +102,32 @@ export class UpdateUserCommand extends UpdateCommand<User> {
   private handleRoleChange(user: User, previousRole: string): void {
     // Handle side effects of role changes
     // e.g., send notification, update permissions cache, etc.
-    console.log(
-      `User ${user.name} role changed from ${previousRole} to ${user.role}`,
-    );
+    console.log(`User ${user.name} role changed from ${previousRole} to ${user.role}`);
   }
 
   private mapRepositoryError(error: any, userId: number): UseCaseResult<User> {
     switch (error?.code) {
       case 'USER_NOT_FOUND':
-        return this.createErrorResult(
-          'USER_NOT_FOUND',
-          'The user to update was not found',
-          [
-            {
-              code: 'USER_NOT_FOUND',
-              message: `User with ID ${userId} does not exist`,
-              target: 'id',
-              severity: 'error',
-              category: 'business',
-            },
-          ],
-        );
+        return this.createErrorResult('USER_NOT_FOUND', 'The user to update was not found', [
+          {
+            code: 'USER_NOT_FOUND',
+            message: `User with ID ${userId} does not exist`,
+            target: 'id',
+            severity: 'error',
+            category: 'business',
+          },
+        ]);
 
       case 'EMAIL_ALREADY_EXISTS':
-        return this.createErrorResult(
-          'USER_EMAIL_DUPLICATE',
-          'Email address is already in use',
-          [
-            {
-              code: 'USER_EMAIL_DUPLICATE',
-              message: 'Another user is already using this email address',
-              target: 'email',
-              severity: 'error',
-              category: 'business',
-            },
-          ],
-        );
+        return this.createErrorResult('USER_EMAIL_DUPLICATE', 'Email address is already in use', [
+          {
+            code: 'USER_EMAIL_DUPLICATE',
+            message: 'Another user is already using this email address',
+            target: 'email',
+            severity: 'error',
+            category: 'business',
+          },
+        ]);
 
       default:
         return this.createErrorResult(

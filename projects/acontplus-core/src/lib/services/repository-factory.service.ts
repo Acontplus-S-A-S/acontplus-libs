@@ -15,11 +15,11 @@ export const REPOSITORY_REGISTRATIONS = new InjectionToken<RepositoryRegistratio
   'REPOSITORY_REGISTRATIONS',
   {
     factory: () => [],
-  }
+  },
 );
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RepositoryFactory {
   private repositories = new Map<string, BaseRepository<any>>();
@@ -32,7 +32,7 @@ export class RepositoryFactory {
     key: string,
     repository: Type<BaseRepository<T>>,
     entityName: string,
-    baseUrl?: string
+    baseUrl?: string,
   ): void {
     // Check if already registered
     if (this.repositories.has(key)) {
@@ -122,7 +122,7 @@ export class RepositoryFactory {
         registration.key,
         registration.repository,
         registration.entityName,
-        registration.baseUrl
+        registration.baseUrl,
       );
     });
   }
@@ -171,7 +171,7 @@ export function createRepositoryRegistration<T extends BaseEntity>(
   key: string,
   repository: Type<BaseRepository<T>>,
   entityName: string,
-  baseUrl?: string
+  baseUrl?: string,
 ): RepositoryRegistration<T> {
   return {
     key,

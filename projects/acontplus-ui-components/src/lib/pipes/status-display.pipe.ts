@@ -38,16 +38,10 @@ export class StatusDisplayPipe implements PipeTransform {
       iconClass = '',
     } = options;
 
-    const text = this.getStatusText(
-      isActive,
-      gender,
-      customActiveText,
-      customInactiveText,
-    );
+    const text = this.getStatusText(isActive, gender, customActiveText, customInactiveText);
     const icon = isActive ? 'check_circle' : 'cancel';
     const colorClass = isActive ? 'text-green-500' : 'text-red-500';
-    const combinedIconClass =
-      `${colorClass} align-middle mr-1 ${iconClass}`.trim();
+    const combinedIconClass = `${colorClass} align-middle mr-1 ${iconClass}`.trim();
     const combinedTextClass = `align-middle ${textClass}`.trim();
 
     let html = '';
@@ -74,15 +68,10 @@ export class StatusDisplayPipe implements PipeTransform {
     const translationKey = this.getTranslationKey(isActive, gender);
     const translation = this.transloco.translate(translationKey);
 
-    return translation !== translationKey
-      ? translation
-      : this.getFallbackText(isActive, gender);
+    return translation !== translationKey ? translation : this.getFallbackText(isActive, gender);
   }
 
-  private getTranslationKey(
-    isActive: boolean,
-    gender: StatusGender,
-  ): TranslationKey {
+  private getTranslationKey(isActive: boolean, gender: StatusGender): TranslationKey {
     const base = isActive ? 'status.active' : 'status.inactive';
     return gender !== 'neutral'
       ? (`${base}.${gender}` as TranslationKey)

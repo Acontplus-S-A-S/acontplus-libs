@@ -1,13 +1,13 @@
 /* Global styles and theme definitions */
-@use "@angular/material" as mat;
+@use '@angular/material' as mat;
 
 // Import your custom theme palettes
-@use "theme-colors" as custom-theme;
+@use 'theme-colors' as custom-theme;
 
 // Import UI components' styles
-@use "acontplus-ui-components/src/styles/snackbar-theme";
-@use "acontplus-ui-components/src/styles/custom-buttons" as buttons;
-@use "acontplus-ui-components/src/styles/custom-dialog";
+@use 'acontplus-ui-components/src/styles/snackbar-theme';
+@use 'acontplus-ui-components/src/styles/custom-buttons' as buttons;
+@use 'acontplus-ui-components/src/styles/custom-dialog';
 
 // Include Angular Material Core foundational styles
 @include mat.core();
@@ -23,8 +23,8 @@ $light-theme: mat.define-theme(
       scale: 0,
     ),
     typography: (
-      plain-family: "Roboto",
-      brand-family: "Open Sans",
+      plain-family: 'Roboto',
+      brand-family: 'Open Sans',
     ),
   )
 );
@@ -39,8 +39,8 @@ $dark-theme: mat.define-theme(
       scale: 0,
     ),
     typography: (
-      plain-family: "Roboto",
-      brand-family: "Open Sans",
+      plain-family: 'Roboto',
+      brand-family: 'Open Sans',
     ),
   )
 );

@@ -68,12 +68,9 @@ const DEFAULT_CONFIG: Required<HttpContextConfig> = {
 };
 
 // Injection token for configuration - FIXED
-export const HTTP_CONTEXT_CONFIG = new InjectionToken<HttpContextConfig>(
-  'HTTP_CONTEXT_CONFIG',
-  {
-    factory: () => DEFAULT_CONFIG, // Provide a default factory in case it's not provided
-  },
-);
+export const HTTP_CONTEXT_CONFIG = new InjectionToken<HttpContextConfig>('HTTP_CONTEXT_CONFIG', {
+  factory: () => DEFAULT_CONFIG, // Provide a default factory in case it's not provided
+});
 
 export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
   const jwtTokenService = inject(JwtTokenService);
@@ -103,7 +100,7 @@ export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
 
   // Check if URL should be excluded
   const shouldExclude = config.excludeUrls.some(
-    (url) => req.url.includes(url) || new RegExp(url).test(req.url),
+    url => req.url.includes(url) || new RegExp(url).test(req.url),
   );
 
   if (shouldExclude) {
@@ -112,8 +109,7 @@ export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
 
   // Handle URL transformation
   const baseUrl = environment.apiBaseUrl;
-  const finalUrl =
-    isCustomUrl || !config.baseUrlInjection ? req.url : `${baseUrl}${req.url}`;
+  const finalUrl = isCustomUrl || !config.baseUrlInjection ? req.url : `${baseUrl}${req.url}`;
 
   // Generate or get correlation context
   const correlationId = config.enableCorrelationTracking

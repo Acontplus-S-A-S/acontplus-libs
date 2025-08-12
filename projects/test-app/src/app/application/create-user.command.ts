@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import {
-  BaseRepository,
-  CreateCommand,
-  UseCaseResult,
-  ValidationError,
-} from '@acontplus-core';
+import { BaseRepository, CreateCommand, UseCaseResult, ValidationError } from '@acontplus-core';
 import { User } from '../user';
 
 @Injectable()
@@ -21,12 +16,12 @@ export class CreateUserCommand extends CreateCommand<User> {
 
   execute(request: Omit<User, 'id'>): Observable<User> {
     return this.userRepository.create(request).pipe(
-      map((user) => {
+      map(user => {
         // Send welcome email as side effect
         // this.sendWelcomeEmail(user);
         return user;
       }),
-      catchError((error) => {
+      catchError(error => {
         // Transform repository errors to domain-specific errors
         return throwError(() => this.mapRepositoryError(error));
       }),

@@ -131,7 +131,7 @@
 }
 
 .code-examples code {
-  font-family: "Courier New", monospace;
+  font-family: 'Courier New', monospace;
 }
 
 @media (max-width: 768px) {

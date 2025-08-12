@@ -25,34 +25,27 @@ import { provideHttpContext } from '../../../acontplus-core/src/lib/interceptors
 export const appConfig: ApplicationConfig = {
   providers: [
     // Core configuration
-    provideCoreConfig(createCoreConfig({
-      apiBaseUrl: environment.apiBaseUrl,
-      enableCorrelationTracking: true,
-      enableRequestLogging: !environment.isProduction,
-      enableErrorLogging: true,
-      customHeaders: {
-        'Client-Version': '1.0.0',
-        'Client-Id': 'test-app',
-      },
-      excludeUrls: ['/health', '/metrics'],
-    })),
+    provideCoreConfig(
+      createCoreConfig({
+        apiBaseUrl: environment.apiBaseUrl,
+        enableCorrelationTracking: true,
+        enableRequestLogging: !environment.isProduction,
+        enableErrorLogging: true,
+        customHeaders: {
+          'Client-Version': '1.0.0',
+          'Client-Id': 'test-app',
+        },
+        excludeUrls: ['/health', '/metrics'],
+      }),
+    ),
 
     // Repository registrations
     provideRepositoryRegistrations([
-      createRepositoryRegistration(
-        'user',
-        UserHttpRepository,
-        'users',
-        '/api/users'
-      ),
+      createRepositoryRegistration('user', UserHttpRepository, 'users', '/api/users'),
     ]),
 
     provideHttpClient(
-      withInterceptors([
-        apiInterceptor,
-        spinnerInterceptor,
-        httpContextInterceptor,
-      ]),
+      withInterceptors([apiInterceptor, spinnerInterceptor, httpContextInterceptor]),
     ),
     provideTransloco({
       config: {

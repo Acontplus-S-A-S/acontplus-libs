@@ -1,10 +1,5 @@
 // Example concrete implementation
-import {
-  BaseRepository,
-  FilterParams,
-  PaginatedResult,
-  PaginationParams,
-} from '@acontplus-core';
+import { BaseRepository, FilterParams, PaginatedResult, PaginationParams } from '@acontplus-core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -13,10 +8,7 @@ export class ExampleRepository extends BaseRepository<any> {
     super(http, '/api/examples');
   }
 
-  getAll(
-    pagination: PaginationParams,
-    filters?: FilterParams,
-  ): Observable<PaginatedResult<any>> {
+  getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<any>> {
     const params = this.buildQueryParams(pagination, filters);
     // Toast automatically hidden for GET requests (list operations)
     return this.get<PaginatedResult<any>>(this.buildUrl(''), params);
@@ -42,10 +34,7 @@ export class ExampleRepository extends BaseRepository<any> {
     return this.deleteHttp<boolean>(this.buildUrl(id.toString()));
   }
 
-  search(
-    query: string,
-    pagination: PaginationParams,
-  ): Observable<PaginatedResult<any>> {
+  search(query: string, pagination: PaginationParams): Observable<PaginatedResult<any>> {
     const params = {
       ...this.buildQueryParams(pagination),
       search: query,

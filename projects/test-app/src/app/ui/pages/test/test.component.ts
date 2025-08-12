@@ -30,7 +30,7 @@ export class TestComponent {
       },
     );
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       console.log('Framed dialog closed. Result:', result);
       // alert(`Action was ${result ? 'confirmed' : 'cancelled'}.`);
     });
@@ -48,7 +48,7 @@ export class TestComponent {
       isMobileFullScreen: true,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       console.log('Raw dialog closed. Result:', result);
       // alert(`Action was ${result ? 'confirmed' : 'cancelled'}.`);
     });

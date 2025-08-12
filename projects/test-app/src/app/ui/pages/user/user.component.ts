@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-user',
@@ -6,7 +6,7 @@ import {Component, signal} from '@angular/core';
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',
 })
-export class UserComponent {
+export class UserComponent implements OnInit {
   users = signal<PaginatedResult<User> | null>(null);
   loading = signal(false);
   error = signal<string | null>(null);
@@ -29,7 +29,7 @@ export class UserComponent {
     this.error.set(null);
 
     this.userUseCases.getUsers(this.pagination).subscribe({
-      next: (users) => {
+      next: users => {
         this.users.set(users);
         this.loading.set(false);
       },
@@ -58,7 +58,7 @@ export class UserComponent {
     };
 
     this.userUseCases.createUser(userData).subscribe({
-      next: (user) => {
+      next: user => {
         console.log('User created successfully:', user);
         this.loadUsers();
       },
@@ -79,8 +79,7 @@ export class UserComponent {
         break;
       case 'VALIDATION_FAILED':
         const validationMessages =
-          useCaseResult.errors?.map((e) => e.message).join(', ') ||
-          'Validation failed';
+          useCaseResult.errors?.map(e => e.message).join(', ') || 'Validation failed';
         this.error.set(validationMessages);
         break;
       default:

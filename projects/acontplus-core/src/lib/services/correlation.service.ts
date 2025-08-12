@@ -2,7 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CorrelationService {
   private correlationId = signal<string | null>(null);

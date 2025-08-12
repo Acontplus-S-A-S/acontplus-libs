@@ -1,6 +1,11 @@
 {
   "name": "acontplus-ui-components",
   "version": "0.0.16",
+  "scripts": {
+    "format": "prettier --write \"**/*.{ts,js,html,css,scss,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,html,css,scss,json,md}\"",
+    "format:fix": "npm run format"
+  },
   "dependencies": {
     "tslib": "^2.8.1"
   },

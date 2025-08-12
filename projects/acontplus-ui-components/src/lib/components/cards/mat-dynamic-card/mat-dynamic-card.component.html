@@ -24,11 +24,7 @@
   @if (areActionsVisible()) {
     <mat-card-actions [align]="buttonsPosition()">
       @if (secondaryButtonText()) {
-        <button
-          mat-button
-          color="warn"
-          (click)="handleSecondaryButtonClick($event)"
-        >
+        <button mat-button color="warn" (click)="handleSecondaryButtonClick($event)">
           @if (secondaryButtonIcon()) {
             <mat-icon>{{ secondaryButtonIcon() }}</mat-icon>
           }
@@ -37,11 +33,7 @@
       }
 
       @if (primaryButtonText()) {
-        <button
-          mat-button
-          color="primary"
-          (click)="handlePrimaryButtonClick($event)"
-        >
+        <button mat-button color="primary" (click)="handlePrimaryButtonClick($event)">
           @if (primaryButtonIcon()) {
             <mat-icon>{{ primaryButtonIcon() }}</mat-icon>
           }

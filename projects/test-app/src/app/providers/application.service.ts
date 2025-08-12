@@ -16,7 +16,7 @@ export interface Application {
 })
 export class ApplicationService {
   private http = inject(HttpClient);
-  private url = `aplicaciones/`;
+  private url = 'aplicaciones/';
 
   get(): Observable<Application[]> {
     // The interceptor handles all standardization - just return the data

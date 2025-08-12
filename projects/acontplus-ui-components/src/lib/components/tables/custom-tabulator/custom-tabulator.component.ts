@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'lib-custom-tabulator',
   imports: [],
   templateUrl: './custom-tabulator.component.html',
-  styleUrl: './custom-tabulator.component.css'
+  styleUrl: './custom-tabulator.component.css',
 })
-export class CustomTabulatorComponent {
-
-}
+export class CustomTabulatorComponent {}

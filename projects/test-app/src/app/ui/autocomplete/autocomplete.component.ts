@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-autocomplete',
   imports: [],
   templateUrl: './autocomplete.component.html',
-  styleUrl: './autocomplete.component.scss'
+  styleUrl: './autocomplete.component.scss',
 })
-export class AutocompleteComponent {
-
-}
+export class AutocompleteComponent {}

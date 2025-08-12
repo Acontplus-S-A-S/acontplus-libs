@@ -21,9 +21,7 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
       }
       return event;
     }),
-    catchError((error: HttpErrorResponse) =>
-      handleErrorResponse(error, toastr),
-    ),
+    catchError((error: HttpErrorResponse) => handleErrorResponse(error, toastr)),
   );
 };
 
@@ -44,10 +42,7 @@ function handleSuccessResponse(
   return transformResponseForConsumers(standardizedResponse, event);
 }
 
-function handleErrorResponse(
-  error: HttpErrorResponse,
-  toastr: ToastrNotificationService,
-) {
+function handleErrorResponse(error: HttpErrorResponse, toastr: ToastrNotificationService) {
   const apiError = error.error;
 
   // Standardize error response

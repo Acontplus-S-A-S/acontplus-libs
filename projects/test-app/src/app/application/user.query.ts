@@ -26,7 +26,7 @@ export class GetUsersQuery extends GetAllQuery<User> {
     filters?: FilterParams;
   }): Observable<PaginatedResult<User>> {
     return this.userRepository.getAll(request.pagination, request.filters).pipe(
-      map((result) => {
+      map(result => {
         // Apply business rules - e.g., filter sensitive data based on user role
         // const currentUserRole = this.authService.getCurrentUserRole();
         //
@@ -42,7 +42,7 @@ export class GetUsersQuery extends GetAllQuery<User> {
 
         return result;
       }),
-      catchError((error) => throwError(() => this.mapRepositoryError(error))),
+      catchError(error => throwError(() => this.mapRepositoryError(error))),
     );
   }
 

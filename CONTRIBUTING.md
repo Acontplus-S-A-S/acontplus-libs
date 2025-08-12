@@ -1,6 +1,7 @@
 # Contributing to acontplus-libs
 
-Thank you for your interest in contributing to acontplus-libs! This document provides guidelines and instructions for contributing to the project.
+Thank you for your interest in contributing to acontplus-libs! This document
+provides guidelines and instructions for contributing to the project.
 
 ## Table of Contents
 
@@ -15,7 +16,9 @@ Thank you for your interest in contributing to acontplus-libs! This document pro
 
 ## Code of Conduct
 
-We are committed to providing a friendly, safe, and welcoming environment for all contributors. Please be respectful and considerate of others when participating in this project.
+We are committed to providing a friendly, safe, and welcoming environment for
+all contributors. Please be respectful and considerate of others when
+participating in this project.
 
 ## Getting Started
 
@@ -37,10 +40,13 @@ We are committed to providing a friendly, safe, and welcoming environment for al
 ## Development Workflow
 
 1. **Create a new branch** for your feature or bugfix:
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
+
    or
+
    ```bash
    git checkout -b fix/issue-description
    ```
@@ -48,16 +54,19 @@ We are committed to providing a friendly, safe, and welcoming environment for al
 2. **Make your changes** following the [coding standards](#coding-standards).
 
 3. **Run tests** to ensure your changes don't break existing functionality:
+
    ```bash
    npm test
    ```
 
 4. **Build the libraries** to verify your changes:
+
    ```bash
    npm run build-library
    ```
 
 5. **Commit your changes** with a descriptive commit message:
+
    ```bash
    git commit -m "feat: add new feature" # for features
    git commit -m "fix: resolve issue with component" # for bug fixes
@@ -67,6 +76,7 @@ We are committed to providing a friendly, safe, and welcoming environment for al
    ```
 
 6. **Push your branch** to your fork:
+
    ```bash
    git push origin feature/your-feature-name
    ```
@@ -76,8 +86,10 @@ We are committed to providing a friendly, safe, and welcoming environment for al
 ## Pull Request Process
 
 1. **Update the README.md** with details of changes if applicable.
-2. **Update the CHANGELOG.md** following the [Keep a Changelog](https://keepachangelog.com/) format.
-3. **Ensure all tests pass** and your code follows the project's coding standards.
+2. **Update the CHANGELOG.md** following the
+   [Keep a Changelog](https://keepachangelog.com/) format.
+3. **Ensure all tests pass** and your code follows the project's coding
+   standards.
 4. **Add appropriate labels** to your pull request.
 5. **Request a review** from one of the project maintainers.
 6. **Address any feedback** provided during the review process.
@@ -85,11 +97,13 @@ We are committed to providing a friendly, safe, and welcoming environment for al
 
 ## Coding Standards
 
-We follow the [Angular Style Guide](https://angular.io/guide/styleguide) for this project. Additionally:
+We follow the [Angular Style Guide](https://angular.io/guide/styleguide) for
+this project. Additionally:
 
 - Use TypeScript features like strong typing, interfaces, and access modifiers.
 - Document public APIs with JSDoc comments.
-- Follow the project's [style guide](docs/style-guide.md) for component design and usage.
+- Follow the project's [style guide](docs/style-guide.md) for component design
+  and usage.
 - Use consistent naming conventions:
   - Components: `kebab-case` for selectors, `PascalCase` for class names
   - Services: `PascalCase` for class names
@@ -122,4 +136,5 @@ We use [Semantic Versioning](https://semver.org/) for this project:
 
 ---
 
-Thank you for contributing to acontplus-libs! Your efforts help make this project better for everyone.
+Thank you for contributing to acontplus-libs! Your efforts help make this
+project better for everyone.

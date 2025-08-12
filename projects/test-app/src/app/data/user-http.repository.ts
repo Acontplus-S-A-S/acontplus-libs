@@ -1,12 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-  BaseRepository,
-  FilterParams,
-  PaginatedResult,
-  PaginationParams,
-} from '@acontplus-core';
+import { BaseRepository, FilterParams, PaginatedResult, PaginationParams } from '@acontplus-core';
 import { User } from '../domain/user';
 import { map } from 'rxjs/operators';
 
@@ -22,10 +17,7 @@ export class UserHttpRepository extends BaseRepository<User> {
   }
 
   // Base CRUD Operations - now much simpler with standardized interceptor
-  getAll(
-    pagination: PaginationParams,
-    filters?: FilterParams
-  ): Observable<PaginatedResult<User>> {
+  getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<User>> {
     const params = this.buildQueryParams(pagination, filters);
     return this.get<PaginatedResult<User>>(this.buildUrl(''), params);
   }
@@ -49,13 +41,13 @@ export class UserHttpRepository extends BaseRepository<User> {
   // Custom business logic methods
   findByEmail(email: string): Observable<User | null> {
     return this.get<User[]>(this.buildUrl(''), { email }).pipe(
-      map(users => users.length > 0 ? users[0] : null)
+      map(users => (users.length > 0 ? users[0] : null)),
     );
   }
 
   findByUsername(username: string): Observable<User | null> {
     return this.get<User[]>(this.buildUrl(''), { username }).pipe(
-      map(users => users.length > 0 ? users[0] : null)
+      map(users => (users.length > 0 ? users[0] : null)),
     );
   }
 
@@ -73,10 +65,7 @@ export class UserHttpRepository extends BaseRepository<User> {
   }
 
   // Search and filtering
-  search(
-    query: string,
-    pagination: PaginationParams
-  ): Observable<PaginatedResult<User>> {
+  search(query: string, pagination: PaginationParams): Observable<PaginatedResult<User>> {
     const params = this.buildQueryParams(pagination, { search: query });
     return this.get<PaginatedResult<User>>(this.buildUrl('search'), params);
   }
