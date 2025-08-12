@@ -1,8 +1,6 @@
 # UI Component API Documentation
 
-This document provides detailed API documentation for all UI components in the
-acontplus-ui-components library, including inputs, outputs, methods, and
-interfaces.
+This document provides detailed API documentation for all UI components in the `acontplus-ui-components` library, including inputs, outputs, methods, and interfaces.
 
 ## Table of Contents
 
@@ -14,19 +12,29 @@ interfaces.
   - [DialogWrapperConfig](#dialogwrapperconfig)
   - [MatCustomDialogConfig](#matcustomdialogconfig)
 - [Icons](#icons)
+  - [SvgIconComponent](#svgiconcomponent)
+  - [IconUserComponent](#iconusercomponent)
 - [Mat Input Chip](#mat-input-chip)
+  - [MatInputChipComponent](#matinputchipcomponent)
 - [Mat Theme Button](#mat-theme-button)
+  - [MatThemeButtonComponent](#matthemebuttoncomponent)
 - [Snackbar](#snackbar)
+  - [SnackbarNotificationComponent](#snackbarnotificationcomponent)
 - [Spinner](#spinner)
+  - [SpinnerComponent](#spinnercomponent)
 - [Tables](#tables)
+  - [MatDynamicTableComponent](#matdynamictablecomponent)
+  - [CustomTabulatorComponent](#customtabulatorcomponent)
 - [Theme Toggle](#theme-toggle)
+  - [ThemeToggleComponent](#themetogglecomponent)
+- [Autocomplete Wrapper](#autocomplete-wrapper)
+  - [AutocompleteWrapperComponent](#autocompletewrappercomponent)
 
 ## Cards
 
 ### MatDynamicCardComponent
 
-A versatile card component that wraps Angular Material's `mat-card` with
-additional functionality and customization options.
+A versatile card component that wraps Angular Material's `mat-card` with additional functionality and customization options.
 
 **Selector:** `acp-mat-dynamic-card`
 
@@ -67,9 +75,7 @@ additional functionality and customization options.
 
 ### DialogWrapperComponent
 
-A wrapper component for Angular Material dialogs that provides a consistent look
-and feel, including a draggable header and the ability to dynamically create
-components inside the dialog.
+A wrapper component for Angular Material dialogs that provides a consistent look and feel, including a draggable header and the ability to dynamically create components inside the dialog.
 
 **Selector:** `acp-dialog-wrapper`
 
@@ -153,3 +159,176 @@ Configuration interface for Material dialogs with additional options.
 | scrollStrategy         | ScrollStrategy                                                   | Strategy for handling scrolling while the dialog is open                          |
 | enterAnimationDuration | number \| string                                                 | Duration of the enter animation                                                   |
 | exitAnimationDuration  | number \| string                                                 | Duration of the exit animation                                                    |
+
+## Icons
+
+### SvgIconComponent
+
+A component for displaying SVG icons with customizable styling.
+
+**Selector:** `acp-svg-icon`
+
+**Inputs:**
+
+| Name  | Type   | Default | Description                    |
+| ----- | ------ | ------- | ------------------------------ |
+| icon  | string | -       | The SVG icon content to render |
+| size  | string | '24px'  | Size of the icon               |
+| color | string | -       | Color of the icon              |
+
+### IconUserComponent
+
+A user icon component with customizable appearance.
+
+**Selector:** `acp-icon-user`
+
+**Inputs:**
+
+| Name  | Type   | Default | Description                    |
+| ----- | ------ | ------- | ------------------------------ |
+| size  | string | '24px'  | Size of the icon               |
+| color | string | -       | Color of the icon              |
+
+## Mat Input Chip
+
+### MatInputChipComponent
+
+A chip component that integrates with Angular Material's chip list.
+
+**Selector:** `acp-mat-input-chip`
+
+**Inputs:**
+
+| Name      | Type   | Default | Description                    |
+| --------- | ------ | ------- | ------------------------------ |
+| value     | string | -       | The value of the chip          |
+| removable | boolean| true    | Whether the chip can be removed |
+
+**Outputs:**
+
+| Name      | Type   | Description                    |
+| --------- | ------ | ------------------------------ |
+| removed   | string | Emitted when the chip is removed |
+
+## Mat Theme Button
+
+### MatThemeButtonComponent
+
+A theme-aware button component that adapts to the current theme.
+
+**Selector:** `acp-mat-theme-button`
+
+**Inputs:**
+
+| Name      | Type   | Default | Description                    |
+| --------- | ------ | ------- | ------------------------------ |
+| text      | string | -       | Button text                    |
+| icon      | string | -       | Material icon name             |
+| variant   | 'primary' \| 'secondary' \| 'warn' | 'primary' | Button variant |
+
+## Snackbar
+
+### SnackbarNotificationComponent
+
+A notification component for displaying snackbar messages.
+
+**Selector:** `acp-snackbar-notification`
+
+**Inputs:**
+
+| Name      | Type   | Default | Description                    |
+| --------- | ------ | ------- | ------------------------------ |
+| message   | string | -       | The notification message       |
+| type      | 'success' \| 'error' \| 'warning' \| 'info' | 'info' | Message type |
+| duration  | number | 3000    | Display duration in milliseconds |
+
+## Spinner
+
+### SpinnerComponent
+
+A loading spinner component with customizable appearance.
+
+**Selector:** `acp-spinner`
+
+**Inputs:**
+
+| Name      | Type   | Default | Description                    |
+| --------- | ------ | ------- | ------------------------------ |
+| size      | string | '24px'  | Size of the spinner            |
+| color     | string | -       | Color of the spinner           |
+| overlay   | boolean| false   | Whether to show overlay        |
+
+## Tables
+
+### MatDynamicTableComponent
+
+A dynamic table component built on Angular Material.
+
+**Selector:** `acp-mat-dynamic-table`
+
+**Inputs:**
+
+| Name      | Type   | Default | Description                    |
+| --------- | ------ | ------- | ------------------------------ |
+| data      | any[]  | []      | Table data                     |
+| columns   | ColumnDefinition[] | [] | Column definitions            |
+| pagination| PaginationConfig | null | Pagination configuration |
+
+### CustomTabulatorComponent
+
+A table component using Tabulator library for advanced table features.
+
+**Selector:** `acp-custom-tabulator`
+
+**Inputs:**
+
+| Name      | Type   | Default | Description                    |
+| --------- | ------ | ------- | ------------------------------ |
+| data      | any[]  | []      | Table data                     |
+| options   | TabulatorOptions | {} | Tabulator configuration options |
+
+## Theme Toggle
+
+### ThemeToggleComponent
+
+A component for switching between light and dark themes.
+
+**Selector:** `acp-theme-toggle`
+
+**Inputs:**
+
+| Name      | Type   | Default | Description                    |
+| --------- | ------ | ------- | ------------------------------ |
+| showLabel | boolean| true    | Whether to show the theme label |
+
+**Outputs:**
+
+| Name      | Type   | Description                    |
+| --------- | ------ | ------------------------------ |
+| themeChanged | 'light' \| 'dark' | Emitted when theme changes |
+
+## Autocomplete Wrapper
+
+### AutocompleteWrapperComponent
+
+A wrapper component for Angular Material autocomplete with enhanced functionality.
+
+**Selector:** `acp-autocomplete-wrapper`
+
+**Inputs:**
+
+| Name      | Type   | Default | Description                    |
+| --------- | ------ | ------- | ------------------------------ |
+| options   | any[]  | []      | Available options              |
+| placeholder| string | -       | Input placeholder text         |
+| multiple  | boolean| false   | Whether multiple selection is allowed |
+
+**Outputs:**
+
+| Name      | Type   | Description                    |
+| --------- | ------ | ------------------------------ |
+| selectionChanged | any \| any[] | Emitted when selection changes |
+
+---
+
+For detailed usage examples, see the [Component Examples](component-examples.md) documentation.

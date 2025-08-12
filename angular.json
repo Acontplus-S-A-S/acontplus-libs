@@ -119,10 +119,14 @@
       "projectType": "library",
       "root": "projects/acontplus-ui-components",
       "sourceRoot": "projects/acontplus-ui-components/src",
-      "prefix": "lib",
+      "prefix": "acp",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "scss",
+          "prefix": "acp"
+        },
+        "@schematics/angular:directive": {
+          "prefix": "acp"
         }
       },
       "architect": {
