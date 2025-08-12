@@ -16,7 +16,13 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
   protected responseHandler = new ResponseHandlerService();
   protected loggingService = inject(LoggingService);
 
-  abstract execute(request: TRequest): Observable<TResponse>;
+  // Main execution method - now uses validation by default
+  execute(request: TRequest): Observable<TResponse> {
+    return this.executeWithValidation(request);
+  }
+
+  // Internal execution method - override this in concrete classes
+  protected abstract executeInternal(request: TRequest): Observable<TResponse>;
 
   // Helper method for validation
   protected validate(request: TRequest): ValidationError[] {
@@ -134,7 +140,7 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
           }
 
           // Execute the actual use case
-          this.execute(request).subscribe({
+          this.executeInternal(request).subscribe({
             next: (result) => observer.next(result),
             error: (error) => observer.error(this.handleError(error)),
             complete: () => observer.complete(),

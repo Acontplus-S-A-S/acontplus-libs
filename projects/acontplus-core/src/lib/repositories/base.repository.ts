@@ -1,7 +1,5 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import {
   ApiResponse,
   ApiError,
@@ -13,15 +11,19 @@ import {
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
+@Injectable()
 export abstract class BaseRepository<T extends BaseEntity> {
-  constructor(
-    protected http: HttpClient,
-    protected baseUrl: string,
-  ) {}
+  protected http = inject(HttpClient);
+
+  // Abstract property for entity name - used for dynamic URL building
+  protected abstract entityName: string;
+
+  // Abstract property for base URL - can be overridden for custom endpoints
+  protected abstract baseUrl: string;
 
   abstract getAll(
     pagination: PaginationParams,
-    filters?: FilterParams,
+    filters?: FilterParams
   ): Observable<PaginatedResult<T>>;
 
   abstract getById(id: number): Observable<T>;
@@ -34,7 +36,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
 
   abstract search(
     query: string,
-    pagination: PaginationParams,
+    pagination: PaginationParams
   ): Observable<PaginatedResult<T>>;
 
   // Protected helper methods for HTTP operations
@@ -42,35 +44,35 @@ export abstract class BaseRepository<T extends BaseEntity> {
   protected get<R>(url: string, params?: any): Observable<R> {
     return this.http.get<ApiResponse<R>>(url, { params }).pipe(
       map((response) => response as R), // Interceptor already extracts data
-      catchError((error) => this.handleHttpError<R>(error)),
+      catchError((error) => this.handleHttpError<R>(error))
     );
   }
 
   protected post<R>(url: string, body: any): Observable<R> {
     return this.http.post<ApiResponse<R>>(url, body).pipe(
       map((response) => response as R), // Interceptor already extracts data
-      catchError((error) => this.handleHttpError<R>(error)),
+      catchError((error) => this.handleHttpError<R>(error))
     );
   }
 
   protected put<R>(url: string, body: any): Observable<R> {
     return this.http.put<ApiResponse<R>>(url, body).pipe(
       map((response) => response as R), // Interceptor already extracts data
-      catchError((error) => this.handleHttpError<R>(error)),
+      catchError((error) => this.handleHttpError<R>(error))
     );
   }
 
   protected patch<R>(url: string, body: any): Observable<R> {
     return this.http.patch<ApiResponse<R>>(url, body).pipe(
       map((response) => response as R), // Interceptor already extracts data
-      catchError((error) => this.handleHttpError<R>(error)),
+      catchError((error) => this.handleHttpError<R>(error))
     );
   }
 
   protected deleteHttp<R>(url: string): Observable<R> {
     return this.http.delete<ApiResponse<R>>(url).pipe(
       map((response) => response as R), // Interceptor already extracts data
-      catchError((error) => this.handleHttpError<R>(error)),
+      catchError((error) => this.handleHttpError<R>(error))
     );
   }
 
@@ -79,9 +81,17 @@ export abstract class BaseRepository<T extends BaseEntity> {
     return `${this.baseUrl}/${endpoint}`.replace(/\/+/g, '/');
   }
 
+  // Enhanced URL building with entity name support
+  protected buildEntityUrl(endpoint?: string): string {
+    const entityPath = endpoint
+      ? `${this.entityName}/${endpoint}`
+      : this.entityName;
+    return `${this.baseUrl}/${entityPath}`.replace(/\/+/g, '/');
+  }
+
   protected buildQueryParams(
     pagination: PaginationParams,
-    filters?: FilterParams,
+    filters?: FilterParams
   ): any {
     const params: any = {
       page: pagination.page.toString(),

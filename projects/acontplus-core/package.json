@@ -1,6 +1,6 @@
 {
   "name": "acontplus-core",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Core utilities, services, and models for Angular applications",
   "dependencies": {
     "jwt-decode": "^4.0.0",
