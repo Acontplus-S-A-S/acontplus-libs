@@ -1,4 +1,4 @@
-import { inject, Injectable, InjectionToken } from '@angular/core';
+import { Injectable, inject, InjectionToken } from '@angular/core';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
 
 export type ToastrType = 'success' | 'error' | 'warning' | 'info';
@@ -28,7 +28,7 @@ export interface ToastrShowProps extends ToastrCallProps {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ToastrNotificationService {
   private readonly toastrService = inject(ToastrService);
