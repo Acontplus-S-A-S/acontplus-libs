@@ -11,29 +11,51 @@ and this project adheres to
 
 ### Added
 
-- Comprehensive documentation for the acontplus-ui-components library
-- Usage examples for UI components with code snippets
-- Component API documentation for all UI components
-- Style guide for consistent component design and usage
-- JSDoc comments to public methods, properties, and interfaces
-- Changelog to track version changes and updates
+- **Comprehensive Core Services Documentation** - Complete documentation for all core library services
+- **AutocompleteWrapperComponent Documentation** - Full API reference and usage examples
+- **Enhanced Component Examples** - More realistic and practical usage scenarios
+- **Improved API Documentation** - Added missing component documentation and interfaces
+- **Core Services Guide** - New documentation file covering all core library services
+- **Updated Documentation Structure** - Better organization and navigation
 
 ### Changed
 
-- Improved code organization and structure
-- Enhanced component documentation
+- **Enhanced Component Examples** - Added comprehensive AutocompleteWrapperComponent examples
+- **Improved API Reference** - Added missing component APIs and service documentation
+- **Updated Main README** - Better project overview and enterprise features highlighting
+- **Enhanced Documentation README** - Added "What's New" section and better navigation
 
 ### Fixed
 
-- Various code style and formatting issues
+- **Missing Component Documentation** - Added documentation for AutocompleteWrapperComponent
+- **Missing Service Documentation** - Added documentation for all core services
+- **Incomplete API Coverage** - Added missing interfaces and type definitions
+- **Documentation Gaps** - Filled in missing examples and usage patterns
+
+## [1.1.0] - 2025-08-12
+
+### Added
+
+- **Core Services Documentation** - Comprehensive coverage of all core library services
+- **AutocompleteWrapperComponent** - Advanced autocomplete component with search and filtering
+- **Enhanced Repository Pattern** - Factory pattern for dynamic repository management
+- **Improved Error Handling** - Domain-specific error types and categorization
+- **Advanced Configuration** - Runtime configuration updates and environment management
+
+### Changed
+
+- **Repository Pattern** - Enhanced with factory pattern and better registration
+- **Use Case Pattern** - Improved validation and authorization handling
+- **API Response Handling** - Standardized response format across all endpoints
+- **Configuration Management** - Centralized configuration with runtime updates
 
 ## [1.0.0] - 2025-06-18
 
 ### Added
 
-- Initial release of acontplus-utils library
+- Initial release of acontplus-core library
 - Initial release of acontplus-ui-components library
-- Basic documentation for acontplus-utils
+- Basic documentation for core library
 - Test application for demonstrating and testing the libraries
 
 ### Components

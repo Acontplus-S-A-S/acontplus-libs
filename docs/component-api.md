@@ -29,6 +29,7 @@ This document provides detailed API documentation for all UI components in the `
   - [ThemeToggleComponent](#themetogglecomponent)
 - [Autocomplete Wrapper](#autocomplete-wrapper)
   - [AutocompleteWrapperComponent](#autocompletewrappercomponent)
+  - [AutocompleteWrapperService](#autocompletewrapperservice)
 
 ## Cards
 
@@ -311,23 +312,135 @@ A component for switching between light and dark themes.
 
 ### AutocompleteWrapperComponent
 
-A wrapper component for Angular Material autocomplete with enhanced functionality.
+A powerful, feature-rich autocomplete component that provides advanced search capabilities, local and remote data handling, and customizable filtering options.
 
 **Selector:** `acp-autocomplete-wrapper`
 
 **Inputs:**
 
-| Name      | Type   | Default | Description                    |
-| --------- | ------ | ------- | ------------------------------ |
-| options   | any[]  | []      | Available options              |
-| placeholder| string | -       | Input placeholder text         |
-| multiple  | boolean| false   | Whether multiple selection is allowed |
+| Name                | Type                                    | Default | Description                                    |
+| ------------------- | --------------------------------------- | ------- | ---------------------------------------------- |
+| dataSource          | AutocompleteWrapperItem[]                | []      | Local data source for the autocomplete         |
+| config              | AutocompleteWrapperConfig                | default | Configuration object for the component         |
+| itemTemplate        | TemplateRef<any>                        | -       | Custom template for rendering items             |
+| searchFunction      | AutocompleteWrapperSearchFunction        | -       | Function for remote search operations          |
+| notFoundTemplate    | TemplateRef<any>                        | -       | Custom template for when no items are found    |
+| overlayWidth        | string                                  | 'auto'  | Width of the dropdown overlay                  |
+| overlayMaxHeight    | string                                  | '400px' | Maximum height of the dropdown overlay         |
 
 **Outputs:**
 
-| Name      | Type   | Description                    |
-| --------- | ------ | ------------------------------ |
-| selectionChanged | any \| any[] | Emitted when selection changes |
+| Name                | Type                                                                    | Description                                    |
+| ------------------- | ----------------------------------------------------------------------- | ---------------------------------------------- |
+| itemSelected        | AutocompleteWrapperItem                                                  | Emitted when an item is selected               |
+| searchChanged       | string                                                                  | Emitted when the search query changes          |
+| searchRequested     | { query: string; filters: AutocompleteWrapperFilters; page: number }    | Emitted when a search is requested             |
+| pageChanged         | number                                                                  | Emitted when the page changes                  |
+| filterChanged       | AutocompleteWrapperFilters                                               | Emitted when filters change                    |
+| advancedSearchClicked| void                                                                     | Emitted when advanced search is clicked        |
+| allResultsClicked   | string                                                                  | Emitted when "all results" is clicked         |
+| createClicked       | string                                                                  | Emitted when create option is clicked          |
+
+**ViewChild:**
+
+| Name                | Type             | Description                                    |
+| ------------------- | ---------------- | ---------------------------------------------- |
+| searchInput         | ElementRef       | Reference to the search input element          |
+| historyListElement  | ElementRef       | Reference to the history list element          |
+| resultsListElement  | ElementRef       | Reference to the results list element          |
+
+**Methods:**
+
+| Name                | Parameters | Return Type | Description                                    |
+| ------------------- | ---------- | ----------- | ---------------------------------------------- |
+| ngOnInit            | none       | void        | Lifecycle hook that initializes the component |
+| ngOnDestroy         | none       | void        | Lifecycle hook that cleans up subscriptions   |
+| onInputFocus        | none       | void        | Handles input focus events                     |
+| onInputBlur        | none       | void        | Handles input blur events                      |
+| onInputChange      | event: Event | void      | Handles input change events                    |
+| onInputKeyDown      | event: KeyboardEvent | void | Handles keyboard navigation                    |
+| onItemClick        | item: AutocompleteWrapperItem | void | Handles item selection                        |
+| onHistoryItemClick | item: AutocompleteWrapperItem | void | Handles history item selection                |
+| onAdvancedSearchClick | none | void | Handles advanced search button click          |
+| onAllResultsClick  | none       | void        | Handles "all results" button click            |
+| onCreateClick      | none       | void        | Handles create option button click            |
+| onFilterChange     | filters: AutocompleteWrapperFilters | void | Handles filter changes                        |
+| onPageChange       | page: number | void      | Handles page changes                          |
+| closeOverlay       | none       | void        | Closes the dropdown overlay                    |
+| openOverlay        | none       | void        | Opens the dropdown overlay                     |
+
+### AutocompleteWrapperService
+
+A service that provides utility methods for autocomplete operations, including local search, filtering, and history management.
+
+**Methods:**
+
+| Name                | Parameters                                                                                    | Return Type                                    | Description                                    |
+| ------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
+| searchLocal         | items: AutocompleteWrapperItem[], query: string, filters: AutocompleteWrapperFilters, config: AutocompleteWrapperConfig | Observable<AutocompleteWrapperSearchResult> | Performs local search on provided items        |
+| searchAsync         | items: AutocompleteWrapperItem[], query: string, filters: AutocompleteWrapperFilters, config: AutocompleteWrapperConfig | Observable<AutocompleteWrapperItem[]>        | Simulates async search with delay              |
+| filterItems         | items: AutocompleteWrapperItem[], query: string, filters: AutocompleteWrapperFilters, config: AutocompleteWrapperConfig | AutocompleteWrapperItem[]                     | Filters items based on query and filters       |
+| addToHistory        | item: AutocompleteWrapperItem | void                                           | Adds an item to search history                 |
+| getHistory          | none       | Observable<AutocompleteWrapperItem[]>          | Gets the current search history                |
+| clearHistory        | none       | void                                           | Clears the search history                      |
+| loadHistoryFromStorage | none | void                                           | Loads history from local storage               |
+| saveHistoryToStorage | none | void                                           | Saves history to local storage                 |
+
+**Interfaces:**
+
+```typescript
+interface AutocompleteWrapperItem {
+  id: number | string;
+  [key: string]: any;
+}
+
+interface AutocompleteWrapperConfig {
+  minSearchLength?: number;
+  itemsPerPage?: number;
+  enableStockFilter?: boolean;
+  stockProperty?: string;
+  searchFields?: Array<{
+    value: string;
+    property: string;
+    label: string;
+  }>;
+  defaultSearchField?: string;
+  enableHistory?: boolean;
+  maxHistoryItems?: number;
+  enableAdvancedSearch?: boolean;
+  enableCreateOption?: boolean;
+  createOptionText?: string;
+  notFoundText?: string;
+  loadingText?: string;
+  placeholder?: string;
+}
+
+interface AutocompleteWrapperFilters {
+  searchBy: string;
+  stockFilter: 'all' | 'with-stock' | 'out-of-stock';
+}
+
+interface AutocompleteWrapperSearchFunction {
+  (query: string, filters: AutocompleteWrapperFilters, page: number): Observable<AutocompleteWrapperSearchResult>;
+}
+
+interface AutocompleteWrapperSearchResult {
+  items: AutocompleteWrapperItem[];
+  totalCount: number;
+  hasMore: boolean;
+}
+
+interface AutocompleteWrapperState {
+  query: string;
+  isLoading: boolean;
+  overlayOpen: boolean;
+  selectedIndex: number;
+  currentPage: number;
+  filteredItems: AutocompleteWrapperItem[];
+  historyList: AutocompleteWrapperItem[];
+  totalCount: number;
+}
+```
 
 ---
 
