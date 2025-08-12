@@ -4,7 +4,7 @@ import { ENVIRONMENT } from '../environments';
 import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class JwtTokenService {
   private environment = inject(ENVIRONMENT);

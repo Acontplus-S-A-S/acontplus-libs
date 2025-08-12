@@ -1,74 +1,83 @@
-import { Injectable } from '@angular/core';
-import { HttpErrorLog, HttpRequestLog } from '../interceptors';
+import { Injectable, inject } from '@angular/core';
+import { ENVIRONMENT } from '../environments';
+import { HttpRequestLog, HttpErrorLog } from '../interceptors';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class LoggingService {
+  private environment = inject(ENVIRONMENT);
+
+  log(level: 'info' | 'warn' | 'error', message: string, context?: any): void {
+    if (this.environment.isProduction) {
+      // Production logging (e.g., to external service)
+      this.logToExternalService(level, message, context);
+    } else {
+      // Development logging
+      console[level](`[${level.toUpperCase()}] ${message}`, context);
+    }
+  }
+
+  info(message: string, context?: any): void {
+    this.log('info', message, context);
+  }
+
+  warn(message: string, context?: any): void {
+    this.log('warn', message, context);
+  }
+
+  error(message: string, context?: any): void {
+    this.log('error', message, context);
+  }
+
+  // HTTP Request Logging
   logHttpRequest(log: HttpRequestLog): void {
-    console.group(`🌐 HTTP Request - ${log.method} ${log.url}`);
-    console.log('Request ID:', log.requestId);
-    console.log('Correlation ID:', log.correlationId);
-    console.log('Tenant ID:', log.tenantId);
-    console.log('Headers:', log.headers);
-    console.log('Custom URL:', log.isCustomUrl);
-    console.log('Timestamp:', log.timestamp);
-    console.groupEnd();
-
-    // Send to external logging service in production
-    this.sendToExternalLogger('http-request', log);
+    this.info(`HTTP Request - ${log.method} ${log.url}`, {
+      requestId: log.requestId,
+      correlationId: log.correlationId,
+      tenantId: log.tenantId,
+      headers: log.headers,
+      isCustomUrl: log.isCustomUrl,
+      timestamp: log.timestamp
+    });
   }
 
+  // HTTP Error Logging
   logHttpError(error: HttpErrorLog): void {
-    console.group(`🚨 HTTP Error - ${error.method} ${error.url}`);
-    console.error('Status:', error.status, error.statusText);
-    console.error('Request ID:', error.requestId);
-    console.error('Correlation ID:', error.correlationId);
-    console.error('Tenant ID:', error.tenantId);
-    console.error('Error Details:', error.errorDetails);
-    console.error('Environment:', error.environment);
-    console.error('Timestamp:', error.timestamp);
-    console.groupEnd();
-
-    // Send to external logging service
-    this.sendToExternalLogger('http-error', error);
+    this.error(`HTTP Error - ${error.method} ${error.url}`, {
+      status: error.status,
+      statusText: error.statusText,
+      requestId: error.requestId,
+      correlationId: error.correlationId,
+      tenantId: error.tenantId,
+      errorDetails: error.errorDetails,
+      environment: error.environment,
+      timestamp: error.timestamp
+    });
   }
 
+  // Network Error Logging
   logNetworkError(correlationId: string): void {
-    const networkError = {
+    this.error('Network connection failed', {
       type: 'network-error',
       correlationId,
-      message: 'Network connection failed',
-      timestamp: new Date().toISOString(),
       userAgent: navigator.userAgent,
-      online: navigator.onLine,
-    };
-
-    console.error('🔌 Network Error:', networkError);
-    this.sendToExternalLogger('network-error', networkError);
+      online: navigator.onLine
+    });
   }
 
+  // Rate Limit Error Logging
   logRateLimitError(correlationId: string, url: string): void {
-    const rateLimitError = {
+    this.warn('Rate limit exceeded', {
       type: 'rate-limit-error',
       correlationId,
-      url,
-      message: 'Rate limit exceeded',
-      timestamp: new Date().toISOString(),
-    };
-
-    console.warn('⏳ Rate Limit Error:', rateLimitError);
-    this.sendToExternalLogger('rate-limit-error', rateLimitError);
+      url
+    });
   }
 
-  private sendToExternalLogger(type: string, data: any): void {
-    // Implementation for external logging service
-    // Examples: Application Insights, Sentry, LogRocket, etc.
-    /*
-    if (environment.production) {
-      // Send to your logging service
-      this.analyticsService.track(type, data);
-    }
-    */
+  private logToExternalService(level: string, message: string, context?: any): void {
+    // Implement external logging service integration
+    // e.g., Sentry, LogRocket, etc.
+    // This is a placeholder for production logging implementation
   }
 }

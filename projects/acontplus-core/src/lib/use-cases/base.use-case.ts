@@ -1,4 +1,5 @@
-import { Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable, Observer } from 'rxjs';
 import {
   ApiError,
   ApiResponse,
@@ -6,12 +7,14 @@ import {
   UseCaseResult,
   ValidationError,
 } from '../models';
-import { ResponseHandlerService } from '../services';
+import { ResponseHandlerService } from '../services/response-handler.service';
+import { LoggingService } from '../services/logging.service';
 
 export abstract class BaseUseCase<TRequest = void, TResponse = void>
   implements UseCase<TRequest, TResponse>
 {
   protected responseHandler = new ResponseHandlerService();
+  protected loggingService = inject(LoggingService);
 
   abstract execute(request: TRequest): Observable<TResponse>;
 
@@ -187,7 +190,7 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
 
     if (response.status === 'warning') {
       // Log warning but continue with data
-      console.warn(`Use Case Warning [${response.code}]:`, response.message);
+      this.loggingService.warn(`Use Case Warning [${response.code}]: ${response.message}`);
     }
 
     return this.responseHandler.extractData<T>(response);

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class TenantService {
   private tenantId: string | null = null;
@@ -18,9 +18,17 @@ export class TenantService {
     return this.tenantId;
   }
 
+  getCurrentTenant(): string | null {
+    return this.tenantId;
+  }
+
   setTenantId(tenantId: string): void {
     this.tenantId = tenantId;
     localStorage.setItem('tenantId', tenantId);
+  }
+
+  setTenant(tenantId: string): void {
+    this.setTenantId(tenantId);
   }
 
   handleForbidden(): void {

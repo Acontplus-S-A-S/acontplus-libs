@@ -1,11 +1,4 @@
 import { Injectable } from '@angular/core';
-import {
-  ApiResponse,
-  ApiSuccessResponse,
-  ApiSuccessMessageResponse,
-  isApiSuccessResponse,
-  isApiSuccessMessageResponse
-} from '../models';
 
 export interface ResponseResult<T> {
   data?: T;
@@ -16,7 +9,7 @@ export interface ResponseResult<T> {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ResponseHandlerService {
 
