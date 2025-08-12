@@ -1,31 +1,16 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ApplicationService } from './application.service';
+import { ApplicationService } from './providers/application.service';
 import {
-  IconUserComponent,
-  MatThemeButtonComponent,
   SnackbarService,
   ThemeService,
 } from '@acontplus-ui-components';
-import { MatDynamicCardComponent } from '@acontplus-ui-components';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatSelect, MatSelectModule } from '@angular/material/select';
-import { StatusDisplayPipe } from '@acontplus-ui-components';
-import { ThemeToggleComponent } from '@acontplus-ui-components';
 import {AppLayoutComponent} from "./layout/app-layout/app-layout.component";
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    IconUserComponent,
-    MatDynamicCardComponent,
-    MatFormField,
-    MatLabel,
-    MatSelectModule,
-    StatusDisplayPipe,
-    StatusDisplayPipe,
-    ThemeToggleComponent,
     AppLayoutComponent,
   ],
   templateUrl: './app.component.html',

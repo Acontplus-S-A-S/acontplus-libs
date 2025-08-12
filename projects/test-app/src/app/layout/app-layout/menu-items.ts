@@ -1,9 +1,9 @@
 import {Type} from '@angular/core';
-import {ProductsComponent} from "../../pages/products/products.component";
-import {CustomersComponent} from "../../pages/customers/customers.component";
-import {AutocompleteComponent} from "../../pages/autocomplete/autocomplete.component";
-import {CardsComponent} from "../../pages/cards/cards.component";
-import {TablesComponent} from "../../pages/tables/tables.component";
+import {ProductsComponent} from "../../ui/products/products.component";
+import {CustomersComponent} from "../../ui/customers/customers.component";
+import {AutocompleteComponent} from "../../ui/autocomplete/autocomplete.component";
+import {CardsComponent} from "../../ui/cards/cards.component";
+import {TablesComponent} from "../../ui/tables/tables.component";
 
 export type MenuItemList = {
   icon: string
