@@ -3,16 +3,15 @@ import { Injectable } from '@angular/core';
 export interface ResponseResult<T> {
   data?: T;
   message?: string;
-  metadata?: { [key: string]: any };
+  metadata?: Record<string, any>;
   correlationId?: string;
   traceId?: string;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ResponseHandlerService {
-
   /**
    * Handles API responses and extracts the appropriate data/message
    * @param response The response from the API (already processed by interceptor)
@@ -78,7 +77,9 @@ export class ResponseHandlerService {
     if (response && typeof response === 'object' && !('status' in response)) {
       return true;
     }
-    return response?.status === 'success' && response?.data !== undefined && response?.data !== null;
+    return (
+      response?.status === 'success' && response?.data !== undefined && response?.data !== null
+    );
   }
 
   /**

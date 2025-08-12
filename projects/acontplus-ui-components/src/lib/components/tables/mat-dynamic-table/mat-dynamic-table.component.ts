@@ -32,19 +32,8 @@ import {
 } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
-import {
-  DatePipe,
-  DecimalPipe,
-  NgClass,
-  NgTemplateOutlet,
-} from '@angular/common';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { DatePipe, DecimalPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -74,10 +63,7 @@ import { ColumnDefinition, Pagination, TableContext } from '../../../models';
     trigger('detailExpand', [
       state('collapsed,void', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -135,11 +121,7 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
       this.dataSource.data = this.tableData || [];
     }
 
-    if (
-      changes['showExpand'] ||
-      changes['visibleColumns'] ||
-      changes['columnDefinitions']
-    ) {
+    if (changes['showExpand'] || changes['visibleColumns'] || changes['columnDefinitions']) {
       this.updateColumnsToDisplay();
     }
   }
@@ -155,7 +137,7 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
 
   private updateColumnsToDisplay(): void {
     if (!this.visibleColumns.length && this.columnDefinitions) {
-      this.visibleColumns = this.columnDefinitions.map((col) => col.key);
+      this.visibleColumns = this.columnDefinitions.map(col => col.key);
       this.columnDefinitions.forEach((col, index) => (col.index = index));
     }
 
@@ -166,7 +148,7 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
     }
 
     if (this.showExpand && this.expandedDetail) {
-      if (!this.columnDefinitions?.some((col) => col.key === 'expand')) {
+      if (!this.columnDefinitions?.some(col => col.key === 'expand')) {
         this.columnDefinitions = [
           ...(this.columnDefinitions || []),
           {
@@ -191,20 +173,14 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
   }
 
   private registerTableContent(): void {
-    this.columnDefs.forEach((columnDef) => this.table.addColumnDef(columnDef));
-    this.rowDefs.forEach((rowDef) => this.table.addRowDef(rowDef));
-    this.headerRowDefs.forEach((headerRowDef) =>
-      this.table.addHeaderRowDef(headerRowDef)
-    );
+    this.columnDefs.forEach(columnDef => this.table.addColumnDef(columnDef));
+    this.rowDefs.forEach(rowDef => this.table.addRowDef(rowDef));
+    this.headerRowDefs.forEach(headerRowDef => this.table.addHeaderRowDef(headerRowDef));
 
     if (this.showFooter) {
-      this.footerRowDefs.forEach((footerRowDef) =>
-        this.table.addFooterRowDef(footerRowDef)
-      );
+      this.footerRowDefs.forEach(footerRowDef => this.table.addFooterRowDef(footerRowDef));
     } else {
-      this.footerRowDefs.forEach((footerRowDef) =>
-        this.table.removeFooterRowDef(footerRowDef)
-      );
+      this.footerRowDefs.forEach(footerRowDef => this.table.removeFooterRowDef(footerRowDef));
     }
 
     if (this.noDataRow) {
@@ -217,8 +193,8 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
   }
 
   private cleanupDynamicComponents(): void {
-    this.componentRefs.forEach((ref) => ref.destroy());
-    this.embeddedViews.forEach((view) => view.destroy());
+    this.componentRefs.forEach(ref => ref.destroy());
+    this.embeddedViews.forEach(view => view.destroy());
   }
 
   isAllSelected(): boolean {
@@ -230,7 +206,7 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
   masterToggle(): void {
     this.isAllSelected()
       ? this.selection.clear()
-      : this.dataSource.data.forEach((row) => this.selection.select(row));
+      : this.dataSource.data.forEach(row => this.selection.select(row));
     this.rowSelected.emit(this.selection.selected);
   }
 
@@ -249,15 +225,11 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
   onExpand(event: Event, element: T): void {
     event.stopPropagation();
     this.expandedElement = this.expandedElement === element ? null : element;
-    this.expandedElement
-      ? this.showExpanded.emit(element)
-      : this.hideExpanded.emit(element);
+    this.expandedElement ? this.showExpanded.emit(element) : this.hideExpanded.emit(element);
   }
 
-  getRowColor(element: T): { [key: string]: string } {
-    return element['colorRow']
-      ? { 'background-color': element['colorRow '] }
-      : {};
+  getRowColor(element: T): Record<string, string> {
+    return element['colorRow'] ? { 'background-color': element['colorRow '] } : {};
   }
 
   handlePageEvent(e: PageEvent): void {

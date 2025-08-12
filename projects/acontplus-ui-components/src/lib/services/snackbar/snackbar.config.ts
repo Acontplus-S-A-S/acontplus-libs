@@ -17,10 +17,7 @@ export const DEFAULT_SNACKBAR_CONFIG: SnackbarConfig = {
   titleEnabled: true,
 };
 
-export const SNACKBAR_CONFIG = new InjectionToken<SnackbarConfig>(
-  'acontplus-snackbar-config',
-  {
-    providedIn: 'root',
-    factory: () => DEFAULT_SNACKBAR_CONFIG,
-  }
-);
+export const SNACKBAR_CONFIG = new InjectionToken<SnackbarConfig>('acontplus-snackbar-config', {
+  providedIn: 'root',
+  factory: () => DEFAULT_SNACKBAR_CONFIG,
+});

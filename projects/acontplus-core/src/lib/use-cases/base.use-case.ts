@@ -1,12 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
-import {
-  ApiError,
-  ApiResponse,
-  UseCase,
-  UseCaseResult,
-  ValidationError,
-} from '../models';
+import { ApiError, ApiResponse, UseCase, UseCaseResult, ValidationError } from '../models';
 import { ResponseHandlerService } from '../services/response-handler.service';
 import { LoggingService } from '../services/logging.service';
 
@@ -16,7 +10,13 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
   protected responseHandler = new ResponseHandlerService();
   protected loggingService = inject(LoggingService);
 
-  abstract execute(request: TRequest): Observable<TResponse>;
+  // Main execution method - now uses validation by default
+  execute(request: TRequest): Observable<TResponse> {
+    return this.executeWithValidation(request);
+  }
+
+  // Internal execution method - override this in concrete classes
+  protected abstract executeInternal(request: TRequest): Observable<TResponse>;
 
   // Helper method for validation
   protected validate(request: TRequest): ValidationError[] {
@@ -34,8 +34,8 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
   protected createSuccessResult<T>(
     data: T,
     message?: string,
-    code: string = 'SUCCESS',
-    metadata?: { [key: string]: any },
+    code = 'SUCCESS',
+    metadata?: Record<string, any>,
   ): UseCaseResult<T> {
     return {
       status: 'success',
@@ -52,7 +52,7 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
     data: T,
     code: string,
     message: string,
-    metadata?: { [key: string]: any },
+    metadata?: Record<string, any>,
   ): UseCaseResult<T> {
     return {
       status: 'warning',
@@ -69,7 +69,7 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
     code: string,
     message: string,
     errors?: ApiError[],
-    metadata?: { [key: string]: any },
+    metadata?: Record<string, any>,
   ): UseCaseResult<T> {
     return {
       status: 'error',
@@ -82,10 +82,8 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
   }
 
   // Helper method to create validation error result
-  protected createValidationErrorResult<T>(
-    validationErrors: ValidationError[],
-  ): UseCaseResult<T> {
-    const apiErrors: ApiError[] = validationErrors.map((ve) => ({
+  protected createValidationErrorResult<T>(validationErrors: ValidationError[]): UseCaseResult<T> {
+    const apiErrors: ApiError[] = validationErrors.map(ve => ({
       code: ve.code,
       message: ve.message,
       target: ve.field,
@@ -104,7 +102,7 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
 
   // Execute with validation and error handling wrapper
   protected executeWithValidation(request: TRequest): Observable<TResponse> {
-    return new Observable<TResponse>((observer) => {
+    return new Observable<TResponse>(observer => {
       // Pre-execution validation
       const validationErrors = this.validate(request);
       if (validationErrors.length > 0) {
@@ -115,7 +113,7 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
 
       // Authorization check
       this.checkAuthorization(request)
-        .then((authorized) => {
+        .then(authorized => {
           if (!authorized) {
             const errorResult = this.createErrorResult(
               'UNAUTHORIZED',
@@ -134,13 +132,13 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
           }
 
           // Execute the actual use case
-          this.execute(request).subscribe({
-            next: (result) => observer.next(result),
-            error: (error) => observer.error(this.handleError(error)),
+          this.executeInternal(request).subscribe({
+            next: result => observer.next(result),
+            error: error => observer.error(this.handleError(error)),
             complete: () => observer.complete(),
           });
         })
-        .catch((error) => {
+        .catch(error => {
           observer.error(this.handleError(error));
         });
     });
@@ -149,10 +147,7 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
   // Centralized error handling that maps to ApiResponse structure
   private handleError(error: any): UseCaseResult<any> {
     // If it's already an ApiResponse structure, return as is
-    if (
-      error?.status &&
-      ['success', 'error', 'warning'].includes(error.status)
-    ) {
+    if (error?.status && ['success', 'error', 'warning'].includes(error.status)) {
       return error;
     }
 
@@ -167,19 +162,15 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
     }
 
     // Handle unexpected errors
-    return this.createErrorResult(
-      'UNEXPECTED_ERROR',
-      'An unexpected error occurred',
-      [
-        {
-          code: 'UNEXPECTED_ERROR',
-          message: error?.message || 'Unknown error',
-          severity: 'error',
-          category: 'infrastructure',
-          details: error,
-        },
-      ],
-    );
+    return this.createErrorResult('UNEXPECTED_ERROR', 'An unexpected error occurred', [
+      {
+        code: 'UNEXPECTED_ERROR',
+        message: error?.message || 'Unknown error',
+        severity: 'error',
+        category: 'infrastructure',
+        details: error,
+      },
+    ]);
   }
 
   // Helper to extract data from ApiResponse (for repository responses)

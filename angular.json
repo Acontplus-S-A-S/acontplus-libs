@@ -3,46 +3,6 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "acontplus-utils": {
-      "projectType": "library",
-      "root": "projects/acontplus-utils",
-      "sourceRoot": "projects/acontplus-utils/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/acontplus-utils/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/acontplus-utils/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/acontplus-utils/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "tsConfig": "projects/acontplus-utils/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/acontplus-utils/**/*.ts",
-              "projects/acontplus-utils/**/*.html"
-            ],
-            "eslintConfig": "projects/acontplus-utils/eslint.config.js"
-          }
-        }
-      }
-    },
     "test-app": {
       "projectType": "application",
       "schematics": {
@@ -140,8 +100,17 @@
             "styles": [
               "@angular/material/prebuilt-themes/rose-red.css",
               "projects/test-app/src/styles.scss"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/test-app/**/*.ts",
+              "projects/test-app/**/*.html"
             ],
-            "scripts": []
+            "eslintConfig": "eslint.config.js"
           }
         }
       }
@@ -150,10 +119,14 @@
       "projectType": "library",
       "root": "projects/acontplus-ui-components",
       "sourceRoot": "projects/acontplus-ui-components/src",
-      "prefix": "lib",
+      "prefix": "acp",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "scss",
+          "prefix": "acp"
+        },
+        "@schematics/angular:directive": {
+          "prefix": "acp"
         }
       },
       "architect": {
@@ -174,6 +147,16 @@
           "options": {
             "tsConfig": "projects/acontplus-ui-components/tsconfig.spec.json",
             "polyfills": ["zone.js", "zone.js/testing"]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/acontplus-ui-components/**/*.ts",
+              "projects/acontplus-ui-components/**/*.html"
+            ],
+            "eslintConfig": "eslint.config.js"
           }
         }
       }
@@ -200,10 +183,17 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/acontplus-core/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": ["zone.js", "zone.js/testing"]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/acontplus-core/**/*.ts",
+              "projects/acontplus-core/**/*.html"
+            ],
+            "eslintConfig": "eslint.config.js"
           }
         }
       }

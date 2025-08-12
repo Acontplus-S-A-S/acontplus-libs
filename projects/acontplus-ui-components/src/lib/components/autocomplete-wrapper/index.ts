@@ -1,1 +1,1 @@
-export * from './autocomplete-wrapper.component'
+export * from './autocomplete-wrapper.component';

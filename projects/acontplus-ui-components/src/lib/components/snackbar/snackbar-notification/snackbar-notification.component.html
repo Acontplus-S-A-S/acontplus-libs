@@ -6,9 +6,7 @@
         <mat-icon>notifications</mat-icon>
         Quick Notifications
       </mat-card-title>
-      <mat-card-subtitle>
-        Test common notification scenarios
-      </mat-card-subtitle>
+      <mat-card-subtitle> Test common notification scenarios </mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
@@ -63,9 +61,7 @@
         <mat-icon>build</mat-icon>
         Custom Notification Builder
       </mat-card-title>
-      <mat-card-subtitle>
-        Create and test custom notifications
-      </mat-card-subtitle>
+      <mat-card-subtitle> Create and test custom notifications </mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
@@ -73,11 +69,7 @@
         <div class="form-row">
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Type</mat-label>
-            <mat-select
-              [(ngModel)]="customNotification().type"
-              name="type"
-              required
-            >
+            <mat-select [(ngModel)]="customNotification().type" name="type" required>
               <mat-option value="success">Success</mat-option>
               <mat-option value="info">Info</mat-option>
               <mat-option value="warning">Warning</mat-option>
@@ -133,12 +125,7 @@
             Send Notification
           </button>
 
-          <button
-            mat-button
-            type="button"
-            (click)="resetForm()"
-            class="reset-btn"
-          >
+          <button mat-button type="button" (click)="resetForm()" class="reset-btn">
             <mat-icon>refresh</mat-icon>
             Reset
           </button>

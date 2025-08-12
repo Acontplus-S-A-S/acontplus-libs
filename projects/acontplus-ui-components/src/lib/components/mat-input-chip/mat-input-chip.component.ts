@@ -1,6 +1,8 @@
 import { Component, inject, input } from '@angular/core';
 import {
-  MatChipEditedEvent, MatChipGrid, MatChipInput,
+  MatChipEditedEvent,
+  MatChipGrid,
+  MatChipInput,
   MatChipInputEvent,
   MatChipRow,
 } from '@angular/material/chips';

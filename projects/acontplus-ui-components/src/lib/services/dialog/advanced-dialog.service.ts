@@ -1,19 +1,11 @@
 import { inject, Injectable, Type } from '@angular/core';
-import {
-  MatDialog,
-  MatDialogConfig,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Overlay } from '@angular/cdk/overlay';
 import { firstValueFrom, map, Observable } from 'rxjs';
 import { ComponentType } from '@angular/cdk/portal';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
-import {
-  MatCustomDialogConfig,
-  DialogSize,
-  DialogWrapperConfig,
-} from './dialog.interfaces';
+import { MatCustomDialogConfig, DialogSize, DialogWrapperConfig } from './dialog.interfaces';
 import { DialogWrapperComponent } from '../../components';
 
 @Injectable({
@@ -27,7 +19,7 @@ export class AdvancedDialogService {
   // An observable that emits true if the viewport matches mobile dimensions.
   private readonly isMobile$ = this.breakpointObserver
     .observe([Breakpoints.HandsetPortrait, Breakpoints.HandsetLandscape])
-    .pipe(map((result) => result.matches));
+    .pipe(map(result => result.matches));
 
   /**
    * Main method to open any component in a dialog.
@@ -56,11 +48,10 @@ export class AdvancedDialogService {
     matDialogConfig: MatCustomDialogConfig<T> = {},
   ): Promise<MatDialogRef<DialogWrapperComponent, R>> {
     // Package the wrapper config into the `data` property for the DialogWrapperComponent to consume.
-    const configWithWrapperData: MatCustomDialogConfig<DialogWrapperConfig<T>> =
-      {
-        ...matDialogConfig,
-        data: wrapperConfig,
-      };
+    const configWithWrapperData: MatCustomDialogConfig<DialogWrapperConfig<T>> = {
+      ...matDialogConfig,
+      data: wrapperConfig,
+    };
     const dialogConfig = await this.buildDialogConfig(configWithWrapperData);
     return this.dialog.open<DialogWrapperComponent, DialogWrapperConfig<T>, R>(
       DialogWrapperComponent,
@@ -149,12 +140,9 @@ export class AdvancedDialogService {
     dialogConfig.disableClose = !(config.backdropClickClosable ?? true);
     // Note: escapeKeyClosable is handled by MatDialog separately and doesn't affect disableClose directly.
     dialogConfig.autoFocus = config.autoFocus ?? 'first-tabbable';
-    dialogConfig.scrollStrategy =
-      config.scrollStrategy ?? this.overlay.scrollStrategies.block();
-    dialogConfig.enterAnimationDuration =
-      config.enterAnimationDuration ?? '300ms';
-    dialogConfig.exitAnimationDuration =
-      config.exitAnimationDuration ?? '200ms';
+    dialogConfig.scrollStrategy = config.scrollStrategy ?? this.overlay.scrollStrategies.block();
+    dialogConfig.enterAnimationDuration = config.enterAnimationDuration ?? '300ms';
+    dialogConfig.exitAnimationDuration = config.exitAnimationDuration ?? '200ms';
     dialogConfig.ariaLabel = config.ariaLabel;
     dialogConfig.ariaLabelledBy = config.ariaLabelledBy;
     dialogConfig.ariaDescribedBy = config.ariaDescribedBy;

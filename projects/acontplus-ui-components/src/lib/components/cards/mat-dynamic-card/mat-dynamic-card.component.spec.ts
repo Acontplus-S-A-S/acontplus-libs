@@ -8,9 +8,8 @@ describe('MatDynamicCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDynamicCardComponent]
-    })
-    .compileComponents();
+      imports: [MatDynamicCardComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MatDynamicCardComponent);
     component = fixture.componentInstance;

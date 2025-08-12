@@ -1,13 +1,16 @@
 # Development Guidelines for acontplus-libs
 
-This document provides guidelines and instructions for developing and maintaining the acontplus-libs project.
+This document provides guidelines and instructions for developing and
+maintaining the acontplus-libs project.
 
 ## Project Structure
 
 The project is organized as a monorepo with multiple Angular libraries:
 
-- **acontplus-utils**: A utility library with services, interceptors, models, and utility functions
-- **acontplus-ui-components**: A UI component library built with Angular Material
+- **acontplus-utils**: A utility library with services, interceptors, models,
+  and utility functions
+- **acontplus-ui-components**: A UI component library built with Angular
+  Material
 - **test-app**: A test application for demonstrating and testing the libraries
 
 ## Build and Configuration Instructions
@@ -20,6 +23,7 @@ The project is organized as a monorepo with multiple Angular libraries:
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/Acontplus-S-A-S/acontplus-libs.git
    cd acontplus-libs
@@ -82,7 +86,8 @@ ng test acontplus-utils --include=**/string-utils.spec.ts
 
 ### Writing Tests
 
-Tests should be placed in .spec.ts files alongside the files they test. For example:
+Tests should be placed in .spec.ts files alongside the files they test. For
+example:
 
 - `string-utils.ts` → `string-utils.spec.ts`
 - `jwt-token.service.ts` → `jwt-token.service.spec.ts`
@@ -107,7 +112,9 @@ describe('String Utils', () => {
 
     it('should handle null and undefined', () => {
       expect(capitalizeFirstLetter(null as unknown as string)).toBe(null);
-      expect(capitalizeFirstLetter(undefined as unknown as string)).toBe(undefined);
+      expect(capitalizeFirstLetter(undefined as unknown as string)).toBe(
+        undefined,
+      );
     });
   });
 });
@@ -115,7 +122,9 @@ describe('String Utils', () => {
 
 ### Test Coverage
 
-Test coverage reports are generated when running tests. You can view the coverage report in the `coverage` directory after running tests with the `--code-coverage` flag:
+Test coverage reports are generated when running tests. You can view the
+coverage report in the `coverage` directory after running tests with the
+`--code-coverage` flag:
 
 ```bash
 ng test acontplus-utils --code-coverage
@@ -125,7 +134,8 @@ ng test acontplus-utils --code-coverage
 
 ### Code Style
 
-- The project uses ESLint for linting. Run `npm run lint` to check for linting issues.
+- The project uses ESLint for linting. Run `npm run lint` to check for linting
+  issues.
 - Follow the Angular style guide for naming conventions and code organization.
 - Use TypeScript features like strong typing, interfaces, and access modifiers.
 - Document public APIs with JSDoc comments.
@@ -156,21 +166,26 @@ ng test acontplus-utils --code-coverage
 To publish the libraries to npm:
 
 1. Build and pack the libraries:
+
    ```bash
    npm run build-and-pack
    ```
 
 2. Publish each library:
+
    ```bash
    cd dist/acontplus-utils
    npm publish
-   
+
    cd ../acontplus-ui-components
    npm publish
    ```
 
 ## Troubleshooting
 
-- If you encounter SSL issues when running the development server, ensure the SSL certificates in the `ssl` directory are valid.
-- If tests fail to run, check that the Karma configuration is correct and that all dependencies are installed.
-- For build errors, check the Angular version compatibility and ensure all dependencies are up to date.
+- If you encounter SSL issues when running the development server, ensure the
+  SSL certificates in the `ssl` directory are valid.
+- If tests fail to run, check that the Karma configuration is correct and that
+  all dependencies are installed.
+- For build errors, check the Angular version compatibility and ensure all
+  dependencies are up to date.

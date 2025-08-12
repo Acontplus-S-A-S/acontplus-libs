@@ -8,9 +8,8 @@ describe('MatInputChipComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatInputChipComponent]
-    })
-    .compileComponents();
+      imports: [MatInputChipComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MatInputChipComponent);
     component = fixture.componentInstance;

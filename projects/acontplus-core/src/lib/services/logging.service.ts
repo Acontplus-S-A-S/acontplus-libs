@@ -3,7 +3,7 @@ import { ENVIRONMENT } from '../environments';
 import { HttpRequestLog, HttpErrorLog } from '../interceptors';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoggingService {
   private environment = inject(ENVIRONMENT);
@@ -38,7 +38,7 @@ export class LoggingService {
       tenantId: log.tenantId,
       headers: log.headers,
       isCustomUrl: log.isCustomUrl,
-      timestamp: log.timestamp
+      timestamp: log.timestamp,
     });
   }
 
@@ -52,7 +52,7 @@ export class LoggingService {
       tenantId: error.tenantId,
       errorDetails: error.errorDetails,
       environment: error.environment,
-      timestamp: error.timestamp
+      timestamp: error.timestamp,
     });
   }
 
@@ -62,7 +62,7 @@ export class LoggingService {
       type: 'network-error',
       correlationId,
       userAgent: navigator.userAgent,
-      online: navigator.onLine
+      online: navigator.onLine,
     });
   }
 
@@ -71,7 +71,7 @@ export class LoggingService {
     this.warn('Rate limit exceeded', {
       type: 'rate-limit-error',
       correlationId,
-      url
+      url,
     });
   }
 

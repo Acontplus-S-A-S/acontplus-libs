@@ -16,7 +16,7 @@ export interface UseCaseResult<T> {
   message?: string;
   data?: T;
   errors?: ApiError[];
-  metadata?: { [key: string]: any };
+  metadata?: Record<string, any>;
   timestamp: string;
   correlationId?: string;
   traceId?: string;
@@ -28,16 +28,55 @@ export interface ValidationError {
   code: string;
 }
 
-// Domain-specific error types for use cases
+// Enhanced domain-specific error types for use cases
+export enum ErrorCategory {
+  BUSINESS = 'business',
+  VALIDATION = 'validation',
+  INFRASTRUCTURE = 'infrastructure',
+  AUTHORIZATION = 'authorization',
+  NOT_FOUND = 'not_found',
+  CONFLICT = 'conflict',
+  TIMEOUT = 'timeout',
+  NETWORK = 'network',
+  UNKNOWN = 'unknown',
+}
+
 export interface DomainError extends ApiError {
-  type:
-    | 'business'
-    | 'validation'
-    | 'infrastructure'
-    | 'authorization'
-    | 'not_found'
-    | 'conflict'
-    | 'timeout'
-    | 'network'
-    | 'unknown';
+  type: ErrorCategory;
+  recoverable?: boolean;
+  retryable?: boolean;
+  userActionable?: boolean;
+}
+
+// Specific error types for common scenarios
+export interface BusinessRuleError extends DomainError {
+  type: ErrorCategory.BUSINESS;
+  ruleId: string;
+  businessContext?: string;
+}
+
+export interface ValidationError extends DomainError {
+  type: ErrorCategory.VALIDATION;
+  field: string;
+  constraint?: string;
+  value?: any;
+}
+
+export interface AuthorizationError extends DomainError {
+  type: ErrorCategory.AUTHORIZATION;
+  requiredPermissions?: string[];
+  userRole?: string;
+  resource?: string;
+}
+
+export interface NotFoundError extends DomainError {
+  type: ErrorCategory.NOT_FOUND;
+  resourceType: string;
+  resourceId: string | number;
+}
+
+export interface ConflictError extends DomainError {
+  type: ErrorCategory.CONFLICT;
+  conflictingResource?: string;
+  conflictReason?: string;
 }

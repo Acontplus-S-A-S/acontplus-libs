@@ -1,6 +1,10 @@
 <div class="autocomplete-wrapper-wrapper" [class.autocomplete-wrapper-active]="overlayOpen()">
   <!-- Input Container -->
-  <div class="autocomplete-wrapper-input-container" cdkOverlayOrigin #overlayPosition="cdkOverlayOrigin">
+  <div
+    class="autocomplete-wrapper-input-container"
+    cdkOverlayOrigin
+    #overlayPosition="cdkOverlayOrigin"
+  >
     <div class="autocomplete-wrapper-input-wrapper">
       <mat-icon class="autocomplete-wrapper-search-icon">search</mat-icon>
       <input
@@ -12,11 +16,16 @@
         (input)="onInput($event)"
         (click)="showOverlay()"
         (keydown)="onKeyDown($event)"
-        [disabled]="config.disabled||false"
+        [disabled]="config.disabled || false"
         autocomplete="off"
       />
       @if (query && query.length > 0 && !isLoading()) {
-        <button mat-icon-button (click)="clearSearch()" type="button" class="autocomplete-wrapper-clear-button">
+        <button
+          mat-icon-button
+          (click)="clearSearch()"
+          type="button"
+          class="autocomplete-wrapper-clear-button"
+        >
           <mat-icon>clear</mat-icon>
         </button>
       }
@@ -44,17 +53,24 @@
   >
     <div class="autocomplete-wrapper-dropdown" [class.autocomplete-wrapper-active]="overlayOpen()">
       <div class="autocomplete-wrapper-dropdown-content">
-
         <!-- History Section -->
         @if (isHistoryVisible() && historyList().length > 0) {
           <div class="autocomplete-wrapper-section">
             <div class="autocomplete-wrapper-section-header">
               <span class="autocomplete-wrapper-section-title">Búsquedas recientes</span>
-              <button type="button" mat-icon-button (click)="clearHistory()" class="autocomplete-wrapper-clear-history-button">
+              <button
+                type="button"
+                mat-icon-button
+                (click)="clearHistory()"
+                class="autocomplete-wrapper-clear-history-button"
+              >
                 <mat-icon>delete_outline</mat-icon>
               </button>
             </div>
-            <ul class="autocomplete-wrapper-items-list autocomplete-wrapper-scrollable-list" #historyListElement>
+            <ul
+              class="autocomplete-wrapper-items-list autocomplete-wrapper-scrollable-list"
+              #historyListElement
+            >
               @for (item of historyList(); track $index) {
                 <li class="autocomplete-wrapper-list-item autocomplete-wrapper-history-item">
                   <div
@@ -64,11 +80,21 @@
                   >
                     <mat-icon class="autocomplete-wrapper-history-icon">history</mat-icon>
                     <div class="autocomplete-wrapper-item-details">
-                      <ng-container *ngTemplateOutlet="itemTemplate || defaultItemTemplate; context: { $implicit: item }">
+                      <ng-container
+                        *ngTemplateOutlet="
+                          itemTemplate || defaultItemTemplate;
+                          context: { $implicit: item }
+                        "
+                      >
                       </ng-container>
                     </div>
                   </div>
-                  <button type="button" mat-icon-button class="autocomplete-wrapper-remove-button" (click)="removeHistoryItem($index, $event)">
+                  <button
+                    type="button"
+                    mat-icon-button
+                    class="autocomplete-wrapper-remove-button"
+                    (click)="removeHistoryItem($index, $event)"
+                  >
                     <mat-icon>close</mat-icon>
                   </button>
                 </li>
@@ -175,7 +201,10 @@
 
             <!-- Items List -->
             @if (totalItems()) {
-              <ul class="autocomplete-wrapper-items-list autocomplete-wrapper-scrollable-list" #resultsListElement>
+              <ul
+                class="autocomplete-wrapper-items-list autocomplete-wrapper-scrollable-list"
+                #resultsListElement
+              >
                 @for (item of currentPageItems(); track $index) {
                   <li class="autocomplete-wrapper-list-item autocomplete-wrapper-result-item">
                     <div
@@ -184,7 +213,12 @@
                       (click)="selectItem(item)"
                     >
                       <div class="autocomplete-wrapper-item-info">
-                        <ng-container *ngTemplateOutlet="itemTemplate || defaultItemTemplate; context: { $implicit: item }">
+                        <ng-container
+                          *ngTemplateOutlet="
+                            itemTemplate || defaultItemTemplate;
+                            context: { $implicit: item }
+                          "
+                        >
                         </ng-container>
                       </div>
                     </div>
@@ -200,7 +234,12 @@
           <div class="autocomplete-wrapper-no-results">
             <mat-icon class="autocomplete-wrapper-no-results-icon">search_off</mat-icon>
             <div class="autocomplete-wrapper-no-results-content">
-              <ng-container *ngTemplateOutlet="notFoundTemplate || defaultNotFoundTemplate; context: { $implicit: noResultsText() }">
+              <ng-container
+                *ngTemplateOutlet="
+                  notFoundTemplate || defaultNotFoundTemplate;
+                  context: { $implicit: noResultsText() }
+                "
+              >
               </ng-container>
             </div>
           </div>
@@ -222,7 +261,9 @@
                   >
                     <mat-icon>chevron_left</mat-icon>
                   </button>
-                  <span class="autocomplete-wrapper-page-indicator">{{ currentPage() }} / {{ totalPages() }}</span>
+                  <span class="autocomplete-wrapper-page-indicator"
+                    >{{ currentPage() }} / {{ totalPages() }}</span
+                  >
                   <button
                     class="autocomplete-wrapper-pagination-button"
                     (click)="goToNextPage()"
@@ -234,18 +275,27 @@
               </div>
             }
 
-            @if(config.enableFooterActions){
+            @if (config.enableFooterActions) {
               <div class="autocomplete-wrapper-footer-actions">
-                <button class="autocomplete-wrapper-footer-button autocomplete-wrapper-create-button" (click)="onCreateNew($event)">
+                <button
+                  class="autocomplete-wrapper-footer-button autocomplete-wrapper-create-button"
+                  (click)="onCreateNew($event)"
+                >
                   <mat-icon>add</mat-icon>
                   <span class="autocomplete-wrapper-button-text">Crear</span>
                 </button>
-                <button class="autocomplete-wrapper-footer-button autocomplete-wrapper-search-button" (click)="onAdvancedSearch()">
+                <button
+                  class="autocomplete-wrapper-footer-button autocomplete-wrapper-search-button"
+                  (click)="onAdvancedSearch()"
+                >
                   <mat-icon>tune</mat-icon>
                   <span class="autocomplete-wrapper-button-text">Avanzada</span>
                 </button>
                 @if (!isHistoryVisible() && totalItems() > 0) {
-                  <button class="autocomplete-wrapper-footer-button autocomplete-wrapper-results-button" (click)="onShowAllResults()">
+                  <button
+                    class="autocomplete-wrapper-footer-button autocomplete-wrapper-results-button"
+                    (click)="onShowAllResults()"
+                  >
                     <mat-icon>list</mat-icon>
                     <span class="autocomplete-wrapper-button-text">Todos</span>
                   </button>

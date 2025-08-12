@@ -5,17 +5,13 @@ export interface SnackbarProps {
   readonly message: string;
   readonly title?: string;
   readonly action?: string;
-  readonly config?: Partial<
-    import('@angular/material/snack-bar').MatSnackBarConfig
-  >;
+  readonly config?: Partial<import('@angular/material/snack-bar').MatSnackBarConfig>;
 }
 
 export interface NotificationCallProps {
   readonly message: string;
   readonly title?: string;
-  readonly config?: Partial<
-    import('@angular/material/snack-bar').MatSnackBarConfig
-  >;
+  readonly config?: Partial<import('@angular/material/snack-bar').MatSnackBarConfig>;
 }
 
 export interface NotificationDemo {

@@ -8,9 +8,8 @@ describe('MatDynamicTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDynamicTableComponent]
-    })
-    .compileComponents();
+      imports: [MatDynamicTableComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MatDynamicTableComponent);
     component = fixture.componentInstance;

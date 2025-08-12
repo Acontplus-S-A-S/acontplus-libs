@@ -8,9 +8,8 @@ describe('CustomTabulatorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CustomTabulatorComponent]
-    })
-    .compileComponents();
+      imports: [CustomTabulatorComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CustomTabulatorComponent);
     component = fixture.componentInstance;

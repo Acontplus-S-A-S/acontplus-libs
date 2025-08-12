@@ -57,9 +57,9 @@ this.dialog.open(DialogWrapperComponent, {
     content: 'Dialog content goes here',
     actions: [
       { label: 'Cancel', value: false },
-      { label: 'Confirm', value: true }
-    ]
-  }
+      { label: 'Confirm', value: true },
+    ],
+  },
 });
 ```
 
@@ -258,7 +258,7 @@ import { TableColumn } from 'acontplus/ui-components';
 
 const columns: TableColumn[] = [
   { name: 'id', label: 'ID' },
-  { name: 'name', label: 'Name' }
+  { name: 'name', label: 'Name' },
 ];
 ```
 
@@ -344,17 +344,20 @@ src/
 If you wish to contribute to this library or run it locally:
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/Acontplus-S-A-S/acontplus-libs.git
    cd acontplus-libs
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 3. **Build the library:**
+
    ```bash
    npm run build-library
    ```

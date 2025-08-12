@@ -13,10 +13,10 @@ export class Pagination {
    * @param pageSizeOptions Available page size options
    */
   constructor(
-    pageIndex: number = 0, // MatPagination starts at 0
-    pageSize: number = 25,
-    maxSize: number = 5,
-    totalRecords: number = 0,
+    pageIndex = 0, // MatPagination starts at 0
+    pageSize = 25,
+    maxSize = 5,
+    totalRecords = 0,
     pageSizeOptions: number[] = [25, 50, 75, 100],
   ) {
     this.pageIndex = pageIndex;

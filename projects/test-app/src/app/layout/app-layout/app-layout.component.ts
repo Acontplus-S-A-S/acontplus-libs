@@ -1,4 +1,4 @@
-import { Component, inject ,signal} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -8,8 +8,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
-import {MenuItemList, menuItems} from './menu-items'
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { MenuItemList, menuItems } from './menu-items';
 
 @Component({
   selector: 'app-app-layout',
@@ -22,19 +22,17 @@ import {MenuItemList, menuItems} from './menu-items'
     AsyncPipe,
     RouterLink,
     RouterLinkActive,
-    RouterOutlet
+    RouterOutlet,
   ],
   templateUrl: './app-layout.component.html',
-  styleUrl: './app-layout.component.scss'
+  styleUrl: './app-layout.component.scss',
 })
 export class AppLayoutComponent {
   private breakpointObserver = inject(BreakpointObserver);
-  menuItems = signal<MenuItemList[]>(menuItems)
+  menuItems = signal<MenuItemList[]>(menuItems);
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches),
-      shareReplay()
-    );
-
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
+    map(result => result.matches),
+    shareReplay(),
+  );
 }

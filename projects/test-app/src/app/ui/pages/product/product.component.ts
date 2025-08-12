@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -49,14 +49,8 @@ interface Product {
       />
     </ng-template>
 
-    <ng-template
-      #expandedProductDetail
-      let-element="$implicit"
-      let-index="index"
-    >
-      <div
-        style="padding: 16px; background-color: #f0f0f0; border-top: 1px solid #ccc;"
-      >
+    <ng-template #expandedProductDetail let-element="$implicit" let-index="index">
+      <div style="padding: 16px; background-color: #f0f0f0; border-top: 1px solid #ccc;">
         <h3>Details for {{ element.name }} (Index: {{ index }})</h3>
         <p>
           <strong>Description:</strong>
@@ -65,7 +59,7 @@ interface Product {
         <p><strong>Category:</strong> {{ element.category }}</p>
         <p>
           <strong>Available On:</strong>
-          {{ element.availableDate | date : 'fullDate' }}
+          {{ element.availableDate | date: 'fullDate' }}
         </p>
         <p>Additional details can go here.</p>
       </div>
@@ -90,7 +84,7 @@ interface Product {
   `,
   styleUrl: './product.component.scss',
 })
-export class ProductComponent implements OnInit {
+export class ProductComponent implements OnInit, AfterViewInit {
   products: Product[] = [];
   productColumns: ColumnDefinition<Product>[] = [];
   selectedProducts: Product[] = [];
@@ -203,7 +197,7 @@ export class ProductComponent implements OnInit {
   deleteProduct(product: Product): void {
     // console.log('Delete product:', product);
     // Implement your delete logic here (e.g., show confirmation dialog)
-    this.products = this.products.filter((p) => p.id !== product.id);
+    this.products = this.products.filter(p => p.id !== product.id);
     this.productPaginationConfig.totalRecords = this.products.length;
     // Re-assign dataSource data to refresh the table if needed
     // this.matTableComponent.dataSource.data = this.products; // Access via @ViewChild if you have it
@@ -217,13 +211,7 @@ export class ProductComponent implements OnInit {
   }
 
   private generateMockProducts(count: number): void {
-    const categories = [
-      'Electronics',
-      'Books',
-      'Home & Kitchen',
-      'Apparel',
-      'Sports',
-    ];
+    const categories = ['Electronics', 'Books', 'Home & Kitchen', 'Apparel', 'Sports'];
     for (let i = 1; i <= count; i++) {
       this.products.push({
         id: i,
@@ -234,7 +222,7 @@ export class ProductComponent implements OnInit {
         availableDate: new Date(
           2023,
           Math.floor(Math.random() * 12),
-          Math.floor(Math.random() * 28) + 1
+          Math.floor(Math.random() * 28) + 1,
         ),
         description: `This is a detailed description for Product ${i}. It is a fantastic item.`,
         imageUrl: `https://picsum.photos/id/${100 + i}/50/50`,

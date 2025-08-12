@@ -23,10 +23,7 @@ export class SnackbarService {
     } = props;
 
     const typeClass = `acontplus-snackbar-${type}`;
-    const panelClasses = this.buildPanelClasses(
-      typeClass,
-      userConfig.panelClass,
-    );
+    const panelClasses = this.buildPanelClasses(typeClass, userConfig.panelClass);
 
     const finalConfig = {
       ...this.config,
@@ -94,16 +91,11 @@ export class SnackbarService {
     });
   }
 
-  private buildPanelClasses(
-    typeClass: string,
-    userClasses?: string | string[],
-  ): string[] {
+  private buildPanelClasses(typeClass: string, userClasses?: string | string[]): string[] {
     const classes = ['acontplus-snackbar', typeClass];
 
     if (userClasses) {
-      const normalizedClasses = Array.isArray(userClasses)
-        ? userClasses
-        : [userClasses];
+      const normalizedClasses = Array.isArray(userClasses) ? userClasses : [userClasses];
       classes.push(...normalizedClasses);
     }
 

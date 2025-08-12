@@ -2,7 +2,10 @@
 
 ## Overview
 
-The API interceptor now **standardizes all responses** to follow a consistent `ApiResponse<T>` structure, making the handling more predictable and robust. This approach ensures that regardless of how your backend returns data, the frontend always receives a consistent format.
+The API interceptor now **standardizes all responses** to follow a consistent
+`ApiResponse<T>` structure, making the handling more predictable and robust.
+This approach ensures that regardless of how your backend returns data, the
+frontend always receives a consistent format.
 
 ## Response Standardization
 
@@ -20,7 +23,7 @@ The interceptor automatically standardizes all HTTP responses:
 
 ```typescript
 // Raw data response → Standardized
-{ id: 1, name: "John" } 
+{ id: 1, name: "John" }
 // ↓
 {
   status: 'success',
@@ -56,6 +59,7 @@ true
 ### 1. Success with Data
 
 **Backend Response (any format):**
+
 ```json
 {
   "id": 1,
@@ -65,6 +69,7 @@ true
 ```
 
 **Interceptor Standardization:**
+
 ```json
 {
   "status": "success",
@@ -80,6 +85,7 @@ true
 ```
 
 **Repository Receives:**
+
 ```typescript
 // Direct data object (interceptor extracts data)
 const user = await this.userRepository.create(userData);
@@ -89,6 +95,7 @@ const user = await this.userRepository.create(userData);
 ### 2. Success with Message Only
 
 **Backend Response:**
+
 ```json
 {
   "status": "success",
@@ -98,6 +105,7 @@ const user = await this.userRepository.create(userData);
 ```
 
 **Repository Receives:**
+
 ```typescript
 // Full ApiResponse (interceptor preserves for context)
 const response = await this.userRepository.delete(userId);
@@ -107,32 +115,36 @@ const response = await this.userRepository.delete(userId);
 ### 3. Warning Response
 
 **Backend Response:**
+
 ```json
 {
   "status": "warning",
   "message": "Operation completed with warnings",
   "data": { "id": 1, "name": "John" },
-  "warnings": [{"code": "FIELD_IGNORED", "message": "Some fields ignored"}]
+  "warnings": [{ "code": "FIELD_IGNORED", "message": "Some fields ignored" }]
 }
 ```
 
 **Interceptor Behavior:**
+
 - Shows warning toast notification
 - Returns data if present, otherwise full response
 
 ### 4. Error Response
 
 **Backend Response:**
+
 ```json
 {
   "status": "error",
   "code": "400",
   "message": "Validation failed",
-  "errors": [{"code": "EMAIL_INVALID", "message": "Invalid email"}]
+  "errors": [{ "code": "EMAIL_INVALID", "message": "Invalid email" }]
 }
 ```
 
 **Interceptor Behavior:**
+
 - Shows error toast notification
 - Throws standardized error for use case handling
 
@@ -140,7 +152,8 @@ const response = await this.userRepository.delete(userId);
 
 ### Automatic Behavior
 
-The interceptor automatically determines whether to show success toast notifications based on HTTP method and URL patterns:
+The interceptor automatically determines whether to show success toast
+notifications based on HTTP method and URL patterns:
 
 - **Commands (POST, PUT, PATCH, DELETE)**: Show success toasts automatically
 - **Queries (GET)**: Hide success toasts automatically (to avoid spam)
@@ -150,12 +163,14 @@ The interceptor automatically determines whether to show success toast notificat
 ### When Toasts Are Shown
 
 ✅ **Automatically shown for:**
+
 - POST requests (create operations)
-- PUT requests (update operations)  
+- PUT requests (update operations)
 - PATCH requests (partial updates)
 - DELETE requests (delete operations)
 
 ❌ **Automatically hidden for:**
+
 - GET requests (queries/lists)
 - URLs containing `/list`, `/search`, `/query`
 - URLs containing `/page`, `/paginated`
@@ -172,7 +187,10 @@ export class UserRepository extends BaseRepository<User> {
   }
 
   // The interceptor handles all standardization - repository is very simple
-  getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<User>> {
+  getAll(
+    pagination: PaginationParams,
+    filters?: FilterParams,
+  ): Observable<PaginatedResult<User>> {
     const params = this.buildQueryParams(pagination, filters);
     return this.get<PaginatedResult<User>>(this.buildUrl(''), params);
   }
@@ -198,29 +216,31 @@ export class UserRepository extends BaseRepository<User> {
 export class DeleteUserCommand extends DeleteCommand {
   execute(request: { id: number }): Observable<DeleteUserResult> {
     return this.userRepository.delete(request.id).pipe(
-      map((response) => {
+      map(response => {
         // Handle different response scenarios
         if (this.hasDataInResponse(response)) {
           return {
             success: true,
             userId: request.id,
-            message: this.extractMessageFromApiResponse(response) || 'User deleted successfully'
+            message:
+              this.extractMessageFromApiResponse(response) ||
+              'User deleted successfully',
           };
         } else if (this.hasMessageInResponse(response)) {
           return {
             success: true,
             userId: request.id,
-            message: this.extractMessageFromApiResponse(response)
+            message: this.extractMessageFromApiResponse(response),
           };
         } else {
           return {
             success: true,
             userId: request.id,
-            message: 'User deleted successfully'
+            message: 'User deleted successfully',
           };
         }
       }),
-      catchError((error) => {
+      catchError(error => {
         return throwError(() => this.mapRepositoryError(error, request.id));
       }),
     );
@@ -231,26 +251,31 @@ export class DeleteUserCommand extends DeleteCommand {
 ## Benefits of Standardization
 
 ### 1. **Consistent Response Format**
+
 - All responses follow the same structure
 - No need to handle different response formats in repositories
 - Predictable data flow throughout the application
 
 ### 2. **Backend Flexibility**
+
 - Works with any backend response format
 - Automatically wraps raw data into proper structure
 - Handles legacy APIs that don't follow standard format
 
 ### 3. **Simplified Repositories**
+
 - Repository methods are much simpler
 - No complex response extraction logic
 - Focus on business logic, not HTTP details
 
 ### 4. **Better Error Handling**
+
 - Consistent error format across all endpoints
 - Proper error categorization and severity levels
 - Centralized error display logic
 
 ### 5. **Automatic Toast Management**
+
 - Smart toast notifications based on operation type
 - No manual toast configuration needed
 - Consistent user experience
@@ -265,8 +290,8 @@ Your C# backend's automatic message generation works perfectly:
 // These are automatically handled by the interceptor
 ApiResponse<User>.Success(user); // "Operation completed successfully."
 ApiResponse.Success(); // "Operation completed successfully."
-ApiResponse<User>.Success(user, new ApiResponseOptions { 
-    Message = "User created successfully" 
+ApiResponse<User>.Success(user, new ApiResponseOptions {
+    Message = "User created successfully"
 });
 ```
 
@@ -291,8 +316,13 @@ The interceptor handles various backend response formats:
 
 1. **Rely on automatic standardization** - The interceptor handles everything
 2. **Keep repositories simple** - Focus on business logic, not HTTP details
-3. **Use consistent HTTP methods** - Follow REST conventions for automatic detection
-4. **Handle special cases at use case level** - For custom messaging requirements
-5. **Structure your API consistently** - Use standard URL patterns for automatic detection
-6. **Let the interceptor handle errors** - Centralized error handling and display
-7. **Trust the standardization** - All responses are guaranteed to follow ApiResponse format
+3. **Use consistent HTTP methods** - Follow REST conventions for automatic
+   detection
+4. **Handle special cases at use case level** - For custom messaging
+   requirements
+5. **Structure your API consistently** - Use standard URL patterns for automatic
+   detection
+6. **Let the interceptor handle errors** - Centralized error handling and
+   display
+7. **Trust the standardization** - All responses are guaranteed to follow
+   ApiResponse format

@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
  * A versatile card component that wraps Angular Material's mat-card with additional functionality
  * and customization options. This component provides a consistent card layout with configurable
  * header, content, and action areas.
- * 
+ *
  * @example
  * <acp-mat-dynamic-card
  *   [cardTitle]="'Card Title'"
