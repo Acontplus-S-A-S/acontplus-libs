@@ -1,0 +1,50 @@
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="form" class="utils-form">
+      <!-- Array Input -->
+      <mat-form-field appearance="fill">
+        <mat-label>Array (comma separated)</mat-label>
+        <input matInput formControlName="arrayInput" placeholder="1,2,3">
+      </mat-form-field>
+
+      <!-- Date Input -->
+      <mat-form-field appearance="fill">
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dateInput">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <!-- Decimal Input -->
+      <mat-form-field appearance="fill">
+        <mat-label>Decimal</mat-label>
+        <input matInput type="number" step="0.01" formControlName="decimalInput" placeholder="0.00">
+      </mat-form-field>
+
+      <!-- Number Input -->
+      <mat-form-field appearance="fill">
+        <mat-label>Number</mat-label>
+        <input matInput type="number" formControlName="numberInput" placeholder="42">
+      </mat-form-field>
+
+      <!-- Object Input -->
+      <mat-form-field appearance="fill">
+        <mat-label>Object (JSON)</mat-label>
+        <input matInput formControlName="objectInput" placeholder='{"key": "value"}'>
+      </mat-form-field>
+
+      <!-- Regex Input -->
+      <mat-form-field appearance="fill">
+        <mat-label>Regex Pattern</mat-label>
+        <input matInput formControlName="regexInput" placeholder="^[a-zA-Z]+$">
+      </mat-form-field>
+
+      <!-- String Input -->
+      <mat-form-field appearance="fill">
+        <mat-label>String</mat-label>
+        <input matInput formControlName="stringInput" placeholder="Enter text">
+      </mat-form-field>
+    </form>
+
+  </mat-card-content>
+</mat-card>

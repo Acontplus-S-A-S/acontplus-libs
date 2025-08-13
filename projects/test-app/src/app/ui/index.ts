@@ -9,3 +9,4 @@ export * from './products';
 export * from './tables';
 export * from './pages/test';
 export * from './pages/user';
+export * from './utils'
