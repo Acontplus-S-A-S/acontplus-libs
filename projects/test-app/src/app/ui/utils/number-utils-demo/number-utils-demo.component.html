@@ -1,0 +1,40 @@
+<mat-card style="max-width: 500px; margin: 20px auto; padding: 20px;">
+  <mat-card-title>Demo NumberUtils</mat-card-title>
+  <mat-card-content>
+
+    <!-- Valor único para isInteger, isSafeInteger, toFixed -->
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Valor</mat-label>
+      <input matInput type="text" [(ngModel)]="value">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Dígitos decimales</mat-label>
+      <input matInput type="number" [(ngModel)]="fractionDigits">
+    </mat-form-field>
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <button mat-raised-button color="primary" (click)="checkIsInteger()">¿Es entero?</button>
+      <button mat-raised-button color="accent" (click)="checkIsSafeInteger()">¿Es entero seguro?</button>
+      <button mat-raised-button color="primary" (click)="formatToFixed()">Formatear con toFixed</button>
+    </div>
+
+    <hr style="margin: 20px 0;">
+
+    <!-- Comparar dos números -->
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Número 1</mat-label>
+      <input matInput type="number" [(ngModel)]="num1">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Número 2</mat-label>
+      <input matInput type="number" [(ngModel)]="num2">
+    </mat-form-field>
+
+    <button mat-raised-button color="warn" (click)="compareNumbers()">Comparar números</button>
+
+    <p style="margin-top: 15px; font-weight: bold;">Resultado: {{ result }}</p>
+
+  </mat-card-content>
+</mat-card>
