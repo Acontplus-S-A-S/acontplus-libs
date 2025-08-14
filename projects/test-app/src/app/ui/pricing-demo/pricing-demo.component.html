@@ -1,0 +1,89 @@
+<div class="demo-container">
+  <!-- Escenario 1 -->
+  <mat-card>
+    <h3>Escenario 1: Facturación con IVA</h3>
+    <div class="d-grid">
+      <div>
+        <mat-form-field>
+          <mat-label>Precio base</mat-label>
+          <input matInput [(ngModel)]="precioBase" type="number" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>IVA (%)</mat-label>
+          <input matInput [(ngModel)]="ivaRate" type="number" />
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="calcularEscenario1()">Calcular</button>
+      </div>
+      @if (detallesIva) {
+        <div>
+          <p>Precio base: {{ detallesIva.baseAmount }}</p>
+          <p>IVA ({{ detallesIva.taxRate }}%): {{ detallesIva.taxAmount }}</p>
+          <p>Total con IVA: {{ detallesIva.totalAmount }}</p>
+        </div>
+      }
+    </div>
+  </mat-card>
+
+  <!-- Escenario 2 -->
+  <mat-card>
+    <h3>Escenario 2: Descuento promocional</h3>
+    <div class="d-grid">
+      <section>
+        <mat-form-field>
+          <mat-label>Descuento (%)</mat-label>
+          <input matInput [(ngModel)]="descuentoPromo" type="number" />
+        </mat-form-field>
+        <button mat-raised-button color="accent" (click)="calcularEscenario2()">
+          Aplicar Descuento
+        </button>
+      </section>
+      @if (detallesDescuento) {
+        <div>
+          <p>Precio original: {{ detallesDescuento.originalPrice }}</p>
+          <p>
+            Descuento ({{ detallesDescuento.discountRate }}%):
+            {{ detallesDescuento.discountAmount }}
+          </p>
+          <p>Precio final: {{ detallesDescuento.finalPrice }}</p>
+        </div>
+      }
+    </div>
+  </mat-card>
+
+  <!-- Escenario 3 -->
+  <mat-card>
+    <h3>Escenario 3: Análisis de rentabilidad</h3>
+    <button mat-raised-button color="warn" (click)="calcularEscenario3()">Calcular Margen</button>
+    @if (detallesGanancia) {
+      <div>
+        <p>Precio venta: {{ detallesGanancia.salePrice }}</p>
+        <p>Costo: {{ detallesGanancia.cost }}</p>
+        <p>Ganancia: {{ detallesGanancia.profitAmount }}</p>
+        <p>Margen: {{ detallesGanancia.profitMargin | number: '1.2-2' }}%</p>
+      </div>
+    }
+  </mat-card>
+
+  <!-- Escenario 4 -->
+  <mat-card>
+    <h3>Escenario 4: Factura con múltiples líneas</h3>
+    <button mat-raised-button color="primary" (click)="calcularEscenario4()">
+      Calcular Totales
+    </button>
+    @if (linea1 && linea2) {
+      <div>
+        <h4>Línea 1 - Laptops</h4>
+        <p>Subtotal: {{ linea1.subtotal }}</p>
+        <p>Descuento: {{ linea1.discountAmount }}</p>
+        <p>Base gravable: {{ linea1.subtotalAfterDiscount }}</p>
+        <p>Impuesto: {{ linea1.taxAmount }}</p>
+        <p>Total línea: {{ linea1.total }}</p>
+
+        <h4>Línea 2 - Mouses</h4>
+        <p>Total línea: {{ linea2.total }}</p>
+
+        <h3>Total factura: {{ totalFactura }}</h3>
+      </div>
+    }
+  </mat-card>
+</div>

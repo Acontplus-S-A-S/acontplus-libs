@@ -8,7 +8,7 @@ export class RegexUtils {
    * @example } => \}
    */
   public static escapeRegExp(str: string): string {
-    return str.replace(/[.*+?^${}()|[\]\\-]/g, "\\$&");
+    return str.replace(/[.*+?^${}()|[\]\\-]/g, '\\$&');
   }
 
   /**
@@ -20,7 +20,6 @@ export class RegexUtils {
     return regex.test(username);
   }
 
-
   /**
    * Minimum eight characters, at least one letter and one number:
    * @param password
@@ -30,13 +29,13 @@ export class RegexUtils {
     return regex.test(password);
   }
 
-
   /**
    * valid current input is email format.
    */
   public static validateEmail(email: string): boolean {
     // from: https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
-    const regex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    const regex =
+      /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     return regex.test(email);
   }
 }

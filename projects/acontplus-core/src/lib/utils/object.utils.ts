@@ -1,4 +1,4 @@
-import {ArrayUtils} from "./array.utils";
+import { ArrayUtils } from './array.utils';
 
 export class ObjectUtils {
   /**
@@ -121,11 +121,7 @@ export class ObjectUtils {
    * @param key
    * @param defaultValue
    */
-  public static getProperty<T, K extends keyof T>(
-    obj: T,
-    key: K,
-    defaultValue?: T[K]
-  ) {
+  public static getProperty<T, K extends keyof T>(obj: T, key: K, defaultValue?: T[K]) {
     if (ObjectUtils.isNullOrUndefined(obj)) {
       return defaultValue;
     }
@@ -144,7 +140,7 @@ export class ObjectUtils {
     obj: T,
     key1: K1,
     key2: K2,
-    defaultValue?: T[K1][K2]
+    defaultValue?: T[K1][K2],
   ) {
     const p = this.getProperty(obj, key1);
     if (ObjectUtils.isNullOrUndefined(p)) {
@@ -157,7 +153,7 @@ export class ObjectUtils {
     T,
     K1 extends keyof T,
     K2 extends keyof T[K1],
-    K3 extends keyof T[K1][K2]
+    K3 extends keyof T[K1][K2],
   >(obj: T, key1: K1, key2: K2, key3: K3, defaultValue?: T[K1][K2][K3]) {
     const p = this.getProperty2(obj, key1, key2);
     if (ObjectUtils.isNullOrUndefined(p)) {
@@ -187,7 +183,6 @@ export class ObjectUtils {
     return new type();
   }
 
-
   /**
    * get name of property.
    * @param key
@@ -200,9 +195,8 @@ export class ObjectUtils {
     if (this.isNullOrUndefined(obj)) {
       return [];
     }
-    return Object.keys(obj).map((key) => (obj as any)[key]);
+    return Object.keys(obj).map(key => (obj as any)[key]);
   }
-
 
   /**
    * get matching descendant property.
@@ -215,7 +209,10 @@ export class ObjectUtils {
    * @example ObjectUtils.getDescendantProperty(undefined)                  = undefined
    * @example ObjectUtils.getDescendantProperty(null)                       = undefined
    */
-  public static getDescendantProperty(obj: any, ...descendantPaths: string[]): NonNullable<any> | undefined {
+  public static getDescendantProperty(
+    obj: any,
+    ...descendantPaths: string[]
+  ): NonNullable<any> | undefined {
     if (this.isNullOrUndefined(obj)) {
       return undefined;
     }
@@ -257,7 +254,7 @@ export class ObjectUtils {
     value1: T,
     value2?: T,
     value3?: T,
-    defaultValue?: NonNullable<T>
+    defaultValue?: NonNullable<T>,
   ): NonNullable<T> | undefined {
     if (!ObjectUtils.isNullOrUndefined(value1)) {
       return value1 as NonNullable<T>;

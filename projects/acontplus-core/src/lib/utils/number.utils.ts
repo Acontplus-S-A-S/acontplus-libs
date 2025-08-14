@@ -1,9 +1,7 @@
-
 // isInteger and isSafeInteger cannot be found in IE
-import {ObjectUtils} from "./object.utils";
+import { ObjectUtils } from './object.utils';
 
 export class NumberUtils {
-
   public static readonly MAX_SAFE_INTEGER: number = 9007199254740991;
   public static readonly MIN_SAFE_INTEGER: number = -9007199254740991;
 
@@ -25,11 +23,7 @@ export class NumberUtils {
    * @example Number.isInteger([1]);       // false
    */
   public static isInteger(value: any): boolean {
-    return (
-      ObjectUtils.isNumber(value) &&
-      isFinite(value) &&
-      Math.floor(value) === value
-    );
+    return ObjectUtils.isNumber(value) && isFinite(value) && Math.floor(value) === value;
   }
 
   /**
@@ -57,7 +51,7 @@ export class NumberUtils {
   public static toFixed(
     value: number | null | undefined,
     fractionDigits: number,
-    defaultValue = ''
+    defaultValue = '',
   ): string {
     // asegurar que fractionDigits esté dentro de 0 y 20
     const digits = Math.min(Math.max(fractionDigits, 0), 20);
@@ -68,7 +62,6 @@ export class NumberUtils {
 
     return value.toFixed(digits);
   }
-
 
   /**
    * compare two numbers
@@ -84,5 +77,17 @@ export class NumberUtils {
     } else {
       return 1;
     }
+  }
+
+  public static isNumber(value: any): boolean {
+    return typeof value === 'number' && !isNaN(value) && isFinite(value);
+  }
+
+  public static isPositive(value: number): boolean {
+    return value >= 0;
+  }
+
+  public static isPercentage(value: number): boolean {
+    return value >= 0 && value <= 100;
   }
 }

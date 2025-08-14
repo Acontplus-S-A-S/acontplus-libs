@@ -1,4 +1,4 @@
-import Decimal from "decimal.js";
+import Decimal from 'decimal.js';
 
 // Tipos más específicos y flexibles
 type DecimalInput = string | number | Decimal;
@@ -20,14 +20,15 @@ const DEFAULT_CONFIG: Required<DecimalOptions> = {
   rounding: Decimal.ROUND_HALF_UP,
   returnAsNumber: true,
   throwOnInfinity: true,
-  throwOnNaN: true
-}
-
-
+  throwOnNaN: true,
+};
 
 // Errores personalizados
 class DecimalError extends Error {
-  constructor(message: string, public readonly operation?: string) {
+  constructor(
+    message: string,
+    public readonly operation?: string,
+  ) {
     super(message);
     this.name = 'DecimalError';
   }
@@ -38,7 +39,7 @@ class DecimalError extends Error {
  * Diseñado para aplicaciones empresariales que requieren cálculos exactos
  */
 export class DecimalUtils {
-  private static defaultConfig = DEFAULT_CONFIG
+  private static defaultConfig = DEFAULT_CONFIG;
 
   /**
    * Configura valores por defecto globalmente con validación
@@ -76,7 +77,10 @@ export class DecimalUtils {
 
       return decimal;
     } catch (error) {
-      throw new DecimalError(`Failed to create decimal from value: ${value} in ${operation}`, operation);
+      throw new DecimalError(
+        `Failed to create decimal from value: ${value} in ${operation}`,
+        operation,
+      );
     }
   }
 
@@ -86,7 +90,7 @@ export class DecimalUtils {
   private static processResult(
     decimal: Decimal,
     options: DecimalOptions = {},
-    operation = 'unknown'
+    operation = 'unknown',
   ): DecimalOutput {
     const config = { ...this.defaultConfig, ...options };
 
@@ -103,9 +107,10 @@ export class DecimalUtils {
 
     // Aplicar precisión si se especifica
     if (config.precision >= 0) {
-      result = config.rounding !== undefined
-        ? result.toDecimalPlaces(config.precision, config.rounding)
-        : result.toDecimalPlaces(config.precision);
+      result =
+        config.rounding !== undefined
+          ? result.toDecimalPlaces(config.precision, config.rounding)
+          : result.toDecimalPlaces(config.precision);
     }
 
     // Retornar como número o Decimal
@@ -165,7 +170,11 @@ export class DecimalUtils {
   /**
    * Potencia de un número
    */
-  static power(base: DecimalInput, exponent: DecimalInput, options?: DecimalOptions): DecimalOutput {
+  static power(
+    base: DecimalInput,
+    exponent: DecimalInput,
+    options?: DecimalOptions,
+  ): DecimalOutput {
     const decimal1 = this.createDecimal(base, 'power');
     const decimal2 = this.createDecimal(exponent, 'power');
     const result = decimal1.pow(decimal2);
@@ -207,7 +216,11 @@ export class DecimalUtils {
   /**
    * Calcula el porcentaje
    */
-  static percentage(value: DecimalInput, percent: DecimalInput, options?: DecimalOptions): DecimalOutput {
+  static percentage(
+    value: DecimalInput,
+    percent: DecimalInput,
+    options?: DecimalOptions,
+  ): DecimalOutput {
     const decimal1 = this.createDecimal(value, 'percentage');
     const decimal2 = this.createDecimal(percent, 'percentage');
     const result = decimal1.mul(decimal2).div(100);
@@ -218,7 +231,11 @@ export class DecimalUtils {
   /**
    * Aplica un descuento porcentual
    */
-  static applyDiscount(value: DecimalInput, discountPercent: DecimalInput, options?: DecimalOptions): DecimalOutput {
+  static applyDiscount(
+    value: DecimalInput,
+    discountPercent: DecimalInput,
+    options?: DecimalOptions,
+  ): DecimalOutput {
     const originalValue = this.createDecimal(value, 'discount');
     const discount = this.percentage(value, discountPercent, { returnAsNumber: false }) as Decimal;
     const result = originalValue.minus(discount);
@@ -229,7 +246,11 @@ export class DecimalUtils {
   /**
    * Calcula impuestos sobre un valor
    */
-  static addTax(value: DecimalInput, taxPercent: DecimalInput, options?: DecimalOptions): DecimalOutput {
+  static addTax(
+    value: DecimalInput,
+    taxPercent: DecimalInput,
+    options?: DecimalOptions,
+  ): DecimalOutput {
     const originalValue = this.createDecimal(value, 'tax');
     const tax = this.percentage(value, taxPercent, { returnAsNumber: false }) as Decimal;
     const result = originalValue.plus(tax);
@@ -244,7 +265,7 @@ export class DecimalUtils {
     principal: DecimalInput,
     rate: DecimalInput,
     time: DecimalInput,
-    options?: DecimalOptions
+    options?: DecimalOptions,
   ): DecimalOutput {
     const p = this.createDecimal(principal, 'simple_interest');
     const r = this.createDecimal(rate, 'simple_interest');
@@ -262,7 +283,7 @@ export class DecimalUtils {
     rate: DecimalInput,
     time: DecimalInput,
     frequency: DecimalInput = 1,
-    options?: DecimalOptions
+    options?: DecimalOptions,
   ): DecimalOutput {
     const p = this.createDecimal(principal, 'compound_interest');
     const r = this.createDecimal(rate, 'compound_interest').div(100);
@@ -383,12 +404,13 @@ export class DecimalUtils {
     value: DecimalInput,
     precision = 0,
     rounding?: Decimal.Rounding,
-    options?: DecimalOptions
+    options?: DecimalOptions,
   ): DecimalOutput {
     const decimal = this.createDecimal(value, 'rounding');
-    const result = rounding !== undefined
-      ? decimal.toDecimalPlaces(precision, rounding)
-      : decimal.toDecimalPlaces(precision);
+    const result =
+      rounding !== undefined
+        ? decimal.toDecimalPlaces(precision, rounding)
+        : decimal.toDecimalPlaces(precision);
 
     return this.processResult(result, { ...options, precision, rounding }, 'rounding');
   }
@@ -447,7 +469,9 @@ export class DecimalUtils {
       throw new DecimalError('Cannot calculate median of empty array', 'median');
     }
 
-    const decimals = values.map(v => this.createDecimal(v, 'median')).sort((a, b) => a.comparedTo(b));
+    const decimals = values
+      .map(v => this.createDecimal(v, 'median'))
+      .sort((a, b) => a.comparedTo(b));
     const middle = Math.floor(decimals.length / 2);
 
     let result: Decimal;
@@ -534,14 +558,14 @@ export class DecimalUtils {
       decimalSeparator?: string;
       prefix?: string;
       suffix?: string;
-    } = {}
+    } = {},
   ): string {
     const {
       precision = 2,
       thousandsSeparator = ',',
       decimalSeparator = '.',
       prefix = '',
-      suffix = ''
+      suffix = '',
     } = options;
 
     const decimal = this.createDecimal(value, 'format');
@@ -647,9 +671,10 @@ class DecimalChain {
   }
 
   round(precision = 0, rounding?: Decimal.Rounding): DecimalChain {
-    this.value = rounding !== undefined
-      ? this.value.toDecimalPlaces(precision, rounding)
-      : this.value.toDecimalPlaces(precision);
+    this.value =
+      rounding !== undefined
+        ? this.value.toDecimalPlaces(precision, rounding)
+        : this.value.toDecimalPlaces(precision);
     this.operations.push(`Rounded to ${precision} decimal places`);
     return this;
   }

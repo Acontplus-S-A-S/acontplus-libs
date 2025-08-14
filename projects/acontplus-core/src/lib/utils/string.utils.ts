@@ -1,11 +1,11 @@
-import { ArrayUtils } from "./array.utils";
-import { NumberUtils } from "./number.utils";
-import { ObjectUtils } from "./object.utils";
+import { ArrayUtils } from './array.utils';
+import { NumberUtils } from './number.utils';
+import { ObjectUtils } from './object.utils';
 
 export type NullableString = string | undefined | null;
 
 export class StringUtils {
-  public static readonly EMPTY: string = "";
+  public static readonly EMPTY: string = '';
   public static readonly INDEX_NOT_FOUND: number = -1;
 
   /**
@@ -77,7 +77,7 @@ export class StringUtils {
     if (ObjectUtils.isNullOrUndefined(str)) {
       return str;
     } else {
-      return str.replace("\b", this.EMPTY).trim();
+      return str.replace('\b', this.EMPTY).trim();
     }
   }
 
@@ -129,7 +129,7 @@ export class StringUtils {
    * Strips whitespace from the start and end of a String returning null if the String is empty ("") after the strip.
    * @param str
    */
-  public static stripToNull(str: string): string |null{
+  public static stripToNull(str: string): string | null {
     if (ObjectUtils.isNullOrUndefined(str)) {
       return null;
     }
@@ -230,10 +230,7 @@ export class StringUtils {
    * @example StringUtils.equal("abc", "abc")            = true
    */
   public static equals(str1: string, str2: string): boolean {
-    if (
-      !ObjectUtils.isNullOrUndefined(str1) &&
-      !ObjectUtils.isNullOrUndefined(str2)
-    ) {
+    if (!ObjectUtils.isNullOrUndefined(str1) && !ObjectUtils.isNullOrUndefined(str2)) {
       return str1 === str2;
     }
     if (ObjectUtils.isNull(str1) && ObjectUtils.isNull(str2)) {
@@ -262,10 +259,7 @@ export class StringUtils {
    * @example StringUtils.equal("abc", "AbC")            = true
    */
   public static equalsIgnoreCase(str1: string, str2: string): boolean {
-    if (
-      !ObjectUtils.isNullOrUndefined(str1) &&
-      !ObjectUtils.isNullOrUndefined(str2)
-    ) {
+    if (!ObjectUtils.isNullOrUndefined(str1) && !ObjectUtils.isNullOrUndefined(str2)) {
       return str1.toLocaleLowerCase() === str2.toLocaleLowerCase();
     }
     if (ObjectUtils.isNull(str1) && ObjectUtils.isNull(str2)) {
@@ -290,16 +284,11 @@ export class StringUtils {
    * @example StringUtils.indexOf("aabaabaa", 'b', 3) = 5
    * @example StringUtils.indexOf("aabaabaa", '') = 0
    */
-  public static indexOf(
-    str: string,
-    searchStr: string,
-    startPos?: number
-  ): number {
+  public static indexOf(str: string, searchStr: string, startPos?: number): number {
     if (
       ObjectUtils.isNullOrUndefined(str) ||
       ObjectUtils.isNullOrUndefined(searchStr) ||
-      (!ObjectUtils.isUndefined(startPos) &&
-        !NumberUtils.isSafeInteger(startPos))
+      (!ObjectUtils.isUndefined(startPos) && !NumberUtils.isSafeInteger(startPos))
     ) {
       return this.INDEX_NOT_FOUND;
     }
@@ -317,22 +306,15 @@ export class StringUtils {
    * @example StringUtils.lastIndexOf("aabaabaa", "b");      =5
    * @example StringUtils.lastIndexOf("aabaabaa", "b", 4);   =2
    */
-  public static lastIndexOf(
-    str: string,
-    searchStr: string,
-    position?: number
-  ): number {
+  public static lastIndexOf(str: string, searchStr: string, position?: number): number {
     if (
       ObjectUtils.isNullOrUndefined(str) ||
       ObjectUtils.isNullOrUndefined(searchStr) ||
-      (!ObjectUtils.isUndefined(position) &&
-        !NumberUtils.isSafeInteger(position))
+      (!ObjectUtils.isUndefined(position) && !NumberUtils.isSafeInteger(position))
     ) {
       return this.INDEX_NOT_FOUND;
     }
-    const usePosition = ObjectUtils.isUndefined(position)
-      ? str.length - 1
-      : position;
+    const usePosition = ObjectUtils.isUndefined(position) ? str.length - 1 : position;
     return str.lastIndexOf(searchStr, usePosition);
   }
 
@@ -356,9 +338,7 @@ export class StringUtils {
    */
   public static containsIgnoreCase(str: string, searchStr: string): boolean {
     if (ObjectUtils.isString(str) && ObjectUtils.isString(searchStr)) {
-      return (
-        str.toLocaleLowerCase().indexOf(searchStr.toLocaleLowerCase()) >= 0
-      );
+      return str.toLocaleLowerCase().indexOf(searchStr.toLocaleLowerCase()) >= 0;
     } else {
       return false;
     }
@@ -370,7 +350,7 @@ export class StringUtils {
    * @param start
    * @param end
    */
-  public static subString(str: string, start: number, end?: number): string|null {
+  public static subString(str: string, start: number, end?: number): string | null {
     if (
       !ObjectUtils.isString(str) ||
       !NumberUtils.isSafeInteger(start) ||
@@ -449,7 +429,7 @@ export class StringUtils {
    * @param ch
    */
   public static isWhitespace(ch: string): boolean {
-    return " \f\n\r\t\v\u00A0\u2028\u2029".indexOf(ch) > -1;
+    return ' \f\n\r\t\v\u00A0\u2028\u2029'.indexOf(ch) > -1;
   }
 
   /**
@@ -459,13 +439,13 @@ export class StringUtils {
     return (
       this.S4() +
       this.S4() +
-      "-" +
+      '-' +
       this.S4() +
-      "-" +
+      '-' +
       this.S4() +
-      "-" +
+      '-' +
       this.S4() +
-      "-" +
+      '-' +
       this.S4() +
       this.S4() +
       this.S4()
@@ -506,9 +486,9 @@ export class StringUtils {
     }
 
     return String(str)
-      .replace(/^[^A-Za-z0-9]*|[^A-Za-z0-9]*$/g, "")
-      .replace(/([a-z])([A-Z])/g, (m, a, b) => a + "_" + b.toLowerCase())
-      .replace(/[^A-Za-z0-9]+|_+/g, "_")
+      .replace(/^[^A-Za-z0-9]*|[^A-Za-z0-9]*$/g, '')
+      .replace(/([a-z])([A-Z])/g, (m, a, b) => a + '_' + b.toLowerCase())
+      .replace(/[^A-Za-z0-9]+|_+/g, '_')
       .toLowerCase();
   }
 
@@ -518,11 +498,7 @@ export class StringUtils {
    * @example StringUtils.replaceAll(" ", " ", "a")    = "a";
    * @example StringUtils.replaceAll("aa", "a", "b")    = "bb";
    */
-  public static replaceAll(
-    str: string,
-    searchValue: string,
-    replacer: string
-  ): string {
+  public static replaceAll(str: string, searchValue: string, replacer: string): string {
     if (
       !ObjectUtils.isString(str) ||
       !ObjectUtils.isString(searchValue) ||
@@ -531,10 +507,7 @@ export class StringUtils {
       return str;
     }
 
-    return str.replace(
-      new RegExp(this.escapeRegExp(searchValue), "g"),
-      replacer
-    );
+    return str.replace(new RegExp(this.escapeRegExp(searchValue), 'g'), replacer);
   }
 
   /**
@@ -556,8 +529,7 @@ export class StringUtils {
     return array.map(item => String(item)).join(useSeparator);
   }
 
-
   private static escapeRegExp(str: string): string {
-    return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+    return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1');
   }
 }

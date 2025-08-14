@@ -1,5 +1,5 @@
-import { NumberUtils } from "./number.utils";
-import { ObjectUtils } from "./object.utils";
+import { NumberUtils } from './number.utils';
+import { ObjectUtils } from './object.utils';
 
 export class ArrayUtils {
   /**
@@ -19,7 +19,7 @@ export class ArrayUtils {
       return true;
     }
     if (!ObjectUtils.isArray(array)) {
-      throw new Error("input parameter is not a array or null/undefined");
+      throw new Error('input parameter is not a array or null/undefined');
     }
 
     return array.length === 0;
@@ -119,11 +119,7 @@ export class ArrayUtils {
    * @example ArrayUtils.insert([1, 2], 100, 4) = false // greater than array.length.
    */
   public static insert<T>(array: T[], index: number, item: T): boolean {
-    if (
-      !ObjectUtils.isArray(array) ||
-      !NumberUtils.isSafeInteger(index) ||
-      index > array.length
-    ) {
+    if (!ObjectUtils.isArray(array) || !NumberUtils.isSafeInteger(index) || index > array.length) {
       return false;
     }
     const oldCount = array.length;

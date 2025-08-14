@@ -1,5 +1,5 @@
-import { TIME_OF_DAY } from "./../models/date.type";
-import { ObjectUtils } from "./object.utils";
+import { TIME_OF_DAY } from './../models/date.type';
+import { ObjectUtils } from './object.utils';
 
 export class DateUtils {
   private static timeFormatRegex = /yyyy|yy|MM|M|dd|d|HH|H|mm|m|ss|s|SSS|S/g;
@@ -102,7 +102,6 @@ export class DateUtils {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   }
 
-
   /**
    * Returns the number of milliseconds that have elapsed since 1970-01-01T00:00:00.000Z.
    * @param date
@@ -161,7 +160,7 @@ export class DateUtils {
     }
 
     return format.replace(this.timeFormatRegex, matched =>
-      this.getTimeFormat(false, date, matched)
+      this.getTimeFormat(false, date, matched),
     );
   }
 
@@ -189,9 +188,7 @@ export class DateUtils {
     if (!this.isValid(date)) {
       return '';
     }
-    return format.replace(this.timeFormatRegex, matched =>
-      this.getTimeFormat(true, date, matched)
-    );
+    return format.replace(this.timeFormatRegex, matched => this.getTimeFormat(true, date, matched));
   }
 
   /**
@@ -225,7 +222,11 @@ export class DateUtils {
    * @example TimestampUtils.isInTimeRange(new Date(2023, 0, 1, 10, 30, 0), { hour: 9, minute: 0, second: 0 }, { hour: 11, minute: 0, second: 0 }) = true
    * @example TimestampUtils.isInTimeRange(new Date(2023, 0, 1, 23, 30, 0), { hour: 23, minute: 0, second: 0 }, { hour: 1, minute: 0, second: 0 }) = true
    */
-  public static isInTimeRange<T extends TIME_OF_DAY>(date: Date, startTime: T, endTime: T): boolean {
+  public static isInTimeRange<T extends TIME_OF_DAY>(
+    date: Date,
+    startTime: T,
+    endTime: T,
+  ): boolean {
     const currentSeconds = date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds();
     const startSeconds = startTime.hour * 3600 + startTime.minute * 60 + startTime.second;
     const endSeconds = endTime.hour * 3600 + endTime.minute * 60 + endTime.second;
@@ -247,7 +248,11 @@ export class DateUtils {
    * @example DateUtils.isSame(new Date(2024, 0, 1), new Date(2024, 0, 1), 'day') = true
    * @example DateUtils.isSame(new Date(2024, 0, 1), new Date(2024, 0, 2), 'year') = true
    */
-  public static isSame(date1: Date, date2: Date, unit?: 'year' | 'month' | 'day' | 'hour' | 'minute' | 'second' | 'millisecond'): boolean {
+  public static isSame(
+    date1: Date,
+    date2: Date,
+    unit?: 'year' | 'month' | 'day' | 'hour' | 'minute' | 'second' | 'millisecond',
+  ): boolean {
     if (ObjectUtils.isNullOrUndefined(date1) || ObjectUtils.isNullOrUndefined(date2)) {
       return false;
     }
@@ -260,30 +265,37 @@ export class DateUtils {
       case 'year':
         return date1.getFullYear() === date2.getFullYear();
       case 'month':
-        return date1.getFullYear() === date2.getFullYear() &&
-          date1.getMonth() === date2.getMonth();
+        return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
       case 'day':
-        return date1.getFullYear() === date2.getFullYear() &&
+        return (
+          date1.getFullYear() === date2.getFullYear() &&
           date1.getMonth() === date2.getMonth() &&
-          date1.getDate() === date2.getDate();
+          date1.getDate() === date2.getDate()
+        );
       case 'hour':
-        return date1.getFullYear() === date2.getFullYear() &&
+        return (
+          date1.getFullYear() === date2.getFullYear() &&
           date1.getMonth() === date2.getMonth() &&
           date1.getDate() === date2.getDate() &&
-          date1.getHours() === date2.getHours();
+          date1.getHours() === date2.getHours()
+        );
       case 'minute':
-        return date1.getFullYear() === date2.getFullYear() &&
+        return (
+          date1.getFullYear() === date2.getFullYear() &&
           date1.getMonth() === date2.getMonth() &&
           date1.getDate() === date2.getDate() &&
           date1.getHours() === date2.getHours() &&
-          date1.getMinutes() === date2.getMinutes();
+          date1.getMinutes() === date2.getMinutes()
+        );
       case 'second':
-        return date1.getFullYear() === date2.getFullYear() &&
+        return (
+          date1.getFullYear() === date2.getFullYear() &&
           date1.getMonth() === date2.getMonth() &&
           date1.getDate() === date2.getDate() &&
           date1.getHours() === date2.getHours() &&
           date1.getMinutes() === date2.getMinutes() &&
-          date1.getSeconds() === date2.getSeconds();
+          date1.getSeconds() === date2.getSeconds()
+        );
       case 'millisecond':
         return date1.getTime() === date2.getTime();
       default:
@@ -309,18 +321,12 @@ export class DateUtils {
     return !isNaN(date.getTime());
   }
 
-  private static getTimeFormat(
-    isUTC: boolean,
-    date: Date,
-    formatKey: string
-  ): string {
+  private static getTimeFormat(isUTC: boolean, date: Date, formatKey: string): string {
     switch (formatKey) {
       case 'yyyy':
         return (isUTC ? date.getUTCFullYear() : date.getFullYear()).toString();
       case 'yy':
-        return (isUTC ? date.getUTCFullYear() : date.getFullYear())
-          .toString()
-          .slice(2);
+        return (isUTC ? date.getUTCFullYear() : date.getFullYear()).toString().slice(2);
       case 'MM':
         const month = isUTC ? date.getUTCMonth() + 1 : date.getMonth() + 1;
         return month >= 10 ? month.toString() : `0${month}`;
@@ -347,9 +353,7 @@ export class DateUtils {
       case 's':
         return (isUTC ? date.getUTCSeconds() : date.getSeconds()).toString();
       case 'SSS':
-        const milliseconds = isUTC
-          ? date.getUTCMilliseconds()
-          : date.getMilliseconds();
+        const milliseconds = isUTC ? date.getUTCMilliseconds() : date.getMilliseconds();
         return milliseconds >= 100
           ? milliseconds.toString()
           : milliseconds >= 10
