@@ -1,6 +1,6 @@
 {
   "name": "acontplus-core",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Core utilities, services, and models for Angular applications",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,json,md}\"",
@@ -27,14 +27,14 @@
     }
   },
   "sideEffects": false,
-  "main": "index.js",
-  "module": "index.js",
+  "main": "fesm2022/acontplus-core.mjs",
+  "module": "fesm2022/acontplus-core.mjs",
   "typings": "index.d.ts",
   "files": [
-    "index.js",
     "index.d.ts",
     "*.d.ts",
-    "**/*.d.ts"
+    "**/*.d.ts",
+    "fesm2022/**/*"
   ],
   "engines": {
     "node": ">=18.0.0"

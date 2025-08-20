@@ -1,6 +1,6 @@
 {
   "name": "acontplus-ui-components",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,js,html,css,scss,json,md}\"",
@@ -9,22 +9,26 @@
   "dependencies": {
     "tslib": "^2.8.1"
   },
+  "peerDependencies": {
+    "@angular/common": "^20.0.0",
+    "@angular/core": "^20.0.0",
+    "@angular/material": "^20.0.0",
+    "@angular/cdk": "^20.0.0"
+  },
   "exports": {
-    ".": {
-      "sass": "./styles/index.scss"
-    },
     "./styles": "./styles/_index.scss",
     "./styles/buttons": "./styles/_custom-buttons.scss",
     "./styles/dialog": "./styles/_custom-dialog.scss",
     "./styles/snackbar": "./styles/_snackbar-theme.scss"
   },
-  "sassExports": {
-    "./styles": "./styles/_index.scss",
-    "./styles/buttons": "./styles/_custom-buttons.scss",
-    "./styles/dialog": "./styles/_custom-dialog.scss",
-    "./styles/snackbar": "./styles/_snackbar-theme.scss"
-  },
-  "sideEffects": false,
+
+  "sideEffects": [
+    "**/*.scss",
+    "**/*.css"
+  ],
+  "main": "fesm2022/acontplus-ui-components.mjs",
+  "module": "fesm2022/acontplus-ui-components.mjs",
+  "typings": "index.d.ts",
   "keywords": [
     "acontplus",
     "components",
@@ -42,7 +46,6 @@
     "url": "https://github.com/Acontplus-S-A-S/acontplus-libs/issues"
   },
   "homepage": "https://github.com/Acontplus-S-A-S/acontplus-libs#readme",
-  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Acontplus-S-A-S/acontplus-libs.git"
