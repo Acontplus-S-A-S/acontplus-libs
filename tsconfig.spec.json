@@ -1,0 +1,30 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/spec",
+    "types": ["jest", "node"],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "noImplicitReturns": false,
+    "noUnusedParameters": false,
+    "noUnusedLocals": false,
+    "exactOptionalPropertyTypes": false,
+    "noImplicitOverride": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "noUncheckedIndexedAccess": false,
+    "skipLibCheck": true
+  },
+  "include": [
+    "projects/**/src/**/*.spec.ts",
+    "projects/**/src/**/*.test.ts",
+    "projects/**/src/**/*.d.ts",
+    "setup-jest.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

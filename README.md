@@ -59,7 +59,9 @@ npm start
 
 - `npm run build` - Build all projects
 - `npm run build-library` - Build core and UI component libraries
-- `npm run test` - Run tests for all projects
+- `npm run test` - Run Jest tests for all projects
+- `npm run test:watch` - Run Jest tests in watch mode
+- `npm run test:coverage` - Run Jest tests with coverage report
 - `npm run lint` - Lint all projects
 - `npm run lint:fix` - Lint and auto-fix issues
 - `npm run format` - Format all code with Prettier
@@ -150,6 +152,9 @@ acontplus-libs/
 │   ├── api-response-handling.md # API handling guide
 │   ├── style-guide.md          # Design system guidelines
 │   └── linting-and-formatting-setup.md # Development setup
+├── jest.config.js              # Jest testing configuration
+├── setup-jest.ts               # Jest setup and mocks
+├── tsconfig.spec.json          # TypeScript configuration for tests
 ├── .eslintrc.js                # ESLint configuration
 ├── .prettierrc                 # Prettier configuration
 ├── .editorconfig               # Editor configuration
@@ -157,6 +162,14 @@ acontplus-libs/
 ```
 
 ## 🔧 Configuration Files
+
+### Jest (jest.config.js)
+
+- Angular testing with jest-preset-angular
+- JSDOM environment for component testing
+- Module name mapping for library imports
+- Coverage reporting configuration
+- TypeScript support via ts-jest
 
 ### ESLint (eslint.config.js)
 
@@ -181,15 +194,49 @@ acontplus-libs/
 
 ## 🧪 Testing
 
+This project uses **Jest** as the test runner for fast, reliable testing with excellent Angular support.
+
+### Running Tests
+
 ```bash
 # Run all tests
 npm run test
 
+# Run tests in watch mode (automatically re-runs on file changes)
+npm run test:watch
+
+# Run tests with coverage report
+npm run test:coverage
+
+# Run specific test file
+npm test -- --testPathPattern="component-name.spec.ts"
+
 # Run tests for specific project
-ng test acontplus-core
-ng test acontplus-ui-components
-ng test test-app
+npm test -- --testPathPattern="acontplus-core"
+npm test -- --testPathPattern="acontplus-ui-components" 
+npm test -- --testPathPattern="test-app"
 ```
+
+### Jest Configuration
+
+- **Configuration**: `jest.config.js` - Main Jest configuration
+- **Setup**: `setup-jest.ts` - Jest setup and mocks
+- **TypeScript**: `tsconfig.spec.json` - TypeScript configuration for tests
+- **Environment**: Uses `jsdom` environment for Angular component testing
+- **Module Resolution**: Configured to resolve library imports (`@acontplus-core`, `@acontplus-ui-components`)
+
+### Test File Patterns
+
+Jest automatically discovers test files matching these patterns:
+- `**/__tests__/**/*.ts`
+- `**/?(*.)+(spec|test).ts`
+
+### Coverage Reports
+
+Coverage reports are generated in the `coverage/` directory with:
+- **Text summary** in terminal
+- **HTML report** for detailed coverage analysis  
+- **LCOV format** for CI/CD integration
 
 ## 📦 Building
 
@@ -253,10 +300,16 @@ npm run lint
 # 5. Fix auto-fixable issues
 npm run lint:fix
 
-# 6. Run tests
+# 6. Run tests with Jest
 npm run test
 
-# 7. Build to verify
+# 7. Run tests in watch mode during development (optional)
+npm run test:watch
+
+# 8. Generate coverage report (optional)
+npm run test:coverage
+
+# 9. Build to verify
 npm run build-library
 ```
 
