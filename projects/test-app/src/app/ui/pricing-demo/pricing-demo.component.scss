@@ -1,0 +1,19 @@
+.demo-container {
+  display: grid;
+  grid-gap: 1rem;
+  padding: 1rem;
+}
+
+mat-card {
+  padding: 1rem;
+}
+
+mat-form-field {
+  margin-right: 1rem;
+  width: 200px;
+}
+
+.d-grid {
+  display: grid;
+  gap: 2px;
+}
