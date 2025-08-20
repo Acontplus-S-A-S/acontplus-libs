@@ -8,6 +8,7 @@
 @use 'acontplus-ui-components/src/styles/snackbar-theme';
 @use 'acontplus-ui-components/src/styles/custom-buttons' as buttons;
 @use 'acontplus-ui-components/src/styles/custom-dialog';
+@use 'ngx-toastr/toastr';
 
 // Include Angular Material Core foundational styles
 @include mat.core();
