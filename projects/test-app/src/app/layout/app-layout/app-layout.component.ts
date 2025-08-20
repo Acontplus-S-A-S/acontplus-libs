@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MenuItemList, menuItems } from './menu-items';
+import { ToastrNotificationService } from '@acontplus-core';
 
 @Component({
   selector: 'app-app-layout',
@@ -27,7 +28,8 @@ import { MenuItemList, menuItems } from './menu-items';
   templateUrl: './app-layout.component.html',
   styleUrl: './app-layout.component.scss',
 })
-export class AppLayoutComponent {
+export class AppLayoutComponent implements OnInit {
+  private readonly tS = inject(ToastrNotificationService);
   private breakpointObserver = inject(BreakpointObserver);
   menuItems = signal<MenuItemList[]>(menuItems);
 
@@ -35,4 +37,8 @@ export class AppLayoutComponent {
     map(result => result.matches),
     shareReplay(),
   );
+
+  ngOnInit() {
+    this.tS.success({ message: 'AppLayoutComponent initialized' });
+  }
 }
