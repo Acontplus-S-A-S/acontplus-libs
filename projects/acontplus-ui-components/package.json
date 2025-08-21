@@ -1,6 +1,6 @@
 {
   "name": "acontplus-ui-components",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,js,html,css,scss,json,md}\"",

@@ -6,6 +6,7 @@ import { TablesComponent } from '../../ui/tables/tables.component';
 import { UtilsComponent } from '../../ui/utils/utils.component';
 import { PricingDemoComponent } from '../../ui/pricing-demo/pricing-demo.component';
 import { ProductComponent } from '../../ui/pages/product/product.component';
+import { UserComponent } from '../../ui/pages/user/user.component';
 
 export interface MenuItemList {
   icon: string;
@@ -27,5 +28,11 @@ export const menuItems: MenuItemList[] = [
     label: 'Autocomplete',
     route: 'autocomplete',
     component: AutocompleteComponent,
+  },
+  {
+    icon: 'admin_panel_settings',
+    label: 'Users',
+    route: 'users',
+    component: UserComponent,
   },
 ];

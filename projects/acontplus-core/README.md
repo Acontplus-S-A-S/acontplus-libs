@@ -1,16 +1,30 @@
-# AcontplusCore
+# Acontplus Core
 
-A comprehensive core library for Angular applications providing utilities, services, interceptors, models, and more. This library implements **enterprise-grade architecture patterns** for building scalable, maintainable Angular applications.
+A comprehensive core library for Angular applications providing utilities, services, interceptors, models, and more. This library implements **enterprise-grade architecture patterns** for building scalable, maintainable Angular applications with **flexible, optional-based patterns**.
 
 ## 🚀 **Enterprise Features**
 
 - **Clean Architecture**: Proper separation of concerns with distinct layers
-- **CQRS Pattern**: Command Query Responsibility Segregation implementation
-- **Repository Pattern**: Generic, extensible data access layer
-- **Use Case Pattern**: Business logic components with validation and authorization
+- **CQRS Pattern**: Command Query Responsibility Segregation implementation  
+- **Flexible Repository Pattern**: Optional CRUD methods allowing selective implementation
+- **Specialized Repository Types**: ReadOnly, WriteOnly, and Composite repositories
+- **Enhanced Use Case Pattern**: Business logic components with optional validation and authorization
+- **Composite Use Cases**: Complex operations combining multiple repositories and use cases
 - **Response Standardization**: Unified API response handling
 - **Multi-Application Support**: Designed for sharing across multiple Angular apps
 - **Modern Angular Practices**: Latest Angular patterns and best practices
+
+## 🏗️ **New Flexible Architecture**
+
+### **Key Improvements** ✨
+
+The library has been **completely refactored** to provide maximum flexibility:
+
+1. **Optional CRUD Methods**: Repositories no longer force implementation of all methods
+2. **Specialized Repository Types**: Choose the right repository for your needs
+3. **Enhanced Commands & Queries**: New specialized types for complex operations  
+4. **Composite Use Cases**: Handle complex workflows with multiple operations
+5. **Repository Factory**: Dynamic repository creation and management
 
 ## Features
 
@@ -43,11 +57,7 @@ npm install acontplus-core --save
 yarn add acontplus-core
 ```
 
-## 🏗️ **Architecture Overview**
-
-### **Repository Pattern**
-
-The library provides a modern, scalable repository pattern:
+### **BaseRepository - Now Flexible** 🔄
 
 ```typescript
 @Injectable()
@@ -56,40 +66,74 @@ export abstract class BaseRepository<T extends BaseEntity> {
   protected abstract entityName: string;
   protected abstract baseUrl: string;
 
-  // Standard CRUD operations with pagination and filtering
-  abstract getAll(
-    pagination: PaginationParams,
-    filters?: FilterParams,
-  ): Observable<PaginatedResult<T>>;
-  abstract getById(id: number): Observable<T>;
-  abstract create(entity: Omit<T, 'id'>): Observable<T>;
-  abstract update(id: number, entity: Partial<T>): Observable<T>;
-  abstract delete(id: number): Observable<boolean>;
-  abstract search(query: string, pagination: PaginationParams): Observable<PaginatedResult<T>>;
+  // 🎯 NOW OPTIONAL - Implement only what you need!
+  getAll?(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<T>>;
+  getById?(id: number): Observable<T>;
+  create?(entity: Omit<T, 'id'>): Observable<T>;
+  update?(id: number, entity: Partial<T>): Observable<T>;
+  delete?(id: number): Observable<boolean>;
+  search?(query: string, pagination: PaginationParams): Observable<PaginatedResult<T>>;
 }
 ```
 
-### **Use Case Pattern**
+### **Specialized Repository Types** 🎯
 
-Business logic components with built-in validation and authorization:
+#### **ReadOnlyRepository**
+For read-only data access:
+
+```typescript
+@Injectable()
+export abstract class ReadOnlyRepository<T extends BaseEntity> extends BaseRepository<T> {
+  // ✅ Must implement these
+  abstract override getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<T>>;
+  abstract override getById(id: number): Observable<T>;
+  abstract override search(query: string, pagination: PaginationParams): Observable<PaginatedResult<T>>;
+  
+  // ❌ Write operations throw errors
+  override create(): never { throw new Error('Create operation not supported'); }
+  override update(): never { throw new Error('Update operation not supported'); }
+  override delete(): never { throw new Error('Delete operation not supported'); }
+}
+```
+
+#### **WriteOnlyRepository**
+For write-only data access:
+
+```typescript
+@Injectable()
+export abstract class WriteOnlyRepository<T extends BaseEntity> extends BaseRepository<T> {
+  // ✅ Must implement these
+  abstract override create(entity: Omit<T, 'id'>): Observable<T>;
+  abstract override update(id: number, entity: Partial<T>): Observable<T>;
+  abstract override delete(id: number): Observable<boolean>;
+  
+  // ❌ Read operations throw errors
+  override getAll(): never { throw new Error('Read operations not supported'); }
+  override getById(): never { throw new Error('Read operations not supported'); }
+  override search(): never { throw new Error('Read operations not supported'); }
+}
+```
+
+### **Enhanced Use Case Patterns** 🚀
+
+#### **BaseUseCase - Now Optional Validation**
 
 ```typescript
 @Injectable()
 export abstract class BaseUseCase<TRequest = void, TResponse = void> {
-  // Validation is now the default execution path
+  // 🎯 Direct execution - validation/authorization are now optional
   execute(request: TRequest): Observable<TResponse> {
-    return this.executeWithValidation(request);
+    return this.executeInternal(request);
   }
 
-  // Override this method in concrete classes
   protected abstract executeInternal(request: TRequest): Observable<TResponse>;
 
-  // Override for custom validation
+  // 🎯 Optional validation (empty by default)
   protected validate(request: TRequest): ValidationError[] {
     return [];
   }
 
-  // Override for authorization checks
+  // 🎯 Optional authorization (true by default)
   protected async checkAuthorization(request: TRequest): Promise<boolean> {
     return true;
   }

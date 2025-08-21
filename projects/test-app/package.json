@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "build": "ng build",
     "lint": "eslint . --config eslint.config.js",
     "lint:fix": "eslint . --config eslint.config.js --fix",
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,json,md}\"",

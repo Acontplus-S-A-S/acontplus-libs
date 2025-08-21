@@ -12,12 +12,10 @@ import {
   httpContextInterceptor,
   provideCoreConfig,
   createCoreConfig,
-  provideRepositoryRegistrations,
-  createRepositoryRegistration,
 } from '@acontplus-core';
 import { spinnerInterceptor } from '@acontplus-ui-components';
 import { provideTransloco } from '@jsverse/transloco';
-import { UserHttpRepository } from './data/user-http.repository';
+
 import { provideToastr } from 'ngx-toastr';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpContext } from '../../../acontplus-core/src/lib/interceptors';
@@ -39,10 +37,7 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
 
-    // Repository registrations
-    provideRepositoryRegistrations([
-      createRepositoryRegistration('user', UserHttpRepository, 'users', '/api/users'),
-    ]),
+
 
     provideHttpClient(
       withInterceptors([apiInterceptor, spinnerInterceptor, httpContextInterceptor]),

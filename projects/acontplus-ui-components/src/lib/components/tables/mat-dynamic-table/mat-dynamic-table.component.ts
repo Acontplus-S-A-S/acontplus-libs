@@ -1,6 +1,7 @@
 import {
   AfterContentInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ContentChild,
   ContentChildren,
@@ -39,7 +40,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { GetTotalPipe } from '../../../pipes';
-import { ColumnDefinition, Pagination, TableContext } from '../../../models';
+import { ColumnDefinition, Pagination, TableContext, TableRow } from '../../../models';
 
 @Component({
   selector: 'acp-mat-dynamic-table',
@@ -68,11 +69,12 @@ import { ColumnDefinition, Pagination, TableContext } from '../../../models';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MatDynamicTableComponent<T extends Record<string, any>>
+export class MatDynamicTableComponent<T extends TableRow>
   implements AfterContentInit, OnChanges, OnInit, OnDestroy
 {
   private componentRefs: ComponentRef<any>[] = [];
   private embeddedViews: EmbeddedViewRef<any>[] = [];
+  private cdr = inject(ChangeDetectorRef);
 
   @Input() showExpand = false;
   @Input() showFooter = false;
@@ -118,21 +120,41 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['tableData']) {
-      this.dataSource.data = this.tableData || [];
+      this.updateTableData();
     }
 
     if (changes['showExpand'] || changes['visibleColumns'] || changes['columnDefinitions']) {
       this.updateColumnsToDisplay();
     }
+
+    // Trigger change detection for OnPush strategy
+    this.cdr.markForCheck();
   }
 
   ngAfterContentInit(): void {
     this.registerTableContent();
     this.initializeTable();
+    this.cdr.markForCheck();
   }
 
   ngOnDestroy(): void {
     this.cleanupDynamicComponents();
+  }
+
+  private updateTableData(): void {
+    // Clear selection when new data arrives
+    this.selection.clear();
+
+    // Update data source
+    this.dataSource.data = this.tableData || [];
+
+    // Reset expanded element if it's no longer in the new data
+    if (this.expandedElement && !this.dataSource.data.includes(this.expandedElement)) {
+      this.expandedElement = null;
+    }
+
+    // Trigger change detection
+    this.cdr.markForCheck();
   }
 
   private updateColumnsToDisplay(): void {
@@ -200,7 +222,7 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
   isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    return numSelected === numRows && numRows > 0;
   }
 
   masterToggle(): void {
@@ -208,6 +230,7 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
       ? this.selection.clear()
       : this.dataSource.data.forEach(row => this.selection.select(row));
     this.rowSelected.emit(this.selection.selected);
+    this.cdr.markForCheck();
   }
 
   checkboxLabel(row?: T): string {
@@ -220,16 +243,18 @@ export class MatDynamicTableComponent<T extends Record<string, any>>
   selectRow(row: T): void {
     this.selection.toggle(row);
     this.rowSelected.emit(this.selection.selected);
+    this.cdr.markForCheck();
   }
 
   onExpand(event: Event, element: T): void {
     event.stopPropagation();
     this.expandedElement = this.expandedElement === element ? null : element;
     this.expandedElement ? this.showExpanded.emit(element) : this.hideExpanded.emit(element);
+    this.cdr.markForCheck();
   }
 
   getRowColor(element: T): Record<string, string> {
-    return element['colorRow'] ? { 'background-color': element['colorRow '] } : {};
+    return element.colorRow ? { 'background-color': element.colorRow } : {};
   }
 
   handlePageEvent(e: PageEvent): void {
