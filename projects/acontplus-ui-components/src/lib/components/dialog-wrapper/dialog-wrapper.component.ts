@@ -7,7 +7,7 @@ import {
   ElementRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,7 +32,7 @@ import { DialogWrapperConfig } from '../../services';
 @Component({
   selector: 'acp-dialog-wrapper',
   standalone: true,
-  imports: [CommonModule, CdkDrag, CdkDragHandle, MatDialogModule, MatIconModule, MatButtonModule],
+  imports: [CdkDrag, CdkDragHandle, MatDialogModule, MatIconModule, MatButtonModule],
   templateUrl: './dialog-wrapper.component.html',
   styleUrls: ['./dialog-wrapper.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

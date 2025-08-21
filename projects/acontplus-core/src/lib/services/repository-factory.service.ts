@@ -1,182 +1,158 @@
-import { Injectable, Type, InjectionToken, inject, Optional } from '@angular/core';
-import { BaseRepository } from '../repositories/base.repository';
+import { Injectable, Type } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BaseRepository, ReadOnlyRepository, WriteOnlyRepository } from '../repositories';
 import { BaseEntity } from '../models';
+import { Observable } from 'rxjs';
 
-// Interface for repository registration
-export interface RepositoryRegistration<T extends BaseEntity> {
-  key: string;
-  repository: Type<BaseRepository<T>>;
+export interface RepositoryConfig<T extends BaseRepository<any>> {
+  type: Type<T>;
   entityName: string;
-  baseUrl?: string;
+  baseUrl: string;
+  options?: {
+    enableCaching?: boolean;
+    enableAuditing?: boolean;
+    customInterceptors?: any[];
+  };
 }
 
-// Injection token for repository registrations
-export const REPOSITORY_REGISTRATIONS = new InjectionToken<RepositoryRegistration<any>[]>(
-  'REPOSITORY_REGISTRATIONS',
-  {
-    factory: () => [],
-  },
-);
-
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class RepositoryFactory {
+export class RepositoryFactoryService {
   private repositories = new Map<string, BaseRepository<any>>();
-  private registrations = inject(REPOSITORY_REGISTRATIONS, { optional: true }) || [];
+
+  constructor(private http: HttpClient) {}
 
   /**
-   * Register a repository with the factory
+   * Create a full CRUD repository
    */
-  register<T extends BaseEntity>(
-    key: string,
-    repository: Type<BaseRepository<T>>,
-    entityName: string,
-    baseUrl?: string,
-  ): void {
-    // Check if already registered
+  createFullRepository<T extends BaseRepository<any>>(
+    config: RepositoryConfig<T>
+  ): T {
+    const key = `${config.type.name}_${config.entityName}`;
+
     if (this.repositories.has(key)) {
-      console.warn(`Repository with key '${key}' is already registered. Overwriting...`);
+      return this.repositories.get(key) as T;
     }
 
-    // Create and store the repository instance
-    const repositoryInstance = new repository();
+    const repository = new config.type();
+    // Set required properties
+    (repository as any).entityName = config.entityName;
+    (repository as any).baseUrl = config.baseUrl;
+    (repository as any).http = this.http;
 
-    // Set entity name and base URL if provided
-    if (entityName) {
-      (repositoryInstance as any).entityName = entityName;
-    }
-    if (baseUrl) {
-      (repositoryInstance as any).baseUrl = baseUrl;
-    }
-
-    this.repositories.set(key, repositoryInstance);
-  }
-
-  /**
-   * Get a repository by key
-   */
-  get<T extends BaseEntity>(key: string): BaseRepository<T> | undefined {
-    return this.repositories.get(key);
-  }
-
-  /**
-   * Get a repository by key, throwing an error if not found
-   */
-  getRequired<T extends BaseEntity>(key: string): BaseRepository<T> {
-    const repository = this.get<T>(key);
-    if (!repository) {
-      throw new Error(`Repository with key '${key}' not found. Make sure it's registered.`);
-    }
+    this.repositories.set(key, repository);
     return repository;
   }
 
   /**
-   * Check if a repository is registered
+   * Create a read-only repository
    */
-  has(key: string): boolean {
-    return this.repositories.has(key);
+  createReadOnlyRepository<T extends BaseEntity>(
+    entityName: string,
+    baseUrl: string
+  ): ReadOnlyRepository<T> {
+    const key = `ReadOnly_${entityName}`;
+
+    if (this.repositories.has(key)) {
+      return this.repositories.get(key) as ReadOnlyRepository<T>;
+    }
+
+    const repository = new (class extends ReadOnlyRepository<T> {
+      protected entityName = entityName;
+      protected baseUrl = baseUrl;
+
+      override getAll(pagination: any, filters?: any): Observable<any> {
+        throw new Error('Method not implemented.');
+      }
+
+      override getById(id: number): Observable<T> {
+        throw new Error('Method not implemented.');
+      }
+
+      override search(query: string, pagination: any): Observable<any> {
+        throw new Error('Method not implemented.');
+      }
+    })();
+
+    (repository as any).http = this.http;
+    this.repositories.set(key, repository);
+    return repository;
   }
 
   /**
-   * Get all registered repository keys
+   * Create a write-only repository
    */
-  getRegisteredKeys(): string[] {
-    return Array.from(this.repositories.keys());
+  createWriteOnlyRepository<T extends BaseEntity>(
+    entityName: string,
+    baseUrl: string
+  ): WriteOnlyRepository<T> {
+    const key = `WriteOnly_${entityName}`;
+
+    if (this.repositories.has(key)) {
+      return this.repositories.get(key) as WriteOnlyRepository<T>;
+    }
+
+    const repository = new (class extends WriteOnlyRepository<T> {
+      protected entityName = entityName;
+      protected baseUrl = baseUrl;
+
+      override create(entity: Omit<T, 'id'>): Observable<T> {
+        throw new Error('Method not implemented.');
+      }
+
+      override update(id: number, entity: Partial<T>): Observable<T> {
+        throw new Error('Method not implemented.');
+      }
+
+      override delete(id: number): Observable<boolean> {
+        throw new Error('Method not implemented.');
+      }
+    })();
+
+    (repository as any).http = this.http;
+    this.repositories.set(key, repository);
+    return repository;
   }
 
   /**
-   * Get all registered repositories
+   * Create a custom repository with specific operations
    */
-  getAllRepositories(): Map<string, BaseRepository<any>> {
-    return new Map(this.repositories);
+  createCustomRepository<T extends BaseEntity>(
+    entityName: string,
+    baseUrl: string,
+    operations: Partial<BaseRepository<T>>
+  ): BaseRepository<T> {
+    const key = `Custom_${entityName}`;
+
+    if (this.repositories.has(key)) {
+      return this.repositories.get(key) as BaseRepository<T>;
+    }
+
+    const repository = new (class extends BaseRepository<T> {
+      protected entityName = entityName;
+      protected baseUrl = baseUrl;
+    })();
+
+    // Override with custom operations
+    Object.assign(repository, operations);
+    (repository as any).http = this.http;
+
+    this.repositories.set(key, repository);
+    return repository;
   }
 
   /**
-   * Unregister a repository
+   * Get an existing repository by key
    */
-  unregister(key: string): boolean {
-    return this.repositories.delete(key);
+  getRepository<T extends BaseRepository<any>>(key: string): T | undefined {
+    return this.repositories.get(key) as T;
   }
 
   /**
-   * Clear all repositories
+   * Clear all repositories (useful for testing)
    */
-  clear(): void {
+  clearRepositories(): void {
     this.repositories.clear();
   }
-
-  /**
-   * Get repository count
-   */
-  getCount(): number {
-    return this.repositories.size;
-  }
-
-  /**
-   * Initialize repositories from registrations
-   */
-  initializeFromRegistrations(): void {
-    this.registrations.forEach(registration => {
-      this.register(
-        registration.key,
-        registration.repository,
-        registration.entityName,
-        registration.baseUrl,
-      );
-    });
-  }
-
-  /**
-   * Get repository by entity type
-   */
-  getByEntityType<T extends BaseEntity>(entityType: new () => T): BaseRepository<T> | undefined {
-    const entityName = new entityType().constructor.name;
-
-    for (const [key, repository] of this.repositories) {
-      if ((repository as any).entityName === entityName) {
-        return repository as BaseRepository<T>;
-      }
-    }
-
-    return undefined;
-  }
-
-  /**
-   * Get repository by entity name
-   */
-  getByEntityName<T extends BaseEntity>(entityName: string): BaseRepository<T> | undefined {
-    for (const [key, repository] of this.repositories) {
-      if ((repository as any).entityName === entityName) {
-        return repository as BaseRepository<T>;
-      }
-    }
-
-    return undefined;
-  }
-}
-
-// Provider function for easy setup
-export function provideRepositoryRegistrations(registrations: RepositoryRegistration<any>[]) {
-  return [
-    {
-      provide: REPOSITORY_REGISTRATIONS,
-      useValue: registrations,
-    },
-  ];
-}
-
-// Helper function to create repository registration
-export function createRepositoryRegistration<T extends BaseEntity>(
-  key: string,
-  repository: Type<BaseRepository<T>>,
-  entityName: string,
-  baseUrl?: string,
-): RepositoryRegistration<T> {
-  return {
-    key,
-    repository,
-    entityName,
-    baseUrl,
-  };
 }

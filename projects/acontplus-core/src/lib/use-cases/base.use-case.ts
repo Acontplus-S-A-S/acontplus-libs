@@ -10,23 +10,21 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
   protected responseHandler = new ResponseHandlerService();
   protected loggingService = inject(LoggingService);
 
-  // Main execution method - now uses validation by default
+  // Main execution method - can be overridden for custom behavior
   execute(request: TRequest): Observable<TResponse> {
-    return this.executeWithValidation(request);
+    return this.executeInternal(request);
   }
 
   // Internal execution method - override this in concrete classes
   protected abstract executeInternal(request: TRequest): Observable<TResponse>;
 
-  // Helper method for validation
+  // Optional validation - override only when needed
   protected validate(request: TRequest): ValidationError[] {
-    // Override in concrete classes for specific validation
     return [];
   }
 
-  // Helper method for authorization checks
+  // Optional authorization - override only when needed
   protected async checkAuthorization(request: TRequest): Promise<boolean> {
-    // Override in concrete classes for specific authorization
     return true;
   }
 
@@ -100,7 +98,7 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
     };
   }
 
-  // Execute with validation and error handling wrapper
+  // Execute with validation and error handling wrapper - optional
   protected executeWithValidation(request: TRequest): Observable<TResponse> {
     return new Observable<TResponse>(observer => {
       // Pre-execution validation
@@ -145,7 +143,7 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
   }
 
   // Centralized error handling that maps to ApiResponse structure
-  private handleError(error: any): UseCaseResult<any> {
+  protected handleError(error: any): UseCaseResult<any> {
     // If it's already an ApiResponse structure, return as is
     if (error?.status && ['success', 'error', 'warning'].includes(error.status)) {
       return error;
