@@ -35,14 +35,9 @@
     "@angular/platform-browser-dynamic": "^20.2.0",
     "@angular/router": "^20.2.0",
     "@jsverse/transloco": "^7.6.1",
-<<<<<<< HEAD
-    "acontplus-core": "file:dist/acontplus-core/acontplus-core-1.9.0.tgz",
-    "acontplus-ui-components": "file:dist/acontplus-ui-components/acontplus-ui-components-1.1.0.tgz",
-=======
-    "acontplus-core": "file:dist/acontplus-core/acontplus-core-1.2.0.tgz",
+    "acontplus-core": "file:dist/acontplus-core/acontplus-core-1.2.1.tgz",
     "acontplus-ui-components": "file:dist/acontplus-ui-components/acontplus-ui-components-1.1.0.tgz",
     "decimal.js": "^10.6.0",
->>>>>>> main
     "jwt-decode": "^4.0.0",
     "ngx-toastr": "^19.0.0",
     "rxjs": "^7.8.2",
