@@ -33,12 +33,12 @@ import { provideHttpContext } from '../../../acontplus-core/src/lib/interceptors
 export function initHttpFactory() {
   return () => {
     // Opción 1: usar Angular HttpClient Adapter
-    //  const http = inject(HttpClient);
-    // HttpClientFactory.use(new AngularHttpAdapter(http));
+     const http = inject(HttpClient);
+     HttpClientFactory.configure(new AngularHttpAdapter(http));
 
     console.log('Initializing HTTP client...');
     // Opción 2: usar FetchAdapter
-    HttpClientFactory.configure(new FetchAdapter(), 'https://jsonplaceholder.typicode.com');
+   // HttpClientFactory.configure(new FetchAdapter(), 'https://jsonplaceholder.typicode.com');
 
 
     return Promise.resolve();

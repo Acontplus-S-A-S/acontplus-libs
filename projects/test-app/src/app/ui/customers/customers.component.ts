@@ -1,6 +1,7 @@
 
 import {Component, inject, Injectable} from '@angular/core';
 import {getAllCustomerUseCase} from "@acontplus-core";
+import {from} from "rxjs";
 
 
 
@@ -14,8 +15,8 @@ import {getAllCustomerUseCase} from "@acontplus-core";
 export class CustomersComponent {
 
   ngOnInit(){
-     getAllCustomerUseCase.execute({test: 0}).then(response=>{
-       console.log(response);
+     from(getAllCustomerUseCase.execute({test: 0})).subscribe(x => {
+       console.log(x)
      })
   }
 }
