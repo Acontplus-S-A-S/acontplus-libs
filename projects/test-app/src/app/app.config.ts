@@ -1,4 +1,7 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+
+
+
+import {ApplicationConfig, provideAppInitializer, provideZoneChangeDetection} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { TranslocoHttpLoader } from './providers/transloco-loader';
 
@@ -12,15 +15,14 @@ import {
   httpContextInterceptor,
   provideCoreConfig,
   createCoreConfig,
-  provideRepositoryRegistrations,
-  createRepositoryRegistration,
 } from '@acontplus-core';
 import { spinnerInterceptor } from '@acontplus-ui-components';
 import { provideTransloco } from '@jsverse/transloco';
-import { UserHttpRepository } from './data/user-http.repository';
+
 import { provideToastr } from 'ngx-toastr';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpContext } from '../../../acontplus-core/src/lib/interceptors';
+import {initHttpFactory} from "./init-http-factory";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -38,11 +40,8 @@ export const appConfig: ApplicationConfig = {
         excludeUrls: ['/health', '/metrics'],
       }),
     ),
+    provideAppInitializer(initHttpFactory()),
 
-    // Repository registrations
-    provideRepositoryRegistrations([
-      createRepositoryRegistration('user', UserHttpRepository, 'users', '/api/users'),
-    ]),
 
     provideHttpClient(
       withInterceptors([apiInterceptor, spinnerInterceptor, httpContextInterceptor]),
