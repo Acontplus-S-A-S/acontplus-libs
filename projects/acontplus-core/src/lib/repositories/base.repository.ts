@@ -21,20 +21,33 @@ export abstract class BaseRepository<T extends BaseEntity> {
   // Abstract property for base URL - can be overridden for custom endpoints
   protected abstract baseUrl: string;
 
-  abstract getAll(
-    pagination: PaginationParams,
-    filters?: FilterParams,
-  ): Observable<PaginatedResult<T>>;
+  // Optional CRUD operations - override only what you need
+  getAll?(
+    _pagination: PaginationParams,
+    _filters?: FilterParams,
+  ): Observable<PaginatedResult<T>> {
+    throw new Error('getAll method not implemented');
+  }
 
-  abstract getById(id: number): Observable<T>;
+  getById?(_id: number): Observable<T> {
+    throw new Error('getById method not implemented');
+  }
 
-  abstract create(entity: Omit<T, 'id'>): Observable<T>;
+  create?(_entity: Omit<T, 'id'>): Observable<T> {
+    throw new Error('create method not implemented');
+  }
 
-  abstract update(id: number, entity: Partial<T>): Observable<T>;
+  update?(_id: number, _entity: Partial<T>): Observable<T> {
+    throw new Error('update method not implemented');
+  }
 
-  abstract delete(id: number): Observable<boolean>;
+  delete?(_id: number): Observable<boolean> {
+    throw new Error('delete method not implemented');
+  }
 
-  abstract search(query: string, pagination: PaginationParams): Observable<PaginatedResult<T>>;
+  search?(_query: string, _pagination: PaginationParams): Observable<PaginatedResult<T>> {
+    throw new Error('search method not implemented');
+  }
 
   // Protected helper methods for HTTP operations
   // The interceptor now handles all response standardization

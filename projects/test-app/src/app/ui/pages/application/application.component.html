@@ -1,0 +1,302 @@
+<div class="application-container">
+  <!-- Header -->
+  <mat-card class="header-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>apps</mat-icon>
+        Application Management
+      </mat-card-title>
+      <mat-card-subtitle>
+        Manage your applications, deployments, and configurations
+      </mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+
+  <!-- Statistics Dashboard -->
+  <mat-card class="stats-card">
+    <mat-card-header>
+      <mat-card-title>Application Statistics</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="stats-grid" *ngIf="stats$ | async as stats">
+        <div class="stat-item">
+          <div class="stat-number">{{ stats.total }}</div>
+          <div class="stat-label">Total Applications</div>
+        </div>
+        <div class="stat-item" *ngFor="let status of statusOptions">
+          <div class="stat-number">{{ stats.byStatus[status] || 0 }}</div>
+          <div class="stat-label">{{ status | titlecase }}</div>
+        </div>
+        <div class="stat-item" *ngFor="let env of environmentOptions">
+          <div class="stat-number">{{ stats.byEnvironment[env] || 0 }}</div>
+          <div class="stat-label">{{ env | titlecase }}</div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Search and Filters -->
+  <mat-card class="search-card">
+    <mat-card-content>
+      <form [formGroup]="searchForm" class="search-form">
+        <div class="search-row">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search Applications</mat-label>
+            <input matInput formControlName="searchQuery" placeholder="Search by name, description, or tags...">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option value="">All Statuses</mat-option>
+              <mat-option *ngFor="let status of statusOptions" [value]="status">
+                {{ status | titlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Environment</mat-label>
+            <mat-select formControlName="environment">
+              <mat-option value="">All Environments</mat-option>
+              <mat-option *ngFor="let env of environmentOptions" [value]="env">
+                {{ env | titlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Category</mat-label>
+            <input matInput formControlName="category" placeholder="Filter by category">
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Application Form -->
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>{{ selectedApplication ? 'edit' : 'add' }}</mat-icon>
+        {{ selectedApplication ? 'Edit Application' : 'Create New Application' }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="applicationForm" class="application-form">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Application Name</mat-label>
+            <input matInput formControlName="name" placeholder="Enter application name">
+            <mat-error *ngIf="applicationForm.get('name')?.hasError('required')">
+              Name is required
+            </mat-error>
+            <mat-error *ngIf="applicationForm.get('name')?.hasError('minlength')">
+              Name must be at least 3 characters
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Version</mat-label>
+            <input matInput formControlName="version" placeholder="e.g., 1.0.0">
+            <mat-error *ngIf="applicationForm.get('version')?.hasError('required')">
+              Version is required
+            </mat-error>
+            <mat-error *ngIf="applicationForm.get('version')?.hasError('pattern')">
+              Version must be in format x.y.z
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" rows="3" placeholder="Enter application description"></textarea>
+            <mat-error *ngIf="applicationForm.get('description')?.hasError('required')">
+              Description is required
+            </mat-error>
+            <mat-error *ngIf="applicationForm.get('description')?.hasError('minlength')">
+              Description must be at least 10 characters
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option *ngFor="let status of statusOptions" [value]="status">
+                {{ status | titlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Environment</mat-label>
+            <mat-select formControlName="environment">
+              <mat-option *ngFor="let env of environmentOptions" [value]="env">
+                {{ env | titlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Category</mat-label>
+            <input matInput formControlName="category" placeholder="e.g., Web App, API, Mobile">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Owner</mat-label>
+            <input matInput formControlName="owner" placeholder="Enter owner name or team">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Repository URL</mat-label>
+            <input matInput formControlName="repositoryUrl" placeholder="https://github.com/user/repo">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Documentation URL</mat-label>
+            <input matInput formControlName="documentationUrl" placeholder="https://docs.example.com">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-checkbox formControlName="isPublic" color="primary">
+            Public Application
+          </mat-checkbox>
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary"
+                  [disabled]="!applicationForm.valid || loading"
+                  (click)="selectedApplication ? onSaveUpdate() : onCreateApplication()">
+            <mat-icon>{{ selectedApplication ? 'save' : 'add' }}</mat-icon>
+            {{ selectedApplication ? 'Update Application' : 'Create Application' }}
+          </button>
+
+          <button mat-button *ngIf="selectedApplication"
+                  (click)="onCancelEdit()">
+            <mat-icon>cancel</mat-icon>
+            Cancel
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Applications Table -->
+  <mat-card class="table-card">
+    <mat-card-header>
+      <mat-card-title>Applications</mat-card-title>
+      <mat-card-subtitle>
+        {{ totalApplications }} application{{ totalApplications !== 1 ? 's' : '' }} found
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="table-container" *ngIf="!loading; else loadingSpinner">
+        <table mat-table [dataSource]="applications" matSort (matSortChange)="onSortChange($event)">
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let app"> {{ app.name }} </td>
+          </ng-container>
+
+          <!-- Version Column -->
+          <ng-container matColumnDef="version">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Version </th>
+            <td mat-cell *matCellDef="let app">
+              <span class="version-badge">{{ app.version }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+            <td mat-cell *matCellDef="let app">
+              <mat-chip [color]="getStatusColor(app.status)" selected>
+                {{ app.status | titlecase }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Environment Column -->
+          <ng-container matColumnDef="environment">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Environment </th>
+            <td mat-cell *matCellDef="let app">
+              <mat-chip [color]="getEnvironmentColor(app.environment)" selected>
+                {{ app.environment | titlecase }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Category Column -->
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+            <td mat-cell *matCellDef="let app"> {{ app.category }} </td>
+          </ng-container>
+
+          <!-- Owner Column -->
+          <ng-container matColumnDef="owner">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Owner </th>
+            <td mat-cell *matCellDef="let app"> {{ app.owner }} </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let app">
+              <div class="action-buttons">
+                <button mat-icon-button color="primary"
+                        (click)="onUpdateApplication(app)"
+                        matTooltip="Edit Application">
+                  <mat-icon>edit</mat-icon>
+                </button>
+
+                <button mat-icon-button color="accent"
+                        (click)="onDeploy(app, 'staging')"
+                        matTooltip="Deploy to Staging">
+                  <mat-icon>rocket_launch</mat-icon>
+                </button>
+
+                <button mat-icon-button color="primary"
+                        (click)="onDeploy(app, 'production')"
+                        matTooltip="Deploy to Production">
+                  <mat-icon>deployed_code</mat-icon>
+                </button>
+
+                <button mat-icon-button color="warn"
+                        (click)="onDeleteApplication(app)"
+                        matTooltip="Delete Application">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [length]="totalApplications"
+                       [pageSize]="pageSize"
+                       [pageSizeOptions]="pageSizeOptions"
+                       [pageIndex]="currentPage - 1"
+                       (page)="onPageChange($event)"
+                       showFirstLastButtons>
+        </mat-paginator>
+      </div>
+
+      <ng-template #loadingSpinner>
+        <div class="loading-container">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>Loading applications...</p>
+        </div>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+</div>
