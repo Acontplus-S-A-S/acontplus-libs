@@ -15,6 +15,141 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced TypeScript strict mode compliance
 - Additional unit test coverage
 
+## [1.2.1] - 2025-08-21
+
+### 🚀 **New Repository Patterns**
+
+#### **Read-Only Repository Pattern**
+- **NEW**: Added `ReadOnlyRepository<T>` abstract class for read-only data access
+- **NEW**: Enforces read-only operations while preventing write operations
+- **NEW**: Must implement `getAll()`, `getById()`, and `search()` methods
+- **NEW**: Write operations (`create`, `update`, `delete`) throw errors when called
+- **NEW**: Perfect for reference data, lookup tables, and read-only APIs
+
+#### **Write-Only Repository Pattern**
+- **NEW**: Added `WriteOnlyRepository<T>` abstract class for write-only data access
+- **NEW**: Enforces write operations while preventing read operations
+- **NEW**: Must implement `create()`, `update()`, and `delete()` methods
+- **NEW**: Read operations (`getAll`, `getById`, `search`) throw errors when called
+- **NEW**: Ideal for audit logs, event streams, and write-only APIs
+
+#### **Repository Factory Service**
+- **NEW**: Added `RepositoryFactoryService` for dynamic repository creation
+- **NEW**: `createReadOnlyRepository()` method for instant read-only repositories
+- **NEW**: `createWriteOnlyRepository()` method for instant write-only repositories
+- **NEW**: `createCustomRepository()` method for specialized repository patterns
+- **NEW**: Centralized repository management and caching
+
+### 🔧 **Enhanced Use Case Architecture**
+
+#### **Composite Use Case Improvements**
+- **NEW**: Enhanced `CompositeUseCase` with action-based routing
+- **NEW**: Support for complex business operations with multiple actions
+- **NEW**: Better separation of concerns for complex workflows
+- **NEW**: Improved error handling and validation flow
+
+#### **Command and Query Pattern**
+- **NEW**: Added specialized command and query classes for CQRS pattern
+- **NEW**: `CachedUsersQuery` for optimized data retrieval with caching
+- **NEW**: `ConditionalUserUpdateCommand` for conditional update operations
+- **NEW**: Better separation of read and write operations
+
+### 📚 **Enhanced Documentation and Examples**
+
+#### **Test Application Updates**
+- **NEW**: Comprehensive application management use case with 20+ operations
+- **NEW**: User management use case with advanced filtering and bulk operations
+- **NEW**: Product management use case with pricing and inventory features
+- **NEW**: Real-world examples of all repository patterns
+- **NEW**: Complete UI components demonstrating the new architecture
+
+#### **Repository Pattern Examples**
+- **NEW**: `ReadOnlyUserRepository` demonstrating read-only pattern
+- **NEW**: `WriteOnlyUserRepository` demonstrating write-only pattern
+- **NEW**: `ApplicationRepository` demonstrating flexible base repository
+- **NEW**: Mock services with realistic data for testing
+
+### 🎯 **Use Case Examples**
+
+#### **Application Management**
+- **NEW**: Create, update, delete applications with full CRUD operations
+- **NEW**: Bulk operations for multiple applications
+- **NEW**: Advanced filtering by status, environment, category, and owner
+- **NEW**: Deployment management and version control
+- **NEW**: Dependency and tag management
+- **NEW**: Statistics and reporting capabilities
+
+#### **User Management**
+- **NEW**: User CRUD operations with role-based access control
+- **NEW**: Bulk user operations (activate, deactivate, delete)
+- **NEW**: Advanced search and filtering capabilities
+- **NEW**: User statistics and analytics
+- **NEW**: Caching strategies for performance optimization
+
+#### **Product Management**
+- **NEW**: Product catalog management with categories and pricing
+- **NEW**: Inventory tracking and stock management
+- **NEW**: Bulk product operations
+- **NEW**: Advanced filtering by price range and availability
+- **NEW**: Product image and description management
+
+### 🔄 **Migration and Usage**
+
+#### **Repository Pattern Usage**
+```typescript
+// Read-only repository
+@Injectable()
+export class ReadOnlyUserRepository extends ReadOnlyRepository<User> {
+  protected entityName = 'users';
+  protected baseUrl = '/api/users';
+  
+  // Must implement these methods
+  override getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<User>>
+  override getById(id: number): Observable<User>
+  override search(query: string, pagination: PaginationParams): Observable<PaginatedResult<User>>
+}
+
+// Write-only repository
+@Injectable()
+export class WriteOnlyUserRepository extends WriteOnlyRepository<User> {
+  protected entityName = 'users';
+  protected baseUrl = '/api/users';
+  
+  // Must implement these methods
+  override create(entity: Omit<User, 'id'>): Observable<User>
+  override update(id: number, entity: Partial<User>): Observable<User>
+  override delete(id: number): Observable<boolean>
+}
+```
+
+#### **Repository Factory Usage**
+```typescript
+@Injectable()
+export class UserService {
+  constructor(private repositoryFactory: RepositoryFactoryService) {}
+  
+  getReadOnlyRepo() {
+    return this.repositoryFactory.createReadOnlyRepository<User>('users', '/api/users');
+  }
+  
+  getWriteOnlyRepo() {
+    return this.repositoryFactory.createWriteOnlyRepository<User>('users', '/api/users');
+  }
+}
+```
+
+### ⚠️ **Breaking Changes**
+
+- None in this release - all new features are additive
+
+### 🔧 **Technical Improvements**
+
+- Enhanced TypeScript generics for better type safety
+- Improved error handling with specific error types
+- Better separation of concerns in repository patterns
+- Enhanced testability with mock services
+- Improved performance with caching strategies
+
 ## [1.1.0] - 2025-08-12
 
 ### 🚀 **Major Architecture Improvements**
