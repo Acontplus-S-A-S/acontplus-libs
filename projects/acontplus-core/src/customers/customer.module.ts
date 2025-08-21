@@ -1,4 +1,4 @@
-// src/CustomerModule.ts
+// src/customer.module.ts
 import {CustomerRepository} from "./domain/repositories/CustomerRepository";
 import {HttpCustomerRepository} from "./infrastructure/repositoriess/http-customer.repository";
 import {GetAllCustomerUseCase} from "./application/use-cases/get-all-customer.use-case";

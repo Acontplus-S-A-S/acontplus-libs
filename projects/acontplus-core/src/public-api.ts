@@ -31,4 +31,4 @@ export * from './customers/application/use-cases/get-all-customer.use-case';
 export * from './customers/infrastructure/repositoriess/http-customer.repository';
 
 // Module export
-export * from './customers/CustomerModule';
+export * from './customers/customer.module';
