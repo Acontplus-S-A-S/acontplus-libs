@@ -1,9 +1,10 @@
-import { BaseUseCase } from '../../../lib/application/use-cases/base.use-case';
-import { CustomerRepository } from '../../domain/repositories/CustomerRepository';
+import { IBaseUseCase } from '../../../lib/application/use-cases/base.use-case';
+import { CustomerRepository } from '../../domain/repositories/customer.repository';
 
-export class GetAllCustomerUseCase extends BaseUseCase<any, any> {
+
+export class GetAllCustomerUseCase extends IBaseUseCase<any, any> {
   constructor(private customerRepository: CustomerRepository) {
-    super();
+    super()
   }
 
   execute(request: any) {

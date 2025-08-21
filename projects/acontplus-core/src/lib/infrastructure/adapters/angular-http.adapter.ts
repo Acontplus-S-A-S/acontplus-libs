@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { HttpPort, HttpOptions} from '../../application/interfaces/http.port';
 import { lastValueFrom } from 'rxjs';
 
-function mergeUrl(baseURL?: string, url: string): string {
-  return baseURL ? `${baseURL}${url}` : url;
+function mergeUrl(baseURL:string|undefined, enpoint: string): string {
+  return baseURL ? `${baseURL}${enpoint}` : enpoint;
 }
 export class AngularHttpAdapter implements HttpPort {
   constructor(

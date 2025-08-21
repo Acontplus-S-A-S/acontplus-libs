@@ -1,29 +1,43 @@
-import {HttpPort, HttpOptions} from "../../application/interfaces/http.port";
-import {fetch} from "rxjs/src/internal/umd";
-import * as url from "node:url";
+import { HttpPort, HttpOptions } from "../../application/interfaces/http.port";
+import {HttpClientFactory} from "./http-client-factory";
 
 export class FetchAdapter implements HttpPort {
-  constructor(private baseURL: string) {}
-
   async get<T>(url: string, options?: HttpOptions): Promise<T> {
-    const response = await fetch(`${this.baseURL}${url}`, {
-      method: 'GET',
-      headers: options?.headers,
+    return this.request<T>('GET', url, undefined, options);
+  }
+
+  async post<T>(url: string, body: unknown, options?: HttpOptions): Promise<T> {
+    return this.request<T>('POST', url, body, options);
+  }
+
+  async put<T>(url: string, body: unknown, options?: HttpOptions): Promise<T> {
+    return this.request<T>('PUT', url, body, options);
+  }
+
+  async delete<T>(url: string, options?: HttpOptions): Promise<T> {
+    return this.request<T>('DELETE', url, undefined, options);
+  }
+
+  private async request<T>(
+    method: string,
+    url: string,
+    body?: unknown,
+    options?: HttpOptions
+  ): Promise<T> {
+    const baseURL = HttpClientFactory.getBaseURL();
+    const response = await fetch(`${baseURL}${url}`, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options?.headers || {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
     });
-    return response.json();
-  }
 
-  delete<T>(url: string, options?: HttpOptions): Promise<T> {
-    return Promise.resolve(undefined);
-  }
+    if (!response.ok) {
+      throw new Error(`HTTP error ${response.status}`);
+    }
 
-  post<T>(url: string, body: unknown, options?: HttpOptions): Promise<T> {
-    return Promise.resolve(undefined);
+    return response.json() as Promise<T>;
   }
-
-  put<T>(url: string, body: unknown, options?: HttpOptions): Promise<T> {
-    return Promise.resolve(undefined);
-  }
-
-  // ... otros métodos
 }
