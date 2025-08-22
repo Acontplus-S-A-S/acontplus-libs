@@ -7,19 +7,13 @@ export * from './lib/use-cases';
 export * from './lib/utils';
 
 // Domain exports
-//export * from './lib/domain/entities/BaseEntity';
-export * from './lib/domain/value-objects/base.value-object';
-export * from './lib/domain/value-objects/entity-id';
+export * from './lib/domain';
 
 // Application exports
-export * from './lib/application/interfaces/repository';
-export * from './lib/application/interfaces/http.port';
-//export * from './lib/application/use-cases/BaseUseCase';
+export * from './lib/application';
 
 // Infrastructure exports
-export * from './lib/infrastructure/adapters/http-client-factory';
-export * from './lib/infrastructure/adapters/fetch.adapter';
-export * from './lib/infrastructure/adapters/angular-http.adapter';
-//export * from './lib/infrastructure/persistence/InMemoryRepository';
+export * from './lib/infrastructure'
 
+//context
  export * from './customers'
