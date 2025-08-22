@@ -7,4 +7,12 @@ export class CustomerUseCase {
     return this.repo.getFormData()
   }
 
+  create(params:any){
+    return this.repo.create(params);
+  }
+
+  update(params:any){
+   return this.repo.update(params);
+  }
+
 }

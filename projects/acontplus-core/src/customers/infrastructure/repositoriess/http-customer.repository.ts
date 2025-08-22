@@ -10,14 +10,13 @@ export class HttpCustomerRepository implements CustomerRepository {
   }
 
   private get url(){
-    return `${API_URLS.BILLING}/CompanyCustomer`;
+    return `${API_URLS.BILLING}/CompanyCustomer/`;
   }
 
   getFormData(): Promise<any> {
     const json = GetFormDataCustomerMapper.toJson();
     return this.http.get(`${this.url}?json=${json}`).then(response=>{
-      console.log(response);
-      return response;
+      return GetFormDataCustomerMapper.fromJson(response);
     })
   }
 

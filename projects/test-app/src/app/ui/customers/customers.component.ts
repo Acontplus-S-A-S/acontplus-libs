@@ -1,6 +1,6 @@
 
 import {Component, inject, Injectable} from '@angular/core';
-import {getAllCustomerUseCase} from "@acontplus-core";
+import {customerUseCase} from "@acontplus-core";
 import {from} from "rxjs";
 import {MatCardModule} from "@angular/material/card";
 import {AdvancedDialogService, MatThemeButtonComponent, CustomerAddEditComponent} from "@acontplus-ui-components";
@@ -22,7 +22,7 @@ export class CustomersComponent {
   private dialogSvc = inject(AdvancedDialogService)
 
   ngOnInit(){
-     from(getAllCustomerUseCase.execute({test: 0})).subscribe(x => {
+     from(customerUseCase.getFormData()).subscribe(x => {
        console.log(x)
      })
   }
@@ -30,7 +30,9 @@ export class CustomersComponent {
 
   openAdd(){
     this.dialogSvc.open( CustomerAddEditComponent, {
-      size: 'xxl'
+      size: 'xxl',
+      data: {
+      }
     })
   }
 }
