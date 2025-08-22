@@ -1,4 +1,5 @@
 // Domain exports
+export * from './application/dtos/customer.dto';
 import {HttpCustomerRepository} from "./infrastructure/repositoriess/http-customer.repository";
 import {CustomerUseCase} from "./application/use-cases/customer.use-case";
 

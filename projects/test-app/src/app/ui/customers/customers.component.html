@@ -4,6 +4,16 @@
       text="Nuevo"
       (handleClick)="openAdd()"
     />
+
+    <div class="mt-2">
+      <div class="customer-list-container">
+        @for (item of customers(); track $index){
+
+          <acp-customer-card [customer]="item"/>
+        }
+      </div>
+    </div>
+
   </mat-card-content>
 
 </mat-card>

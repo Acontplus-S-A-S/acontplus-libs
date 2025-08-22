@@ -222,10 +222,10 @@ export class CustomerAddEditComponent {
         let mainDataForm = {} as any;
         let dataCompanyCustomer = {} as any;
         if (Array.isArray(response)) {
-          mainDataForm = response[0];
+          mainDataForm = response[0].data;
           dataCompanyCustomer = response[1];
         } else {
-          mainDataForm = response;
+          mainDataForm = response.data;
         }
 
         this.tiposIdentificacion.set(mainDataForm.tipoIdentificacion);

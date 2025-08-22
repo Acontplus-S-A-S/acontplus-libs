@@ -12,7 +12,7 @@ export class GetFormDataCustomerMapper {
     const result = {} as any;
     if(response.code==="1"){
       const mainData = JSON.parse(response.payload as string);
-      console.log(mainData)
+
       result.tipoIdentificacion = mainData[0];
       result.tipoContribuyentes = mainData[1];
       result.tiempoCreditos = mainData[2] || [];
@@ -46,7 +46,10 @@ export class GetFormDataCustomerMapper {
       result.maritalStatuses = mainData[9] || [];
       result.employees = mainData[10] || [];
     }
-    return result;
+    return {
+      data: result,
+      success: true,
+    };
 
   }
 }

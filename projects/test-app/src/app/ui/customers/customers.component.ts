@@ -1,9 +1,11 @@
 
-import {Component, inject, Injectable} from '@angular/core';
-import {customerUseCase} from "@acontplus-core";
+import {Component, inject, Injectable, signal} from '@angular/core';
+import {customerUseCase, CustomerListItemDto} from "@acontplus-core";
 import {from} from "rxjs";
 import {MatCardModule} from "@angular/material/card";
-import {AdvancedDialogService, MatThemeButtonComponent, CustomerAddEditComponent} from "@acontplus-ui-components";
+import {AdvancedDialogService, MatThemeButtonComponent, CustomerAddEditComponent, CustomerCardComponent} from "@acontplus-ui-components";
+import {MatChip, MatChipSet} from "@angular/material/chips";
+import {MatButtonModule} from "@angular/material/button";
 
 
 
@@ -13,7 +15,13 @@ import {AdvancedDialogService, MatThemeButtonComponent, CustomerAddEditComponent
   selector: 'app-customers',
   imports: [
     MatCardModule,
-    MatThemeButtonComponent
+    MatThemeButtonComponent,
+    CustomerCardComponent,
+    MatChipSet,
+    MatChip,
+    MatButtonModule,
+    MatThemeButtonComponent,
+    CustomerCardComponent
   ],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.scss',
@@ -21,18 +29,27 @@ import {AdvancedDialogService, MatThemeButtonComponent, CustomerAddEditComponent
 export class CustomersComponent {
   private dialogSvc = inject(AdvancedDialogService)
 
+  customers = signal<CustomerListItemDto[]>([])
+
   ngOnInit(){
-     from(customerUseCase.getFormData()).subscribe(x => {
+     from(customerUseCase.getAll({
+       pageIndex: 1,
+       pageSize: 10,
+     })).subscribe(x => {
        console.log(x)
+       this.customers.set(x?.data?.items || [])
      })
   }
 
 
   openAdd(){
-    this.dialogSvc.open( CustomerAddEditComponent, {
-      size: 'xxl',
-      data: {
-      }
+    this.dialogSvc.openInWrapper({
+      component: CustomerAddEditComponent,
+      title: 'Add Customer',
+      icon: 'add',
+    }, {
+      data: {},
+      size: 'xl',
     })
   }
 }
