@@ -45,11 +45,12 @@ export class CustomersComponent {
   openAdd(){
     this.dialogSvc.openInWrapper({
       component: CustomerAddEditComponent,
-      title: 'Add Customer',
+      title: 'Nuevo Cliente',
       icon: 'add',
     }, {
       data: {},
       size: 'xl',
+
     })
   }
 }
