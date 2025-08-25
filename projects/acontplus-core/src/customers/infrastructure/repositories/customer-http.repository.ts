@@ -1,11 +1,12 @@
-import { CustomerRepository } from '../../domain/repositories/customer.repository';
-import {HttpClientFactory} from "../../../lib/infrastructure/adapters/http-client-factory";
+
+import {CustomerFormDataMapper} from "../mappers/customer-form-data.mapper";
+import {ListCustomerMapper} from "../mappers/customer-list.mapper";
+import {CustomerRepository} from "../../domain/repositories/customer.repository";
+import {HttpClientFactory} from "../../../lib/infrastructure";
 import {API_URLS} from "../../../lib/domain";
-import {GetFormDataCustomerMapper} from "../mappers/get-form-data-customer.mapper";
-import {ListCustomerMapper} from "../mappers/get-all-customer.mapper";
 import {PageResult, Result} from "../../../lib/application";
 
-export class HttpCustomerRepository implements CustomerRepository {
+export class CustomerHttpRepository implements CustomerRepository {
   private get http() {
     return HttpClientFactory.getClient(); // siempre toma el último cliente configurado
   }
@@ -15,9 +16,9 @@ export class HttpCustomerRepository implements CustomerRepository {
   }
 
   getFormData()  {
-    const json = GetFormDataCustomerMapper.toJson();
+    const json = CustomerFormDataMapper.toJson();
     return this.http.get(`${this.url}?json=${json}`).then(response=>{
-      return GetFormDataCustomerMapper.fromJson(response);
+      return CustomerFormDataMapper.fromJson(response);
     })
   }
 

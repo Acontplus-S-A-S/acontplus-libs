@@ -10,6 +10,12 @@ export class CustomerUseCase {
     return this.repo.getFormData()
   }
 
+  checkExistence(identificationNumber: string){
+    return Promise.resolve({
+      identificationNumber
+    })
+  }
+
   create(params:any){
      return Promise.resolve()
   }

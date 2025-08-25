@@ -32,10 +32,10 @@ export class ListCustomerMapper {
       email: item.correo,
       finalConsumer: item.consumidorFinal,
       sriValidation: item.validacionSri,
-      sriValidationName: item.validationSri ? "YES" : "NO",
+      sriValidationName: item.validationSri ? "SI" : "NO",
       identificationType: item.tipoIdentificacion,
       status: item.estado,
-      statusName: item.estado ? "Active" : "Inactive",
+      statusName: item.estado ? "Activo" : "Inactivo",
       isFinalConsumer: item.codTipoIdentificacion === "CF",
       totalRecords: item.totalRecords,
     }));

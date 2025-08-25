@@ -1,6 +1,6 @@
 
 
-export class GetFormDataCustomerMapper {
+export class CustomerFormDataMapper {
   static toJson(){
     return JSON.stringify({
       tipo: 2,

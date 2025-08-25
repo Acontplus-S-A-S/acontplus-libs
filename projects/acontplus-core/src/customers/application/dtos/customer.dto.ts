@@ -1,8 +1,3 @@
-export interface Customer {
-  id: string;
-  name: string;
-  email: string;
-}
 
 export interface CustomerListItemDto {
   index: number;
@@ -16,10 +11,10 @@ export interface CustomerListItemDto {
   email: string;
   finalConsumer: boolean;
   sriValidation: boolean;
-  sriValidationName: "YES" | "NO";
+  sriValidationName: "SI" | "NO";
   identificationType: string;
   status: boolean;
-  statusName: "Active" | "Inactive";
+  statusName: "Activo" | "Inactivo";
   isFinalConsumer: boolean;
   totalRecords: number;
 }

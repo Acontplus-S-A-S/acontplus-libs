@@ -1,5 +1,5 @@
-// src/domain/value-objects/base.value-object.ts
-export abstract class BaseValueObject<T> {
+// src/domain/value-objects/base.vo.ts
+export abstract class BaseVo<T> {
   protected constructor(protected readonly value: T) {
     this.validate(value);
   }
@@ -10,7 +10,7 @@ export abstract class BaseValueObject<T> {
     return this.value;
   }
 
-  equals(other: BaseValueObject<T>): boolean {
+  equals(other: BaseVo<T>): boolean {
     return JSON.stringify(this.value) === JSON.stringify(other.value);
   }
 }

@@ -1,28 +1,42 @@
-import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
-import {forkJoin, from, Observable} from "rxjs";
-import {customerUseCase, ToastrNotificationService, SRI_IDENTIFICATION_CODE, SEPARATOR_KEY_CODE} from "@acontplus-core";
-import {MAT_DIALOG_DATA, MatDialogActions, MatDialogContent} from "@angular/material/dialog";
+import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
+import { forkJoin, from, Observable } from 'rxjs';
+import {
+  customerUseCase,
+  ToastrNotificationService,
+  SRI_IDENTIFICATION_CODE,
+  SEPARATOR_KEY_CODE,
+  customerExternalUseCase,
+  SEPARADORES_REGEX,
+} from '@acontplus-core';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent } from '@angular/material/dialog';
 import {
   MatDynamicCardComponent,
   MatInputChipComponent,
-  MatThemeButtonComponent
-} from "../../components";
-import {MatButtonModule} from "@angular/material/button";
-import {AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators} from "@angular/forms";
-import {MatTabsModule} from "@angular/material/tabs";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {MatSelectChange, MatSelectModule} from "@angular/material/select";
-import {MatSlideToggleModule} from "@angular/material/slide-toggle";
-import {ToUpperCaseDirective} from "../../directives";
-import {MatCheckbox} from "@angular/material/checkbox";
-import {MatIcon} from "@angular/material/icon";
-import {MatTooltip} from "@angular/material/tooltip";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {provideNativeDateAdapter} from "@angular/material/core";
+  MatThemeButtonComponent,
+} from '../../components';
+import { MatButtonModule } from '@angular/material/button';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ToUpperCaseDirective } from '../../directives';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 @Component({
-  selector: 'ac-customer-add-edit',
+  selector: 'acp-customer-add-edit',
   imports: [
     MatDialogContent,
     MatDialogActions,
@@ -40,14 +54,14 @@ import {provideNativeDateAdapter} from "@angular/material/core";
     MatTooltip,
     MatDatepickerModule,
     MatThemeButtonComponent,
-    MatDynamicCardComponent
+    MatDynamicCardComponent,
   ],
   templateUrl: './customer-add-edit.component.html',
   styleUrl: './customer-add-edit.component.scss',
   providers: [provideNativeDateAdapter()],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomerAddEditComponent {
+export class CustomerAddEditComponent implements OnInit {
   btnText = signal('Guardar');
 
   readonly params = inject<{
@@ -139,78 +153,63 @@ export class CustomerAddEditComponent {
     this.customerForm.patchValue({
       validationSri: false,
     });
-    // this._companyCustomerUseCase.checkExistence({ textSearch: id }).subscribe((response) => {
-    //   if (response.code == '1' && response.payload) {
-    //     this.tS.show({
-    //       type: 'warning',
-    //       message: 'El cliente ya se encuentra registrado en su empresa',
-    //     });
-    //     this.customerForm.patchValue({ numeroIdentificacion: null });
-    //     return;
-    //   }
-    //
-    //   if (codigo === SRI_IDENTIFICATION_CODE.PASSPORT) {
-    //     this.customerForm.patchValue({
-    //       validationSri: true,
-    //     });
-    //     return;
-    //   }
-    //   this._sriCustomerUseCase.search(codigo, id).subscribe((secondResponse) => {
-    //     const {
-    //       error,
-    //       telefono,
-    //       email,
-    //       numeroRuc,
-    //       razonSocial,
-    //       direccion,
-    //       identificacion,
-    //       nombreCompleto,
-    //     } = secondResponse;
-    //     if (error) {
-    //       this.tS.show({
-    //         type: 'info',
-    //         message: error,
-    //       });
-    //       return;
-    //     }
-    //
-    //     if (telefono) {
-    //       this.telephones = telefono.split(SEPARADORES_REGEX) || [];
-    //     }
-    //     if (email) {
-    //       this.emails = email.split(SEPARADORES_REGEX) || [];
-    //     }
-    //
-    //     if (codigo == SRI_IDENTIFICATION_CODE.RUC) {
-    //       if (numeroRuc) {
-    //         this.customerForm.patchValue({
-    //           numeroIdentificacion: numeroRuc,
-    //           nombreFiscal: razonSocial,
-    //           validationSri: true,
-    //           direccion: direccion,
-    //           nombreComercial: razonSocial,
-    //         });
-    //       }
-    //     } else {
-    //       if (identificacion) {
-    //         this.customerForm.patchValue({
-    //           numeroIdentificacion: identificacion,
-    //           nombreFiscal: nombreCompleto,
-    //           nombreComercial: nombreCompleto,
-    //           direccion: direccion,
-    //           validationSri: true,
-    //         });
-    //       }
-    //     }
-    //   });
-    // });
+    from(customerUseCase.checkExistence(id)).subscribe((response: any) => {
+      // if (response.code == '1' && response.payload) {
+      //   this.tS.show({
+      //     type: 'warning',
+      //     message: 'El cliente ya se encuentra registrado en su empresa',
+      //   });
+      //   this.customerForm.patchValue({ numeroIdentificacion: null });
+      //   return;
+      // }
+      //
+      // if (codigo === SRI_IDENTIFICATION_CODE.PASSPORT) {
+      //   this.customerForm.patchValue({
+      //     validationSri: true,
+      //   });
+      //   return;
+      // }
+      from(customerExternalUseCase.getById(id)).subscribe(secondResponse => {
+        console.log('secondResponse', secondResponse);
+        if (!secondResponse.success || !secondResponse.data) {
+          this.tS.show({
+            type: 'info',
+            message: '  No se encontró información en el SRI',
+          });
+          return;
+        }
+        const {
+          phone,
+          email,
+          idCard, // numeroRuc
+          businessName, // razonSocial
+          address, // direccion
+        } = secondResponse.data;
+
+        if (phone) {
+          this.telephones = phone.split(SEPARADORES_REGEX) || [];
+        }
+        if (email) {
+          this.emails = email.split(SEPARADORES_REGEX) || [];
+        }
+        if (idCard) {
+          this.customerForm.patchValue({
+            numeroIdentificacion: idCard,
+            nombreFiscal: businessName,
+            validationSri: true,
+            direccion: address,
+            nombreComercial: businessName,
+          });
+        }
+      });
+    });
   }
 
   getLoadData(): Observable<any> {
     if (this.isUpdate()) {
       return forkJoin([
         from(customerUseCase.getFormData()),
-      //  this._companyCustomerUseCase.getId(this.params.id),
+        //  this._companyCustomerUseCase.getId(this.params.id),
       ]);
     }
     return from(customerUseCase.getFormData());
@@ -218,7 +217,7 @@ export class CustomerAddEditComponent {
 
   ngOnInit(): void {
     try {
-      this.getLoadData().subscribe((response) => {
+      this.getLoadData().subscribe(response => {
         let mainDataForm = {} as any;
         let dataCompanyCustomer = {} as any;
         if (Array.isArray(response)) {
@@ -302,7 +301,7 @@ export class CustomerAddEditComponent {
 
   identificationTypeChange(event: MatSelectChange) {
     const dt = this.tiposIdentificacion().find(
-      (item) => item.idTipoIdentificacion === Number(event.value),
+      item => item.idTipoIdentificacion === Number(event.value),
     );
     this.setIdentificationTypeChange(dt.codigoSri);
   }
@@ -409,7 +408,7 @@ export class CustomerAddEditComponent {
         id: this.params.id,
         data: dataForm,
       };
-      from(customerUseCase.update(sendParams)).subscribe((response:any) => {
+      from(customerUseCase.update(sendParams)).subscribe((response: any) => {
         this.tS.show({
           type: response.code == '1' ? 'success' : 'warning',
           message: response.message,
@@ -423,21 +422,17 @@ export class CustomerAddEditComponent {
     }
 
     if (this.isCreate()) {
-      from(customerUseCase.create(dataForm)).subscribe((response:any) => {
+      from(customerUseCase.create(dataForm)).subscribe((response: any) => {
         this.tS.show({
           type: response.code == '1' ? 'success' : 'warning',
           message: response.message,
         });
         if (response.code == '1') {
-     //     this.dialogRef.close(response.payload);
+          //     this.dialogRef.close(response.payload);
         }
       });
     }
   }
 
-  close(){
-
-  }
-
-
+  close() {}
 }

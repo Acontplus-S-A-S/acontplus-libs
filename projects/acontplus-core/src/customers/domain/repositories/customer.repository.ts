@@ -1,14 +1,13 @@
-
-import {Repository, Result} from '../../../lib/application/interfaces/repository';
-import { EntityId } from '../../../lib/domain/value-objects/entity-id';
+import {Repository, Result} from "../../../lib/application";
 import {
-  CustomerCreateDTO,
-  CustomerFilterDTO, CustomerListItemDto,
+  CustomerCreateDTO, CustomerFilterDTO,
+  CustomerListItemDto,
   CustomerUpdateDTO
 } from "../../application/dtos/customer.dto";
+import {EntityIdVo} from "../../../lib/domain";
 
 
-interface BaseCustomerRepository extends Pick<Repository<CustomerListItemDto, EntityId, CustomerCreateDTO, CustomerUpdateDTO, CustomerFilterDTO>, 'getAll'> {}
+interface BaseCustomerRepository extends Pick<Repository<CustomerListItemDto, EntityIdVo, CustomerCreateDTO, CustomerUpdateDTO, CustomerFilterDTO>, 'getAll'> {}
 
 
 export interface CustomerRepository extends BaseCustomerRepository {
