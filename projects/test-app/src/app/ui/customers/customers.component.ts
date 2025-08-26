@@ -41,14 +41,26 @@ export class CustomersComponent {
      })
   }
 
+  openEdit(customer: CustomerListItemDto){
+    console.log(customer)
+    this.dialogSvc.openInWrapper({
+      component: CustomerAddEditComponent,
+      title: 'Editar Cliente',
+      icon: 'edit',
+      data: customer,
+    }, {
+      size: 'xl',
+    }
+    )
+  }
 
   openAdd(){
     this.dialogSvc.openInWrapper({
       component: CustomerAddEditComponent,
       title: 'Nuevo Cliente',
       icon: 'add',
-    }, {
       data: {},
+    }, {
       size: 'xl',
 
     })

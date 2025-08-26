@@ -8,7 +8,12 @@ import {
   customerExternalUseCase,
   SEPARADORES_REGEX,
 } from '@acontplus-core';
-import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef
+} from '@angular/material/dialog';
 import {
   MatDynamicCardComponent,
   MatInputChipComponent,
@@ -62,15 +67,20 @@ import { provideNativeDateAdapter } from '@angular/material/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomerAddEditComponent implements OnInit {
+  private readonly dialogRef = inject(MatDialogRef<CustomerAddEditComponent>);
   btnText = signal('Guardar');
 
-  readonly params = inject<{
+  readonly paramsOptions = inject<{
     id: number;
     descripcion: null | string;
     dataOfSri?: boolean;
     numeroIdentificacion?: string;
     codigoSri?: string;
+    data: any
   }>(MAT_DIALOG_DATA);
+
+  readonly params = this.paramsOptions.data
+
 
   private tS = inject(ToastrNotificationService);
 
@@ -153,24 +163,24 @@ export class CustomerAddEditComponent implements OnInit {
     this.customerForm.patchValue({
       validationSri: false,
     });
-    from(customerUseCase.checkExistence(id)).subscribe((response: any) => {
-      // if (response.code == '1' && response.payload) {
-      //   this.tS.show({
-      //     type: 'warning',
-      //     message: 'El cliente ya se encuentra registrado en su empresa',
-      //   });
-      //   this.customerForm.patchValue({ numeroIdentificacion: null });
-      //   return;
-      // }
-      //
-      // if (codigo === SRI_IDENTIFICATION_CODE.PASSPORT) {
-      //   this.customerForm.patchValue({
-      //     validationSri: true,
-      //   });
-      //   return;
-      // }
+    from(customerUseCase.checkExistence(id)).subscribe((response) => {
+      if (response.success && response.data) {
+        alert('El cliente ya se encuentra registrado en su empresa');
+        this.tS.show({
+          type: 'warning',
+          message: 'El cliente ya se encuentra registrado en su empresa',
+        });
+        this.customerForm.patchValue({ numeroIdentificacion: null });
+        return;
+      }
+
+      if (codigo === SRI_IDENTIFICATION_CODE.PASSPORT) {
+        this.customerForm.patchValue({
+          validationSri: true,
+        });
+        return;
+      }
       from(customerExternalUseCase.getById(id)).subscribe(secondResponse => {
-        console.log('secondResponse', secondResponse);
         if (!secondResponse.success || !secondResponse.data) {
           this.tS.show({
             type: 'info',
@@ -209,7 +219,7 @@ export class CustomerAddEditComponent implements OnInit {
     if (this.isUpdate()) {
       return forkJoin([
         from(customerUseCase.getFormData()),
-        //  this._companyCustomerUseCase.getId(this.params.id),
+        from(customerUseCase.getById(this.params.id)),
       ]);
     }
     return from(customerUseCase.getFormData());
@@ -218,6 +228,7 @@ export class CustomerAddEditComponent implements OnInit {
   ngOnInit(): void {
     try {
       this.getLoadData().subscribe(response => {
+
         let mainDataForm = {} as any;
         let dataCompanyCustomer = {} as any;
         if (Array.isArray(response)) {
@@ -357,8 +368,6 @@ export class CustomerAddEditComponent implements OnInit {
     return this.customerForm.get('birthDate');
   }
 
-  copyTradeName() {}
-
   onKeyDownGovernmentId($event?: Event) {
     if ($event) {
       $event.preventDefault();
@@ -408,31 +417,33 @@ export class CustomerAddEditComponent implements OnInit {
         id: this.params.id,
         data: dataForm,
       };
-      from(customerUseCase.update(sendParams)).subscribe((response: any) => {
+      from(customerUseCase.update(sendParams)).subscribe((response) => {
         this.tS.show({
-          type: response.code == '1' ? 'success' : 'warning',
-          message: response.message,
+          type: response.success ? 'success' : 'warning',
+          message: `${response.message}`,
         });
-        if (response.code == '1') {
-          // this.dialogRef.close({
-          //   id: this.params.id,
-          // });
+        if (response.success) {
+          this.dialogRef.close({
+            id: this.params.id,
+          });
         }
       });
     }
 
     if (this.isCreate()) {
-      from(customerUseCase.create(dataForm)).subscribe((response: any) => {
+      from(customerUseCase.create(dataForm)).subscribe((response) => {
         this.tS.show({
-          type: response.code == '1' ? 'success' : 'warning',
-          message: response.message,
+          type: response.success ? 'success' : 'warning',
+          message: `${response.message}`,
         });
-        if (response.code == '1') {
-          //     this.dialogRef.close(response.payload);
+        if (response.success) {
+           this.dialogRef.close(response.data);
         }
       });
     }
   }
 
-  close() {}
+  close() {
+    this.dialogRef.close();
+  }
 }

@@ -73,8 +73,6 @@
               <mat-form-field class="w-100">
                 <mat-label>Nombre Fiscal:</mat-label>
                 <input matInput
-
-                       (keyup)="copyTradeName()"
                        autocomplete="off"
                        formControlName="nombreFiscal"
                        id="nombreComercial"
@@ -451,7 +449,7 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <acp-mat-theme-button (handleClick)="close()"
+  <acp-mat-theme-button type="submit" form="formCompanyCustomer"
   [text]="btnText()"
 
   />

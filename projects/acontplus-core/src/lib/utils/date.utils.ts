@@ -154,7 +154,7 @@ export class DateUtils {
    * "SSS" Milliseconds; leading zero for single-digit seconds.
    * "S" Milliseconds; no leading zero for single-digit seconds.
    */
-  public static toString(date: Date, format: string): string {
+  public static toString(date: Date, format='yyyy-MM-dd HH:mm:ss'): string {
     if (!this.isValid(date)) {
       return '';
     }
@@ -184,7 +184,7 @@ export class DateUtils {
    * "SSS" Milliseconds; leading zero for single-digit seconds.
    * "S" Milliseconds; no leading zero for single-digit seconds.
    */
-  public static toUTCString(date: Date, format: string): string {
+  public static toUTCString(date: Date, format='yyyy-MM-dd HH:mm:ss'): string {
     if (!this.isValid(date)) {
       return '';
     }

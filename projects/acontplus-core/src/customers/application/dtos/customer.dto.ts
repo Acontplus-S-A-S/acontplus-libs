@@ -33,3 +33,16 @@ export interface CustomerFilterDTO {
   search?: string;
   limit?: number;
 }
+
+export interface CustomerSearchDTO {
+  /** Texto de búsqueda libre (nombre, identificación, comercio, etc.) */
+  search?: string;
+
+  /** Número de resultados por página */
+  pageSize?: number;
+
+  /** Índice de página (0-based) */
+  pageIndex?: number;
+}
+
+

@@ -1,28 +1,38 @@
-import {CustomerRepository} from "../../domain/repositories/customer.repository";
+import { CustomerRepository } from '../../domain/repositories/customer.repository';
+import {CustomerSearchDTO} from "../dtos/customer.dto";
 
 export class CustomerUseCase {
   constructor(private repo: CustomerRepository) {}
 
-  getAll(params:any){
+  getAll(params: any) {
     return this.repo.getAll(params);
   }
-  getFormData(){
-    return this.repo.getFormData()
+  getFormData() {
+    return this.repo.getFormData();
   }
 
-  checkExistence(identificationNumber: string){
-    return Promise.resolve({
-      identificationNumber
-    })
+  getById(id: number) {
+    return this.repo.getById(id);
   }
 
-  create(params:any){
-     return Promise.resolve()
+  checkExistence(identificationNumber: string) {
+    return this.repo.checkExistence(identificationNumber);
   }
 
-  update(params:any){
-    return Promise.resolve()
+  create(params: any) {
+    return this.repo.create(params)
+  }
 
+  update(params: any) {
+    return this.repo.update(params)
+  }
+
+  updateState(id: number){
+    return this.repo.updateState(id);
+  }
+
+  search(filter: CustomerSearchDTO){
+    return this.repo.search(filter)
   }
 
 }

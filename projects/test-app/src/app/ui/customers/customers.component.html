@@ -9,7 +9,7 @@
       <div class="customer-list-container">
         @for (item of customers(); track $index){
 
-          <acp-customer-card [customer]="item"/>
+          <acp-customer-card [customer]="item" (editCustomer)="openEdit(item)"/>
         }
       </div>
     </div>
