@@ -1,9 +1,8 @@
-
 export interface CustomerListItemDto {
   index: number;
   id: number;
   identificationTypeId: number;
-  identification: string;
+  idCard: string;
   businessName: string;
   tradeName: string;
   address: string;
@@ -11,10 +10,10 @@ export interface CustomerListItemDto {
   email: string;
   finalConsumer: boolean;
   sriValidation: boolean;
-  sriValidationName: "SI" | "NO";
+  sriValidationName: 'SI' | 'NO';
   identificationType: string;
-  status: boolean;
-  statusName: "Activo" | "Inactivo";
+  isActive: boolean;
+  statusName: 'Activo' | 'Inactivo';
   isFinalConsumer: boolean;
   totalRecords: number;
 }
@@ -44,5 +43,3 @@ export interface CustomerSearchDTO {
   /** Índice de página (0-based) */
   pageIndex?: number;
 }
-
-
