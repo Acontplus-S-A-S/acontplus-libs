@@ -13,7 +13,7 @@ export * from './lib/domain';
 export * from './lib/application';
 
 // Infrastructure exports
-export * from './lib/infrastructure'
+export * from './lib/infrastructure';
 
 //context
- export * from './customers'
+export * from './customers';

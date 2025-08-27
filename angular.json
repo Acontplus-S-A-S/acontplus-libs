@@ -132,6 +132,9 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "projects/acontplus-ui-components/ng-package.json"
+          },
           "configurations": {
             "production": {
               "tsConfig": "projects/acontplus-ui-components/tsconfig.lib.prod.json"
@@ -168,6 +171,9 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "projects/acontplus-core/ng-package.json"
+          },
           "configurations": {
             "production": {
               "tsConfig": "projects/acontplus-core/tsconfig.lib.prod.json"

@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
-import { SnackbarService } from '../../../services';
-import { NotificationDemo, SnackbarType } from '../../../models';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
+import { NotificationDemo } from '../../../models/snackbar.model';
+import { SnackbarType } from '../../../types';
 import { MatCardModule } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
@@ -8,7 +9,7 @@ import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
-import { SNACKBAR_MESSAGES } from '../../../constants';
+import { SNACKBAR_MESSAGES } from '../../../constants/snackbar.constants';
 
 @Component({
   selector: 'acp-snackbar-notification',

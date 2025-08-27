@@ -1,2 +1,2 @@
-export * from './customer-add-edit/customer-add-edit.component';
-export * from './customer-card/customer-card.component';
+export * from './customer-add-edit';
+export * from './customer-card';

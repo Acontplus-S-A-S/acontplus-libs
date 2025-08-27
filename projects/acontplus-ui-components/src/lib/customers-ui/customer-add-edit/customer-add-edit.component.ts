@@ -2,17 +2,17 @@ import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@ang
 import { forkJoin, from, Observable } from 'rxjs';
 import {
   customerUseCase,
+  customerExternalUseCase,
   ToastrNotificationService,
   SRI_IDENTIFICATION_CODE,
   SEPARATOR_KEY_CODE,
-  customerExternalUseCase,
   SEPARADORES_REGEX,
-} from '@acontplus-core';
+} from 'acontplus-core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogContent,
-  MatDialogRef
+  MatDialogRef,
 } from '@angular/material/dialog';
 import {
   MatDynamicCardComponent,
@@ -76,11 +76,10 @@ export class CustomerAddEditComponent implements OnInit {
     dataOfSri?: boolean;
     numeroIdentificacion?: string;
     codigoSri?: string;
-    data: any
+    data: any;
   }>(MAT_DIALOG_DATA);
 
-  readonly params = this.paramsOptions.data
-
+  readonly params = this.paramsOptions.data;
 
   private tS = inject(ToastrNotificationService);
 
@@ -163,7 +162,7 @@ export class CustomerAddEditComponent implements OnInit {
     this.customerForm.patchValue({
       validationSri: false,
     });
-    from(customerUseCase.checkExistence(id)).subscribe((response) => {
+    from(customerUseCase.checkExistence(id)).subscribe(response => {
       if (response.success && response.data) {
         alert('El cliente ya se encuentra registrado en su empresa');
         this.tS.show({
@@ -196,10 +195,10 @@ export class CustomerAddEditComponent implements OnInit {
           address, // direccion
         } = secondResponse.data;
 
-        if (phone) {
+        if (phone && typeof phone === 'string') {
           this.telephones = phone.split(SEPARADORES_REGEX) || [];
         }
-        if (email) {
+        if (email && typeof email === 'string') {
           this.emails = email.split(SEPARADORES_REGEX) || [];
         }
         if (idCard) {
@@ -228,7 +227,6 @@ export class CustomerAddEditComponent implements OnInit {
   ngOnInit(): void {
     try {
       this.getLoadData().subscribe(response => {
-
         let mainDataForm = {} as any;
         let dataCompanyCustomer = {} as any;
         if (Array.isArray(response)) {
@@ -306,7 +304,7 @@ export class CustomerAddEditComponent implements OnInit {
         }
       });
     } catch (error) {
-      console.log(error);
+      // Handle error appropriately
     }
   }
 
@@ -417,7 +415,7 @@ export class CustomerAddEditComponent implements OnInit {
         id: this.params.id,
         data: dataForm,
       };
-      from(customerUseCase.update(sendParams)).subscribe((response) => {
+      from(customerUseCase.update(sendParams)).subscribe(response => {
         this.tS.show({
           type: response.success ? 'success' : 'warning',
           message: `${response.message}`,
@@ -431,13 +429,13 @@ export class CustomerAddEditComponent implements OnInit {
     }
 
     if (this.isCreate()) {
-      from(customerUseCase.create(dataForm)).subscribe((response) => {
+      from(customerUseCase.create(dataForm)).subscribe(response => {
         this.tS.show({
           type: response.success ? 'success' : 'warning',
           message: `${response.message}`,
         });
         if (response.success) {
-           this.dialogRef.close(response.data);
+          this.dialogRef.close(response.data);
         }
       });
     }
