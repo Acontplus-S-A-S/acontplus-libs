@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
 import { CompositeUseCase } from '@acontplus-core';
 import { Application, ApplicationFilterParams } from '../domain/application';
@@ -26,8 +26,13 @@ export interface ApplicationManagementResponse {
   providedIn: 'root'
 })
 export class ApplicationManagementUseCase extends CompositeUseCase<ApplicationManagementRequest, ApplicationManagementResponse> {
+  private applicationRepository = inject(ApplicationRepository);
 
-  constructor(private applicationRepository: ApplicationRepository) {
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+
+  constructor() {
     super();
   }
 

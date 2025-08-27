@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { CachedQuery, FilterParams, PaginatedResult, PaginationParams } from '@acontplus-core';
 import { UserManagementUseCase } from './user-management.use-case';
@@ -12,9 +12,14 @@ export class CachedUsersQuery extends CachedQuery<
   { pagination: PaginationParams; filters?: FilterParams },
   PaginatedResult<User>
 > {
+  private userManagement = inject(UserManagementUseCase);
+
   private cache = new Map<string, { data: PaginatedResult<User>; timestamp: number }>();
 
-  constructor(private userManagement: UserManagementUseCase) {
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {
     super();
   }
 

@@ -1,0 +1,56 @@
+.customer-card {
+  width: 345px;
+  border-radius: 16px;
+
+
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  background-color: #e3f2fd;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+
+  .businessName {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .tradeName {
+    text-align: center;
+    font-size: 12px;
+    color: #6c757d;
+  }
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #1976d2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  color: white;
+  margin-bottom: 12px;
+}
+
+.info p {
+  margin: 4px 0;
+}
+
+.chips {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.actions {
+
+  justify-content: flex-end;
+  padding: 16px;
+}

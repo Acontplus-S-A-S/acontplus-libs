@@ -1,12 +1,4 @@
-import {
-  Component,
-  Inject,
-  ViewChild,
-  ViewContainerRef,
-  AfterViewInit,
-  ElementRef,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, ViewChild, ViewContainerRef, AfterViewInit, ElementRef, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
@@ -38,6 +30,9 @@ import { DialogWrapperConfig } from '../../services';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DialogWrapperComponent implements AfterViewInit {
+  dialogRef = inject<MatDialogRef<DialogWrapperComponent>>(MatDialogRef);
+  config = inject<DialogWrapperConfig>(MAT_DIALOG_DATA);
+
   /**
    * A template reference that acts as an anchor for dynamic content.
    * This is where the component specified in the config will be rendered.
@@ -57,16 +52,16 @@ export class DialogWrapperComponent implements AfterViewInit {
    */
   private static lastZIndex = 1000;
 
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
   /**
    * Creates an instance of DialogWrapperComponent.
    *
    * @param dialogRef Reference to the dialog opened via the Material Dialog service
    * @param config Configuration for the dialog wrapper, injected from MAT_DIALOG_DATA
    */
-  constructor(
-    public dialogRef: MatDialogRef<DialogWrapperComponent>,
-    @Inject(MAT_DIALOG_DATA) public config: DialogWrapperConfig, // Injects the wrapper-specific config
-  ) {}
+  constructor() {}
 
   /**
    * Lifecycle hook that initializes the dynamic content after the view is ready.

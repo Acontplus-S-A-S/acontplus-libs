@@ -8,7 +8,9 @@
     "declarationMap": true,
     "inlineSources": true,
     "composite": true,
-    "types": []
+    "types": [],
+    "rootDir": "./src"
   },
-  "exclude": ["**/*.spec.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts", "**/node_modules"]
 }

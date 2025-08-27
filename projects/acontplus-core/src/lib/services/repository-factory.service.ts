@@ -1,4 +1,4 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable, Type, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BaseRepository, ReadOnlyRepository, WriteOnlyRepository } from '../repositories';
 import { BaseEntity } from '../models';
@@ -19,9 +19,14 @@ export interface RepositoryConfig<T extends BaseRepository<any>> {
   providedIn: 'root'
 })
 export class RepositoryFactoryService {
+  private http = inject(HttpClient);
+
   private repositories = new Map<string, BaseRepository<any>>();
 
-  constructor(private http: HttpClient) {}
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {}
 
   /**
    * Create a full CRUD repository

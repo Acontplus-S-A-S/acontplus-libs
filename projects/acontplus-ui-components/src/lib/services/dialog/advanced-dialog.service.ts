@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { MatCustomDialogConfig, DialogSize, DialogWrapperConfig } from './dialog.interfaces';
-import { DialogWrapperComponent } from '../../components';
+import { DialogWrapperComponent } from '../../components/dialog-wrapper/dialog-wrapper.component';
 
 @Injectable({
   providedIn: 'root',

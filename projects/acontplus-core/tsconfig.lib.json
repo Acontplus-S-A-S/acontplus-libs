@@ -7,20 +7,10 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
+    "composite": true,
     "types": [],
-    // Library-specific overrides
-    "module": "ES2022",
-    "moduleResolution": "bundler",
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM"],
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "importHelpers": true,
-    "useDefineForClassFields": false
+    "rootDir": "./src"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["**/*.spec.ts", "**/*.test.ts"]
+  "exclude": ["**/*.spec.ts", "**/*.test.ts", "**/node_modules"]
 }

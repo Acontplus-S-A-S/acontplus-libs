@@ -1,4 +1,4 @@
-export type SnackbarType = 'success' | 'warning' | 'info' | 'error';
+import { SnackbarType } from '../types';
 
 export interface SnackbarProps {
   readonly type: SnackbarType;

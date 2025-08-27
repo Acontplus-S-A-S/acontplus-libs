@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit, ChangeDetectorRef, inject } from '@angular/core';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -49,6 +49,12 @@ import { PaginationParams, FilterParams, PaginatedResult } from '@acontplus-core
   styleUrl: './user.component.scss',
 })
 export class UserComponent implements OnInit, AfterViewInit {
+  private userManagement = inject(UserManagementUseCase);
+  private cachedQuery = inject(CachedUsersQuery);
+  private conditionalCommand = inject(ConditionalUserUpdateCommand);
+  private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
+
   users: User[] = [];
   userColumns: ColumnDefinition<User>[] = [];
 
@@ -92,13 +98,10 @@ export class UserComponent implements OnInit, AfterViewInit {
   @ViewChild('roleTemplate') roleTemplate!: TemplateRef<any>;
   @ViewChild('statusTemplate') statusTemplate!: TemplateRef<any>;
 
-  constructor(
-    private userManagement: UserManagementUseCase,
-    private cachedQuery: CachedUsersQuery,
-    private conditionalCommand: ConditionalUserUpdateCommand,
-    private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef
-  ) {}
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {}
 
   ngOnInit() {
     this.initializeColumns();
