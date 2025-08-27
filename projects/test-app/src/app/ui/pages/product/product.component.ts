@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -308,6 +308,10 @@ interface ProductFilters extends FilterParams {
   styleUrl: './product.component.scss',
 })
 export class ProductComponent implements OnInit, AfterViewInit {
+  private productManagement = inject(ProductManagementUseCase);
+  private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
+
   products: Product[] = [];
   productColumns: ColumnDefinition<Product>[] = [];
   selectedProducts: Product[] = [];
@@ -352,11 +356,10 @@ export class ProductComponent implements OnInit, AfterViewInit {
   @ViewChild('productImageTemplate') productImageTemplate!: TemplateRef<any>;
   @ViewChild('expandedProductDetail') expandedProductDetail!: TemplateRef<any>;
 
-  constructor(
-    private productManagement: ProductManagementUseCase,
-    private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef
-  ) {}
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {}
 
   ngOnInit(): void {
     // Initialize form data first

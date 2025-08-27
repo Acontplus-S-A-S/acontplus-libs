@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ConditionalCommand } from '@acontplus-core';
 import { UserManagementUseCase } from './user-management.use-case';
@@ -19,9 +19,14 @@ export interface ConditionalUserUpdateRequest {
   providedIn: 'root'
 })
 export class ConditionalUserUpdateCommand extends ConditionalCommand<ConditionalUserUpdateRequest, User> {
+  private userManagement = inject(UserManagementUseCase);
+
   private approvalStatus = new Map<number, boolean>();
 
-  constructor(private userManagement: UserManagementUseCase) {
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {
     super();
   }
 

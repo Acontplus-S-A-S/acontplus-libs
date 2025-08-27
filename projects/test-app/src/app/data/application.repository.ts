@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseRepository } from '@acontplus-core';
 import { Application, ApplicationFilterParams } from '../domain/application';
@@ -9,10 +9,15 @@ import { MockApplicationService } from './mock-application.service';
   providedIn: 'root'
 })
 export class ApplicationRepository extends BaseRepository<Application> {
+  private mockService = inject(MockApplicationService);
+
   protected entityName = 'applications';
   protected baseUrl = 'https://api.example.com/v1';
 
-  constructor(private mockService: MockApplicationService) {
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {
     super();
   }
 
