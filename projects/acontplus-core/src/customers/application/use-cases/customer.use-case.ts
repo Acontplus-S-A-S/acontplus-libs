@@ -1,5 +1,5 @@
 import { CustomerRepository } from '../../domain/repositories/customer.repository';
-import {CustomerSearchDTO} from "../dtos/customer.dto";
+import { CustomerSearchDTO } from '../dtos/customer.dto';
 
 export class CustomerUseCase {
   constructor(private repo: CustomerRepository) {}
@@ -20,19 +20,18 @@ export class CustomerUseCase {
   }
 
   create(params: any) {
-    return this.repo.create(params)
+    return this.repo.create(params);
   }
 
   update(params: any) {
-    return this.repo.update(params)
+    return this.repo.update(params);
   }
 
-  updateState(id: number){
+  updateState(id: number) {
     return this.repo.updateState(id);
   }
 
-  search(filter: CustomerSearchDTO){
-    return this.repo.search(filter)
+  search(filter: CustomerSearchDTO) {
+    return this.repo.search(filter);
   }
-
 }

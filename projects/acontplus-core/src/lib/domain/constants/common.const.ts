@@ -15,6 +15,4 @@ export enum SEPARATOR_KEY_CODE {
   PUNTO_COMA = ';',
   DOS_PUNTOS = ':',
 }
-export const SEPARADORES_REGEX = new RegExp(
-  `[${Object.values(SEPARATOR_KEY_CODE).join('')}]`,
-);
+export const SEPARADORES_REGEX = new RegExp(`[${Object.values(SEPARATOR_KEY_CODE).join('')}]`);
