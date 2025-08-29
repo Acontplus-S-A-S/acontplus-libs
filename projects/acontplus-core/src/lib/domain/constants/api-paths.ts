@@ -24,7 +24,7 @@ export const API_ENDPOINTS = {
     V1: `${API_BASES.CUSTOMER}/Account`,
   },
   COMPANY_CUSTOMER: {
-    V1: `${API_BASES.CUSTOMER}/CompanyCustomer`,
+    V1: `${API_BASES.BILLING}/CompanyCustomer`,
   },
   ORDER: {
     V1: `${API_BASES.RESTAURANT}/Order`,

@@ -1,8 +1,7 @@
-import { CustomerRepository } from '../../domain/repositories/customer.repository';
-import { CustomerSearchDTO } from '../dtos/customer.dto';
+import { ClientRepository } from '../../domain/repositories/client.repository';
 
-export class CustomerUseCase {
-  constructor(private repo: CustomerRepository) {}
+export class ClientUseCase {
+  constructor(private repo: ClientRepository) {}
 
   getAll(params: any) {
     return this.repo.getAll(params);
@@ -31,7 +30,7 @@ export class CustomerUseCase {
     return this.repo.updateState(id);
   }
 
-  search(filter: CustomerSearchDTO) {
+  search(filter: any) {
     return this.repo.search(filter);
   }
 }
