@@ -7,7 +7,7 @@ import {
   SRI_IDENTIFICATION_CODE,
   SEPARATOR_KEY_CODE,
   SEPARADORES_REGEX,
-} from '@acontplus-core';
+} from 'acontplus-core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
