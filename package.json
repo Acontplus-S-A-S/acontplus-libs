@@ -32,6 +32,7 @@
     "build-and-pack": "npm run build-library && npm run pack-acontplus-core && npm run pack-acontplus-ui-components",
     "build:sass": "sass styles/styles.scss assets/styles.css",
     "publish": "npm publish dist/acontplus-ui-components/acontplus-ui-components-0.0.13.tgz",
+    "publish:all": "npm run build-and-pack && npm publish dist/acontplus-core && npm publish dist/acontplus-ui-components",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,json,md}\"",
