@@ -1,6 +1,6 @@
 {
   "name": "acontplus-ui-components",
-  "version": "1.2.0",
+  "version": "1.2.3",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,js,html,css,scss,json,md}\"",
@@ -14,7 +14,7 @@
     "@angular/core": "^20.0.0",
     "@angular/material": "^20.0.0",
     "@angular/cdk": "^20.0.0",
-    "acontplus-core": "^1.2.3"
+    "acontplus-core": "^1.2.5"
   },
   "exports": {
     "./styles": "./styles/_index.scss",
@@ -22,7 +22,6 @@
     "./styles/dialog": "./styles/_custom-dialog.scss",
     "./styles/snackbar": "./styles/_snackbar-theme.scss"
   },
-
   "sideEffects": [
     "**/*.scss",
     "**/*.css"

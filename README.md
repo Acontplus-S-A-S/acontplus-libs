@@ -223,7 +223,7 @@ npm test -- --testPathPattern="test-app"
 - **Setup**: `setup-jest.ts` - Jest setup and mocks
 - **TypeScript**: `tsconfig.spec.json` - TypeScript configuration for tests
 - **Environment**: Uses `jsdom` environment for Angular component testing
-- **Module Resolution**: Configured to resolve library imports (`@acontplus-core`, `@acontplus-ui-components`)
+- **Module Resolution**: Configured to resolve library imports (`acontplus-core`, `@acontplus-ui-components`)
 
 ### Test File Patterns
 
