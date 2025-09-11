@@ -1,2 +1,2 @@
-export * from './api-paths';
-export * from './common.const';
+export * from './api-urls.const'
+export * from './common.const'

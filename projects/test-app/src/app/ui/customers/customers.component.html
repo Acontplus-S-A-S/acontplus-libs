@@ -1,13 +1,19 @@
 <mat-card>
   <mat-card-content>
-    <acp-mat-theme-button text="Nuevo" (handleClick)="openAdd()" />
+    <acp-mat-theme-button
+      text="Nuevo"
+      (handleClick)="openAdd()"
+    />
 
     <div class="mt-2">
       <div class="customer-list-container">
-        @for (item of customers(); track $index) {
-          <acp-client-card [client]="item" (editClient)="openEdit(item)" />
+        @for (item of customers(); track $index){
+
+          <acp-customer-card [customer]="item" (editCustomer)="openEdit(item)"/>
         }
       </div>
     </div>
+
   </mat-card-content>
+
 </mat-card>

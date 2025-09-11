@@ -1,5 +1,8 @@
-export class ClientSearchMapper {
-  static toJson(params: any) {
+import { CustomerSearchDTO } from "../../application/dtos/customer.dto";
+
+export class CompanySearchMapper {
+
+  static toJson(params: CustomerSearchDTO) {
     return JSON.stringify({
       textSearch: params.search,
     });
@@ -8,7 +11,7 @@ export class ClientSearchMapper {
   static fromJson(response: any) {
     let customers: any[] = [];
 
-    if (response && response.code === '1') {
+    if (response && response.code === "1") {
       const results = JSON.parse(response.payload as string) || [];
 
       customers = results.map((item: any) => ({
@@ -30,7 +33,7 @@ export class ClientSearchMapper {
         sriCode: item.codigoSri,
         companyRuc: item.rucEmpresa,
         companyId: item.companyId,
-        name: item.nombreFiscal,
+        name: item.nombreFiscal
       }));
     }
 

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
 import { forkJoin, from, Observable } from 'rxjs';
 import {
-  clientUseCase,
+  customerUseCase,
   customerExternalUseCase,
   ToastrNotificationService,
   SRI_IDENTIFICATION_CODE,
@@ -18,7 +18,7 @@ import {
   MatDynamicCardComponent,
   MatInputChipComponent,
   MatThemeButtonComponent,
-} from '../../../components';
+} from '../../components';
 import { MatButtonModule } from '@angular/material/button';
 import {
   AbstractControl,
@@ -33,7 +33,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ToUpperCaseDirective } from '../../../directives';
+import { ToUpperCaseDirective } from '../../directives';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -41,7 +41,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 
 @Component({
-  selector: 'acp-client-add-edit',
+  selector: 'acp-customer-add-edit',
   imports: [
     MatDialogContent,
     MatDialogActions,
@@ -61,13 +61,13 @@ import { provideNativeDateAdapter } from '@angular/material/core';
     MatThemeButtonComponent,
     MatDynamicCardComponent,
   ],
-  templateUrl: './client-add-edit.component.html',
-  styleUrl: './client-add-edit.component.scss',
+  templateUrl: './customer-add-edit.component.html',
+  styleUrl: './customer-add-edit.component.scss',
   providers: [provideNativeDateAdapter()],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClientAddEditComponent implements OnInit {
-  private readonly dialogRef = inject(MatDialogRef<ClientAddEditComponent>);
+export class CustomerAddEditComponent implements OnInit {
+  private readonly dialogRef = inject(MatDialogRef<CustomerAddEditComponent>);
   btnText = signal('Guardar');
 
   readonly paramsOptions = inject<{
@@ -162,7 +162,7 @@ export class ClientAddEditComponent implements OnInit {
     this.customerForm.patchValue({
       validationSri: false,
     });
-    from(clientUseCase.checkExistence(id)).subscribe(response => {
+    from(customerUseCase.checkExistence(id)).subscribe(response => {
       if (response.success && response.data) {
         alert('El cliente ya se encuentra registrado en su empresa');
         this.tS.show({
@@ -217,11 +217,11 @@ export class ClientAddEditComponent implements OnInit {
   getLoadData(): Observable<any> {
     if (this.isUpdate()) {
       return forkJoin([
-        from(clientUseCase.getFormData()),
-        from(clientUseCase.getById(this.params.id)),
+        from(customerUseCase.getFormData()),
+        from(customerUseCase.getById(this.params.id)),
       ]);
     }
-    return from(clientUseCase.getFormData());
+    return from(customerUseCase.getFormData());
   }
 
   ngOnInit(): void {
@@ -415,7 +415,7 @@ export class ClientAddEditComponent implements OnInit {
         id: this.params.id,
         data: dataForm,
       };
-      from(clientUseCase.update(sendParams)).subscribe(response => {
+      from(customerUseCase.update(sendParams)).subscribe(response => {
         this.tS.show({
           type: response.success ? 'success' : 'warning',
           message: `${response.message}`,
@@ -429,7 +429,7 @@ export class ClientAddEditComponent implements OnInit {
     }
 
     if (this.isCreate()) {
-      from(clientUseCase.create(dataForm)).subscribe(response => {
+      from(customerUseCase.create(dataForm)).subscribe(response => {
         this.tS.show({
           type: response.success ? 'success' : 'warning',
           message: `${response.message}`,

@@ -1,4 +1,4 @@
-export interface Result<T> {
+export interface Result<T>  {
   success: boolean;
   data?: T;
   error?: string;
@@ -23,21 +23,16 @@ export interface RepositoryOptions<
   CreateDTO = TEntity,
   UpdateDTO = Partial<TEntity>,
   GetDTO = TEntity,
-  GetListDTO = TEntity,
-  GetAllRequest = any,
+  GetAllRequest = any
 > {
   entity: TEntity;
   id: ID;
   createDto?: CreateDTO;
   updateDto?: UpdateDTO;
-  getDto?: GetDTO; // Nuevo DTO para respuestas
-  getListDto?: GetListDTO; // Nuevo DTO para listas
+  getDto?: GetDTO;  // Nuevo DTO para respuestas
   getAllRequest?: GetAllRequest;
 }
 
-type WithRequiredProp<T, K extends keyof T> = Omit<T, K> & {
-  [P in K]-?: NonNullable<T[P]>;
-};
 export interface Repository<T extends RepositoryOptions> {
   /**
    * Busca una entidad por ID.
@@ -47,13 +42,9 @@ export interface Repository<T extends RepositoryOptions> {
 
   /**
    * Obtiene todas las entidades, soportando filtros y paginación.
-   * Devuelve un arreglo paginado de getListDto
+   * Devuelve un arreglo paginado de GetDTO
    */
-  getAll(
-    request?: T['getAllRequest'],
-  ): Promise<
-    WithRequiredProp<Result<WithRequiredProp<PageResult<T['getListDto']>, 'items'>>, 'data'>
-  >;
+  getAll(request?: T['getAllRequest']): Promise<Result<PageResult<T['getDto']>>>;
 
   /**
    * Crea una nueva entidad y devuelve el GetDTO.

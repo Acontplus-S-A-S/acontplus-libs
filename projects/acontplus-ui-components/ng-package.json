@@ -4,9 +4,6 @@
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "assets": [
-    { "input": "src/styles", "glob": "**/*", "output": "styles" },
-    { "input": "src/assets", "glob": "**/*", "output": "assets" }
-  ],
+  "assets": ["src/assets/**/*", "src/styles/**/*"],
   "allowedNonPeerDependencies": ["."]
 }

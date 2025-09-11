@@ -1,7 +1,8 @@
 import { CustomerExternalRepository } from '../../domain/repositories/customer-external.repository';
+import { CustomerExternalDTO } from '../../application/dtos/customer-external.dto';
 import { IdentificationNumberVo } from '../../../lib/domain/value-objects/identification-number.vo';
 import { HttpClientFactory } from '../../../lib/infrastructure';
-import { API_ENDPOINTS } from '../../../lib/domain/constants/api-paths';
+import { API_URLS } from '../../../lib/domain';
 
 export class CustomerExternalHttpRepository implements CustomerExternalRepository {
   private get http() {
@@ -9,7 +10,7 @@ export class CustomerExternalHttpRepository implements CustomerExternalRepositor
   }
 
   private get url() {
-    return `${API_ENDPOINTS.CONSULTAS.V1}/`;
+    return `${API_URLS.BILLING}/Consultas/`;
   }
 
   getById(identification: IdentificationNumberVo) {
