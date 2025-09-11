@@ -14,7 +14,7 @@
     "@angular/core": "^20.0.0",
     "@angular/material": "^20.0.0",
     "@angular/cdk": "^20.0.0",
-    "acontplus-core": "^1.2.3"
+    "acontplus-core": "^1.2.6"
   },
   "exports": {
     "./styles": "./styles/_index.scss",
