@@ -5,5 +5,5 @@ export const environment = {
 
   storageKey: 'app-test-token',
   clientId: 'app-test-client',
-  tokenKey: 'access_token'
+  tokenKey: 'access_token',
 };

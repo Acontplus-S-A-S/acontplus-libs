@@ -1,11 +1,14 @@
 # Acontplus Libraries
 
-A comprehensive collection of Angular libraries providing core utilities, UI components, and development tools with enterprise-grade architecture patterns.
+A comprehensive collection of Angular libraries providing core utilities, UI
+components, and development tools with enterprise-grade architecture patterns.
 
 ## 📚 Libraries
 
-- **acontplus-core**: Core utilities, services, interceptors, and models for Angular applications
-- **acontplus-ui-components**: Reusable UI components built with Angular Material
+- **acontplus-core**: Core utilities, services, interceptors, and models for
+  Angular applications
+- **acontplus-ui-components**: Reusable UI components built with Angular
+  Material
 - **test-app**: Demo application showcasing the libraries
 
 ## 🚀 Quick Start
@@ -37,19 +40,24 @@ npm start
 
 - **Clean Architecture**: Proper separation of concerns with distinct layers
 - **CQRS Pattern**: Command Query Responsibility Segregation implementation
-- **Repository Pattern**: Generic, extensible data access layer with factory pattern
-- **Use Case Pattern**: Business logic components with validation and authorization
+- **Repository Pattern**: Generic, extensible data access layer with factory
+  pattern
+- **Use Case Pattern**: Business logic components with validation and
+  authorization
 - **Response Standardization**: Unified API response handling with interceptors
-- **Multi-Application Support**: Designed for sharing across multiple Angular apps
+- **Multi-Application Support**: Designed for sharing across multiple Angular
+  apps
 - **Modern Angular Practices**: Latest Angular patterns and best practices
 
 ## 🎯 **Key Benefits**
 
 - **Consistent Architecture**: Same patterns across all applications
 - **Easy Configuration**: Environment-specific settings and runtime updates
-- **Scalable Repository Management**: Centralized registration and dynamic creation
+- **Scalable Repository Management**: Centralized registration and dynamic
+  creation
 - **Better Testing**: Dependency injection for mocking and isolated components
-- **Developer Experience**: Clear patterns, consistent API design, better error messages
+- **Developer Experience**: Clear patterns, consistent API design, better error
+  messages
 
 ## 🛠️ Development
 
@@ -95,7 +103,8 @@ Each project has its own format scripts:
 
 #### EditorConfig
 
-- **Cross-editor Consistency**: Ensures consistent coding style regardless of editor
+- **Cross-editor Consistency**: Ensures consistent coding style regardless of
+  editor
 - **File-type Specific**: Different rules for TypeScript, HTML, CSS, JSON, etc.
 - **Line Ending Management**: Consistent line endings across platforms
 
@@ -194,7 +203,8 @@ acontplus-libs/
 
 ## 🧪 Testing
 
-This project uses **Jest** as the test runner for fast, reliable testing with excellent Angular support.
+This project uses **Jest** as the test runner for fast, reliable testing with
+excellent Angular support.
 
 ### Running Tests
 
@@ -213,7 +223,7 @@ npm test -- --testPathPattern="component-name.spec.ts"
 
 # Run tests for specific project
 npm test -- --testPathPattern="acontplus-core"
-npm test -- --testPathPattern="acontplus-ui-components" 
+npm test -- --testPathPattern="acontplus-ui-components"
 npm test -- --testPathPattern="test-app"
 ```
 
@@ -223,19 +233,22 @@ npm test -- --testPathPattern="test-app"
 - **Setup**: `setup-jest.ts` - Jest setup and mocks
 - **TypeScript**: `tsconfig.spec.json` - TypeScript configuration for tests
 - **Environment**: Uses `jsdom` environment for Angular component testing
-- **Module Resolution**: Configured to resolve library imports (`@acontplus-core`, `@acontplus-ui-components`)
+- **Module Resolution**: Configured to resolve library imports
+  (`@acontplus-core`, `@acontplus-ui-components`)
 
 ### Test File Patterns
 
 Jest automatically discovers test files matching these patterns:
+
 - `**/__tests__/**/*.ts`
 - `**/?(*.)+(spec|test).ts`
 
 ### Coverage Reports
 
 Coverage reports are generated in the `coverage/` directory with:
+
 - **Text summary** in terminal
-- **HTML report** for detailed coverage analysis  
+- **HTML report** for detailed coverage analysis
 - **LCOV format** for CI/CD integration
 
 ## 📦 Building
@@ -268,12 +281,17 @@ npm run pack-acontplus-ui-components
 Comprehensive documentation is available in the `docs/` directory:
 
 - **[Documentation Overview](docs/README.md)** - Start here for an overview
-- **[Component API Reference](docs/component-api.md)** - Complete API documentation
-- **[Component Examples](docs/component-examples.md)** - Practical usage examples
-- **[Core Services](docs/core-services.md)** - Core library services documentation
-- **[API Response Handling](docs/api-response-handling.md)** - API handling guide
+- **[Component API Reference](docs/component-api.md)** - Complete API
+  documentation
+- **[Component Examples](docs/component-examples.md)** - Practical usage
+  examples
+- **[Core Services](docs/core-services.md)** - Core library services
+  documentation
+- **[API Response Handling](docs/api-response-handling.md)** - API handling
+  guide
 - **[Style Guide](docs/style-guide.md)** - Design system guidelines
-- **[Development Setup](docs/linting-and-formatting-setup.md)** - Code quality tools
+- **[Development Setup](docs/linting-and-formatting-setup.md)** - Code quality
+  tools
 
 ## 🤝 Contributing
 
@@ -315,22 +333,29 @@ npm run build-library
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
+for details.
 
 ## 🆘 Support
 
-- **Issues**: [GitHub Issues](https://github.com/Acontplus-S-A-S/acontplus-libs/issues)
+- **Issues**:
+  [GitHub Issues](https://github.com/Acontplus-S-A-S/acontplus-libs/issues)
 - **Documentation**: [Project Documentation](docs/README.md)
 - **Contact**: [Ivan Paz](https://github.com/ivanpaz)
 
 ## 🔄 Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes and improvements.
+See [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes and
+improvements.
 
 ## 🏆 **Architecture Assessment**
 
 **Current Status**: Enterprise-grade solution (9.5/10)
 
-The library now represents a **state-of-the-art, enterprise-ready foundation** that follows modern Angular development patterns. It's perfectly suited for multiple Angular applications and provides an excellent base for building scalable, maintainable applications.
+The library now represents a **state-of-the-art, enterprise-ready foundation**
+that follows modern Angular development patterns. It's perfectly suited for
+multiple Angular applications and provides an excellent base for building
+scalable, maintainable applications.
 
-**This is exactly the kind of foundation you want for a multi-application Angular ecosystem.** 🚀
+**This is exactly the kind of foundation you want for a multi-application
+Angular ecosystem.** 🚀

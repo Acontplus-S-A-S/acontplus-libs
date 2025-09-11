@@ -22,10 +22,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
   protected abstract baseUrl: string;
 
   // Optional CRUD operations - override only what you need
-  getAll?(
-    _pagination: PaginationParams,
-    _filters?: FilterParams,
-  ): Observable<PaginatedResult<T>> {
+  getAll?(_pagination: PaginationParams, _filters?: FilterParams): Observable<PaginatedResult<T>> {
     throw new Error('getAll method not implemented');
   }
 

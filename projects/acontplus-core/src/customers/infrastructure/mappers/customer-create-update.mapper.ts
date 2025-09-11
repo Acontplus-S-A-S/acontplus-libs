@@ -1,6 +1,5 @@
-import {getValidId, isValidField} from "../../../lib/utils/field.util";
-import {DateUtils} from "../../../lib/utils";
-
+import { getValidId, isValidField } from '../../../lib/utils/field.util';
+import { DateUtils } from '../../../lib/utils';
 
 export class CustomerCreateUpdateMapper {
   static toJson(param: any) {
@@ -37,7 +36,7 @@ export class CustomerCreateUpdateMapper {
     if (!response) return response;
     const result = {
       id: 0,
-    }
+    };
 
     if (response.code === '1' && typeof response.payload === 'string') {
       try {

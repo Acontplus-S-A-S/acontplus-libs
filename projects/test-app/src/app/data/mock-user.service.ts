@@ -4,7 +4,7 @@ import { User } from '../domain/user';
 import { PaginatedResult, PaginationParams, FilterParams } from '@acontplus-core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MockUserService {
   private users: User[] = [
@@ -15,7 +15,7 @@ export class MockUserService {
       role: 'admin',
       isActive: true,
       createdAt: '2024-01-15T10:00:00Z',
-      updatedAt: '2024-01-15T10:00:00Z'
+      updatedAt: '2024-01-15T10:00:00Z',
     },
     {
       id: 2,
@@ -24,7 +24,7 @@ export class MockUserService {
       role: 'manager',
       isActive: true,
       createdAt: '2024-01-16T11:00:00Z',
-      updatedAt: '2024-01-16T11:00:00Z'
+      updatedAt: '2024-01-16T11:00:00Z',
     },
     {
       id: 3,
@@ -33,7 +33,7 @@ export class MockUserService {
       role: 'user',
       isActive: true,
       createdAt: '2024-01-17T12:00:00Z',
-      updatedAt: '2024-01-17T12:00:00Z'
+      updatedAt: '2024-01-17T12:00:00Z',
     },
     {
       id: 4,
@@ -42,7 +42,7 @@ export class MockUserService {
       role: 'user',
       isActive: false,
       createdAt: '2024-01-18T13:00:00Z',
-      updatedAt: '2024-01-18T13:00:00Z'
+      updatedAt: '2024-01-18T13:00:00Z',
     },
     {
       id: 5,
@@ -51,7 +51,7 @@ export class MockUserService {
       role: 'manager',
       isActive: true,
       createdAt: '2024-01-19T14:00:00Z',
-      updatedAt: '2024-01-19T14:00:00Z'
+      updatedAt: '2024-01-19T14:00:00Z',
     },
     {
       id: 6,
@@ -60,7 +60,7 @@ export class MockUserService {
       role: 'user',
       isActive: true,
       createdAt: '2024-01-20T15:00:00Z',
-      updatedAt: '2024-01-20T15:00:00Z'
+      updatedAt: '2024-01-20T15:00:00Z',
     },
     {
       id: 7,
@@ -69,7 +69,7 @@ export class MockUserService {
       role: 'admin',
       isActive: true,
       createdAt: '2024-01-21T16:00:00Z',
-      updatedAt: '2024-01-21T16:00:00Z'
+      updatedAt: '2024-01-21T16:00:00Z',
     },
     {
       id: 8,
@@ -78,7 +78,7 @@ export class MockUserService {
       role: 'user',
       isActive: false,
       createdAt: '2024-01-22T17:00:00Z',
-      updatedAt: '2024-01-22T17:00:00Z'
+      updatedAt: '2024-01-22T17:00:00Z',
     },
     {
       id: 9,
@@ -87,7 +87,7 @@ export class MockUserService {
       role: 'manager',
       isActive: true,
       createdAt: '2024-01-23T18:00:00Z',
-      updatedAt: '2024-01-23T18:00:00Z'
+      updatedAt: '2024-01-23T18:00:00Z',
     },
     {
       id: 10,
@@ -96,23 +96,27 @@ export class MockUserService {
       role: 'user',
       isActive: true,
       createdAt: '2024-01-24T19:00:00Z',
-      updatedAt: '2024-01-24T19:00:00Z'
-    }
+      updatedAt: '2024-01-24T19:00:00Z',
+    },
   ];
 
   private nextId = 11;
 
-  getUsers(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<User>> {
+  getUsers(
+    pagination: PaginationParams,
+    filters?: FilterParams,
+  ): Observable<PaginatedResult<User>> {
     let filteredUsers = [...this.users];
 
     // Apply filters
     if (filters) {
       if (filters.search) {
         const searchTerm = filters.search.toLowerCase();
-        filteredUsers = filteredUsers.filter(user =>
-          user.name.toLowerCase().includes(searchTerm) ||
-          user.email.toLowerCase().includes(searchTerm) ||
-          user.role.toLowerCase().includes(searchTerm)
+        filteredUsers = filteredUsers.filter(
+          user =>
+            user.name.toLowerCase().includes(searchTerm) ||
+            user.email.toLowerCase().includes(searchTerm) ||
+            user.role.toLowerCase().includes(searchTerm),
         );
       }
 
@@ -151,7 +155,7 @@ export class MockUserService {
       total: filteredUsers.length,
       page: pagination.page,
       pageSize: pagination.pageSize,
-      totalPages: Math.ceil(filteredUsers.length / pagination.pageSize)
+      totalPages: Math.ceil(filteredUsers.length / pagination.pageSize),
     };
 
     return of(result).pipe(delay(300)); // Simulate network delay
@@ -170,7 +174,7 @@ export class MockUserService {
       ...userData,
       id: this.nextId++,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     this.users.push(newUser);
@@ -186,7 +190,7 @@ export class MockUserService {
     this.users[userIndex] = {
       ...this.users[userIndex],
       ...userData,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     return of(this.users[userIndex]).pipe(delay(500));

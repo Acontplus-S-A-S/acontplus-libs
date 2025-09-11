@@ -1,8 +1,7 @@
 import { CustomerExternalRepository } from '../../domain/repositories/customer-external.repository';
 import { CustomerExternalDTO } from '../../application/dtos/customer-external.dto';
-import { IdentificationNumberVo } from '../../../lib/domain/value-objects/identification-number.vo';
+import { IdentificationNumberVo, API_URLS } from '../../../lib/domain';
 import { HttpClientFactory } from '../../../lib/infrastructure';
-import { API_URLS } from '../../../lib/domain';
 
 export class CustomerExternalHttpRepository implements CustomerExternalRepository {
   private get http() {

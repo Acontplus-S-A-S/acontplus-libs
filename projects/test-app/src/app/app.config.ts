@@ -1,7 +1,8 @@
-
-
-
-import {ApplicationConfig, provideAppInitializer, provideZoneChangeDetection} from '@angular/core';
+import {
+  ApplicationConfig,
+  provideAppInitializer,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { TranslocoHttpLoader } from './providers/transloco-loader';
 
@@ -22,7 +23,7 @@ import { provideTransloco } from '@jsverse/transloco';
 import { provideToastr } from 'ngx-toastr';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpContext } from '../../../acontplus-core/src/lib/interceptors';
-import {initHttpFactory} from "./init-http-factory";
+import { initHttpFactory } from './init-http-factory';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -41,7 +42,6 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     provideAppInitializer(initHttpFactory()),
-
 
     provideHttpClient(
       withInterceptors([apiInterceptor, spinnerInterceptor, httpContextInterceptor]),

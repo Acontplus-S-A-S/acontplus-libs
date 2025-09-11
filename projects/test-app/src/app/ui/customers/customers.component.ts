@@ -1,15 +1,15 @@
-
-import {Component, inject, Injectable, signal} from '@angular/core';
-import {customerUseCase, CustomerListItemDto} from "@acontplus-core";
-import {from} from "rxjs";
-import {MatCardModule} from "@angular/material/card";
-import {AdvancedDialogService, MatThemeButtonComponent, CustomerAddEditComponent, CustomerCardComponent} from "@acontplus-ui-components";
-import {MatChip, MatChipSet} from "@angular/material/chips";
-import {MatButtonModule} from "@angular/material/button";
-
-
-
-
+import { Component, inject, Injectable, signal } from '@angular/core';
+import { customerUseCase, CustomerListItemDto } from '@acontplus-core';
+import { from } from 'rxjs';
+import { MatCardModule } from '@angular/material/card';
+import {
+  AdvancedDialogService,
+  MatThemeButtonComponent,
+  CustomerAddEditComponent,
+  CustomerCardComponent,
+} from '@acontplus-ui-components';
+import { MatChip, MatChipSet } from '@angular/material/chips';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-customers',
@@ -21,48 +21,54 @@ import {MatButtonModule} from "@angular/material/button";
     MatChip,
     MatButtonModule,
     MatThemeButtonComponent,
-    CustomerCardComponent
+    CustomerCardComponent,
   ],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.scss',
 })
 export class CustomersComponent {
-  private dialogSvc = inject(AdvancedDialogService)
+  private dialogSvc = inject(AdvancedDialogService);
 
-  customers = signal<CustomerListItemDto[]>([])
+  customers = signal<CustomerListItemDto[]>([]);
 
-  ngOnInit(){
-     from(customerUseCase.getAll({
-       pageIndex: 1,
-       pageSize: 10,
-     })).subscribe(x => {
-       console.log(x)
-       this.customers.set(x?.data?.items || [])
-     })
+  ngOnInit() {
+    from(
+      customerUseCase.getAll({
+        pageIndex: 1,
+        pageSize: 10,
+      }),
+    ).subscribe(x => {
+      console.log(x);
+      this.customers.set(x?.data?.items || []);
+    });
   }
 
-  openEdit(customer: CustomerListItemDto){
-    console.log(customer)
-    this.dialogSvc.openInWrapper({
-      component: CustomerAddEditComponent,
-      title: 'Editar Cliente',
-      icon: 'edit',
-      data: customer,
-    }, {
-      size: 'xl',
-    }
-    )
+  openEdit(customer: CustomerListItemDto) {
+    console.log(customer);
+    this.dialogSvc.openInWrapper(
+      {
+        component: CustomerAddEditComponent,
+        title: 'Editar Cliente',
+        icon: 'edit',
+        data: customer,
+      },
+      {
+        size: 'xl',
+      },
+    );
   }
 
-  openAdd(){
-    this.dialogSvc.openInWrapper({
-      component: CustomerAddEditComponent,
-      title: 'Nuevo Cliente',
-      icon: 'add',
-      data: {},
-    }, {
-      size: 'xl',
-
-    })
+  openAdd() {
+    this.dialogSvc.openInWrapper(
+      {
+        component: CustomerAddEditComponent,
+        title: 'Nuevo Cliente',
+        icon: 'add',
+        data: {},
+      },
+      {
+        size: 'xl',
+      },
+    );
   }
 }

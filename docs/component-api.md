@@ -1,6 +1,8 @@
 # UI Component API Documentation
 
-This document provides detailed API documentation for all UI components in the `acontplus-ui-components` library, including inputs, outputs, methods, and interfaces.
+This document provides detailed API documentation for all UI components in the
+`acontplus-ui-components` library, including inputs, outputs, methods, and
+interfaces.
 
 ## Table of Contents
 
@@ -35,7 +37,8 @@ This document provides detailed API documentation for all UI components in the `
 
 ### MatDynamicCardComponent
 
-A versatile card component that wraps Angular Material's `mat-card` with additional functionality and customization options.
+A versatile card component that wraps Angular Material's `mat-card` with
+additional functionality and customization options.
 
 **Selector:** `acp-mat-dynamic-card`
 
@@ -76,7 +79,9 @@ A versatile card component that wraps Angular Material's `mat-card` with additio
 
 ### DialogWrapperComponent
 
-A wrapper component for Angular Material dialogs that provides a consistent look and feel, including a draggable header and the ability to dynamically create components inside the dialog.
+A wrapper component for Angular Material dialogs that provides a consistent look
+and feel, including a draggable header and the ability to dynamically create
+components inside the dialog.
 
 **Selector:** `acp-dialog-wrapper`
 
@@ -185,10 +190,10 @@ A user icon component with customizable appearance.
 
 **Inputs:**
 
-| Name  | Type   | Default | Description                    |
-| ----- | ------ | ------- | ------------------------------ |
-| size  | string | '24px'  | Size of the icon               |
-| color | string | -       | Color of the icon              |
+| Name  | Type   | Default | Description       |
+| ----- | ------ | ------- | ----------------- |
+| size  | string | '24px'  | Size of the icon  |
+| color | string | -       | Color of the icon |
 
 ## Mat Input Chip
 
@@ -200,16 +205,16 @@ A chip component that integrates with Angular Material's chip list.
 
 **Inputs:**
 
-| Name      | Type   | Default | Description                    |
-| --------- | ------ | ------- | ------------------------------ |
-| value     | string | -       | The value of the chip          |
-| removable | boolean| true    | Whether the chip can be removed |
+| Name      | Type    | Default | Description                     |
+| --------- | ------- | ------- | ------------------------------- |
+| value     | string  | -       | The value of the chip           |
+| removable | boolean | true    | Whether the chip can be removed |
 
 **Outputs:**
 
-| Name      | Type   | Description                    |
-| --------- | ------ | ------------------------------ |
-| removed   | string | Emitted when the chip is removed |
+| Name    | Type   | Description                      |
+| ------- | ------ | -------------------------------- |
+| removed | string | Emitted when the chip is removed |
 
 ## Mat Theme Button
 
@@ -221,11 +226,11 @@ A theme-aware button component that adapts to the current theme.
 
 **Inputs:**
 
-| Name      | Type   | Default | Description                    |
-| --------- | ------ | ------- | ------------------------------ |
-| text      | string | -       | Button text                    |
-| icon      | string | -       | Material icon name             |
-| variant   | 'primary' \| 'secondary' \| 'warn' | 'primary' | Button variant |
+| Name    | Type                               | Default   | Description        |
+| ------- | ---------------------------------- | --------- | ------------------ |
+| text    | string                             | -         | Button text        |
+| icon    | string                             | -         | Material icon name |
+| variant | 'primary' \| 'secondary' \| 'warn' | 'primary' | Button variant     |
 
 ## Snackbar
 
@@ -237,11 +242,11 @@ A notification component for displaying snackbar messages.
 
 **Inputs:**
 
-| Name      | Type   | Default | Description                    |
-| --------- | ------ | ------- | ------------------------------ |
-| message   | string | -       | The notification message       |
-| type      | 'success' \| 'error' \| 'warning' \| 'info' | 'info' | Message type |
-| duration  | number | 3000    | Display duration in milliseconds |
+| Name     | Type                                        | Default | Description                      |
+| -------- | ------------------------------------------- | ------- | -------------------------------- |
+| message  | string                                      | -       | The notification message         |
+| type     | 'success' \| 'error' \| 'warning' \| 'info' | 'info'  | Message type                     |
+| duration | number                                      | 3000    | Display duration in milliseconds |
 
 ## Spinner
 
@@ -253,11 +258,11 @@ A loading spinner component with customizable appearance.
 
 **Inputs:**
 
-| Name      | Type   | Default | Description                    |
-| --------- | ------ | ------- | ------------------------------ |
-| size      | string | '24px'  | Size of the spinner            |
-| color     | string | -       | Color of the spinner           |
-| overlay   | boolean| false   | Whether to show overlay        |
+| Name    | Type    | Default | Description             |
+| ------- | ------- | ------- | ----------------------- |
+| size    | string  | '24px'  | Size of the spinner     |
+| color   | string  | -       | Color of the spinner    |
+| overlay | boolean | false   | Whether to show overlay |
 
 ## Tables
 
@@ -269,11 +274,11 @@ A dynamic table component built on Angular Material.
 
 **Inputs:**
 
-| Name      | Type   | Default | Description                    |
-| --------- | ------ | ------- | ------------------------------ |
-| data      | any[]  | []      | Table data                     |
-| columns   | ColumnDefinition[] | [] | Column definitions            |
-| pagination| PaginationConfig | null | Pagination configuration |
+| Name       | Type               | Default | Description              |
+| ---------- | ------------------ | ------- | ------------------------ |
+| data       | any[]              | []      | Table data               |
+| columns    | ColumnDefinition[] | []      | Column definitions       |
+| pagination | PaginationConfig   | null    | Pagination configuration |
 
 ### CustomTabulatorComponent
 
@@ -283,10 +288,10 @@ A table component using Tabulator library for advanced table features.
 
 **Inputs:**
 
-| Name      | Type   | Default | Description                    |
-| --------- | ------ | ------- | ------------------------------ |
-| data      | any[]  | []      | Table data                     |
-| options   | TabulatorOptions | {} | Tabulator configuration options |
+| Name    | Type             | Default | Description                     |
+| ------- | ---------------- | ------- | ------------------------------- |
+| data    | any[]            | []      | Table data                      |
+| options | TabulatorOptions | {}      | Tabulator configuration options |
 
 ## Theme Toggle
 
@@ -298,93 +303,96 @@ A component for switching between light and dark themes.
 
 **Inputs:**
 
-| Name      | Type   | Default | Description                    |
-| --------- | ------ | ------- | ------------------------------ |
-| showLabel | boolean| true    | Whether to show the theme label |
+| Name      | Type    | Default | Description                     |
+| --------- | ------- | ------- | ------------------------------- |
+| showLabel | boolean | true    | Whether to show the theme label |
 
 **Outputs:**
 
-| Name      | Type   | Description                    |
-| --------- | ------ | ------------------------------ |
+| Name         | Type              | Description                |
+| ------------ | ----------------- | -------------------------- |
 | themeChanged | 'light' \| 'dark' | Emitted when theme changes |
 
 ## Autocomplete Wrapper
 
 ### AutocompleteWrapperComponent
 
-A powerful, feature-rich autocomplete component that provides advanced search capabilities, local and remote data handling, and customizable filtering options.
+A powerful, feature-rich autocomplete component that provides advanced search
+capabilities, local and remote data handling, and customizable filtering
+options.
 
 **Selector:** `acp-autocomplete-wrapper`
 
 **Inputs:**
 
-| Name                | Type                                    | Default | Description                                    |
-| ------------------- | --------------------------------------- | ------- | ---------------------------------------------- |
-| dataSource          | AutocompleteWrapperItem[]                | []      | Local data source for the autocomplete         |
-| config              | AutocompleteWrapperConfig                | default | Configuration object for the component         |
-| itemTemplate        | TemplateRef<any>                        | -       | Custom template for rendering items             |
-| searchFunction      | AutocompleteWrapperSearchFunction        | -       | Function for remote search operations          |
-| notFoundTemplate    | TemplateRef<any>                        | -       | Custom template for when no items are found    |
-| overlayWidth        | string                                  | 'auto'  | Width of the dropdown overlay                  |
-| overlayMaxHeight    | string                                  | '400px' | Maximum height of the dropdown overlay         |
+| Name             | Type                              | Default | Description                                 |
+| ---------------- | --------------------------------- | ------- | ------------------------------------------- |
+| dataSource       | AutocompleteWrapperItem[]         | []      | Local data source for the autocomplete      |
+| config           | AutocompleteWrapperConfig         | default | Configuration object for the component      |
+| itemTemplate     | TemplateRef<any>                  | -       | Custom template for rendering items         |
+| searchFunction   | AutocompleteWrapperSearchFunction | -       | Function for remote search operations       |
+| notFoundTemplate | TemplateRef<any>                  | -       | Custom template for when no items are found |
+| overlayWidth     | string                            | 'auto'  | Width of the dropdown overlay               |
+| overlayMaxHeight | string                            | '400px' | Maximum height of the dropdown overlay      |
 
 **Outputs:**
 
-| Name                | Type                                                                    | Description                                    |
-| ------------------- | ----------------------------------------------------------------------- | ---------------------------------------------- |
-| itemSelected        | AutocompleteWrapperItem                                                  | Emitted when an item is selected               |
-| searchChanged       | string                                                                  | Emitted when the search query changes          |
-| searchRequested     | { query: string; filters: AutocompleteWrapperFilters; page: number }    | Emitted when a search is requested             |
-| pageChanged         | number                                                                  | Emitted when the page changes                  |
-| filterChanged       | AutocompleteWrapperFilters                                               | Emitted when filters change                    |
-| advancedSearchClicked| void                                                                     | Emitted when advanced search is clicked        |
-| allResultsClicked   | string                                                                  | Emitted when "all results" is clicked         |
-| createClicked       | string                                                                  | Emitted when create option is clicked          |
+| Name                  | Type                                                                 | Description                             |
+| --------------------- | -------------------------------------------------------------------- | --------------------------------------- |
+| itemSelected          | AutocompleteWrapperItem                                              | Emitted when an item is selected        |
+| searchChanged         | string                                                               | Emitted when the search query changes   |
+| searchRequested       | { query: string; filters: AutocompleteWrapperFilters; page: number } | Emitted when a search is requested      |
+| pageChanged           | number                                                               | Emitted when the page changes           |
+| filterChanged         | AutocompleteWrapperFilters                                           | Emitted when filters change             |
+| advancedSearchClicked | void                                                                 | Emitted when advanced search is clicked |
+| allResultsClicked     | string                                                               | Emitted when "all results" is clicked   |
+| createClicked         | string                                                               | Emitted when create option is clicked   |
 
 **ViewChild:**
 
-| Name                | Type             | Description                                    |
-| ------------------- | ---------------- | ---------------------------------------------- |
-| searchInput         | ElementRef       | Reference to the search input element          |
-| historyListElement  | ElementRef       | Reference to the history list element          |
-| resultsListElement  | ElementRef       | Reference to the results list element          |
+| Name               | Type       | Description                           |
+| ------------------ | ---------- | ------------------------------------- |
+| searchInput        | ElementRef | Reference to the search input element |
+| historyListElement | ElementRef | Reference to the history list element |
+| resultsListElement | ElementRef | Reference to the results list element |
 
 **Methods:**
 
-| Name                | Parameters | Return Type | Description                                    |
-| ------------------- | ---------- | ----------- | ---------------------------------------------- |
-| ngOnInit            | none       | void        | Lifecycle hook that initializes the component |
-| ngOnDestroy         | none       | void        | Lifecycle hook that cleans up subscriptions   |
-| onInputFocus        | none       | void        | Handles input focus events                     |
-| onInputBlur        | none       | void        | Handles input blur events                      |
-| onInputChange      | event: Event | void      | Handles input change events                    |
-| onInputKeyDown      | event: KeyboardEvent | void | Handles keyboard navigation                    |
-| onItemClick        | item: AutocompleteWrapperItem | void | Handles item selection                        |
-| onHistoryItemClick | item: AutocompleteWrapperItem | void | Handles history item selection                |
-| onAdvancedSearchClick | none | void | Handles advanced search button click          |
-| onAllResultsClick  | none       | void        | Handles "all results" button click            |
-| onCreateClick      | none       | void        | Handles create option button click            |
-| onFilterChange     | filters: AutocompleteWrapperFilters | void | Handles filter changes                        |
-| onPageChange       | page: number | void      | Handles page changes                          |
-| closeOverlay       | none       | void        | Closes the dropdown overlay                    |
-| openOverlay        | none       | void        | Opens the dropdown overlay                     |
+| Name                  | Parameters                          | Return Type | Description                                   |
+| --------------------- | ----------------------------------- | ----------- | --------------------------------------------- |
+| ngOnInit              | none                                | void        | Lifecycle hook that initializes the component |
+| ngOnDestroy           | none                                | void        | Lifecycle hook that cleans up subscriptions   |
+| onInputFocus          | none                                | void        | Handles input focus events                    |
+| onInputBlur           | none                                | void        | Handles input blur events                     |
+| onInputChange         | event: Event                        | void        | Handles input change events                   |
+| onInputKeyDown        | event: KeyboardEvent                | void        | Handles keyboard navigation                   |
+| onItemClick           | item: AutocompleteWrapperItem       | void        | Handles item selection                        |
+| onHistoryItemClick    | item: AutocompleteWrapperItem       | void        | Handles history item selection                |
+| onAdvancedSearchClick | none                                | void        | Handles advanced search button click          |
+| onAllResultsClick     | none                                | void        | Handles "all results" button click            |
+| onCreateClick         | none                                | void        | Handles create option button click            |
+| onFilterChange        | filters: AutocompleteWrapperFilters | void        | Handles filter changes                        |
+| onPageChange          | page: number                        | void        | Handles page changes                          |
+| closeOverlay          | none                                | void        | Closes the dropdown overlay                   |
+| openOverlay           | none                                | void        | Opens the dropdown overlay                    |
 
 ### AutocompleteWrapperService
 
-A service that provides utility methods for autocomplete operations, including local search, filtering, and history management.
+A service that provides utility methods for autocomplete operations, including
+local search, filtering, and history management.
 
 **Methods:**
 
-| Name                | Parameters                                                                                    | Return Type                                    | Description                                    |
-| ------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
-| searchLocal         | items: AutocompleteWrapperItem[], query: string, filters: AutocompleteWrapperFilters, config: AutocompleteWrapperConfig | Observable<AutocompleteWrapperSearchResult> | Performs local search on provided items        |
-| searchAsync         | items: AutocompleteWrapperItem[], query: string, filters: AutocompleteWrapperFilters, config: AutocompleteWrapperConfig | Observable<AutocompleteWrapperItem[]>        | Simulates async search with delay              |
-| filterItems         | items: AutocompleteWrapperItem[], query: string, filters: AutocompleteWrapperFilters, config: AutocompleteWrapperConfig | AutocompleteWrapperItem[]                     | Filters items based on query and filters       |
-| addToHistory        | item: AutocompleteWrapperItem | void                                           | Adds an item to search history                 |
-| getHistory          | none       | Observable<AutocompleteWrapperItem[]>          | Gets the current search history                |
-| clearHistory        | none       | void                                           | Clears the search history                      |
-| loadHistoryFromStorage | none | void                                           | Loads history from local storage               |
-| saveHistoryToStorage | none | void                                           | Saves history to local storage                 |
+| Name                   | Parameters                                                                                                              | Return Type                                 | Description                              |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ---------------------------------------- |
+| searchLocal            | items: AutocompleteWrapperItem[], query: string, filters: AutocompleteWrapperFilters, config: AutocompleteWrapperConfig | Observable<AutocompleteWrapperSearchResult> | Performs local search on provided items  |
+| searchAsync            | items: AutocompleteWrapperItem[], query: string, filters: AutocompleteWrapperFilters, config: AutocompleteWrapperConfig | Observable<AutocompleteWrapperItem[]>       | Simulates async search with delay        |
+| filterItems            | items: AutocompleteWrapperItem[], query: string, filters: AutocompleteWrapperFilters, config: AutocompleteWrapperConfig | AutocompleteWrapperItem[]                   | Filters items based on query and filters |
+| addToHistory           | item: AutocompleteWrapperItem                                                                                           | void                                        | Adds an item to search history           |
+| getHistory             | none                                                                                                                    | Observable<AutocompleteWrapperItem[]>       | Gets the current search history          |
+| clearHistory           | none                                                                                                                    | void                                        | Clears the search history                |
+| loadHistoryFromStorage | none                                                                                                                    | void                                        | Loads history from local storage         |
+| saveHistoryToStorage   | none                                                                                                                    | void                                        | Saves history to local storage           |
 
 **Interfaces:**
 
@@ -421,7 +429,11 @@ interface AutocompleteWrapperFilters {
 }
 
 interface AutocompleteWrapperSearchFunction {
-  (query: string, filters: AutocompleteWrapperFilters, page: number): Observable<AutocompleteWrapperSearchResult>;
+  (
+    query: string,
+    filters: AutocompleteWrapperFilters,
+    page: number,
+  ): Observable<AutocompleteWrapperSearchResult>;
 }
 
 interface AutocompleteWrapperSearchResult {
@@ -444,4 +456,5 @@ interface AutocompleteWrapperState {
 
 ---
 
-For detailed usage examples, see the [Component Examples](component-examples.md) documentation.
+For detailed usage examples, see the [Component Examples](component-examples.md)
+documentation.

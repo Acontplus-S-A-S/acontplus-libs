@@ -1,4 +1,12 @@
-import { Component, ViewChild, ViewContainerRef, AfterViewInit, ElementRef, ChangeDetectionStrategy, inject } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ViewContainerRef,
+  AfterViewInit,
+  ElementRef,
+  ChangeDetectionStrategy,
+  inject,
+} from '@angular/core';
 
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';

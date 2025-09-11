@@ -1,10 +1,12 @@
 # Linting and Formatting Setup
 
-This document describes the comprehensive code quality setup implemented for the Acontplus Libraries project.
+This document describes the comprehensive code quality setup implemented for the
+Acontplus Libraries project.
 
 ## 🎯 Overview
 
 We have implemented a robust code quality system that includes:
+
 - **ESLint**: Code linting with Angular-specific rules
 - **Prettier**: Code formatting for consistency
 - **EditorConfig**: Cross-editor coding style consistency
@@ -15,6 +17,7 @@ We have implemented a robust code quality system that includes:
 ### 1. ESLint Configuration (`eslint.config.js`)
 
 **Features:**
+
 - Angular-specific linting rules
 - TypeScript code quality enforcement
 - Template accessibility checks
@@ -22,6 +25,7 @@ We have implemented a robust code quality system that includes:
 - Project-specific rule overrides
 
 **Key Rules:**
+
 ```javascript
 // Angular component selector rules
 "@angular-eslint/component-selector": [
@@ -46,6 +50,7 @@ We have implemented a robust code quality system that includes:
 ### 2. Prettier Configuration (`.prettierrc`)
 
 **Global Settings:**
+
 ```json
 {
   "semi": true,
@@ -60,6 +65,7 @@ We have implemented a robust code quality system that includes:
 ```
 
 **File-specific Overrides:**
+
 - JSON files: 80 character width
 - Markdown files: 80 character width, always wrap
 - YAML files: Double quotes
@@ -67,6 +73,7 @@ We have implemented a robust code quality system that includes:
 ### 3. EditorConfig (`.editorconfig`)
 
 **Cross-platform consistency:**
+
 - UTF-8 encoding
 - LF line endings (Unix-style)
 - 2-space indentation
@@ -75,6 +82,7 @@ We have implemented a robust code quality system that includes:
 ### 4. Prettier Ignore (`.prettierignore`)
 
 **Excluded from formatting:**
+
 - `node_modules/`
 - `dist/`
 - `coverage/`
@@ -101,6 +109,7 @@ npm run format:fix        # Alias for format
 ### Project-level Scripts
 
 Each project has its own formatting scripts:
+
 ```bash
 # In any project directory
 npm run format            # Format project code
@@ -132,6 +141,7 @@ npm run test
 ### 2. Continuous Integration
 
 The CI pipeline should run:
+
 ```bash
 npm run lint:all          # Lint + format check
 npm run test              # Run all tests
@@ -151,14 +161,17 @@ npm run build-library     # Build verification
 ### ⚠️ Remaining Issues
 
 #### Test Files
+
 - Many `.spec.ts` files have parsing errors due to test framework configuration
 - These are typically not critical for production code
 
 #### Component Selectors
+
 - Some components don't follow the `acp` prefix convention
 - Need to update component decorators
 
 #### TypeScript Issues
+
 - Some `any` types still present (warnings, not errors)
 - Unused variables in some files
 - Missing lifecycle interface implementations
@@ -166,6 +179,7 @@ npm run build-library     # Build verification
 ### 🔧 Recommended Next Steps
 
 1. **Fix Component Selectors**
+
    ```typescript
    // Update component decorators to use correct prefixes
    @Component({
@@ -202,7 +216,8 @@ npm run build-library     # Build verification
 
 1. **Component Selectors**: Use appropriate prefixes (`acp`, `app`)
 2. **Lifecycle Hooks**: Implement proper interfaces
-3. **Dependency Injection**: Prefer `inject()` function over constructor injection
+3. **Dependency Injection**: Prefer `inject()` function over constructor
+   injection
 4. **Template Accessibility**: Follow ARIA guidelines
 
 ### TypeScript Best Practices
@@ -234,7 +249,8 @@ npm run build-library     # Build verification
 ### Getting Help
 
 - Check the [ESLint documentation](https://eslint.org/)
-- Review [Prettier configuration options](https://prettier.io/docs/en/configuration.html)
+- Review
+  [Prettier configuration options](https://prettier.io/docs/en/configuration.html)
 - Consult [EditorConfig specifications](https://editorconfig.org/)
 - Review Angular style guide for component conventions
 
@@ -256,5 +272,4 @@ npm run build-library     # Build verification
 
 ---
 
-*Last updated: December 2024*
-*Maintained by: Development Team*
+_Last updated: December 2024_ _Maintained by: Development Team_

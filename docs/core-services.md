@@ -1,6 +1,8 @@
 # Core Library Services Documentation
 
-This document provides comprehensive documentation for all services available in the `acontplus-core` library, including configuration, authentication, logging, and utility services.
+This document provides comprehensive documentation for all services available in
+the `acontplus-core` library, including configuration, authentication, logging,
+and utility services.
 
 ## Table of Contents
 
@@ -15,7 +17,8 @@ This document provides comprehensive documentation for all services available in
 
 ## Core Configuration Service
 
-The `CoreConfigService` provides centralized configuration management for the core library, allowing runtime updates and environment-specific settings.
+The `CoreConfigService` provides centralized configuration management for the
+core library, allowing runtime updates and environment-specific settings.
 
 ### Basic Usage
 
@@ -61,18 +64,19 @@ interface CoreConfig {
 
 ### Methods
 
-| Name                | Parameters | Return Type | Description                                    |
-| ------------------- | ---------- | ----------- | ---------------------------------------------- |
-| get                 | key: K     | CoreConfig[K] | Gets a configuration value by key              |
-| updateConfig        | updates: Partial<CoreConfig> | void | Updates configuration values                   |
-| isFeatureEnabled    | feature: keyof CoreConfig | boolean | Checks if a feature is enabled                 |
-| getApiUrl           | entityName?: string | string | Gets the API URL for an entity                |
-| resetConfig         | none       | void        | Resets configuration to default values         |
-| getConfigSnapshot   | none       | CoreConfig  | Gets a snapshot of current configuration       |
+| Name              | Parameters                   | Return Type   | Description                              |
+| ----------------- | ---------------------------- | ------------- | ---------------------------------------- |
+| get               | key: K                       | CoreConfig[K] | Gets a configuration value by key        |
+| updateConfig      | updates: Partial<CoreConfig> | void          | Updates configuration values             |
+| isFeatureEnabled  | feature: keyof CoreConfig    | boolean       | Checks if a feature is enabled           |
+| getApiUrl         | entityName?: string          | string        | Gets the API URL for an entity           |
+| resetConfig       | none                         | void          | Resets configuration to default values   |
+| getConfigSnapshot | none                         | CoreConfig    | Gets a snapshot of current configuration |
 
 ## Repository Factory Service
 
-The `RepositoryFactory` provides centralized repository management, allowing dynamic registration and retrieval of repositories by key or entity name.
+The `RepositoryFactory` provides centralized repository management, allowing
+dynamic registration and retrieval of repositories by key or entity name.
 
 ### Basic Usage
 
@@ -96,15 +100,15 @@ export class YourService {
 
 ### Methods
 
-| Name                | Parameters | Return Type | Description                                    |
-| ------------------- | ---------- | ----------- | ---------------------------------------------- |
-| register            | key: string, repository: Type<BaseRepository<T>>, entityName: string, baseUrl?: string | void | Registers a repository with the factory        |
-| get                 | key: string | BaseRepository<T> \| undefined | Gets a repository by key                       |
-| getRequired         | key: string | BaseRepository<T> | Gets a repository by key (throws if not found) |
-| getByEntityName     | entityName: string | BaseRepository<T> \| undefined | Gets a repository by entity name               |
-| getAll              | none       | BaseRepository<any>[] | Gets all registered repositories                |
-| unregister          | key: string | boolean     | Unregisters a repository                       |
-| clear               | none       | void        | Clears all registered repositories              |
+| Name            | Parameters                                                                             | Return Type                    | Description                                    |
+| --------------- | -------------------------------------------------------------------------------------- | ------------------------------ | ---------------------------------------------- |
+| register        | key: string, repository: Type<BaseRepository<T>>, entityName: string, baseUrl?: string | void                           | Registers a repository with the factory        |
+| get             | key: string                                                                            | BaseRepository<T> \| undefined | Gets a repository by key                       |
+| getRequired     | key: string                                                                            | BaseRepository<T>              | Gets a repository by key (throws if not found) |
+| getByEntityName | entityName: string                                                                     | BaseRepository<T> \| undefined | Gets a repository by entity name               |
+| getAll          | none                                                                                   | BaseRepository<any>[]          | Gets all registered repositories               |
+| unregister      | key: string                                                                            | boolean                        | Unregisters a repository                       |
+| clear           | none                                                                                   | void                           | Clears all registered repositories             |
 
 ### Registration Example
 
@@ -113,9 +117,24 @@ export class YourService {
 @NgModule({
   providers: [
     provideRepositoryRegistrations([
-      createRepositoryRegistration('user', UserRepository, 'users', '/api/users'),
-      createRepositoryRegistration('product', ProductRepository, 'products', '/api/products'),
-      createRepositoryRegistration('order', OrderRepository, 'orders', '/api/orders'),
+      createRepositoryRegistration(
+        'user',
+        UserRepository,
+        'users',
+        '/api/users',
+      ),
+      createRepositoryRegistration(
+        'product',
+        ProductRepository,
+        'products',
+        '/api/products',
+      ),
+      createRepositoryRegistration(
+        'order',
+        OrderRepository,
+        'orders',
+        '/api/orders',
+      ),
     ]),
   ],
 })
@@ -124,7 +143,9 @@ export class AppModule {}
 
 ## Response Handler Service
 
-The `ResponseHandlerService` provides utilities for handling API responses that have been processed by the API interceptor, extracting data and messages consistently.
+The `ResponseHandlerService` provides utilities for handling API responses that
+have been processed by the API interceptor, extracting data and messages
+consistently.
 
 ### Basic Usage
 
@@ -154,13 +175,13 @@ export class YourService {
 
 ### Methods
 
-| Name                | Parameters | Return Type | Description                                    |
-| ------------------- | ---------- | ----------- | ---------------------------------------------- |
-| handleResponse      | response: any | ResponseResult<T> | Handles API responses and extracts data/message |
-| extractData         | response: any | T           | Extracts only the data from a response         |
-| extractMessage      | response: any | string \| undefined | Extracts only the message from a response     |
-| hasData             | response: any | boolean     | Checks if the response contains data           |
-| hasMessage          | response: any | boolean     | Checks if the response contains a message      |
+| Name           | Parameters    | Return Type         | Description                                     |
+| -------------- | ------------- | ------------------- | ----------------------------------------------- |
+| handleResponse | response: any | ResponseResult<T>   | Handles API responses and extracts data/message |
+| extractData    | response: any | T                   | Extracts only the data from a response          |
+| extractMessage | response: any | string \| undefined | Extracts only the message from a response       |
+| hasData        | response: any | boolean             | Checks if the response contains data            |
+| hasMessage     | response: any | boolean             | Checks if the response contains a message       |
 
 ### Response Result Interface
 
@@ -176,7 +197,8 @@ interface ResponseResult<T> {
 
 ## JWT Token Service
 
-The `JwtTokenService` provides JWT token management, including storage, validation, and decoding.
+The `JwtTokenService` provides JWT token management, including storage,
+validation, and decoding.
 
 ### Basic Usage
 
@@ -208,20 +230,21 @@ export class AuthService {
 
 ### Methods
 
-| Name                | Parameters | Return Type | Description                                    |
-| ------------------- | ---------- | ----------- | ---------------------------------------------- |
-| setToken            | token: string | void        | Sets the JWT token                             |
-| getToken            | none       | string \| null | Gets the current JWT token                     |
-| clearToken          | none       | void        | Clears the stored JWT token                    |
-| isAuthenticated     | none       | boolean     | Checks if a valid token exists                 |
-| getTokenPayload     | none       | any         | Gets the decoded token payload                 |
-| isTokenExpired      | none       | boolean     | Checks if the token is expired                 |
-| getTokenExpiration  | none       | Date \| null | Gets the token expiration date                |
-| refreshToken        | none       | Observable<string> | Refreshes the token (if refresh logic exists) |
+| Name               | Parameters    | Return Type        | Description                                   |
+| ------------------ | ------------- | ------------------ | --------------------------------------------- |
+| setToken           | token: string | void               | Sets the JWT token                            |
+| getToken           | none          | string \| null     | Gets the current JWT token                    |
+| clearToken         | none          | void               | Clears the stored JWT token                   |
+| isAuthenticated    | none          | boolean            | Checks if a valid token exists                |
+| getTokenPayload    | none          | any                | Gets the decoded token payload                |
+| isTokenExpired     | none          | boolean            | Checks if the token is expired                |
+| getTokenExpiration | none          | Date \| null       | Gets the token expiration date                |
+| refreshToken       | none          | Observable<string> | Refreshes the token (if refresh logic exists) |
 
 ## Correlation Service
 
-The `CorrelationService` provides correlation ID management for request tracing and debugging across distributed systems.
+The `CorrelationService` provides correlation ID management for request tracing
+and debugging across distributed systems.
 
 ### Basic Usage
 
@@ -235,7 +258,7 @@ export class YourService {
   makeRequest(): void {
     const correlationId = this.correlationService.getOrCreateCorrelationId();
     console.log('Request correlation ID:', correlationId);
-    
+
     // The correlation ID is automatically included in HTTP requests
     this.http.get('/api/data').subscribe();
   }
@@ -248,17 +271,18 @@ export class YourService {
 
 ### Methods
 
-| Name                    | Parameters | Return Type | Description                                    |
-| ----------------------- | ---------- | ----------- | ---------------------------------------------- |
-| getOrCreateCorrelationId | none       | string      | Gets existing correlation ID or creates new one |
-| createNewCorrelationId | none       | void        | Creates a new correlation ID                   |
-| getCurrentCorrelationId | none       | string \| null | Gets the current correlation ID               |
-| clearCorrelationId     | none       | void        | Clears the current correlation ID              |
-| setCorrelationId       | id: string | void        | Sets a specific correlation ID                 |
+| Name                     | Parameters | Return Type    | Description                                     |
+| ------------------------ | ---------- | -------------- | ----------------------------------------------- |
+| getOrCreateCorrelationId | none       | string         | Gets existing correlation ID or creates new one |
+| createNewCorrelationId   | none       | void           | Creates a new correlation ID                    |
+| getCurrentCorrelationId  | none       | string \| null | Gets the current correlation ID                 |
+| clearCorrelationId       | none       | void           | Clears the current correlation ID               |
+| setCorrelationId         | id: string | void           | Sets a specific correlation ID                  |
 
 ## Tenant Service
 
-The `TenantService` provides multi-tenancy support for applications that need to handle multiple tenants or organizations.
+The `TenantService` provides multi-tenancy support for applications that need to
+handle multiple tenants or organizations.
 
 ### Basic Usage
 
@@ -282,18 +306,19 @@ export class YourService {
 
 ### Methods
 
-| Name                | Parameters | Return Type | Description                                    |
-| ------------------- | ---------- | ----------- | ---------------------------------------------- |
-| setTenantId         | tenantId: string | void        | Sets the current tenant ID                     |
-| getTenantId         | none       | string \| null | Gets the current tenant ID                     |
-| clearTenantId       | none       | void        | Clears the current tenant ID                   |
-| getTenantHeaders    | none       | Record<string, string> | Gets headers for tenant identification         |
-| isMultiTenant       | none       | boolean     | Checks if multi-tenancy is enabled             |
-| validateTenantId    | tenantId: string | boolean     | Validates a tenant ID format                   |
+| Name             | Parameters       | Return Type            | Description                            |
+| ---------------- | ---------------- | ---------------------- | -------------------------------------- |
+| setTenantId      | tenantId: string | void                   | Sets the current tenant ID             |
+| getTenantId      | none             | string \| null         | Gets the current tenant ID             |
+| clearTenantId    | none             | void                   | Clears the current tenant ID           |
+| getTenantHeaders | none             | Record<string, string> | Gets headers for tenant identification |
+| isMultiTenant    | none             | boolean                | Checks if multi-tenancy is enabled     |
+| validateTenantId | tenantId: string | boolean                | Validates a tenant ID format           |
 
 ## Logging Service
 
-The `LoggingService` provides structured logging capabilities with different log levels and context information.
+The `LoggingService` provides structured logging capabilities with different log
+levels and context information.
 
 ### Basic Usage
 
@@ -305,8 +330,10 @@ export class YourService {
   constructor(private loggingService: LoggingService) {}
 
   performOperation(): void {
-    this.loggingService.info('Starting operation', { operation: 'dataProcessing' });
-    
+    this.loggingService.info('Starting operation', {
+      operation: 'dataProcessing',
+    });
+
     try {
       // Perform operation
       this.loggingService.info('Operation completed successfully');
@@ -323,15 +350,15 @@ export class YourService {
 
 ### Methods
 
-| Name                | Parameters | Return Type | Description                                    |
-| ------------------- | ---------- | ----------- | ---------------------------------------------- |
-| debug               | message: string, context?: any | void        | Logs a debug message                           |
-| info                | message: string, context?: any | void        | Logs an info message                           |
-| warn                | message: string, context?: any | void        | Logs a warning message                         |
-| error               | message: string, context?: any | void        | Logs an error message                          |
-| logHttpRequest      | request: HttpRequestLog | void        | Logs HTTP request information                  |
-| setLogLevel         | level: LogLevel | void        | Sets the minimum log level                     |
-| getLogLevel         | none       | LogLevel    | Gets the current log level                     |
+| Name           | Parameters                     | Return Type | Description                   |
+| -------------- | ------------------------------ | ----------- | ----------------------------- |
+| debug          | message: string, context?: any | void        | Logs a debug message          |
+| info           | message: string, context?: any | void        | Logs an info message          |
+| warn           | message: string, context?: any | void        | Logs a warning message        |
+| error          | message: string, context?: any | void        | Logs an error message         |
+| logHttpRequest | request: HttpRequestLog        | void        | Logs HTTP request information |
+| setLogLevel    | level: LogLevel                | void        | Sets the minimum log level    |
+| getLogLevel    | none                           | LogLevel    | Gets the current log level    |
 
 ### Log Levels
 
@@ -340,7 +367,7 @@ enum LogLevel {
   DEBUG = 'debug',
   INFO = 'info',
   WARN = 'warn',
-  ERROR = 'error'
+  ERROR = 'error',
 }
 ```
 
@@ -364,7 +391,8 @@ interface HttpRequestLog {
 
 ## Toastr Notification Service
 
-The `ToastrNotificationService` provides toast notification capabilities with different types and customization options.
+The `ToastrNotificationService` provides toast notification capabilities with
+different types and customization options.
 
 ### Basic Usage
 
@@ -378,7 +406,7 @@ export class YourService {
   showSuccess(): void {
     this.toastr.success({
       message: 'Operation completed successfully!',
-      title: 'Success'
+      title: 'Success',
     });
   }
 
@@ -386,7 +414,7 @@ export class YourService {
     this.toastr.error({
       message: 'An error occurred!',
       title: 'Error',
-      timeOut: 5000
+      timeOut: 5000,
     });
   }
 }
@@ -394,14 +422,14 @@ export class YourService {
 
 ### Methods
 
-| Name                | Parameters | Return Type | Description                                    |
-| ------------------- | ---------- | ----------- | ---------------------------------------------- |
-| success             | options: ToastrOptions | void        | Shows a success notification                   |
-| error               | options: ToastrOptions | void        | Shows an error notification                    |
-| warning             | options: ToastrOptions | void        | Shows a warning notification                   |
-| info                | options: ToastrOptions | void        | Shows an info notification                     |
-| clear               | none       | void        | Clears all notifications                       |
-| remove              | toastId: number | void        | Removes a specific notification                |
+| Name    | Parameters             | Return Type | Description                     |
+| ------- | ---------------------- | ----------- | ------------------------------- |
+| success | options: ToastrOptions | void        | Shows a success notification    |
+| error   | options: ToastrOptions | void        | Shows an error notification     |
+| warning | options: ToastrOptions | void        | Shows a warning notification    |
+| info    | options: ToastrOptions | void        | Shows an info notification      |
+| clear   | none                   | void        | Clears all notifications        |
+| remove  | toastId: number        | void        | Removes a specific notification |
 
 ### Toastr Options Interface
 
@@ -427,11 +455,11 @@ interface ToastrOptions {
 ### Provider Configuration
 
 ```typescript
-import { 
-  provideCoreConfig, 
+import {
+  provideCoreConfig,
   createCoreConfig,
   provideRepositoryRegistrations,
-  createRepositoryRegistration 
+  createRepositoryRegistration,
 } from 'acontplus/core';
 
 export const appConfig: ApplicationConfig = {
@@ -446,23 +474,33 @@ export const appConfig: ApplicationConfig = {
         logLevel: environment.logLevel,
         customHeaders: {
           'Client-Version': '1.0.0',
-          'Client-Id': 'web-app'
+          'Client-Id': 'web-app',
         },
         excludeUrls: ['/health', '/metrics'],
         maxRetryAttempts: 3,
         retryDelay: 1000,
         timeout: 30000,
         enableCaching: true,
-        cacheTTL: 300000
-      })
+        cacheTTL: 300000,
+      }),
     ),
 
     // Repository registrations
     provideRepositoryRegistrations([
-      createRepositoryRegistration('user', UserRepository, 'users', '/api/users'),
-      createRepositoryRegistration('product', ProductRepository, 'products', '/api/products')
-    ])
-  ]
+      createRepositoryRegistration(
+        'user',
+        UserRepository,
+        'users',
+        '/api/users',
+      ),
+      createRepositoryRegistration(
+        'product',
+        ProductRepository,
+        'products',
+        '/api/products',
+      ),
+    ]),
+  ],
 };
 ```
 
@@ -474,7 +512,7 @@ export const environment = {
   production: false,
   apiBaseUrl: 'http://localhost:3000/api',
   logLevel: 'debug',
-  enableRequestLogging: true
+  enableRequestLogging: true,
 };
 
 // environment.production.ts
@@ -482,7 +520,7 @@ export const environment = {
   production: true,
   apiBaseUrl: 'https://api.production.com',
   logLevel: 'error',
-  enableRequestLogging: false
+  enableRequestLogging: false,
 };
 ```
 
@@ -524,7 +562,7 @@ export const environment = {
 
 ```typescript
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserManagementService {
   constructor(
@@ -532,43 +570,43 @@ export class UserManagementService {
     private repositoryFactory: RepositoryFactory,
     private correlationService: CorrelationService,
     private loggingService: LoggingService,
-    private toastr: ToastrNotificationService
+    private toastr: ToastrNotificationService,
   ) {}
 
   async createUser(userData: CreateUserRequest): Promise<User> {
     const correlationId = this.correlationService.getOrCreateCorrelationId();
-    
-    this.loggingService.info('Creating user', { 
-      correlationId, 
-      userData: { email: userData.email } 
+
+    this.loggingService.info('Creating user', {
+      correlationId,
+      userData: { email: userData.email },
     });
 
     try {
       const userRepo = this.repositoryFactory.getRequired<User>('user');
       const user = await userRepo.create(userData).toPromise();
-      
-      this.loggingService.info('User created successfully', { 
-        correlationId, 
-        userId: user.id 
+
+      this.loggingService.info('User created successfully', {
+        correlationId,
+        userId: user.id,
       });
-      
+
       this.toastr.success({
         message: 'User created successfully!',
-        title: 'Success'
+        title: 'Success',
       });
 
       return user;
     } catch (error) {
-      this.loggingService.error('Failed to create user', { 
-        correlationId, 
-        error: error.message 
+      this.loggingService.error('Failed to create user', {
+        correlationId,
+        error: error.message,
       });
-      
+
       this.toastr.error({
         message: 'Failed to create user',
-        title: 'Error'
+        title: 'Error',
       });
-      
+
       throw error;
     }
   }
@@ -577,4 +615,6 @@ export class UserManagementService {
 
 ---
 
-For more information about specific services and their usage, refer to the individual service documentation or the [API Response Handling](api-response-handling.md) guide.
+For more information about specific services and their usage, refer to the
+individual service documentation or the
+[API Response Handling](api-response-handling.md) guide.

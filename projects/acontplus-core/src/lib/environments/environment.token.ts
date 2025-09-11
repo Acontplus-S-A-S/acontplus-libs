@@ -13,6 +13,5 @@ export const ENVIRONMENT = new InjectionToken<Environment>('ENVIRONMENT', {
     tokenKey: 'auth-token',
     refreshTokenKey: 'refresh-token',
     clientId: 'default-client',
-
   }),
 });

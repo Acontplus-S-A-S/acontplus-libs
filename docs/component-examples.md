@@ -387,7 +387,9 @@ _Note: The actual appearance may vary based on your application's theme._
 
 ## Autocomplete Wrapper
 
-The `AutocompleteWrapperComponent` is a powerful, feature-rich autocomplete component that provides advanced search capabilities, local and remote data handling, and customizable filtering options.
+The `AutocompleteWrapperComponent` is a powerful, feature-rich autocomplete
+component that provides advanced search capabilities, local and remote data
+handling, and customizable filtering options.
 
 ### Basic Usage
 
@@ -429,7 +431,7 @@ export class YourComponent {
     searchFields: [
       { value: 'name', property: 'name', label: 'Name' },
       { value: 'email', property: 'email', label: 'Email' },
-      { value: 'username', property: 'username', label: 'Username' }
+      { value: 'username', property: 'username', label: 'Username' },
     ],
     defaultSearchField: 'name',
     enableHistory: true,
@@ -439,12 +441,24 @@ export class YourComponent {
     createOptionText: 'Create new user',
     notFoundText: 'No users found',
     loadingText: 'Searching...',
-    placeholder: 'Search users...'
+    placeholder: 'Search users...',
   };
 
   users: AutocompleteWrapperItem[] = [
-    { id: 1, name: 'John Doe', email: 'john@example.com', username: 'johndoe', stock: 10 },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', username: 'janesmith', stock: 0 },
+    {
+      id: 1,
+      name: 'John Doe',
+      email: 'john@example.com',
+      username: 'johndoe',
+      stock: 10,
+    },
+    {
+      id: 2,
+      name: 'Jane Smith',
+      email: 'jane@example.com',
+      username: 'janesmith',
+      stock: 0,
+    },
     // ... more users
   ];
 }
@@ -473,25 +487,29 @@ export class YourComponent {
     enableCreateOption: true,
     searchFields: [
       { value: 'name', property: 'name', label: 'Name' },
-      { value: 'email', property: 'email', label: 'Email' }
-    ]
+      { value: 'email', property: 'email', label: 'Email' },
+    ],
   };
 
   searchUsers: AutocompleteWrapperSearchFunction = (
     query: string,
     filters: AutocompleteWrapperFilters,
-    page: number
+    page: number,
   ): Observable<AutocompleteWrapperSearchResult> => {
     return this.userService.searchUsers(query, filters, page).pipe(
       map(response => ({
         items: response.items,
         totalCount: response.totalCount,
-        hasMore: response.hasMore
-      }))
+        hasMore: response.hasMore,
+      })),
     );
   };
 
-  onSearchRequested(event: { query: string; filters: AutocompleteWrapperFilters; page: number }): void {
+  onSearchRequested(event: {
+    query: string;
+    filters: AutocompleteWrapperFilters;
+    page: number;
+  }): void {
     console.log('Search requested:', event);
   }
 }
@@ -508,7 +526,7 @@ export class YourComponent {
 >
   <ng-template #itemTemplate let-item>
     <div class="product-item">
-      <img [src]="item.imageUrl" [alt]="item.name" class="product-image">
+      <img [src]="item.imageUrl" [alt]="item.name" class="product-image" />
       <div class="product-details">
         <div class="product-name">{{ item.name }}</div>
         <div class="product-price">{{ item.price | currency }}</div>
@@ -534,9 +552,7 @@ export class YourComponent {
     <div class="not-found">
       <mat-icon>search_off</mat-icon>
       <p>No items found for "{{ query }}"</p>
-      <button mat-button (click)="createNewItem(query)">
-        Create new item
-      </button>
+      <button mat-button (click)="createNewItem(query)">Create new item</button>
     </div>
   </ng-template>
 </acp-autocomplete-wrapper>
@@ -596,15 +612,15 @@ export class YourComponent {
     searchFields: [
       { value: 'name', property: 'name', label: 'Name' },
       { value: 'category', property: 'category', label: 'Category' },
-      { value: 'brand', property: 'brand', label: 'Brand' }
-    ]
+      { value: 'brand', property: 'brand', label: 'Brand' },
+    ],
   };
 
   // Handle filter changes
   onFilterChanged(filters: AutocompleteWrapperFilters): void {
     console.log('Search by:', filters.searchBy);
     console.log('Stock filter:', filters.stockFilter);
-    
+
     // Apply filters to your data or API call
     this.applyFilters(filters);
   }
@@ -623,7 +639,7 @@ export class YourComponent {
   .search-input {
     border-radius: 8px;
     border: 2px solid #e0e0e0;
-    
+
     &:focus {
       border-color: #1976d2;
       box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
@@ -667,28 +683,28 @@ export class YourComponent {
 
 **Inputs:**
 
-| Name                | Type                                    | Default | Description                                    |
-| ------------------- | --------------------------------------- | ------- | ---------------------------------------------- |
-| dataSource          | AutocompleteWrapperItem[]                | []      | Local data source for the autocomplete         |
-| config              | AutocompleteWrapperConfig                | default | Configuration object for the component         |
-| itemTemplate        | TemplateRef<any>                        | -       | Custom template for rendering items             |
-| searchFunction      | AutocompleteWrapperSearchFunction        | -       | Function for remote search operations          |
-| notFoundTemplate    | TemplateRef<any>                        | -       | Custom template for when no items are found    |
-| overlayWidth        | string                                  | 'auto'  | Width of the dropdown overlay                  |
-| overlayMaxHeight    | string                                  | '400px' | Maximum height of the dropdown overlay         |
+| Name             | Type                              | Default | Description                                 |
+| ---------------- | --------------------------------- | ------- | ------------------------------------------- |
+| dataSource       | AutocompleteWrapperItem[]         | []      | Local data source for the autocomplete      |
+| config           | AutocompleteWrapperConfig         | default | Configuration object for the component      |
+| itemTemplate     | TemplateRef<any>                  | -       | Custom template for rendering items         |
+| searchFunction   | AutocompleteWrapperSearchFunction | -       | Function for remote search operations       |
+| notFoundTemplate | TemplateRef<any>                  | -       | Custom template for when no items are found |
+| overlayWidth     | string                            | 'auto'  | Width of the dropdown overlay               |
+| overlayMaxHeight | string                            | '400px' | Maximum height of the dropdown overlay      |
 
 **Outputs:**
 
-| Name                | Type                                                                    | Description                                    |
-| ------------------- | ----------------------------------------------------------------------- | ---------------------------------------------- |
-| itemSelected        | AutocompleteWrapperItem                                                  | Emitted when an item is selected               |
-| searchChanged       | string                                                                  | Emitted when the search query changes          |
-| searchRequested     | { query: string; filters: AutocompleteWrapperFilters; page: number }    | Emitted when a search is requested             |
-| pageChanged         | number                                                                  | Emitted when the page changes                  |
-| filterChanged       | AutocompleteWrapperFilters                                               | Emitted when filters change                    |
-| advancedSearchClicked| void                                                                     | Emitted when advanced search is clicked        |
-| allResultsClicked   | string                                                                  | Emitted when "all results" is clicked         |
-| createClicked       | string                                                                  | Emitted when create option is clicked          |
+| Name                  | Type                                                                 | Description                             |
+| --------------------- | -------------------------------------------------------------------- | --------------------------------------- |
+| itemSelected          | AutocompleteWrapperItem                                              | Emitted when an item is selected        |
+| searchChanged         | string                                                               | Emitted when the search query changes   |
+| searchRequested       | { query: string; filters: AutocompleteWrapperFilters; page: number } | Emitted when a search is requested      |
+| pageChanged           | number                                                               | Emitted when the page changes           |
+| filterChanged         | AutocompleteWrapperFilters                                           | Emitted when filters change             |
+| advancedSearchClicked | void                                                                 | Emitted when advanced search is clicked |
+| allResultsClicked     | string                                                               | Emitted when "all results" is clicked   |
+| createClicked         | string                                                               | Emitted when create option is clicked   |
 
 **Configuration Interface:**
 
@@ -719,4 +735,5 @@ interface AutocompleteWrapperConfig {
 
 ![AutocompleteWrapper Example](../assets/images/autocomplete-wrapper-example.png)
 
-_Note: The actual appearance may vary based on your application's theme and custom styling._
+_Note: The actual appearance may vary based on your application's theme and
+custom styling._

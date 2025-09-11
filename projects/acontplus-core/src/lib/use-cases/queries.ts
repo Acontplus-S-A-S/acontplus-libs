@@ -1,5 +1,11 @@
 import { Observable } from 'rxjs';
-import { FilterParams, PaginatedResult, PaginationParams, ValidationError, ErrorCategory } from '../models';
+import {
+  FilterParams,
+  PaginatedResult,
+  PaginationParams,
+  ValidationError,
+  ErrorCategory,
+} from '../models';
 import { BaseUseCase } from './base.use-case';
 
 export abstract class Queries<TRequest, TResponse> extends BaseUseCase<TRequest, TResponse> {
@@ -18,12 +24,14 @@ export abstract class GetByIdQuery<TEntity> extends Queries<{ id: number }, TEnt
   // Specific validation for ID queries
   protected override validate(request: { id: number }): ValidationError[] {
     if (!request.id || request.id <= 0) {
-      return [{
-        field: 'id',
-        message: 'ID must be a positive number',
-        code: 'INVALID_ID',
-        type: ErrorCategory.VALIDATION
-      }];
+      return [
+        {
+          field: 'id',
+          message: 'ID must be a positive number',
+          code: 'INVALID_ID',
+          type: ErrorCategory.VALIDATION,
+        },
+      ];
     }
     return [];
   }
@@ -34,7 +42,10 @@ export abstract class GetAllQuery<TEntity> extends Queries<
   PaginatedResult<TEntity>
 > {
   // Specific validation for pagination queries
-  protected override validate(request: { pagination: PaginationParams; filters?: FilterParams }): ValidationError[] {
+  protected override validate(request: {
+    pagination: PaginationParams;
+    filters?: FilterParams;
+  }): ValidationError[] {
     const errors: ValidationError[] = [];
 
     if (!request.pagination) {
@@ -42,7 +53,7 @@ export abstract class GetAllQuery<TEntity> extends Queries<
         field: 'pagination',
         message: 'Pagination parameters are required',
         code: 'MISSING_PAGINATION',
-        type: ErrorCategory.VALIDATION
+        type: ErrorCategory.VALIDATION,
       });
     } else {
       if (!request.pagination.page || request.pagination.page < 1) {
@@ -50,7 +61,7 @@ export abstract class GetAllQuery<TEntity> extends Queries<
           field: 'pagination.page',
           message: 'Page must be a positive number',
           code: 'INVALID_PAGE',
-          type: ErrorCategory.VALIDATION
+          type: ErrorCategory.VALIDATION,
         });
       }
 
@@ -59,7 +70,7 @@ export abstract class GetAllQuery<TEntity> extends Queries<
           field: 'pagination.pageSize',
           message: 'Page size must be a positive number',
           code: 'INVALID_PAGE_SIZE',
-          type: ErrorCategory.VALIDATION
+          type: ErrorCategory.VALIDATION,
         });
       }
     }
@@ -73,7 +84,10 @@ export abstract class SearchQuery<TEntity> extends Queries<
   PaginatedResult<TEntity>
 > {
   // Specific validation for search queries
-  protected override validate(request: { query: string; pagination: PaginationParams }): ValidationError[] {
+  protected override validate(request: {
+    query: string;
+    pagination: PaginationParams;
+  }): ValidationError[] {
     const errors: ValidationError[] = [];
 
     if (!request.query || request.query.trim().length === 0) {
@@ -81,7 +95,7 @@ export abstract class SearchQuery<TEntity> extends Queries<
         field: 'query',
         message: 'Search query is required',
         code: 'MISSING_QUERY',
-        type: ErrorCategory.VALIDATION
+        type: ErrorCategory.VALIDATION,
       });
     }
 
@@ -100,7 +114,7 @@ export abstract class SearchQuery<TEntity> extends Queries<
         field: 'pagination',
         message: 'Pagination parameters are required',
         code: 'MISSING_PAGINATION',
-        type: ErrorCategory.VALIDATION
+        type: ErrorCategory.VALIDATION,
       });
     } else {
       if (!pagination.page || pagination.page < 1) {
@@ -108,7 +122,7 @@ export abstract class SearchQuery<TEntity> extends Queries<
           field: 'pagination.page',
           message: 'Page must be a positive number',
           code: 'INVALID_PAGE',
-          type: ErrorCategory.VALIDATION
+          type: ErrorCategory.VALIDATION,
         });
       }
 
@@ -117,7 +131,7 @@ export abstract class SearchQuery<TEntity> extends Queries<
           field: 'pagination.pageSize',
           message: 'Page size must be a positive number',
           code: 'INVALID_PAGE_SIZE',
-          type: ErrorCategory.VALIDATION
+          type: ErrorCategory.VALIDATION,
         });
       }
     }

@@ -1,8 +1,7 @@
 import { SRI_IDENTIFICATION_CODE } from '../constants';
-import {BaseVo} from "./base.vo";
+import { BaseVo } from './base.vo';
 
 export class IdentificationNumberVo extends BaseVo<string> {
-
   private readonly id: string;
   private readonly type: SRI_IDENTIFICATION_CODE;
 
@@ -22,7 +21,7 @@ export class IdentificationNumberVo extends BaseVo<string> {
     throw new Error('Número de identificación debe tener 10 o 13 dígitos');
   }
 
-   validate(): boolean {
+  validate(): boolean {
     if (this.type === SRI_IDENTIFICATION_CODE.CEDULA) {
       return this.isValidCedulaAlgorithm();
     }

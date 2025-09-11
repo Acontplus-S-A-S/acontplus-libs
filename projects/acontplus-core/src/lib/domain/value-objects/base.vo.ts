@@ -14,4 +14,3 @@ export abstract class BaseVo<T> {
     return JSON.stringify(this.value) === JSON.stringify(other.value);
   }
 }
-

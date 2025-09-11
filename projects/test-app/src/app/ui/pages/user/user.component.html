@@ -35,7 +35,11 @@
       <div class="search-row">
         <mat-form-field appearance="outline" class="search-field">
           <mat-label>Search Users</mat-label>
-          <input matInput [(ngModel)]="searchQuery" placeholder="Search by name, email, or role...">
+          <input
+            matInput
+            [(ngModel)]="searchQuery"
+            placeholder="Search by name, email, or role..."
+          />
           <button mat-icon-button matSuffix (click)="onSearch()">
             <mat-icon>search</mat-icon>
           </button>
@@ -63,12 +67,12 @@
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Name</mat-label>
-          <input matInput [(ngModel)]="newUser.name" placeholder="Enter user name">
+          <input matInput [(ngModel)]="newUser.name" placeholder="Enter user name" />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
-          <input matInput [(ngModel)]="newUser.email" type="email" placeholder="Enter email">
+          <input matInput [(ngModel)]="newUser.email" type="email" placeholder="Enter email" />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -127,7 +131,7 @@
           [isLoadingData]="isLoading"
           (rowSelected)="onRowSelected($event)"
           (pageEvent)="onPageChange($event)"
-          >
+        >
         </acp-mat-dynamic-table>
 
         <!-- No data message -->
@@ -162,11 +166,11 @@
       @if (editUserId === element.id) {
         <mat-form-field appearance="outline" class="inline-edit">
           <mat-label>Name</mat-label>
-          <input matInput [(ngModel)]="editUser.name">
+          <input matInput [(ngModel)]="editUser.name" />
         </mat-form-field>
         <mat-form-field appearance="outline" class="inline-edit">
           <mat-label>Email</mat-label>
-          <input matInput [(ngModel)]="editUser.email" type="email">
+          <input matInput [(ngModel)]="editUser.email" type="email" />
         </mat-form-field>
         <mat-form-field appearance="outline" class="inline-edit">
           <mat-label>Role</mat-label>
@@ -186,14 +190,29 @@
         <button mat-icon-button color="primary" (click)="startEdit(element)" matTooltip="Edit User">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn" (click)="deleteUser(element.id)" matTooltip="Delete User">
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="deleteUser(element.id)"
+          matTooltip="Delete User"
+        >
           <mat-icon>delete</mat-icon>
         </button>
         <!-- Approval buttons for testing conditional commands -->
-        <button mat-icon-button color="accent" (click)="approveUser(element.id)" matTooltip="Approve User">
+        <button
+          mat-icon-button
+          color="accent"
+          (click)="approveUser(element.id)"
+          matTooltip="Approve User"
+        >
           <mat-icon>thumb_up</mat-icon>
         </button>
-        <button mat-icon-button color="warn" (click)="rejectUser(element.id)" matTooltip="Reject User">
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="rejectUser(element.id)"
+          matTooltip="Reject User"
+        >
           <mat-icon>thumb_down</mat-icon>
         </button>
       }
@@ -204,16 +223,31 @@
           <mat-icon>edit</mat-icon>
         </button>
 
-        <button mat-icon-button color="warn" (click)="deleteUser(element.id)" matTooltip="Delete User">
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="deleteUser(element.id)"
+          matTooltip="Delete User"
+        >
           <mat-icon>delete</mat-icon>
         </button>
 
         <!-- Approval buttons for testing conditional commands -->
-        <button mat-icon-button color="accent" (click)="approveUser(element.id)" matTooltip="Approve User">
+        <button
+          mat-icon-button
+          color="accent"
+          (click)="approveUser(element.id)"
+          matTooltip="Approve User"
+        >
           <mat-icon>thumb_up</mat-icon>
         </button>
 
-        <button mat-icon-button color="warn" (click)="rejectUser(element.id)" matTooltip="Reject User">
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="rejectUser(element.id)"
+          matTooltip="Reject User"
+        >
           <mat-icon>thumb_down</mat-icon>
         </button>
       </ng-template>

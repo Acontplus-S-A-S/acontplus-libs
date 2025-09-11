@@ -1,27 +1,37 @@
 # Acontplus Libraries Documentation
 
-Welcome to the comprehensive documentation for the Acontplus Libraries project. This documentation covers both the UI components library and the core utilities library.
+Welcome to the comprehensive documentation for the Acontplus Libraries project.
+This documentation covers both the UI components library and the core utilities
+library.
 
 ## 📚 Documentation Overview
 
 ### 🎨 UI Components Library (`acontplus-ui-components`)
 
-The UI components library provides a comprehensive set of Angular Material-based components with consistent styling and behavior.
+The UI components library provides a comprehensive set of Angular Material-based
+components with consistent styling and behavior.
 
-- **[Component API Reference](component-api.md)** - Complete API documentation for all UI components
-- **[Component Usage Examples](component-examples.md)** - Practical examples and code snippets
-- **[Style Guide](style-guide.md)** - Design principles, color system, and component guidelines
+- **[Component API Reference](component-api.md)** - Complete API documentation
+  for all UI components
+- **[Component Usage Examples](component-examples.md)** - Practical examples and
+  code snippets
+- **[Style Guide](style-guide.md)** - Design principles, color system, and
+  component guidelines
 
 ### 🔧 Core Library (`acontplus-core`)
 
-The core library provides essential utilities, services, and architectural patterns for Angular applications.
+The core library provides essential utilities, services, and architectural
+patterns for Angular applications.
 
-- **[API Response Handling](api-response-handling.md)** - Standardized API response handling with interceptors
-- **[Core Services](core-services.md)** - Comprehensive documentation for all core services
+- **[API Response Handling](api-response-handling.md)** - Standardized API
+  response handling with interceptors
+- **[Core Services](core-services.md)** - Comprehensive documentation for all
+  core services
 
 ### 🛠️ Development
 
-- **[Linting and Formatting Setup](linting-and-formatting-setup.md)** - Code quality tools and configuration
+- **[Linting and Formatting Setup](linting-and-formatting-setup.md)** - Code
+  quality tools and configuration
 
 ## 🚀 Quick Start
 
@@ -39,10 +49,17 @@ npm install @acontplus/core
 
 ```typescript
 // Import UI components
-import { MatDynamicCardComponent, ReusableAutocompleteComponent } from '@acontplus/ui-components';
+import {
+  MatDynamicCardComponent,
+  ReusableAutocompleteComponent,
+} from '@acontplus/ui-components';
 
 // Import core utilities
-import { ApiResponse, CoreConfigService, RepositoryFactory } from '@acontplus/core';
+import {
+  ApiResponse,
+  CoreConfigService,
+  RepositoryFactory,
+} from '@acontplus/core';
 ```
 
 ## 📖 Documentation Structure
@@ -61,26 +78,35 @@ docs/
 
 ## 🔍 Finding What You Need
 
-- **New to the libraries?** Start with the [Component Examples](component-examples.md) to see components in action
-- **Looking for specific API details?** Check the [Component API Reference](component-api.md)
-- **Need to understand the design system?** Review the [Style Guide](style-guide.md)
-- **Working with API responses?** See [API Response Handling](api-response-handling.md)
+- **New to the libraries?** Start with the
+  [Component Examples](component-examples.md) to see components in action
+- **Looking for specific API details?** Check the
+  [Component API Reference](component-api.md)
+- **Need to understand the design system?** Review the
+  [Style Guide](style-guide.md)
+- **Working with API responses?** See
+  [API Response Handling](api-response-handling.md)
 - **Need core services documentation?** Check [Core Services](core-services.md)
-- **Setting up development environment?** Follow [Linting and Formatting Setup](linting-and-formatting-setup.md)
+- **Setting up development environment?** Follow
+  [Linting and Formatting Setup](linting-and-formatting-setup.md)
 
 ## 🆕 What's New
 
 ### Latest Updates (2025-08-12)
 
-- **Added AutocompleteWrapperComponent documentation** - Complete examples and API reference
-- **Added Core Services documentation** - Comprehensive coverage of all core library services
+- **Added AutocompleteWrapperComponent documentation** - Complete examples and
+  API reference
+- **Added Core Services documentation** - Comprehensive coverage of all core
+  library services
 - **Updated Component API** - Added missing component documentation
 - **Improved examples** - More realistic and practical usage scenarios
 
 ### Recently Added Components
 
-- **AutocompleteWrapperComponent** - Advanced autocomplete with local/remote search, filtering, and customization
-- **Enhanced Dialog Wrapper** - Improved configuration options and responsive behavior
+- **AutocompleteWrapperComponent** - Advanced autocomplete with local/remote
+  search, filtering, and customization
+- **Enhanced Dialog Wrapper** - Improved configuration options and responsive
+  behavior
 - **Advanced Table Components** - Dynamic tables with pagination and filtering
 
 ### Recently Added Services
@@ -114,11 +140,14 @@ When contributing to the documentation:
 
 ## 🔗 Related Resources
 
-- **Main Project**: [GitHub Repository](https://github.com/Acontplus-S-A-S/acontplus-libs)
-- **Issues & Bug Reports**: [GitHub Issues](https://github.com/Acontplus-S-A-S/acontplus-libs/issues)
+- **Main Project**:
+  [GitHub Repository](https://github.com/Acontplus-S-A-S/acontplus-libs)
+- **Issues & Bug Reports**:
+  [GitHub Issues](https://github.com/Acontplus-S-A-S/acontplus-libs/issues)
 - **Contributing Guidelines**: [CONTRIBUTING.md](../CONTRIBUTING.md)
 - **License**: [MIT License](../LICENSE)
 
 ---
 
-For questions or suggestions about this documentation, please refer to the main project README or create an issue in the project repository.
+For questions or suggestions about this documentation, please refer to the main
+project README or create an issue in the project repository.

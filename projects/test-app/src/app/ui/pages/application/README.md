@@ -35,6 +35,7 @@ export interface Application extends BaseEntity {
 ```
 
 **Key Features:**
+
 - Extends `BaseEntity` for consistent ID and timestamp handling
 - Strong typing with union types for status and environment
 - Flexible arrays for dependencies and tags
@@ -46,16 +47,20 @@ export interface Application extends BaseEntity {
 export class ApplicationRepository extends BaseRepository<Application> {
   protected entityName = 'applications';
   protected baseUrl = 'https://api.example.com/v1';
-  
+
   // Override base methods for custom implementations
-  override getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<Application>>
-  override getById(id: number): Observable<Application>
-  override create(application: Omit<Application, 'id'>): Observable<Application>
+  override getAll(
+    pagination: PaginationParams,
+    filters?: FilterParams,
+  ): Observable<PaginatedResult<Application>>;
+  override getById(id: number): Observable<Application>;
+  override create(application: Omit<Application, 'id'>): Observable<Application>;
   // ... more methods
 }
 ```
 
 **Key Features:**
+
 - Extends `BaseRepository<Application>` for standard CRUD operations
 - Overrides base methods to provide specific implementations
 - Uses `entityName` and `baseUrl` for dynamic URL building
@@ -64,18 +69,24 @@ export class ApplicationRepository extends BaseRepository<Application> {
 ### 3. Use Case Layer (`application-management.use-case.ts`)
 
 ```typescript
-export class ApplicationManagementUseCase extends CompositeUseCase<ApplicationManagementRequest, ApplicationManagementResponse> {
+export class ApplicationManagementUseCase extends CompositeUseCase<
+  ApplicationManagementRequest,
+  ApplicationManagementResponse
+> {
   constructor(private applicationRepository: ApplicationRepository) {
     super();
   }
-  
-  protected executeInternal(request: ApplicationManagementRequest): Observable<ApplicationManagementResponse> {
+
+  protected executeInternal(
+    request: ApplicationManagementRequest,
+  ): Observable<ApplicationManagementResponse> {
     // Route to appropriate handler based on action
   }
 }
 ```
 
 **Key Features:**
+
 - Extends `CompositeUseCase` for complex business operations
 - Implements action-based routing for different operations
 - Provides public methods for external consumption
@@ -88,14 +99,18 @@ export class MockApplicationService {
   private applications: Application[] = [
     // Sample data for demonstration
   ];
-  
+
   // Implements all repository methods with mock data
-  getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<Application>>
+  getAll(
+    pagination: PaginationParams,
+    filters?: FilterParams,
+  ): Observable<PaginatedResult<Application>>;
   // ... more methods
 }
 ```
 
 **Key Features:**
+
 - Provides realistic sample data for 8 different applications
 - Implements all repository methods with mock implementations
 - Simulates HTTP delays for realistic user experience
@@ -107,9 +122,11 @@ export class MockApplicationService {
 @Component({
   selector: 'app-application',
   standalone: true,
-  imports: [/* Material Design modules */],
+  imports: [
+    /* Material Design modules */
+  ],
   templateUrl: './application.component.html',
-  styleUrls: ['./application.component.scss']
+  styleUrls: ['./application.component.scss'],
 })
 export class ApplicationComponent implements OnInit, OnDestroy {
   // Comprehensive application management interface
@@ -117,6 +134,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 ```
 
 **Key Features:**
+
 - Standalone Angular component with Material Design
 - Reactive forms for create/edit operations
 - Advanced filtering and search capabilities
@@ -129,18 +147,20 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
 ```typescript
 // Using the use case
-const newApp = await this.applicationUseCase.createApplication({
-  name: 'New App',
-  description: 'Description here',
-  version: '1.0.0',
-  status: 'active',
-  category: 'Web App',
-  owner: 'Team Name',
-  environment: 'development',
-  isPublic: false,
-  dependencies: [],
-  tags: []
-}).toPromise();
+const newApp = await this.applicationUseCase
+  .createApplication({
+    name: 'New App',
+    description: 'Description here',
+    version: '1.0.0',
+    status: 'active',
+    category: 'Web App',
+    owner: 'Team Name',
+    environment: 'development',
+    isPublic: false,
+    dependencies: [],
+    tags: [],
+  })
+  .toPromise();
 ```
 
 ### Filtering Applications
@@ -174,30 +194,35 @@ const updatedApp = await this.applicationUseCase
 ## Features Demonstrated
 
 ### 1. Base Repository Pattern
+
 - **Inheritance**: Extends `BaseRepository<T>` for consistent CRUD operations
 - **URL Building**: Dynamic endpoint construction using `entityName`
 - **Error Handling**: Centralized HTTP error handling through base class
 - **Method Overriding**: Custom implementations while maintaining base contract
 
 ### 2. Use Case Pattern
+
 - **Composite Use Case**: Extends `CompositeUseCase` for complex operations
 - **Action Routing**: Request-based routing to appropriate handlers
 - **Response Standardization**: Consistent response format across operations
 - **Public API**: Clean interface for external consumption
 
 ### 3. Domain-Driven Design
+
 - **Entity Definition**: Clear domain model with business rules
 - **Value Objects**: Strong typing for status, environment, and other enums
 - **Business Logic**: Centralized in use case layer
 - **Repository Abstraction**: Clean separation of concerns
 
 ### 4. Modern Angular Patterns
+
 - **Standalone Components**: Modern Angular architecture
 - **Reactive Forms**: Form validation and handling
 - **Observable Pattern**: RxJS-based data flow
 - **Material Design**: Professional UI components
 
 ### 5. Testing and Development
+
 - **Mock Services**: Development without external dependencies
 - **Sample Data**: Realistic data for UI testing
 - **Error Simulation**: Network delay simulation

@@ -1,4 +1,12 @@
-import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit, ChangeDetectorRef, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  AfterViewInit,
+  ChangeDetectorRef,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -56,7 +64,7 @@ interface ProductFilters extends FilterParams {
           <mat-card-title>Product Management</mat-card-title>
           <mat-card-subtitle>Manage your product catalog</mat-card-subtitle>
         </mat-card-header>
-    
+
         <mat-card-content>
           <!-- Statistics Section -->
           @if (!isLoading) {
@@ -71,21 +79,26 @@ interface ProductFilters extends FilterParams {
               </div>
               <div class="stat-card">
                 <h3>Total Value</h3>
-                <p class="stat-number">{{ totalValue | currency:'USD' }}</p>
+                <p class="stat-number">{{ totalValue | currency: 'USD' }}</p>
               </div>
             </div>
           }
-    
+
           <!-- Search and Filters -->
           <div class="filters-section">
             <mat-form-field appearance="outline" class="search-field">
               <mat-label>Search Products</mat-label>
-              <input matInput [(ngModel)]="searchQuery" placeholder="Search by name, category, or description" (keyup.enter)="onSearch()">
+              <input
+                matInput
+                [(ngModel)]="searchQuery"
+                placeholder="Search by name, category, or description"
+                (keyup.enter)="onSearch()"
+              />
               <button mat-icon-button matSuffix (click)="onSearch()">
                 <mat-icon>search</mat-icon>
               </button>
             </mat-form-field>
-    
+
             <mat-form-field appearance="outline" class="category-filter">
               <mat-label>Category</mat-label>
               <mat-select [(ngModel)]="selectedCategory" (selectionChange)="onFilterChange()">
@@ -97,17 +110,29 @@ interface ProductFilters extends FilterParams {
                 }
               </mat-select>
             </mat-form-field>
-    
+
             <mat-form-field appearance="outline" class="price-filter">
               <mat-label>Min Price</mat-label>
-              <input matInput type="number" [(ngModel)]="minPrice" placeholder="0" (input)="onFilterChange()">
+              <input
+                matInput
+                type="number"
+                [(ngModel)]="minPrice"
+                placeholder="0"
+                (input)="onFilterChange()"
+              />
             </mat-form-field>
-    
+
             <mat-form-field appearance="outline" class="price-filter">
               <mat-label>Max Price</mat-label>
-              <input matInput type="number" [(ngModel)]="maxPrice" placeholder="1000" (input)="onFilterChange()">
+              <input
+                matInput
+                type="number"
+                [(ngModel)]="maxPrice"
+                placeholder="1000"
+                (input)="onFilterChange()"
+              />
             </mat-form-field>
-    
+
             <button mat-raised-button color="primary" (click)="onSearch()">
               <mat-icon>search</mat-icon>
               Search
@@ -117,16 +142,21 @@ interface ProductFilters extends FilterParams {
               Clear
             </button>
           </div>
-    
+
           <!-- Create Product Form -->
           <div class="create-section">
             <h3>Add New Product</h3>
             <div class="form-row">
               <mat-form-field appearance="outline">
                 <mat-label>Product Name</mat-label>
-                <input matInput [(ngModel)]="newProduct.name" placeholder="Enter product name" required>
+                <input
+                  matInput
+                  [(ngModel)]="newProduct.name"
+                  placeholder="Enter product name"
+                  required
+                />
               </mat-form-field>
-    
+
               <mat-form-field appearance="outline">
                 <mat-label>Category</mat-label>
                 <mat-select [(ngModel)]="newProduct.category" required>
@@ -137,41 +167,74 @@ interface ProductFilters extends FilterParams {
                   }
                 </mat-select>
               </mat-form-field>
-    
+
               <mat-form-field appearance="outline">
                 <mat-label>Price</mat-label>
-                <input matInput type="number" [(ngModel)]="newProduct.price" placeholder="0.00" step="0.01" required>
+                <input
+                  matInput
+                  type="number"
+                  [(ngModel)]="newProduct.price"
+                  placeholder="0.00"
+                  step="0.01"
+                  required
+                />
               </mat-form-field>
-    
+
               <mat-form-field appearance="outline">
                 <mat-label>Stock</mat-label>
-                <input matInput type="number" [(ngModel)]="newProduct.stock" placeholder="0" required>
+                <input
+                  matInput
+                  type="number"
+                  [(ngModel)]="newProduct.stock"
+                  placeholder="0"
+                  required
+                />
               </mat-form-field>
             </div>
-    
+
             <div class="form-row">
               <mat-form-field appearance="outline" class="description-field">
                 <mat-label>Description</mat-label>
-                <textarea matInput [(ngModel)]="newProduct.description" placeholder="Enter product description" rows="3"></textarea>
+                <textarea
+                  matInput
+                  [(ngModel)]="newProduct.description"
+                  placeholder="Enter product description"
+                  rows="3"
+                ></textarea>
               </mat-form-field>
-    
+
               <mat-form-field appearance="outline">
                 <mat-label>Image URL</mat-label>
-                <input matInput [(ngModel)]="newProduct.imageUrl" placeholder="https://example.com/image.jpg">
+                <input
+                  matInput
+                  [(ngModel)]="newProduct.imageUrl"
+                  placeholder="https://example.com/image.jpg"
+                />
               </mat-form-field>
-    
+
               <mat-form-field appearance="outline">
                 <mat-label>Available Date</mat-label>
-                <input matInput type="date" [ngModel]="getDateString(newProduct.availableDate)" (ngModelChange)="setDateFromString($event, 'newProduct')" required>
+                <input
+                  matInput
+                  type="date"
+                  [ngModel]="getDateString(newProduct.availableDate)"
+                  (ngModelChange)="setDateFromString($event, 'newProduct')"
+                  required
+                />
               </mat-form-field>
             </div>
-    
-            <button mat-raised-button color="primary" (click)="createProduct()" [disabled]="isCreating">
+
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="createProduct()"
+              [disabled]="isCreating"
+            >
               <mat-icon>add</mat-icon>
               {{ isCreating ? 'Creating...' : 'Create Product' }}
             </button>
           </div>
-    
+
           <!-- Bulk Operations -->
           @if (selectedProducts.length > 0) {
             <div class="bulk-operations">
@@ -192,7 +255,7 @@ interface ProductFilters extends FilterParams {
               </div>
             </div>
           }
-    
+
           <!-- Products Table -->
           <div class="table-section">
             <acp-mat-dynamic-table
@@ -207,10 +270,10 @@ interface ProductFilters extends FilterParams {
               [rowTemplate]="actionsTemplate"
               (rowSelected)="onRowSelected($event)"
               (pageEvent)="onPageChange($event)"
-              >
+            >
             </acp-mat-dynamic-table>
           </div>
-    
+
           <!-- Edit Product Dialog -->
           @if (editProductId !== null) {
             <div class="edit-section">
@@ -218,7 +281,12 @@ interface ProductFilters extends FilterParams {
               <div class="form-row">
                 <mat-form-field appearance="outline">
                   <mat-label>Product Name</mat-label>
-                  <input matInput [(ngModel)]="editProduct.name" placeholder="Enter product name" required>
+                  <input
+                    matInput
+                    [(ngModel)]="editProduct.name"
+                    placeholder="Enter product name"
+                    required
+                  />
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                   <mat-label>Category</mat-label>
@@ -232,29 +300,62 @@ interface ProductFilters extends FilterParams {
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                   <mat-label>Price</mat-label>
-                  <input matInput type="number" [(ngModel)]="editProduct.price" placeholder="0.00" step="0.01" required>
+                  <input
+                    matInput
+                    type="number"
+                    [(ngModel)]="editProduct.price"
+                    placeholder="0.00"
+                    step="0.01"
+                    required
+                  />
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                   <mat-label>Stock</mat-label>
-                  <input matInput type="number" [(ngModel)]="editProduct.stock" placeholder="0" required>
+                  <input
+                    matInput
+                    type="number"
+                    [(ngModel)]="editProduct.stock"
+                    placeholder="0"
+                    required
+                  />
                 </mat-form-field>
               </div>
               <div class="form-row">
                 <mat-form-field appearance="outline" class="description-field">
                   <mat-label>Description</mat-label>
-                  <textarea matInput [(ngModel)]="editProduct.description" placeholder="Enter product description" rows="3"></textarea>
+                  <textarea
+                    matInput
+                    [(ngModel)]="editProduct.description"
+                    placeholder="Enter product description"
+                    rows="3"
+                  ></textarea>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                   <mat-label>Image URL</mat-label>
-                  <input matInput [(ngModel)]="editProduct.imageUrl" placeholder="https://example.com/image.jpg">
+                  <input
+                    matInput
+                    [(ngModel)]="editProduct.imageUrl"
+                    placeholder="https://example.com/image.jpg"
+                  />
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                   <mat-label>Available Date</mat-label>
-                  <input matInput type="date" [ngModel]="getDateString(editProduct.availableDate)" (ngModelChange)="setDateFromString($event, 'editProduct')" required>
+                  <input
+                    matInput
+                    type="date"
+                    [ngModel]="getDateString(editProduct.availableDate)"
+                    (ngModelChange)="setDateFromString($event, 'editProduct')"
+                    required
+                  />
                 </mat-form-field>
               </div>
               <div class="edit-buttons">
-                <button mat-raised-button color="primary" (click)="updateProduct()" [disabled]="isUpdating">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="updateProduct()"
+                  [disabled]="isUpdating"
+                >
                   <mat-icon>save</mat-icon>
                   {{ isUpdating ? 'Updating...' : 'Update Product' }}
                 </button>
@@ -268,16 +369,26 @@ interface ProductFilters extends FilterParams {
         </mat-card-content>
       </mat-card>
     </div>
-    
+
     <ng-template #actionsTemplate let-element="element" let-i="index">
-      <button mat-icon-button color="primary" (click)="startEdit(element)" matTooltip="Edit Product">
+      <button
+        mat-icon-button
+        color="primary"
+        (click)="startEdit(element)"
+        matTooltip="Edit Product"
+      >
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-icon-button color="warn" (click)="deleteProduct(element)" matTooltip="Delete Product">
+      <button
+        mat-icon-button
+        color="warn"
+        (click)="deleteProduct(element)"
+        matTooltip="Delete Product"
+      >
         <mat-icon>delete</mat-icon>
       </button>
     </ng-template>
-    
+
     <ng-template #productImageTemplate let-element="$implicit">
       <img
         [src]="element.imageUrl || 'assets/placeholder.png'"
@@ -286,25 +397,28 @@ interface ProductFilters extends FilterParams {
         height="40"
         style="border-radius: 4px;"
         onerror="this.src='assets/placeholder.png'"
-        />
+      />
     </ng-template>
-    
+
     <ng-template #expandedProductDetail let-element="$implicit" let-index="index">
       <div style="padding: 16px; background-color: #f0f0f0; border-top: 1px solid #ccc;">
         <h3>Details for {{ element.name }}</h3>
-        <p><strong>Description:</strong> {{ element.description || 'No description available.' }}</p>
+        <p>
+          <strong>Description:</strong> {{ element.description || 'No description available.' }}
+        </p>
         <p><strong>Category:</strong> {{ element.category }}</p>
         <p><strong>Available On:</strong> {{ element.availableDate | date: 'fullDate' }}</p>
-        <p><strong>Status:</strong>
-        <span [class]="element.isActive ? 'status-active' : 'status-inactive'">
-          {{ element.isActive ? 'Active' : 'Inactive' }}
-        </span>
-      </p>
-      <p><strong>Created:</strong> {{ element.createdAt | date: 'medium' }}</p>
-      <p><strong>Last Updated:</strong> {{ element.updatedAt | date: 'medium' }}</p>
-    </div>
+        <p>
+          <strong>Status:</strong>
+          <span [class]="element.isActive ? 'status-active' : 'status-inactive'">
+            {{ element.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </p>
+        <p><strong>Created:</strong> {{ element.createdAt | date: 'medium' }}</p>
+        <p><strong>Last Updated:</strong> {{ element.updatedAt | date: 'medium' }}</p>
+      </div>
     </ng-template>
-    `,
+  `,
   styleUrl: './product.component.scss',
 })
 export class ProductComponent implements OnInit, AfterViewInit {
@@ -322,7 +436,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
     page: 1,
     pageSize: 10,
     sortBy: 'name',
-    sortDirection: 'asc'
+    sortDirection: 'asc',
   };
 
   // Filters
@@ -391,7 +505,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
       description: '',
       imageUrl: '',
       isActive: true,
-      categoryId: 1
+      categoryId: 1,
     };
   }
 
@@ -431,31 +545,30 @@ export class ProductComponent implements OnInit, AfterViewInit {
       this.filters.maxPrice = this.maxPrice;
     }
 
-    this.productManagement.getProducts(this.pagination, this.filters)
-      .subscribe({
-        next: (result) => {
-          console.log('Products loaded successfully:', result);
-          this.products = result.items;
-          this.totalProducts = result.totalCount;
+    this.productManagement.getProducts(this.pagination, this.filters).subscribe({
+      next: result => {
+        console.log('Products loaded successfully:', result);
+        this.products = result.items;
+        this.totalProducts = result.totalCount;
 
-          // Update pagination config to match the result
-          this.productPaginationConfig.totalRecords = result.totalCount;
-          this.productPaginationConfig.pageIndex = result.pageNumber - 1; // Convert to 0-based index
-          this.productPaginationConfig.pageSize = result.pageSize;
+        // Update pagination config to match the result
+        this.productPaginationConfig.totalRecords = result.totalCount;
+        this.productPaginationConfig.pageIndex = result.pageNumber - 1; // Convert to 0-based index
+        this.productPaginationConfig.pageSize = result.pageSize;
 
-          console.log('Updated products array:', this.products);
-          console.log('Updated pagination config:', this.productPaginationConfig);
+        console.log('Updated products array:', this.products);
+        console.log('Updated pagination config:', this.productPaginationConfig);
 
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        },
-        error: (error) => {
-          console.error('Error loading products:', error);
-          this.snackBar.open('Error loading products', 'Close', { duration: 3000 });
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        }
-      });
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: error => {
+        console.error('Error loading products:', error);
+        this.snackBar.open('Error loading products', 'Close', { duration: 3000 });
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+    });
   }
 
   loadCategories(): void {
@@ -510,43 +623,57 @@ export class ProductComponent implements OnInit, AfterViewInit {
   }
 
   createProduct(): void {
-    if (!this.newProduct.name || !this.newProduct.category || this.newProduct.price === undefined || this.newProduct.stock === undefined) {
-      this.snackBar.open('Name, category, price, and stock are required', 'Close', { duration: 3000 });
+    if (
+      !this.newProduct.name ||
+      !this.newProduct.category ||
+      this.newProduct.price === undefined ||
+      this.newProduct.stock === undefined
+    ) {
+      this.snackBar.open('Name, category, price, and stock are required', 'Close', {
+        duration: 3000,
+      });
       return;
     }
 
     // Convert date string to Date object if needed
     const productData = {
       ...this.newProduct,
-      availableDate: this.newProduct.availableDate instanceof Date
-        ? this.newProduct.availableDate
-        : (this.newProduct.availableDate ? new Date(this.newProduct.availableDate as string) : new Date())
+      availableDate:
+        this.newProduct.availableDate instanceof Date
+          ? this.newProduct.availableDate
+          : this.newProduct.availableDate
+            ? new Date(this.newProduct.availableDate as string)
+            : new Date(),
     };
 
     this.isCreating = true;
-    this.productManagement.execute({
-      action: 'create',
-      data: productData
-    }).subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.snackBar.open('Product created successfully', 'Close', { duration: 3000 });
-          this.initializeNewProduct();
-          this.loadProducts();
-          this.loadStatistics();
-        } else {
-          this.snackBar.open(response.message || 'Failed to create product', 'Close', { duration: 3000 });
-        }
-        this.isCreating = false;
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error('Error creating product:', error);
-        this.snackBar.open('Error creating product', 'Close', { duration: 3000 });
-        this.isCreating = false;
-        this.cdr.detectChanges();
-      }
-    });
+    this.productManagement
+      .execute({
+        action: 'create',
+        data: productData,
+      })
+      .subscribe({
+        next: response => {
+          if (response.success) {
+            this.snackBar.open('Product created successfully', 'Close', { duration: 3000 });
+            this.initializeNewProduct();
+            this.loadProducts();
+            this.loadStatistics();
+          } else {
+            this.snackBar.open(response.message || 'Failed to create product', 'Close', {
+              duration: 3000,
+            });
+          }
+          this.isCreating = false;
+          this.cdr.detectChanges();
+        },
+        error: error => {
+          console.error('Error creating product:', error);
+          this.snackBar.open('Error creating product', 'Close', { duration: 3000 });
+          this.isCreating = false;
+          this.cdr.detectChanges();
+        },
+      });
   }
 
   startEdit(product: Product): void {
@@ -562,7 +689,13 @@ export class ProductComponent implements OnInit, AfterViewInit {
   }
 
   updateProduct(): void {
-    if (!this.editProductId || !this.editProduct.name || !this.editProduct.category || this.editProduct.price === undefined || this.editProduct.stock === undefined) {
+    if (
+      !this.editProductId ||
+      !this.editProduct.name ||
+      !this.editProduct.category ||
+      this.editProduct.price === undefined ||
+      this.editProduct.stock === undefined
+    ) {
       this.snackBar.open('Valid product data is required', 'Close', { duration: 3000 });
       return;
     }
@@ -570,62 +703,73 @@ export class ProductComponent implements OnInit, AfterViewInit {
     // Convert date string to Date object if needed
     const productData = {
       ...this.editProduct,
-      availableDate: this.editProduct.availableDate instanceof Date
-        ? this.editProduct.availableDate
-        : (this.editProduct.availableDate ? new Date(this.editProduct.availableDate as string) : new Date())
+      availableDate:
+        this.editProduct.availableDate instanceof Date
+          ? this.editProduct.availableDate
+          : this.editProduct.availableDate
+            ? new Date(this.editProduct.availableDate as string)
+            : new Date(),
     };
 
     this.isUpdating = true;
-    this.productManagement.execute({
-      action: 'update',
-      data: {
-        id: this.editProductId,
-        data: productData
-      }
-    }).subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.snackBar.open('Product updated successfully', 'Close', { duration: 3000 });
-          this.editProductId = null;
-          this.editProduct = {};
-          this.loadProducts();
-          this.loadStatistics();
-        } else {
-          this.snackBar.open(response.message || 'Failed to update product', 'Close', { duration: 3000 });
-        }
-        this.isUpdating = false;
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error('Error updating product:', error);
-        this.snackBar.open('Error updating product', 'Close', { duration: 3000 });
-        this.isUpdating = false;
-        this.cdr.detectChanges();
-      }
-    });
+    this.productManagement
+      .execute({
+        action: 'update',
+        data: {
+          id: this.editProductId,
+          data: productData,
+        },
+      })
+      .subscribe({
+        next: response => {
+          if (response.success) {
+            this.snackBar.open('Product updated successfully', 'Close', { duration: 3000 });
+            this.editProductId = null;
+            this.editProduct = {};
+            this.loadProducts();
+            this.loadStatistics();
+          } else {
+            this.snackBar.open(response.message || 'Failed to update product', 'Close', {
+              duration: 3000,
+            });
+          }
+          this.isUpdating = false;
+          this.cdr.detectChanges();
+        },
+        error: error => {
+          console.error('Error updating product:', error);
+          this.snackBar.open('Error updating product', 'Close', { duration: 3000 });
+          this.isUpdating = false;
+          this.cdr.detectChanges();
+        },
+      });
   }
 
   deleteProduct(product: Product): void {
     if (confirm(`Are you sure you want to delete "${product.name}"?`)) {
-      this.productManagement.execute({
-        action: 'delete',
-        data: { id: product.id }
-      }).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.snackBar.open('Product deleted successfully', 'Close', { duration: 3000 });
-            this.loadProducts();
-            this.loadStatistics();
-          } else {
-            this.snackBar.open(response.message || 'Failed to delete product', 'Close', { duration: 3000 });
-          }
-          this.cdr.detectChanges();
-        },
-        error: (error) => {
-          console.error('Error deleting product:', error);
-          this.snackBar.open('Error deleting product', 'Close', { duration: 3000 });
-        }
-      });
+      this.productManagement
+        .execute({
+          action: 'delete',
+          data: { id: product.id },
+        })
+        .subscribe({
+          next: response => {
+            if (response.success) {
+              this.snackBar.open('Product deleted successfully', 'Close', { duration: 3000 });
+              this.loadProducts();
+              this.loadStatistics();
+            } else {
+              this.snackBar.open(response.message || 'Failed to delete product', 'Close', {
+                duration: 3000,
+              });
+            }
+            this.cdr.detectChanges();
+          },
+          error: error => {
+            console.error('Error deleting product:', error);
+            this.snackBar.open('Error deleting product', 'Close', { duration: 3000 });
+          },
+        });
     }
   }
 
@@ -641,22 +785,26 @@ export class ProductComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.productManagement.execute({
-      action: 'bulk-operations',
-      data: { activateProducts: this.selectedProductIds }
-    }).subscribe({
-      next: (response) => {
-        this.snackBar.open(response.message || 'Bulk operation completed', 'Close', { duration: 3000 });
-        this.selectedProducts = [];
-        this.selectedProductIds = [];
-        this.loadProducts();
-        this.loadStatistics();
-      },
-      error: (error) => {
-        console.error('Error in bulk operation:', error);
-        this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
-      }
-    });
+    this.productManagement
+      .execute({
+        action: 'bulk-operations',
+        data: { activateProducts: this.selectedProductIds },
+      })
+      .subscribe({
+        next: response => {
+          this.snackBar.open(response.message || 'Bulk operation completed', 'Close', {
+            duration: 3000,
+          });
+          this.selectedProducts = [];
+          this.selectedProductIds = [];
+          this.loadProducts();
+          this.loadStatistics();
+        },
+        error: error => {
+          console.error('Error in bulk operation:', error);
+          this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
+        },
+      });
   }
 
   bulkDeactivateProducts(): void {
@@ -665,22 +813,26 @@ export class ProductComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.productManagement.execute({
-      action: 'bulk-operations',
-      data: { deactivateProducts: this.selectedProductIds }
-    }).subscribe({
-      next: (response) => {
-        this.snackBar.open(response.message || 'Bulk operation completed', 'Close', { duration: 3000 });
-        this.selectedProducts = [];
-        this.selectedProductIds = [];
-        this.loadProducts();
-        this.loadStatistics();
-      },
-      error: (error) => {
-        console.error('Error in bulk operation:', error);
-        this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
-      }
-    });
+    this.productManagement
+      .execute({
+        action: 'bulk-operations',
+        data: { deactivateProducts: this.selectedProductIds },
+      })
+      .subscribe({
+        next: response => {
+          this.snackBar.open(response.message || 'Bulk operation completed', 'Close', {
+            duration: 3000,
+          });
+          this.selectedProducts = [];
+          this.selectedProductIds = [];
+          this.loadProducts();
+          this.loadStatistics();
+        },
+        error: error => {
+          console.error('Error in bulk operation:', error);
+          this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
+        },
+      });
   }
 
   bulkDeleteProducts(): void {
@@ -690,22 +842,26 @@ export class ProductComponent implements OnInit, AfterViewInit {
     }
 
     if (confirm(`Are you sure you want to delete ${this.selectedProductIds.length} products?`)) {
-      this.productManagement.execute({
-        action: 'bulk-operations',
-        data: { deleteProducts: this.selectedProductIds }
-      }).subscribe({
-        next: (response) => {
-          this.snackBar.open(response.message || 'Bulk operation completed', 'Close', { duration: 3000 });
-          this.selectedProducts = [];
-          this.selectedProductIds = [];
-          this.loadProducts();
-          this.loadStatistics();
-        },
-        error: (error) => {
-          console.error('Error in bulk operation:', error);
-          this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
-        }
-      });
+      this.productManagement
+        .execute({
+          action: 'bulk-operations',
+          data: { deleteProducts: this.selectedProductIds },
+        })
+        .subscribe({
+          next: response => {
+            this.snackBar.open(response.message || 'Bulk operation completed', 'Close', {
+              duration: 3000,
+            });
+            this.selectedProducts = [];
+            this.selectedProductIds = [];
+            this.loadProducts();
+            this.loadStatistics();
+          },
+          error: error => {
+            console.error('Error in bulk operation:', error);
+            this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
+          },
+        });
     }
   }
 
@@ -800,7 +956,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
     } else {
       console.log('Templates not ready yet:', {
         actionsTemplate: !!this.actionsTemplate,
-        productImageTemplate: !!this.productImageTemplate
+        productImageTemplate: !!this.productImageTemplate,
       });
     }
   }

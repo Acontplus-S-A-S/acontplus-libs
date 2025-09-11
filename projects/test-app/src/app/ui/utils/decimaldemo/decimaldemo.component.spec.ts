@@ -8,9 +8,8 @@ describe('DecimaldemoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DecimaldemoComponent]
-    })
-    .compileComponents();
+      imports: [DecimaldemoComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DecimaldemoComponent);
     component = fixture.componentInstance;

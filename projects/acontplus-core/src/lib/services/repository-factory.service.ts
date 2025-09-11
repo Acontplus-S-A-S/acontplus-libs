@@ -16,7 +16,7 @@ export interface RepositoryConfig<T extends BaseRepository<any>> {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RepositoryFactoryService {
   private http = inject(HttpClient);
@@ -31,9 +31,7 @@ export class RepositoryFactoryService {
   /**
    * Create a full CRUD repository
    */
-  createFullRepository<T extends BaseRepository<any>>(
-    config: RepositoryConfig<T>
-  ): T {
+  createFullRepository<T extends BaseRepository<any>>(config: RepositoryConfig<T>): T {
     const key = `${config.type.name}_${config.entityName}`;
 
     if (this.repositories.has(key)) {
@@ -55,7 +53,7 @@ export class RepositoryFactoryService {
    */
   createReadOnlyRepository<T extends BaseEntity>(
     entityName: string,
-    baseUrl: string
+    baseUrl: string,
   ): ReadOnlyRepository<T> {
     const key = `ReadOnly_${entityName}`;
 
@@ -90,7 +88,7 @@ export class RepositoryFactoryService {
    */
   createWriteOnlyRepository<T extends BaseEntity>(
     entityName: string,
-    baseUrl: string
+    baseUrl: string,
   ): WriteOnlyRepository<T> {
     const key = `WriteOnly_${entityName}`;
 
@@ -126,7 +124,7 @@ export class RepositoryFactoryService {
   createCustomRepository<T extends BaseEntity>(
     entityName: string,
     baseUrl: string,
-    operations: Partial<BaseRepository<T>>
+    operations: Partial<BaseRepository<T>>,
   ): BaseRepository<T> {
     const key = `Custom_${entityName}`;
 

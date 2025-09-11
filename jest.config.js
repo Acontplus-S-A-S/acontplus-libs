@@ -5,18 +5,15 @@ module.exports = {
   roots: [
     '<rootDir>/projects/test-app',
     '<rootDir>/projects/acontplus-core',
-    '<rootDir>/projects/acontplus-ui-components'
+    '<rootDir>/projects/acontplus-ui-components',
   ],
-  testMatch: [
-    '**/__tests__/**/*.ts',
-    '**/?(*.)+(spec|test).ts'
-  ],
+  testMatch: ['**/__tests__/**/*.ts', '**/?(*.)+(spec|test).ts'],
   collectCoverageFrom: [
     'projects/**/src/**/*.ts',
     '!projects/**/src/**/*.spec.ts',
     '!projects/**/src/**/*.test.ts',
     '!projects/**/src/**/index.ts',
-    '!projects/**/src/**/public-api.ts'
+    '!projects/**/src/**/public-api.ts',
   ],
   coverageDirectory: '<rootDir>/coverage',
   coverageReporters: ['text', 'lcov', 'html'],
@@ -24,7 +21,7 @@ module.exports = {
     '^@acontplus-core$': '<rootDir>/projects/acontplus-core/src/public-api.ts',
     '^@acontplus-ui-components$': '<rootDir>/projects/acontplus-ui-components/src/public-api.ts',
     '^acontplus-core$': '<rootDir>/projects/acontplus-core/src/public-api.ts',
-    '^acontplus-ui-components$': '<rootDir>/projects/acontplus-ui-components/src/public-api.ts'
+    '^acontplus-ui-components$': '<rootDir>/projects/acontplus-ui-components/src/public-api.ts',
   },
   transform: {
     '^.+\\.(ts|js|html)$': [
@@ -33,17 +30,11 @@ module.exports = {
         tsconfig: '<rootDir>/tsconfig.spec.json',
         stringifyContentPathRegex: '\\.(html|svg)$',
         useESM: true,
-        isolatedModules: true
-      }
-    ]
+        isolatedModules: true,
+      },
+    ],
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!.*\\.mjs$)'
-  ],
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   moduleFileExtensions: ['ts', 'js', 'html', 'json'],
-  testPathIgnorePatterns: [
-    '<rootDir>/node_modules/',
-    '<rootDir>/dist/'
-  ],
-
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
 };

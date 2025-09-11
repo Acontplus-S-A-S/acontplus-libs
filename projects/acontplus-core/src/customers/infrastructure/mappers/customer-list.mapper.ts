@@ -1,6 +1,4 @@
-
 export class ListCustomerMapper {
-
   static toJson(params: any) {
     return JSON.stringify({
       ...params,
@@ -32,11 +30,11 @@ export class ListCustomerMapper {
       email: item.correo,
       finalConsumer: item.consumidorFinal,
       sriValidation: item.validacionSri,
-      sriValidationName: item.validationSri ? "SI" : "NO",
+      sriValidationName: item.validationSri ? 'SI' : 'NO',
       identificationType: item.tipoIdentificacion,
       status: item.estado,
-      statusName: item.estado ? "Activo" : "Inactivo",
-      isFinalConsumer: item.codTipoIdentificacion === "CF",
+      statusName: item.estado ? 'Activo' : 'Inactivo',
+      isFinalConsumer: item.codTipoIdentificacion === 'CF',
       totalRecords: item.totalRecords,
     }));
     result.meta.totalItems = result.items.length > 0 ? result.items[0].totalRecords : 0;

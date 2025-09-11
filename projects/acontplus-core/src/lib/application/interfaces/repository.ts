@@ -1,4 +1,4 @@
-export interface Result<T>  {
+export interface Result<T> {
   success: boolean;
   data?: T;
   error?: string;
@@ -23,13 +23,13 @@ export interface RepositoryOptions<
   CreateDTO = TEntity,
   UpdateDTO = Partial<TEntity>,
   GetDTO = TEntity,
-  GetAllRequest = any
+  GetAllRequest = any,
 > {
   entity: TEntity;
   id: ID;
   createDto?: CreateDTO;
   updateDto?: UpdateDTO;
-  getDto?: GetDTO;  // Nuevo DTO para respuestas
+  getDto?: GetDTO; // Nuevo DTO para respuestas
   getAllRequest?: GetAllRequest;
 }
 

@@ -2,17 +2,15 @@ import { CustomerFormDataMapper } from '../mappers/customer-form-data.mapper';
 import { ListCustomerMapper } from '../mappers/customer-list.mapper';
 import { CustomerRepository } from '../../domain/repositories/customer.repository';
 import { HttpClientFactory } from '../../../lib/infrastructure';
-import { API_URLS} from '../../../lib/domain';
-import {PageResult, Result} from '../../../lib/application';
-import {CustomerGetByIdMapper} from "../mappers/customer-get-by-id.mapper";
-import {ApiResponse} from "../../../lib/models";
-import {CustomerCreateUpdateMapper} from "../mappers/customer-create-update.mapper";
-import { CustomerSearchDTO } from './../../application/dtos/customer.dto';
-import {CompanySearchMapper} from "../mappers/company-search.mapper";
+import { API_URLS } from '../../../lib/domain';
+import { PageResult, Result } from '../../../lib/application';
+import { CustomerGetByIdMapper } from '../mappers/customer-get-by-id.mapper';
+import { ApiResponse } from '../../../lib/models';
+import { CustomerCreateUpdateMapper } from '../mappers/customer-create-update.mapper';
+import { CustomerSearchDTO } from '../../application/dtos/customer.dto';
+import { CompanySearchMapper } from '../mappers/company-search.mapper';
 
 export class CustomerHttpRepository implements CustomerRepository {
-
-
   private get http() {
     return HttpClientFactory.getClient(); // siempre toma el último cliente configurado
   }
@@ -60,61 +58,54 @@ export class CustomerHttpRepository implements CustomerRepository {
   }
 
   create(dto: any): Promise<Result<any>> {
-    return this.http.post<ApiResponse>(this.url, { data:CustomerCreateUpdateMapper.toJson(dto.data) }).then(
-      response =>{
+    return this.http
+      .post<ApiResponse>(this.url, { data: CustomerCreateUpdateMapper.toJson(dto.data) })
+      .then(response => {
         console.log(response);
-        const data =  CustomerCreateUpdateMapper.fromJson(response);
+        const data = CustomerCreateUpdateMapper.fromJson(response);
         return {
-          success: response.code==="1",
+          success: response.code === '1',
           data,
-          message: response.message
-        }
-      }
-    );
+          message: response.message,
+        };
+      });
   }
   update(dto: any): Promise<Result<any>> {
     return this.http
-      .put<ApiResponse>(`${this.url}${dto.id}`, { data: CustomerCreateUpdateMapper.toJson(dto.data) }).then(
-        response => {
-          console.log(response);
-          return {
-            success: response.code==="1",
-            message: response.message
-          }
-        }
-      )
+      .put<ApiResponse>(`${this.url}${dto.id}`, {
+        data: CustomerCreateUpdateMapper.toJson(dto.data),
+      })
+      .then(response => {
+        console.log(response);
+        return {
+          success: response.code === '1',
+          message: response.message,
+        };
+      });
   }
   updateState(id: number) {
-    return this.http.delete<ApiResponse>(`${this.url}${id}`).then(
-      response => {
-        return {
-          success: response.code==="1",
-          message: response.message
-        }
-      }
-    )
+    return this.http.delete<ApiResponse>(`${this.url}${id}`).then(response => {
+      return {
+        success: response.code === '1',
+        message: response.message,
+      };
+    });
   }
   getById(id: number): Promise<Result<any>> {
-    return this.http.get<any>(`${this.url}GetId/${id}`).then(
-      response=> CustomerGetByIdMapper.fromJson(response)
-    );
+    return this.http
+      .get<any>(`${this.url}GetId/${id}`)
+      .then(response => CustomerGetByIdMapper.fromJson(response));
   }
-
 
   search(params: CustomerSearchDTO): Promise<Result<any>> {
-    const json = CompanySearchMapper.toJson(params)
-    return this.http
-      .get<ApiResponse>(`${this.url}Search?json=${json}`).then(
-        response => {
-          const data = CompanySearchMapper.fromJson(response);
-          return {
-            success: response.code==="1",
-            data,
-            message: response.message
-          }
-        }
-      )
+    const json = CompanySearchMapper.toJson(params);
+    return this.http.get<ApiResponse>(`${this.url}Search?json=${json}`).then(response => {
+      const data = CompanySearchMapper.fromJson(response);
+      return {
+        success: response.code === '1',
+        data,
+        message: response.message,
+      };
+    });
   }
-
-
 }

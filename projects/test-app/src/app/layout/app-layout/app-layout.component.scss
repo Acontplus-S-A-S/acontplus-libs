@@ -1,4 +1,3 @@
-
 .sidenav-container {
   height: 100%;
 }
@@ -20,7 +19,7 @@ mat-sidenav-content {
 }
 
 .sidenav-scroll-wrapper {
- // height: calc(100dvh - 64px - 16px);
+  // height: calc(100dvh - 64px - 16px);
   overflow: auto;
   border-radius: 16px;
   box-sizing: border-box;

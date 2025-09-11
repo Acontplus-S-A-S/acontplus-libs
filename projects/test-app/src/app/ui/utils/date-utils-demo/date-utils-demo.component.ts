@@ -1,10 +1,10 @@
-import {DateUtils, TIME_OF_DAY } from '@acontplus-core';
+import { DateUtils, TIME_OF_DAY } from '@acontplus-core';
 import { Component } from '@angular/core';
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatCardModule} from "@angular/material/card";
-import {MatInputModule} from "@angular/material/input";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatButtonModule} from "@angular/material/button";
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-date-utils-demo',
@@ -14,10 +14,10 @@ import {MatButtonModule} from "@angular/material/button";
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './date-utils-demo.component.html',
-  styleUrl: './date-utils-demo.component.scss'
+  styleUrl: './date-utils-demo.component.scss',
 })
 export class DateUtilsDemoComponent {
   selectedDate: Date = new Date();
@@ -68,7 +68,8 @@ export class DateUtilsDemoComponent {
 
   compareDates() {
     const cmp = DateUtils.compare(this.selectedDate, this.secondDate);
-    this.result = cmp === 0 ? 'Fechas iguales' : cmp < 0 ? 'La primera es menor' : 'La primera es mayor';
+    this.result =
+      cmp === 0 ? 'Fechas iguales' : cmp < 0 ? 'La primera es menor' : 'La primera es mayor';
   }
 
   formatDate() {
@@ -89,7 +90,9 @@ export class DateUtilsDemoComponent {
   }
 
   isSame(unit: 'year' | 'month' | 'day' | 'hour' | 'minute' | 'second' | 'millisecond') {
-    this.result = DateUtils.isSame(this.selectedDate, this.secondDate, unit) ? 'Fechas iguales' : 'Fechas diferentes';
+    this.result = DateUtils.isSame(this.selectedDate, this.secondDate, unit)
+      ? 'Fechas iguales'
+      : 'Fechas diferentes';
   }
 
   getDayOfWeek() {
@@ -112,6 +115,8 @@ export class DateUtilsDemoComponent {
   }
 
   isInTimeRange(start: TIME_OF_DAY, end: TIME_OF_DAY) {
-    this.result = DateUtils.isInTimeRange(this.selectedDate, start, end) ? 'Dentro del rango' : 'Fuera del rango';
+    this.result = DateUtils.isInTimeRange(this.selectedDate, start, end)
+      ? 'Dentro del rango'
+      : 'Fuera del rango';
   }
 }
