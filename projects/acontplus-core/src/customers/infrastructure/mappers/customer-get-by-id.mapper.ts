@@ -1,7 +1,5 @@
-import { SEPARADORES_REGEX } from "./../../../lib/domain/constants/common.const";
-import {parseJSONSafe} from "../../../lib/utils/json.util";
-
-
+import { SEPARADORES_REGEX } from '../../../lib/domain';
+import { parseJSONSafe } from '../../../lib/utils/json.util';
 
 export class CustomerGetByIdMapper {
   static fromJson(response: any) {
