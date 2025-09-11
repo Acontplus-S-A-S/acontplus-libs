@@ -16,9 +16,12 @@ export interface ConditionalUserUpdateRequest {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class ConditionalUserUpdateCommand extends ConditionalCommand<ConditionalUserUpdateRequest, User> {
+export class ConditionalUserUpdateCommand extends ConditionalCommand<
+  ConditionalUserUpdateRequest,
+  User
+> {
   private userManagement = inject(UserManagementUseCase);
 
   private approvalStatus = new Map<number, boolean>();
@@ -51,20 +54,22 @@ export class ConditionalUserUpdateCommand extends ConditionalCommand<Conditional
           role: request.data.role || 'user',
           isActive: request.data.isActive !== undefined ? request.data.isActive : true,
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
         };
         return mockUser;
-      })
+      }),
     );
   }
 
   protected checkConditions(request: ConditionalUserUpdateRequest): Observable<boolean> {
     // Check if user is active (if required)
     if (request.conditions.checkActive) {
-      const user = this.userManagement.getTotalUsers() > 0 ?
-        this.userManagement.getUsers({ page: 1, pageSize: 1000 }).pipe(
-          map(result => result.items.find(u => u.id === request.id))
-        ) : of(undefined);
+      const user =
+        this.userManagement.getTotalUsers() > 0
+          ? this.userManagement
+              .getUsers({ page: 1, pageSize: 1000 })
+              .pipe(map(result => result.items.find(u => u.id === request.id)))
+          : of(undefined);
 
       return user.pipe(
         map(foundUser => {
@@ -72,7 +77,7 @@ export class ConditionalUserUpdateCommand extends ConditionalCommand<Conditional
             return false;
           }
           return true;
-        })
+        }),
       );
     }
 
@@ -99,7 +104,7 @@ export class ConditionalUserUpdateCommand extends ConditionalCommand<Conditional
         field: 'name',
         message: 'Name is required',
         code: 'REQUIRED',
-        type: ErrorCategory.VALIDATION
+        type: ErrorCategory.VALIDATION,
       });
     }
 
@@ -108,14 +113,14 @@ export class ConditionalUserUpdateCommand extends ConditionalCommand<Conditional
         field: 'email',
         message: 'Email is required',
         code: 'REQUIRED',
-        type: ErrorCategory.VALIDATION
+        type: ErrorCategory.VALIDATION,
       });
     } else if (!this.isValidEmail(request.data.email)) {
       errors.push({
         field: 'email',
         message: 'Invalid email format',
         code: 'INVALID_FORMAT',
-        type: ErrorCategory.VALIDATION
+        type: ErrorCategory.VALIDATION,
       });
     }
 
@@ -124,7 +129,7 @@ export class ConditionalUserUpdateCommand extends ConditionalCommand<Conditional
         field: 'role',
         message: 'Invalid role. Must be admin, manager, or user',
         code: 'INVALID_VALUE',
-        type: ErrorCategory.VALIDATION
+        type: ErrorCategory.VALIDATION,
       });
     }
 

@@ -1,6 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -42,10 +48,10 @@ import { PaginationParams, PaginatedResult } from '@acontplus-core';
     MatTabsModule,
     MatExpansionModule,
     MatBadgeModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './application.component.html',
-  styleUrls: ['./application.component.scss']
+  styleUrls: ['./application.component.scss'],
 })
 export class ApplicationComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
@@ -94,7 +100,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
     private applicationUseCase: ApplicationManagementUseCase,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) {
     this.applicationForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -108,14 +114,14 @@ export class ApplicationComponent implements OnInit, OnDestroy {
       repositoryUrl: [''],
       documentationUrl: [''],
       dependencies: [[]],
-      tags: [[]]
+      tags: [[]],
     });
 
     this.searchForm = this.formBuilder.group({
       searchQuery: [''],
       status: [''],
       environment: [''],
-      category: ['']
+      category: [''],
     });
 
     this.stats$ = this.applicationUseCase.getApplicationStatistics();
@@ -132,18 +138,16 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   }
 
   private setupFormSubscriptions(): void {
-    this.searchForm.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(values => {
-        this.filters = {
-          search: values.searchQuery || undefined,
-          status: values.status || undefined,
-          environment: values.environment || undefined,
-          category: values.category || undefined
-        };
-        this.currentPage = 1;
-        this.loadApplications();
-      });
+    this.searchForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(values => {
+      this.filters = {
+        search: values.searchQuery || undefined,
+        status: values.status || undefined,
+        environment: values.environment || undefined,
+        category: values.category || undefined,
+      };
+      this.currentPage = 1;
+      this.loadApplications();
+    });
   }
 
   private loadApplications(): void {
@@ -152,22 +156,23 @@ export class ApplicationComponent implements OnInit, OnDestroy {
       page: this.currentPage,
       pageSize: this.pageSize,
       sortBy: this.currentSort.active,
-      sortDirection: this.currentSort.direction
+      sortDirection: this.currentSort.direction,
     };
 
-    this.applicationUseCase.getApplications(pagination, this.filters)
+    this.applicationUseCase
+      .getApplications(pagination, this.filters)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (result) => {
+        next: result => {
           this.applications = result.items;
           this.totalApplications = result.totalCount;
           this.loading = false;
         },
-        error: (error) => {
+        error: error => {
           console.error('Error loading applications:', error);
           this.snackBar.open('Error loading applications', 'Close', { duration: 3000 });
           this.loading = false;
-        }
+        },
       });
   }
 
@@ -187,26 +192,27 @@ export class ApplicationComponent implements OnInit, OnDestroy {
       const applicationData = this.applicationForm.value;
       this.loading = true;
 
-      this.applicationUseCase.createApplication(applicationData)
+      this.applicationUseCase
+        .createApplication(applicationData)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          next: (application) => {
+          next: application => {
             this.snackBar.open('Application created successfully', 'Close', { duration: 3000 });
             this.applicationForm.reset({
               status: 'active',
               environment: 'development',
               isPublic: false,
               dependencies: [],
-              tags: []
+              tags: [],
             });
             this.loadApplications();
             this.loading = false;
           },
-          error: (error) => {
+          error: error => {
             console.error('Error creating application:', error);
             this.snackBar.open('Error creating application', 'Close', { duration: 3000 });
             this.loading = false;
-          }
+          },
         });
     }
   }
@@ -221,10 +227,11 @@ export class ApplicationComponent implements OnInit, OnDestroy {
       const updateData = this.applicationForm.value;
       this.loading = true;
 
-      this.applicationUseCase.updateApplication(this.selectedApplication.id, updateData)
+      this.applicationUseCase
+        .updateApplication(this.selectedApplication.id, updateData)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          next: (application) => {
+          next: application => {
             this.snackBar.open('Application updated successfully', 'Close', { duration: 3000 });
             this.selectedApplication = null;
             this.applicationForm.reset({
@@ -232,16 +239,16 @@ export class ApplicationComponent implements OnInit, OnDestroy {
               environment: 'development',
               isPublic: false,
               dependencies: [],
-              tags: []
+              tags: [],
             });
             this.loadApplications();
             this.loading = false;
           },
-          error: (error) => {
+          error: error => {
             console.error('Error updating application:', error);
             this.snackBar.open('Error updating application', 'Close', { duration: 3000 });
             this.loading = false;
-          }
+          },
         });
     }
   }
@@ -250,10 +257,11 @@ export class ApplicationComponent implements OnInit, OnDestroy {
     if (confirm(`Are you sure you want to delete ${application.name}?`)) {
       this.loading = true;
 
-      this.applicationUseCase.deleteApplication(application.id)
+      this.applicationUseCase
+        .deleteApplication(application.id)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          next: (success) => {
+          next: success => {
             if (success) {
               this.snackBar.open('Application deleted successfully', 'Close', { duration: 3000 });
               this.loadApplications();
@@ -262,106 +270,112 @@ export class ApplicationComponent implements OnInit, OnDestroy {
             }
             this.loading = false;
           },
-          error: (error) => {
+          error: error => {
             console.error('Error deleting application:', error);
             this.snackBar.open('Error deleting application', 'Close', { duration: 3000 });
             this.loading = false;
-          }
+          },
         });
     }
   }
 
   onUpdateStatus(application: Application, status: Application['status']): void {
-    this.applicationUseCase.updateApplicationStatus(application.id, status)
+    this.applicationUseCase
+      .updateApplicationStatus(application.id, status)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (updatedApp) => {
+        next: updatedApp => {
           this.snackBar.open(`Status updated to ${status}`, 'Close', { duration: 3000 });
           this.loadApplications();
         },
-        error: (error) => {
+        error: error => {
           console.error('Error updating status:', error);
           this.snackBar.open('Error updating status', 'Close', { duration: 3000 });
-        }
+        },
       });
   }
 
   onDeploy(application: Application, environment: Application['environment']): void {
-    this.applicationUseCase.deployApplication(application.id, environment)
+    this.applicationUseCase
+      .deployApplication(application.id, environment)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (deployedApp) => {
+        next: deployedApp => {
           this.snackBar.open(`Application deployed to ${environment}`, 'Close', { duration: 3000 });
           this.loadApplications();
         },
-        error: (error) => {
+        error: error => {
           console.error('Error deploying application:', error);
           this.snackBar.open('Error deploying application', 'Close', { duration: 3000 });
-        }
+        },
       });
   }
 
   onAddDependency(application: Application, dependency: string): void {
     if (dependency.trim()) {
-      this.applicationUseCase.addApplicationDependency(application.id, dependency.trim())
+      this.applicationUseCase
+        .addApplicationDependency(application.id, dependency.trim())
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          next: (updatedApp) => {
+          next: updatedApp => {
             this.snackBar.open(`Dependency ${dependency} added`, 'Close', { duration: 3000 });
             this.loadApplications();
           },
-          error: (error) => {
+          error: error => {
             console.error('Error adding dependency:', error);
             this.snackBar.open('Error adding dependency', 'Close', { duration: 3000 });
-          }
+          },
         });
     }
   }
 
   onRemoveDependency(application: Application, dependency: string): void {
-    this.applicationUseCase.removeApplicationDependency(application.id, dependency)
+    this.applicationUseCase
+      .removeApplicationDependency(application.id, dependency)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (updatedApp) => {
+        next: updatedApp => {
           this.snackBar.open(`Dependency ${dependency} removed`, 'Close', { duration: 3000 });
           this.loadApplications();
         },
-        error: (error) => {
+        error: error => {
           console.error('Error removing dependency:', error);
           this.snackBar.open('Error removing dependency', 'Close', { duration: 3000 });
-        }
+        },
       });
   }
 
   onAddTag(application: Application, tag: string): void {
     if (tag.trim()) {
-      this.applicationUseCase.addApplicationTag(application.id, tag.trim())
+      this.applicationUseCase
+        .addApplicationTag(application.id, tag.trim())
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          next: (updatedApp) => {
+          next: updatedApp => {
             this.snackBar.open(`Tag ${tag} added`, 'Close', { duration: 3000 });
             this.loadApplications();
           },
-          error: (error) => {
+          error: error => {
             console.error('Error adding tag:', error);
             this.snackBar.open('Error adding tag', 'Close', { duration: 3000 });
-          }
+          },
         });
     }
   }
 
   onRemoveTag(application: Application, tag: string): void {
-    this.applicationUseCase.removeApplicationTag(application.id, tag)
+    this.applicationUseCase
+      .removeApplicationTag(application.id, tag)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (updatedApp) => {
+        next: updatedApp => {
           this.snackBar.open(`Tag ${tag} removed`, 'Close', { duration: 3000 });
           this.loadApplications();
         },
-        error: (error) => {
+        error: error => {
           console.error('Error removing tag:', error);
           this.snackBar.open('Error removing tag', 'Close', { duration: 3000 });
-        }
+        },
       });
   }
 
@@ -372,26 +386,35 @@ export class ApplicationComponent implements OnInit, OnDestroy {
       environment: 'development',
       isPublic: false,
       dependencies: [],
-      tags: []
+      tags: [],
     });
   }
 
   getStatusColor(status: Application['status']): string {
     switch (status) {
-      case 'active': return 'primary';
-      case 'inactive': return 'warn';
-      case 'maintenance': return 'accent';
-      case 'deprecated': return 'warn';
-      default: return 'primary';
+      case 'active':
+        return 'primary';
+      case 'inactive':
+        return 'warn';
+      case 'maintenance':
+        return 'accent';
+      case 'deprecated':
+        return 'warn';
+      default:
+        return 'primary';
     }
   }
 
   getEnvironmentColor(environment: Application['environment']): string {
     switch (environment) {
-      case 'development': return 'accent';
-      case 'staging': return 'warn';
-      case 'production': return 'primary';
-      default: return 'primary';
+      case 'development':
+        return 'accent';
+      case 'staging':
+        return 'warn';
+      case 'production':
+        return 'primary';
+      default:
+        return 'primary';
     }
   }
 }

@@ -5,7 +5,7 @@ A comprehensive core library for Angular applications providing utilities, servi
 ## 🚀 **Enterprise Features**
 
 - **Clean Architecture**: Proper separation of concerns with distinct layers
-- **CQRS Pattern**: Command Query Responsibility Segregation implementation  
+- **CQRS Pattern**: Command Query Responsibility Segregation implementation
 - **Flexible Repository Pattern**: Optional CRUD methods allowing selective implementation
 - **Specialized Repository Types**: ReadOnly, WriteOnly, and Composite repositories
 - **Enhanced Use Case Pattern**: Business logic components with optional validation and authorization
@@ -22,7 +22,7 @@ The library has been **completely refactored** to provide maximum flexibility:
 
 1. **Optional CRUD Methods**: Repositories no longer force implementation of all methods
 2. **Specialized Repository Types**: Choose the right repository for your needs
-3. **Enhanced Commands & Queries**: New specialized types for complex operations  
+3. **Enhanced Commands & Queries**: New specialized types for complex operations
 4. **Composite Use Cases**: Handle complex workflows with multiple operations
 5. **Repository Factory**: Dynamic repository creation and management
 
@@ -79,24 +79,38 @@ export abstract class BaseRepository<T extends BaseEntity> {
 ### **Specialized Repository Types** 🎯
 
 #### **ReadOnlyRepository**
+
 For read-only data access:
 
 ```typescript
 @Injectable()
 export abstract class ReadOnlyRepository<T extends BaseEntity> extends BaseRepository<T> {
   // ✅ Must implement these
-  abstract override getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<T>>;
+  abstract override getAll(
+    pagination: PaginationParams,
+    filters?: FilterParams,
+  ): Observable<PaginatedResult<T>>;
   abstract override getById(id: number): Observable<T>;
-  abstract override search(query: string, pagination: PaginationParams): Observable<PaginatedResult<T>>;
-  
+  abstract override search(
+    query: string,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<T>>;
+
   // ❌ Write operations throw errors
-  override create(): never { throw new Error('Create operation not supported'); }
-  override update(): never { throw new Error('Update operation not supported'); }
-  override delete(): never { throw new Error('Delete operation not supported'); }
+  override create(): never {
+    throw new Error('Create operation not supported');
+  }
+  override update(): never {
+    throw new Error('Update operation not supported');
+  }
+  override delete(): never {
+    throw new Error('Delete operation not supported');
+  }
 }
 ```
 
 #### **WriteOnlyRepository**
+
 For write-only data access:
 
 ```typescript
@@ -106,11 +120,17 @@ export abstract class WriteOnlyRepository<T extends BaseEntity> extends BaseRepo
   abstract override create(entity: Omit<T, 'id'>): Observable<T>;
   abstract override update(id: number, entity: Partial<T>): Observable<T>;
   abstract override delete(id: number): Observable<boolean>;
-  
+
   // ❌ Read operations throw errors
-  override getAll(): never { throw new Error('Read operations not supported'); }
-  override getById(): never { throw new Error('Read operations not supported'); }
-  override search(): never { throw new Error('Read operations not supported'); }
+  override getAll(): never {
+    throw new Error('Read operations not supported');
+  }
+  override getById(): never {
+    throw new Error('Read operations not supported');
+  }
+  override search(): never {
+    throw new Error('Read operations not supported');
+  }
 }
 ```
 

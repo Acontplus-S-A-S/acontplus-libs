@@ -6,7 +6,7 @@ import { PaginationParams, PaginatedResult } from '@acontplus-core';
 import { MockApplicationService } from './mock-application.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApplicationRepository extends BaseRepository<Application> {
   private mockService = inject(MockApplicationService);
@@ -22,7 +22,10 @@ export class ApplicationRepository extends BaseRepository<Application> {
   }
 
   // Override base methods to use mock service for demonstration
-  override getAll(pagination: PaginationParams, filters?: ApplicationFilterParams): Observable<PaginatedResult<Application>> {
+  override getAll(
+    pagination: PaginationParams,
+    filters?: ApplicationFilterParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.mockService.getAll(pagination, filters);
   }
 
@@ -42,24 +45,39 @@ export class ApplicationRepository extends BaseRepository<Application> {
     return this.mockService.delete(id);
   }
 
-  override search(query: string, pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  override search(
+    query: string,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.mockService.search(query, pagination);
   }
 
   // Application-specific methods
-  getByStatus(status: Application['status'], pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  getByStatus(
+    status: Application['status'],
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.mockService.getByStatus(status, pagination);
   }
 
-  getByEnvironment(environment: Application['environment'], pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  getByEnvironment(
+    environment: Application['environment'],
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.mockService.getByEnvironment(environment, pagination);
   }
 
-  getByCategory(category: string, pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  getByCategory(
+    category: string,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.mockService.getByCategory(category, pagination);
   }
 
-  getByOwner(owner: string, pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  getByOwner(
+    owner: string,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.mockService.getByOwner(owner, pagination);
   }
 

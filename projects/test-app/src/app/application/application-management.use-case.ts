@@ -6,10 +6,28 @@ import { PaginationParams, PaginatedResult } from '@acontplus-core';
 import { ApplicationRepository } from '../data/application.repository';
 
 export interface ApplicationManagementRequest {
-  action: 'create' | 'update' | 'delete' | 'bulk-operations' | 'search' | 'get-all' | 'get-by-id' |
-          'get-by-status' | 'get-by-environment' | 'get-by-category' | 'get-by-owner' | 'get-public' |
-          'update-status' | 'update-version' | 'add-dependency' | 'remove-dependency' | 'add-tag' |
-          'remove-tag' | 'deploy' | 'get-deployment-history' | 'get-stats';
+  action:
+    | 'create'
+    | 'update'
+    | 'delete'
+    | 'bulk-operations'
+    | 'search'
+    | 'get-all'
+    | 'get-by-id'
+    | 'get-by-status'
+    | 'get-by-environment'
+    | 'get-by-category'
+    | 'get-by-owner'
+    | 'get-public'
+    | 'update-status'
+    | 'update-version'
+    | 'add-dependency'
+    | 'remove-dependency'
+    | 'add-tag'
+    | 'remove-tag'
+    | 'deploy'
+    | 'get-deployment-history'
+    | 'get-stats';
   data?: any;
   pagination?: PaginationParams;
   filters?: ApplicationFilterParams;
@@ -23,20 +41,24 @@ export interface ApplicationManagementResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class ApplicationManagementUseCase extends CompositeUseCase<ApplicationManagementRequest, ApplicationManagementResponse> {
+export class ApplicationManagementUseCase extends CompositeUseCase<
+  ApplicationManagementRequest,
+  ApplicationManagementResponse
+> {
   private applicationRepository = inject(ApplicationRepository);
 
   /** Inserted by Angular inject() migration for backwards compatibility */
   constructor(...args: unknown[]);
 
-
   constructor() {
     super();
   }
 
-  protected executeInternal(request: ApplicationManagementRequest): Observable<ApplicationManagementResponse> {
+  protected executeInternal(
+    request: ApplicationManagementRequest,
+  ): Observable<ApplicationManagementResponse> {
     switch (request.action) {
       case 'create':
         return this.handleCreate(request.data);
@@ -85,13 +107,15 @@ export class ApplicationManagementUseCase extends CompositeUseCase<ApplicationMa
     }
   }
 
-  private handleCreate(applicationData: Omit<Application, 'id'>): Observable<ApplicationManagementResponse> {
+  private handleCreate(
+    applicationData: Omit<Application, 'id'>,
+  ): Observable<ApplicationManagementResponse> {
     // Validation
     if (!applicationData.name || !applicationData.description || !applicationData.version) {
       return of({
         success: false,
         message: 'Name, description, and version are required',
-        affectedApplications: 0
+        affectedApplications: 0,
       });
     }
 
@@ -100,19 +124,22 @@ export class ApplicationManagementUseCase extends CompositeUseCase<ApplicationMa
         success: true,
         data: application,
         message: 'Application created successfully',
-        affectedApplications: 1
-      }))
+        affectedApplications: 1,
+      })),
     );
   }
 
-  private handleUpdate(updateData: { id: number; data: Partial<Application> }): Observable<ApplicationManagementResponse> {
+  private handleUpdate(updateData: {
+    id: number;
+    data: Partial<Application>;
+  }): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.update(updateData.id, updateData.data).pipe(
       map(application => ({
         success: true,
         data: application,
         message: 'Application updated successfully',
-        affectedApplications: 1
-      }))
+        affectedApplications: 1,
+      })),
     );
   }
 
@@ -121,8 +148,8 @@ export class ApplicationManagementUseCase extends CompositeUseCase<ApplicationMa
       map(success => ({
         success,
         message: success ? 'Application deleted successfully' : 'Failed to delete application',
-        affectedApplications: success ? 1 : 0
-      }))
+        affectedApplications: success ? 1 : 0,
+      })),
     );
   }
 
@@ -132,29 +159,35 @@ export class ApplicationManagementUseCase extends CompositeUseCase<ApplicationMa
     return of({
       success: true,
       message: 'Bulk operations completed successfully',
-      affectedApplications: bulkData.operations?.length || 0
+      affectedApplications: bulkData.operations?.length || 0,
     });
   }
 
-  private handleSearch(searchData: { query: string; pagination: PaginationParams }): Observable<ApplicationManagementResponse> {
+  private handleSearch(searchData: {
+    query: string;
+    pagination: PaginationParams;
+  }): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.search(searchData.query, searchData.pagination).pipe(
       map(result => ({
         success: true,
         data: result,
         message: `Found ${result.totalCount} applications`,
-        affectedApplications: result.totalCount
-      }))
+        affectedApplications: result.totalCount,
+      })),
     );
   }
 
-  private handleGetAll(pagination?: PaginationParams, filters?: ApplicationFilterParams): Observable<ApplicationManagementResponse> {
+  private handleGetAll(
+    pagination?: PaginationParams,
+    filters?: ApplicationFilterParams,
+  ): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.getAll(pagination || { page: 1, pageSize: 10 }, filters).pipe(
       map(result => ({
         success: true,
         data: result,
         message: `Retrieved ${result.items.length} applications`,
-        affectedApplications: result.items.length
-      }))
+        affectedApplications: result.items.length,
+      })),
     );
   }
 
@@ -164,151 +197,190 @@ export class ApplicationManagementUseCase extends CompositeUseCase<ApplicationMa
         success: true,
         data: application,
         message: 'Application retrieved successfully',
-        affectedApplications: 1
-      }))
+        affectedApplications: 1,
+      })),
     );
   }
 
-  private handleGetByStatus(data: { status: Application['status']; pagination: PaginationParams }): Observable<ApplicationManagementResponse> {
+  private handleGetByStatus(data: {
+    status: Application['status'];
+    pagination: PaginationParams;
+  }): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.getByStatus(data.status, data.pagination).pipe(
       map(result => ({
         success: true,
         data: result,
         message: `Retrieved ${result.items.length} applications with status ${data.status}`,
-        affectedApplications: result.items.length
-      }))
+        affectedApplications: result.items.length,
+      })),
     );
   }
 
-  private handleGetByEnvironment(data: { environment: Application['environment']; pagination: PaginationParams }): Observable<ApplicationManagementResponse> {
+  private handleGetByEnvironment(data: {
+    environment: Application['environment'];
+    pagination: PaginationParams;
+  }): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.getByEnvironment(data.environment, data.pagination).pipe(
       map(result => ({
         success: true,
         data: result,
         message: `Retrieved ${result.items.length} applications in ${data.environment} environment`,
-        affectedApplications: result.items.length
-      }))
+        affectedApplications: result.items.length,
+      })),
     );
   }
 
-  private handleGetByCategory(data: { category: string; pagination: PaginationParams }): Observable<ApplicationManagementResponse> {
+  private handleGetByCategory(data: {
+    category: string;
+    pagination: PaginationParams;
+  }): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.getByCategory(data.category, data.pagination).pipe(
       map(result => ({
         success: true,
         data: result,
         message: `Retrieved ${result.items.length} applications in category ${data.category}`,
-        affectedApplications: result.items.length
-      }))
+        affectedApplications: result.items.length,
+      })),
     );
   }
 
-  private handleGetByOwner(data: { owner: string; pagination: PaginationParams }): Observable<ApplicationManagementResponse> {
+  private handleGetByOwner(data: {
+    owner: string;
+    pagination: PaginationParams;
+  }): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.getByOwner(data.owner, data.pagination).pipe(
       map(result => ({
         success: true,
         data: result,
         message: `Retrieved ${result.items.length} applications owned by ${data.owner}`,
-        affectedApplications: result.items.length
-      }))
+        affectedApplications: result.items.length,
+      })),
     );
   }
 
-  private handleGetPublic(pagination?: PaginationParams): Observable<ApplicationManagementResponse> {
-    return this.applicationRepository.getPublicApplications(pagination || { page: 1, pageSize: 10 }).pipe(
-      map(result => ({
-        success: true,
-        data: result,
-        message: `Retrieved ${result.items.length} public applications`,
-        affectedApplications: result.items.length
-      }))
-    );
+  private handleGetPublic(
+    pagination?: PaginationParams,
+  ): Observable<ApplicationManagementResponse> {
+    return this.applicationRepository
+      .getPublicApplications(pagination || { page: 1, pageSize: 10 })
+      .pipe(
+        map(result => ({
+          success: true,
+          data: result,
+          message: `Retrieved ${result.items.length} public applications`,
+          affectedApplications: result.items.length,
+        })),
+      );
   }
 
-  private handleUpdateStatus(data: { id: number; status: Application['status'] }): Observable<ApplicationManagementResponse> {
+  private handleUpdateStatus(data: {
+    id: number;
+    status: Application['status'];
+  }): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.updateStatus(data.id, data.status).pipe(
       map(application => ({
         success: true,
         data: application,
         message: `Application status updated to ${data.status}`,
-        affectedApplications: 1
-      }))
+        affectedApplications: 1,
+      })),
     );
   }
 
-  private handleUpdateVersion(data: { id: number; version: string }): Observable<ApplicationManagementResponse> {
+  private handleUpdateVersion(data: {
+    id: number;
+    version: string;
+  }): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.updateVersion(data.id, data.version).pipe(
       map(application => ({
         success: true,
         data: application,
         message: `Application version updated to ${data.version}`,
-        affectedApplications: 1
-      }))
+        affectedApplications: 1,
+      })),
     );
   }
 
-  private handleAddDependency(data: { id: number; dependency: string }): Observable<ApplicationManagementResponse> {
+  private handleAddDependency(data: {
+    id: number;
+    dependency: string;
+  }): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.addDependency(data.id, data.dependency).pipe(
       map(application => ({
         success: true,
         data: application,
         message: `Dependency ${data.dependency} added successfully`,
-        affectedApplications: 1
-      }))
+        affectedApplications: 1,
+      })),
     );
   }
 
-  private handleRemoveDependency(data: { id: number; dependency: string }): Observable<ApplicationManagementResponse> {
+  private handleRemoveDependency(data: {
+    id: number;
+    dependency: string;
+  }): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.removeDependency(data.id, data.dependency).pipe(
       map(application => ({
         success: true,
         data: application,
         message: `Dependency ${data.dependency} removed successfully`,
-        affectedApplications: 1
-      }))
+        affectedApplications: 1,
+      })),
     );
   }
 
-  private handleAddTag(data: { id: number; tag: string }): Observable<ApplicationManagementResponse> {
+  private handleAddTag(data: {
+    id: number;
+    tag: string;
+  }): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.addTag(data.id, data.tag).pipe(
       map(application => ({
         success: true,
         data: application,
         message: `Tag ${data.tag} added successfully`,
-        affectedApplications: 1
-      }))
+        affectedApplications: 1,
+      })),
     );
   }
 
-  private handleRemoveTag(data: { id: number; tag: string }): Observable<ApplicationManagementResponse> {
+  private handleRemoveTag(data: {
+    id: number;
+    tag: string;
+  }): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.removeTag(data.id, data.tag).pipe(
       map(application => ({
         success: true,
         data: application,
         message: `Tag ${data.tag} removed successfully`,
-        affectedApplications: 1
-      }))
+        affectedApplications: 1,
+      })),
     );
   }
 
-  private handleDeploy(data: { id: number; environment: Application['environment'] }): Observable<ApplicationManagementResponse> {
+  private handleDeploy(data: {
+    id: number;
+    environment: Application['environment'];
+  }): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.deploy(data.id, data.environment).pipe(
       map(application => ({
         success: true,
         data: application,
         message: `Application deployed to ${data.environment} successfully`,
-        affectedApplications: 1
-      }))
+        affectedApplications: 1,
+      })),
     );
   }
 
-  private handleGetDeploymentHistory(data: { id: number }): Observable<ApplicationManagementResponse> {
+  private handleGetDeploymentHistory(data: {
+    id: number;
+  }): Observable<ApplicationManagementResponse> {
     return this.applicationRepository.getDeploymentHistory(data.id).pipe(
       map(history => ({
         success: true,
         data: history,
         message: `Retrieved deployment history for application ${data.id}`,
-        affectedApplications: 1
-      }))
+        affectedApplications: 1,
+      })),
     );
   }
 
@@ -318,123 +390,146 @@ export class ApplicationManagementUseCase extends CompositeUseCase<ApplicationMa
         success: true,
         data: stats,
         message: 'Application statistics retrieved successfully',
-        affectedApplications: stats.total
-      }))
+        affectedApplications: stats.total,
+      })),
     );
   }
 
   // Public methods for external use
-  public getApplications(pagination: PaginationParams, filters?: ApplicationFilterParams): Observable<PaginatedResult<Application>> {
+  public getApplications(
+    pagination: PaginationParams,
+    filters?: ApplicationFilterParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.execute({ action: 'get-all', pagination, filters }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
   public getApplicationById(id: number): Observable<Application> {
-    return this.execute({ action: 'get-by-id', data: { id } }).pipe(
-      map(response => response.data)
-    );
+    return this.execute({ action: 'get-by-id', data: { id } }).pipe(map(response => response.data));
   }
 
   public createApplication(applicationData: Omit<Application, 'id'>): Observable<Application> {
     return this.execute({ action: 'create', data: applicationData }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
-  public updateApplication(id: number, applicationData: Partial<Application>): Observable<Application> {
+  public updateApplication(
+    id: number,
+    applicationData: Partial<Application>,
+  ): Observable<Application> {
     return this.execute({ action: 'update', data: { id, data: applicationData } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
   public deleteApplication(id: number): Observable<boolean> {
-    return this.execute({ action: 'delete', data: { id } }).pipe(
-      map(response => response.success)
-    );
+    return this.execute({ action: 'delete', data: { id } }).pipe(map(response => response.success));
   }
 
-  public searchApplications(query: string, pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  public searchApplications(
+    query: string,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.execute({ action: 'search', data: { query, pagination } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
-  public getApplicationsByStatus(status: Application['status'], pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  public getApplicationsByStatus(
+    status: Application['status'],
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.execute({ action: 'get-by-status', data: { status, pagination } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
-  public getApplicationsByEnvironment(environment: Application['environment'], pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  public getApplicationsByEnvironment(
+    environment: Application['environment'],
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.execute({ action: 'get-by-environment', data: { environment, pagination } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
-  public getApplicationsByCategory(category: string, pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  public getApplicationsByCategory(
+    category: string,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.execute({ action: 'get-by-category', data: { category, pagination } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
-  public getApplicationsByOwner(owner: string, pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  public getApplicationsByOwner(
+    owner: string,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.execute({ action: 'get-by-owner', data: { owner, pagination } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
-  public getPublicApplications(pagination: PaginationParams): Observable<PaginatedResult<Application>> {
-    return this.execute({ action: 'get-public', pagination }).pipe(
-      map(response => response.data)
-    );
+  public getPublicApplications(
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
+    return this.execute({ action: 'get-public', pagination }).pipe(map(response => response.data));
   }
 
-  public updateApplicationStatus(id: number, status: Application['status']): Observable<Application> {
+  public updateApplicationStatus(
+    id: number,
+    status: Application['status'],
+  ): Observable<Application> {
     return this.execute({ action: 'update-status', data: { id, status } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
   public updateApplicationVersion(id: number, version: string): Observable<Application> {
     return this.execute({ action: 'update-version', data: { id, version } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
   public addApplicationDependency(id: number, dependency: string): Observable<Application> {
     return this.execute({ action: 'add-dependency', data: { id, dependency } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
   public removeApplicationDependency(id: number, dependency: string): Observable<Application> {
     return this.execute({ action: 'remove-dependency', data: { id, dependency } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
   public addApplicationTag(id: number, tag: string): Observable<Application> {
     return this.execute({ action: 'add-tag', data: { id, tag } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
   public removeApplicationTag(id: number, tag: string): Observable<Application> {
     return this.execute({ action: 'remove-tag', data: { id, tag } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
-  public deployApplication(id: number, environment: Application['environment']): Observable<Application> {
+  public deployApplication(
+    id: number,
+    environment: Application['environment'],
+  ): Observable<Application> {
     return this.execute({ action: 'deploy', data: { id, environment } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
   public getApplicationDeploymentHistory(id: number): Observable<any[]> {
     return this.execute({ action: 'get-deployment-history', data: { id } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
@@ -444,8 +539,6 @@ export class ApplicationManagementUseCase extends CompositeUseCase<ApplicationMa
     byEnvironment: Record<Application['environment'], number>;
     byCategory: Record<string, number>;
   }> {
-    return this.execute({ action: 'get-stats' }).pipe(
-      map(response => response.data)
-    );
+    return this.execute({ action: 'get-stats' }).pipe(map(response => response.data));
   }
 }

@@ -22,7 +22,6 @@
     "./styles/dialog": "./styles/_custom-dialog.scss",
     "./styles/snackbar": "./styles/_snackbar-theme.scss"
   },
-
   "sideEffects": [
     "**/*.scss",
     "**/*.css"

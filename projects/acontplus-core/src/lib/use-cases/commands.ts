@@ -3,10 +3,7 @@ import { switchMap } from 'rxjs/operators';
 import { BaseUseCase } from './base.use-case';
 import { ValidationError } from '../models';
 
-export abstract class Command<TRequest, TResponse = void> extends BaseUseCase<
-  TRequest,
-  TResponse
-> {
+export abstract class Command<TRequest, TResponse = void> extends BaseUseCase<TRequest, TResponse> {
   // Optional validation - can be overridden
   protected override validate(request: TRequest): ValidationError[] {
     return [];
@@ -87,13 +84,15 @@ export abstract class ConditionalCommand<TRequest, TResponse> extends Command<TR
     return this.checkConditions(request).pipe(
       switchMap(conditionsMet => {
         if (!conditionsMet) {
-          return throwError(() => this.createErrorResult(
-            'CONDITIONS_NOT_MET',
-            'Required conditions are not met for this operation'
-          ));
+          return throwError(() =>
+            this.createErrorResult(
+              'CONDITIONS_NOT_MET',
+              'Required conditions are not met for this operation',
+            ),
+          );
         }
         return this.executeInternal(request);
-      })
+      }),
     );
   }
 }

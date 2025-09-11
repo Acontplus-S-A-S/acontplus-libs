@@ -1,5 +1,5 @@
-import { HttpPort, HttpOptions } from "../../application/interfaces/http.port";
-import {HttpClientFactory} from "./http-client-factory";
+import { HttpPort, HttpOptions } from '../../application/interfaces/http.port';
+import { HttpClientFactory } from './http-client-factory';
 
 export class FetchAdapter implements HttpPort {
   async get<T>(url: string, options?: HttpOptions): Promise<T> {
@@ -22,7 +22,7 @@ export class FetchAdapter implements HttpPort {
     method: string,
     url: string,
     body?: unknown,
-    options?: HttpOptions
+    options?: HttpOptions,
   ): Promise<T> {
     const baseURL = HttpClientFactory.getBaseURL();
     const response = await fetch(`${baseURL}${url}`, {

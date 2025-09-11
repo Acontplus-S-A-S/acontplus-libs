@@ -1,5 +1,4 @@
-
-import {HttpPort} from "../../application/interfaces/http.port";
+import { HttpPort } from '../../application/interfaces/http.port';
 
 /**
  * Clase que actúa como fábrica y contenedor para un cliente HTTP configurable.
@@ -11,8 +10,6 @@ export class HttpClientFactory {
 
   // URL base para las peticiones HTTP
   private static baseURL: string;
-
-
 
   /**
    * Configura el cliente HTTP y opcionalmente la URL base.
@@ -35,7 +32,6 @@ export class HttpClientFactory {
   static getClient(): HttpPort {
     if (!this.client) {
       throw new Error('HttpClientFactory: No se configuró ningún cliente HTTP');
-
     }
     return this.client;
   }
@@ -50,4 +46,3 @@ export class HttpClientFactory {
     return this.baseURL;
   }
 }
-

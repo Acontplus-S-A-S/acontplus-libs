@@ -1,4 +1,3 @@
-
 export interface HttpPort {
   get<T>(url: string, options?: HttpOptions): Promise<T>;
   post<T>(url: string, body: unknown, options?: HttpOptions): Promise<T>;

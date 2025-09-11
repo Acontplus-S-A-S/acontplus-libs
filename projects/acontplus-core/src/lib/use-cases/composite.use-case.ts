@@ -10,7 +10,10 @@ export interface CompositeUseCaseContext {
   metadata?: Record<string, any>;
 }
 
-export abstract class CompositeUseCase<TRequest = void, TResponse = void> extends BaseUseCase<TRequest, TResponse> {
+export abstract class CompositeUseCase<TRequest = void, TResponse = void> extends BaseUseCase<
+  TRequest,
+  TResponse
+> {
   protected context?: CompositeUseCaseContext;
 
   // Set context for the execution
@@ -22,7 +25,7 @@ export abstract class CompositeUseCase<TRequest = void, TResponse = void> extend
   // Helper method to combine multiple operations
   protected combineOperations<T1, T2>(
     op1: Observable<T1>,
-    op2: Observable<T2>
+    op2: Observable<T2>,
   ): Observable<[T1, T2]> {
     return combineLatest([op1, op2]);
   }
@@ -30,40 +33,38 @@ export abstract class CompositeUseCase<TRequest = void, TResponse = void> extend
   // Helper method to chain operations
   protected chainOperations<T1, T2>(
     op1: Observable<T1>,
-    op2: (result: T1) => Observable<T2>
+    op2: (result: T1) => Observable<T2>,
   ): Observable<T2> {
     return op1.pipe(switchMap(op2));
   }
 
   // Helper method to execute operations in parallel
-  protected executeParallel<T extends readonly unknown[]>(
-    operations: { [K in keyof T]: Observable<T[K]> }
-  ): Observable<T> {
+  protected executeParallel<T extends readonly unknown[]>(operations: {
+    [K in keyof T]: Observable<T[K]>;
+  }): Observable<T> {
     return combineLatest(operations) as unknown as Observable<T>;
   }
 
   // Helper method to execute operations sequentially
-  protected executeSequential<T extends readonly unknown[]>(
-    operations: { [K in keyof T]: Observable<T[K]> }
-  ): Observable<T> {
-    return operations.reduce((acc, op) =>
-      acc.pipe(switchMap(() => op)),
-      new Observable<never>()
+  protected executeSequential<T extends readonly unknown[]>(operations: {
+    [K in keyof T]: Observable<T[K]>;
+  }): Observable<T> {
+    return operations.reduce(
+      (acc, op) => acc.pipe(switchMap(() => op)),
+      new Observable<never>(),
     ) as Observable<T>;
   }
 
   // Helper method to handle rollback scenarios
   protected withRollback<T>(
     operation: Observable<T>,
-    rollback: () => Observable<void>
+    rollback: () => Observable<void>,
   ): Observable<T> {
     return operation.pipe(
       catchError(error => {
         // Execute rollback and re-throw error
-        return rollback().pipe(
-          switchMap(() => throwError(() => error))
-        );
-      })
+        return rollback().pipe(switchMap(() => throwError(() => error)));
+      }),
     );
   }
 
@@ -75,7 +76,7 @@ export abstract class CompositeUseCase<TRequest = void, TResponse = void> extend
         ...this.context,
         details,
         action,
-        resource
+        resource,
       });
     }
   }

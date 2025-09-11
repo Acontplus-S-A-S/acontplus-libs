@@ -9,12 +9,7 @@ module.exports = tseslint.config(
   // Configuration for TypeScript files in test-app
   {
     files: ['**/*.ts'],
-    ignores: [
-      '**/node_modules/*',
-      'dist/**/*',
-      '**/*.spec.ts',
-      '**/*.test.ts',
-    ],
+    ignores: ['**/node_modules/*', 'dist/**/*', '**/*.spec.ts', '**/*.test.ts'],
     extends: [
       js.configs.recommended,
       ...tseslint.configs.recommended,

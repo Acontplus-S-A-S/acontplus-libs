@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚀 **Enhanced Table Components**
 
 #### **MatDynamicTable Improvements**
+
 - **NEW**: Enhanced pagination configuration with customizable page sizes
 - **NEW**: Improved row selection with multi-select capabilities
 - **NEW**: Better sorting and filtering integration
@@ -28,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **NEW**: Better accessibility with ARIA labels and keyboard navigation
 
 #### **CustomTabulator Enhancements**
+
 - **NEW**: Advanced table features with Tabulator.js integration
 - **NEW**: Custom cell renderers and formatters
 - **NEW**: Advanced filtering and sorting capabilities
@@ -38,18 +40,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🎨 **UI Component Improvements**
 
 #### **Card Components**
+
 - **NEW**: Enhanced `MatDynamicCard` with flexible content areas
 - **NEW**: Better responsive design for different screen sizes
 - **NEW**: Improved accessibility and keyboard navigation
 - **NEW**: Customizable themes and styling options
 
 #### **Form Components**
+
 - **NEW**: Enhanced `MatInputChip` with better validation
 - **NEW**: Improved autocomplete wrapper with better UX
 - **NEW**: Better form field integration and styling
 - **NEW**: Enhanced error handling and validation display
 
 #### **Icon Components**
+
 - **NEW**: Enhanced `SvgIcon` component with better scaling
 - **NEW**: Improved `IconUser` component with customizable states
 - **NEW**: Better accessibility with proper ARIA labels
@@ -58,18 +63,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🔧 **Service Enhancements**
 
 #### **Dialog Service**
+
 - **NEW**: Enhanced `AdvancedDialogService` with better configuration options
 - **NEW**: Improved dialog positioning and sizing
 - **NEW**: Better mobile responsiveness
 - **NEW**: Enhanced accessibility features
 
 #### **Snackbar Service**
+
 - **NEW**: Improved `SnackbarService` with better positioning
 - **NEW**: Enhanced notification types and styling
 - **NEW**: Better mobile experience
 - **NEW**: Improved accessibility with screen reader support
 
 #### **Overlay Service**
+
 - **NEW**: Enhanced overlay positioning and management
 - **NEW**: Better z-index handling
 - **NEW**: Improved mobile responsiveness
@@ -78,12 +86,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🎯 **New Features**
 
 #### **Theme Management**
+
 - **NEW**: Enhanced theme toggle with better state management
 - **NEW**: Improved dark/light mode switching
 - **NEW**: Better color scheme consistency
 - **NEW**: Customizable theme variables
 
 #### **Spinner Component**
+
 - **NEW**: Enhanced loading spinner with customizable sizes
 - **NEW**: Better integration with HTTP interceptors
 - **NEW**: Improved accessibility with proper ARIA labels
@@ -92,12 +102,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 📱 **Mobile and Responsiveness**
 
 #### **Responsive Design**
+
 - **NEW**: Better mobile-first approach for all components
 - **NEW**: Improved touch interactions for mobile devices
 - **NEW**: Better viewport handling and scaling
 - **NEW**: Enhanced mobile navigation and controls
 
 #### **Touch Support**
+
 - **NEW**: Improved touch gestures for table interactions
 - **NEW**: Better mobile form handling
 - **NEW**: Enhanced mobile dialog and overlay support
@@ -106,18 +118,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🔧 **Technical Improvements**
 
 #### **Performance**
+
 - **NEW**: Optimized rendering for large datasets
 - **NEW**: Better memory management for table components
 - **NEW**: Improved change detection strategies
 - **NEW**: Enhanced lazy loading for better performance
 
 #### **Accessibility**
+
 - **NEW**: Better ARIA support for screen readers
 - **NEW**: Improved keyboard navigation
 - **NEW**: Enhanced focus management
 - **NEW**: Better color contrast and visual indicators
 
 #### **TypeScript**
+
 - **NEW**: Enhanced type definitions for better IntelliSense
 - **NEW**: Improved generic constraints for components
 - **NEW**: Better interface definitions for configuration objects
@@ -126,12 +141,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 📚 **Documentation and Examples**
 
 #### **Component Examples**
+
 - **NEW**: Comprehensive examples for all table components
 - **NEW**: Better usage patterns and best practices
 - **NEW**: Enhanced API documentation
 - **NEW**: Migration guides for existing implementations
 
 #### **Integration Examples**
+
 - **NEW**: Better integration examples with acontplus-core
 - **NEW**: Real-world usage scenarios
 - **NEW**: Performance optimization techniques
@@ -160,6 +177,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚀 **Major Component Library Release**
 
 #### **Core Components**
+
 - **NEW**: `MatDynamicTable` - Flexible, customizable data table component
 - **NEW**: `MatDynamicCard` - Responsive card component with dynamic content
 - **NEW**: `MatInputChip` - Enhanced input field with chip support
@@ -170,12 +188,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **NEW**: `ThemeToggle` - Theme switching component
 
 #### **Advanced Components**
+
 - **NEW**: `CustomTabulator` - Advanced table with Tabulator.js integration
 - **NEW**: `DialogWrapper` - Enhanced dialog component
 - **NEW**: `AutocompleteWrapper` - Flexible autocomplete component
 - **NEW**: `SnackbarNotification` - Toast notification component
 
 #### **Services and Utilities**
+
 - **NEW**: `AdvancedDialogService` - Enhanced dialog management
 - **NEW**: `SnackbarService` - Notification service
 - **NEW**: `OverlayService` - Overlay management service
@@ -184,12 +204,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🎨 **Styling and Theming**
 
 #### **SCSS Architecture**
+
 - **NEW**: Modular SCSS structure with `_index.scss`
 - **NEW**: Custom button styles (`_custom-buttons.scss`)
 - **NEW**: Custom dialog styles (`_custom-dialog.scss`)
 - **NEW**: Snackbar theme styles (`_snackbar-theme.scss`)
 
 #### **Theme Support**
+
 - **NEW**: Light and dark theme support
 - **NEW**: Customizable color schemes
 - **NEW**: Consistent Material Design integration
@@ -198,12 +220,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🔧 **Technical Features**
 
 #### **Angular Integration**
+
 - **NEW**: Angular 20+ compatibility
 - **NEW**: Standalone component support
 - **NEW**: Modern dependency injection patterns
 - **NEW**: Signal-based reactive updates
 
 #### **TypeScript Support**
+
 - **NEW**: Comprehensive type definitions
 - **NEW**: Generic component interfaces
 - **NEW**: Strict type checking support

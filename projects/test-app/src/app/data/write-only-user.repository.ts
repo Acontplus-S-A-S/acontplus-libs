@@ -5,7 +5,7 @@ import { User } from '../domain/user';
 import { MockUserService } from './mock-user.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WriteOnlyUserRepository extends WriteOnlyRepository<User> {
   protected entityName = 'users';
@@ -36,7 +36,7 @@ export class WriteOnlyUserRepository extends WriteOnlyRepository<User> {
 
       users.forEach(userData => {
         this.mockService.createUser(userData).subscribe({
-          next: (user) => {
+          next: user => {
             createdUsers.push(user);
             completed++;
             if (completed === users.length) {
@@ -44,7 +44,7 @@ export class WriteOnlyUserRepository extends WriteOnlyRepository<User> {
               observer.complete();
             }
           },
-          error: (error) => observer.error(error)
+          error: error => observer.error(error),
         });
       });
     });
@@ -58,7 +58,7 @@ export class WriteOnlyUserRepository extends WriteOnlyRepository<User> {
 
       updates.forEach(update => {
         this.mockService.updateUser(update.id, update.data).subscribe({
-          next: (user) => {
+          next: user => {
             updatedUsers.push(user);
             completed++;
             if (completed === updates.length) {
@@ -66,7 +66,7 @@ export class WriteOnlyUserRepository extends WriteOnlyRepository<User> {
               observer.complete();
             }
           },
-          error: (error) => observer.error(error)
+          error: error => observer.error(error),
         });
       });
     });

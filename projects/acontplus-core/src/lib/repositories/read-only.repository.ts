@@ -11,7 +11,10 @@ export abstract class ReadOnlyRepository<T extends BaseEntity> extends BaseRepos
 
   abstract override getById(id: number): Observable<T>;
 
-  abstract override search(query: string, pagination: PaginationParams): Observable<PaginatedResult<T>>;
+  abstract override search(
+    query: string,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<T>>;
 
   // Override to prevent write operations
   override create(): never {

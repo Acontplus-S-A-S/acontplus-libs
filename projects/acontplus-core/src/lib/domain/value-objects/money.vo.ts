@@ -1,5 +1,5 @@
 // src/domain/value-objects/money.vo.ts
-import {BaseVo} from "./base.vo";
+import { BaseVo } from './base.vo';
 
 export class MoneyVo extends BaseVo<{ amount: number; currency: string }> {
   constructor(amount: number, currency = 'USD') {

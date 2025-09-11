@@ -23,10 +23,13 @@ workspaces.forEach(workspace => {
     console.log(`   - Version: ${pkg.version}`);
 
     if (pkg.dependencies) {
-      const workspaceDeps = Object.entries(pkg.dependencies)
-        .filter(([name, version]) => version.startsWith('workspace:'));
+      const workspaceDeps = Object.entries(pkg.dependencies).filter(([name, version]) =>
+        version.startsWith('workspace:'),
+      );
       if (workspaceDeps.length > 0) {
-        console.log(`   - Workspace dependencies: ${workspaceDeps.map(([name]) => name).join(', ')}`);
+        console.log(
+          `   - Workspace dependencies: ${workspaceDeps.map(([name]) => name).join(', ')}`,
+        );
       }
     }
 

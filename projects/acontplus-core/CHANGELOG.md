@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚀 **New Repository Patterns**
 
 #### **Read-Only Repository Pattern**
+
 - **NEW**: Added `ReadOnlyRepository<T>` abstract class for read-only data access
 - **NEW**: Enforces read-only operations while preventing write operations
 - **NEW**: Must implement `getAll()`, `getById()`, and `search()` methods
@@ -27,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **NEW**: Perfect for reference data, lookup tables, and read-only APIs
 
 #### **Write-Only Repository Pattern**
+
 - **NEW**: Added `WriteOnlyRepository<T>` abstract class for write-only data access
 - **NEW**: Enforces write operations while preventing read operations
 - **NEW**: Must implement `create()`, `update()`, and `delete()` methods
@@ -34,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **NEW**: Ideal for audit logs, event streams, and write-only APIs
 
 #### **Repository Factory Service**
+
 - **NEW**: Added `RepositoryFactoryService` for dynamic repository creation
 - **NEW**: `createReadOnlyRepository()` method for instant read-only repositories
 - **NEW**: `createWriteOnlyRepository()` method for instant write-only repositories
@@ -43,12 +46,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🔧 **Enhanced Use Case Architecture**
 
 #### **Composite Use Case Improvements**
+
 - **NEW**: Enhanced `CompositeUseCase` with action-based routing
 - **NEW**: Support for complex business operations with multiple actions
 - **NEW**: Better separation of concerns for complex workflows
 - **NEW**: Improved error handling and validation flow
 
 #### **Command and Query Pattern**
+
 - **NEW**: Added specialized command and query classes for CQRS pattern
 - **NEW**: `CachedUsersQuery` for optimized data retrieval with caching
 - **NEW**: `ConditionalUserUpdateCommand` for conditional update operations
@@ -57,6 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 📚 **Enhanced Documentation and Examples**
 
 #### **Test Application Updates**
+
 - **NEW**: Comprehensive application management use case with 20+ operations
 - **NEW**: User management use case with advanced filtering and bulk operations
 - **NEW**: Product management use case with pricing and inventory features
@@ -64,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **NEW**: Complete UI components demonstrating the new architecture
 
 #### **Repository Pattern Examples**
+
 - **NEW**: `ReadOnlyUserRepository` demonstrating read-only pattern
 - **NEW**: `WriteOnlyUserRepository` demonstrating write-only pattern
 - **NEW**: `ApplicationRepository` demonstrating flexible base repository
@@ -72,6 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🎯 **Use Case Examples**
 
 #### **Application Management**
+
 - **NEW**: Create, update, delete applications with full CRUD operations
 - **NEW**: Bulk operations for multiple applications
 - **NEW**: Advanced filtering by status, environment, category, and owner
@@ -80,6 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **NEW**: Statistics and reporting capabilities
 
 #### **User Management**
+
 - **NEW**: User CRUD operations with role-based access control
 - **NEW**: Bulk user operations (activate, deactivate, delete)
 - **NEW**: Advanced search and filtering capabilities
@@ -87,6 +96,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **NEW**: Caching strategies for performance optimization
 
 #### **Product Management**
+
 - **NEW**: Product catalog management with categories and pricing
 - **NEW**: Inventory tracking and stock management
 - **NEW**: Bulk product operations
@@ -96,17 +106,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🔄 **Migration and Usage**
 
 #### **Repository Pattern Usage**
+
 ```typescript
 // Read-only repository
 @Injectable()
 export class ReadOnlyUserRepository extends ReadOnlyRepository<User> {
   protected entityName = 'users';
   protected baseUrl = '/api/users';
-  
+
   // Must implement these methods
-  override getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<User>>
-  override getById(id: number): Observable<User>
-  override search(query: string, pagination: PaginationParams): Observable<PaginatedResult<User>>
+  override getAll(
+    pagination: PaginationParams,
+    filters?: FilterParams,
+  ): Observable<PaginatedResult<User>>;
+  override getById(id: number): Observable<User>;
+  override search(query: string, pagination: PaginationParams): Observable<PaginatedResult<User>>;
 }
 
 // Write-only repository
@@ -114,24 +128,25 @@ export class ReadOnlyUserRepository extends ReadOnlyRepository<User> {
 export class WriteOnlyUserRepository extends WriteOnlyRepository<User> {
   protected entityName = 'users';
   protected baseUrl = '/api/users';
-  
+
   // Must implement these methods
-  override create(entity: Omit<User, 'id'>): Observable<User>
-  override update(id: number, entity: Partial<User>): Observable<User>
-  override delete(id: number): Observable<boolean>
+  override create(entity: Omit<User, 'id'>): Observable<User>;
+  override update(id: number, entity: Partial<User>): Observable<User>;
+  override delete(id: number): Observable<boolean>;
 }
 ```
 
 #### **Repository Factory Usage**
+
 ```typescript
 @Injectable()
 export class UserService {
   constructor(private repositoryFactory: RepositoryFactoryService) {}
-  
+
   getReadOnlyRepo() {
     return this.repositoryFactory.createReadOnlyRepository<User>('users', '/api/users');
   }
-  
+
   getWriteOnlyRepo() {
     return this.repositoryFactory.createWriteOnlyRepository<User>('users', '/api/users');
   }

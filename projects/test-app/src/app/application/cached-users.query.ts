@@ -6,7 +6,7 @@ import { User } from '../domain/user';
 import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CachedUsersQuery extends CachedQuery<
   { pagination: PaginationParams; filters?: FilterParams },
@@ -23,7 +23,10 @@ export class CachedUsersQuery extends CachedQuery<
     super();
   }
 
-  protected executeInternal(request: { pagination: PaginationParams; filters?: FilterParams }): Observable<PaginatedResult<User>> {
+  protected executeInternal(request: {
+    pagination: PaginationParams;
+    filters?: FilterParams;
+  }): Observable<PaginatedResult<User>> {
     const cacheKey = this.getCacheKey(request);
     const cached = this.cache.get(cacheKey);
 
@@ -35,10 +38,10 @@ export class CachedUsersQuery extends CachedQuery<
       map(result => {
         this.cache.set(cacheKey, {
           data: result,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
         return result;
-      })
+      }),
     );
   }
 

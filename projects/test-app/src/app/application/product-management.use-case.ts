@@ -19,9 +19,12 @@ export interface ProductManagementResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class ProductManagementUseCase extends CompositeUseCase<ProductManagementRequest, ProductManagementResponse> {
+export class ProductManagementUseCase extends CompositeUseCase<
+  ProductManagementRequest,
+  ProductManagementResponse
+> {
   // Mock products for demo purposes
   private products: Product[] = [
     {
@@ -36,7 +39,7 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
       isActive: true,
       categoryId: 1,
       createdAt: '2024-01-15T10:00:00Z',
-      updatedAt: '2024-01-15T10:00:00Z'
+      updatedAt: '2024-01-15T10:00:00Z',
     },
     {
       id: 2,
@@ -50,7 +53,7 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
       isActive: true,
       categoryId: 1,
       createdAt: '2024-01-16T11:00:00Z',
-      updatedAt: '2024-01-16T11:00:00Z'
+      updatedAt: '2024-01-16T11:00:00Z',
     },
     {
       id: 3,
@@ -64,13 +67,15 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
       isActive: true,
       categoryId: 1,
       createdAt: '2024-01-17T12:00:00Z',
-      updatedAt: '2024-01-17T12:00:00Z'
-    }
+      updatedAt: '2024-01-17T12:00:00Z',
+    },
   ];
 
   private nextId = 4;
 
-  protected executeInternal(request: ProductManagementRequest): Observable<ProductManagementResponse> {
+  protected executeInternal(
+    request: ProductManagementRequest,
+  ): Observable<ProductManagementResponse> {
     switch (request.action) {
       case 'create':
         return this.handleCreate(request.data);
@@ -92,7 +97,7 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
       ...productData,
       id: this.nextId++,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     this.products.push(newProduct);
@@ -102,13 +107,16 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
         success: true,
         data: newProduct,
         message: 'Product created successfully',
-        affectedProducts: 1
+        affectedProducts: 1,
       });
       observer.complete();
     });
   }
 
-  private handleUpdate(updateData: { id: number; data: Partial<Product> }): Observable<ProductManagementResponse> {
+  private handleUpdate(updateData: {
+    id: number;
+    data: Partial<Product>;
+  }): Observable<ProductManagementResponse> {
     const productIndex = this.products.findIndex(p => p.id === updateData.id);
 
     if (productIndex === -1) {
@@ -116,7 +124,7 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
         observer.next({
           success: false,
           message: 'Product not found',
-          affectedProducts: 0
+          affectedProducts: 0,
         });
         observer.complete();
       });
@@ -125,7 +133,7 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
     this.products[productIndex] = {
       ...this.products[productIndex],
       ...updateData.data,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     return new Observable(observer => {
@@ -133,7 +141,7 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
         success: true,
         data: this.products[productIndex],
         message: 'Product updated successfully',
-        affectedProducts: 1
+        affectedProducts: 1,
       });
       observer.complete();
     });
@@ -147,7 +155,7 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
         observer.next({
           success: false,
           message: 'Product not found',
-          affectedProducts: 0
+          affectedProducts: 0,
         });
         observer.complete();
       });
@@ -159,7 +167,7 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
       observer.next({
         success: true,
         message: 'Product deleted successfully',
-        affectedProducts: 1
+        affectedProducts: 1,
       });
       observer.complete();
     });
@@ -200,18 +208,22 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
       observer.next({
         success: affectedCount > 0,
         message: `Bulk operations completed. ${affectedCount} products affected.`,
-        affectedProducts: affectedCount
+        affectedProducts: affectedCount,
       });
       observer.complete();
     });
   }
 
-  private handleSearch(searchData: { query: string; pagination: PaginationParams }): Observable<ProductManagementResponse> {
+  private handleSearch(searchData: {
+    query: string;
+    pagination: PaginationParams;
+  }): Observable<ProductManagementResponse> {
     const query = searchData.query.toLowerCase();
-    const filteredProducts = this.products.filter(product =>
-      product.name.toLowerCase().includes(query) ||
-      product.category.toLowerCase().includes(query) ||
-      product.description?.toLowerCase().includes(query)
+    const filteredProducts = this.products.filter(
+      product =>
+        product.name.toLowerCase().includes(query) ||
+        product.category.toLowerCase().includes(query) ||
+        product.description?.toLowerCase().includes(query),
     );
 
     const startIndex = (searchData.pagination.page - 1) * searchData.pagination.pageSize;
@@ -223,8 +235,10 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
       totalCount: filteredProducts.length,
       pageNumber: searchData.pagination.page,
       pageSize: searchData.pagination.pageSize,
-      hasNextPage: searchData.pagination.page < Math.ceil(filteredProducts.length / searchData.pagination.pageSize),
-      hasPreviousPage: searchData.pagination.page > 1
+      hasNextPage:
+        searchData.pagination.page <
+        Math.ceil(filteredProducts.length / searchData.pagination.pageSize),
+      hasPreviousPage: searchData.pagination.page > 1,
     };
 
     return new Observable(observer => {
@@ -232,14 +246,17 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
         success: true,
         data: result,
         message: `Found ${filteredProducts.length} products`,
-        affectedProducts: filteredProducts.length
+        affectedProducts: filteredProducts.length,
       });
       observer.complete();
     });
   }
 
   // Public methods for external use
-  public getProducts(pagination: PaginationParams, filters?: FilterParams & { category?: string; minPrice?: number; maxPrice?: number }): Observable<PaginatedResult<Product>> {
+  public getProducts(
+    pagination: PaginationParams,
+    filters?: FilterParams & { category?: string; minPrice?: number; maxPrice?: number },
+  ): Observable<PaginatedResult<Product>> {
     let filteredProducts = [...this.products];
 
     if (filters) {
@@ -282,7 +299,7 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
       pageNumber: pagination.page,
       pageSize: pagination.pageSize,
       hasNextPage: pagination.page < Math.ceil(filteredProducts.length / pagination.pageSize),
-      hasPreviousPage: pagination.page > 1
+      hasPreviousPage: pagination.page > 1,
     };
 
     return new Observable(observer => {
@@ -310,11 +327,16 @@ export class ProductManagementUseCase extends CompositeUseCase<ProductManagement
     });
   }
 
-  public getProductStats(): Observable<{ total: number; active: number; inactive: number; totalValue: number }> {
+  public getProductStats(): Observable<{
+    total: number;
+    active: number;
+    inactive: number;
+    totalValue: number;
+  }> {
     const total = this.products.length;
     const active = this.products.filter(p => p.isActive).length;
     const inactive = total - active;
-    const totalValue = this.products.reduce((sum, p) => sum + (p.price * p.stock), 0);
+    const totalValue = this.products.reduce((sum, p) => sum + p.price * p.stock, 0);
 
     return new Observable(observer => {
       observer.next({ total, active, inactive, totalValue });

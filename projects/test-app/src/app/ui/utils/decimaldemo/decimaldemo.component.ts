@@ -16,8 +16,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import {MatTab, MatTabGroup} from "@angular/material/tabs";
-import {JsonPipe} from "@angular/common";
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-decimaldemo',
@@ -35,19 +35,18 @@ import {JsonPipe} from "@angular/common";
     MatSelectModule,
     MatTabGroup,
     MatTab,
-    JsonPipe
+    JsonPipe,
   ],
   templateUrl: './decimaldemo.component.html',
 })
-export class DecimaldemoComponent   {
-
+export class DecimaldemoComponent {
   constructor() {
     DecimalUtils.configure({
       precision: 2,
       rounding: 4, // ROUND_HALF_UP
       returnAsNumber: true,
       throwOnInfinity: true,
-      throwOnNaN: true
+      throwOnNaN: true,
     });
   }
 
@@ -61,7 +60,7 @@ export class DecimaldemoComponent   {
     const potencia = DecimalUtils.power(this.basicA, this.basicB);
     const raiz = DecimalUtils.sqrt(this.basicA);
     const multp = DecimalUtils.multiply(this.basicA, this.basicB);
-    this.basicResult = { suma, potencia, raiz , multp};
+    this.basicResult = { suma, potencia, raiz, multp };
   }
 
   // === FINANCIERAS ===
@@ -81,7 +80,7 @@ export class DecimaldemoComponent   {
       this.interesPrincipal,
       this.interesTasa,
       this.interesAnios,
-      this.interesCompuesto
+      this.interesCompuesto,
     );
     this.financialResult = { conDescuento, conImpuestos, interes };
   }
@@ -97,7 +96,7 @@ export class DecimaldemoComponent   {
       promedio: DecimalUtils.average(valores),
       mediana: DecimalUtils.median(valores),
       minimo: DecimalUtils.min(valores),
-      maximo: DecimalUtils.max(valores)
+      maximo: DecimalUtils.max(valores),
     };
   }
 
@@ -105,7 +104,7 @@ export class DecimaldemoComponent   {
   chainValue = 1000;
   chainDescuento = 10;
   chainImpuesto = 16;
-  chainResult='';
+  chainResult = '';
 
   calculateChain() {
     this.chainResult = DecimalUtils.chain(this.chainValue)
@@ -118,7 +117,7 @@ export class DecimaldemoComponent   {
   // === FORMATEO ===
   formatValue = 1234.5678;
   formatPrecision = 2;
-  formatResult='';
+  formatResult = '';
 
   calculateFormat() {
     this.formatResult = DecimalUtils.format(this.formatValue, {
@@ -126,7 +125,7 @@ export class DecimaldemoComponent   {
       thousandsSeparator: '.',
       decimalSeparator: ',',
       prefix: '€ ',
-      suffix: ' EUR'
+      suffix: ' EUR',
     });
   }
 
@@ -137,12 +136,12 @@ export class DecimaldemoComponent   {
   calculateValidation() {
     this.validationResult = {
       valido: DecimalUtils.isValid(this.validationInput),
-      noValido: DecimalUtils.isValid("abc")
+      noValido: DecimalUtils.isValid('abc'),
     };
   }
 
   // === ERRORES ===
-  errorResult='';
+  errorResult = '';
 
   calculateError() {
     try {
@@ -158,7 +157,7 @@ export class DecimaldemoComponent   {
   historyValue = 100;
   historyMultiply = 1.16;
   historySubtract = 50;
-  historyResult: string[]=[];
+  historyResult: string[] = [];
 
   calculateHistory() {
     const cadena = DecimalUtils.chain(this.historyValue)

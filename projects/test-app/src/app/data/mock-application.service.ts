@@ -4,7 +4,7 @@ import { Application, ApplicationFilterParams } from '../domain/application';
 import { PaginationParams, PaginatedResult } from '@acontplus-core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MockApplicationService {
   private applications: Application[] = [
@@ -24,7 +24,7 @@ export class MockApplicationService {
       repositoryUrl: 'https://github.com/company/customer-portal',
       documentationUrl: 'https://docs.company.com/customer-portal',
       createdAt: '2023-06-01T09:00:00Z',
-      updatedAt: '2024-01-15T10:00:00Z'
+      updatedAt: '2024-01-15T10:00:00Z',
     },
     {
       id: 2,
@@ -42,7 +42,7 @@ export class MockApplicationService {
       repositoryUrl: 'https://github.com/company/order-api',
       documentationUrl: 'https://api.company.com/docs',
       createdAt: '2023-03-15T11:00:00Z',
-      updatedAt: '2024-01-10T14:30:00Z'
+      updatedAt: '2024-01-10T14:30:00Z',
     },
     {
       id: 3,
@@ -60,7 +60,7 @@ export class MockApplicationService {
       repositoryUrl: 'https://github.com/company/mobile-app',
       documentationUrl: 'https://docs.company.com/mobile',
       createdAt: '2023-01-20T08:00:00Z',
-      updatedAt: '2024-01-12T16:45:00Z'
+      updatedAt: '2024-01-12T16:45:00Z',
     },
     {
       id: 4,
@@ -78,7 +78,7 @@ export class MockApplicationService {
       repositoryUrl: 'https://github.com/company/analytics-dashboard',
       documentationUrl: 'https://docs.company.com/analytics',
       createdAt: '2023-08-10T13:00:00Z',
-      updatedAt: '2024-01-08T12:15:00Z'
+      updatedAt: '2024-01-08T12:15:00Z',
     },
     {
       id: 5,
@@ -96,7 +96,7 @@ export class MockApplicationService {
       repositoryUrl: 'https://github.com/company/legacy-system',
       documentationUrl: 'https://docs.company.com/legacy',
       createdAt: '2018-05-15T10:00:00Z',
-      updatedAt: '2023-12-01T09:00:00Z'
+      updatedAt: '2023-12-01T09:00:00Z',
     },
     {
       id: 6,
@@ -114,7 +114,7 @@ export class MockApplicationService {
       repositoryUrl: 'https://github.com/company/devops-tools',
       documentationUrl: 'https://docs.company.com/devops',
       createdAt: '2023-09-01T14:00:00Z',
-      updatedAt: '2024-01-14T11:20:00Z'
+      updatedAt: '2024-01-14T11:20:00Z',
     },
     {
       id: 7,
@@ -132,7 +132,7 @@ export class MockApplicationService {
       repositoryUrl: 'https://github.com/company/testing-framework',
       documentationUrl: 'https://docs.company.com/testing',
       createdAt: '2023-04-20T16:00:00Z',
-      updatedAt: '2024-01-11T15:30:00Z'
+      updatedAt: '2024-01-11T15:30:00Z',
     },
     {
       id: 8,
@@ -150,8 +150,8 @@ export class MockApplicationService {
       repositoryUrl: 'https://github.com/company/api-gateway',
       documentationUrl: 'https://docs.company.com/gateway',
       createdAt: '2023-07-01T12:00:00Z',
-      updatedAt: '2024-01-09T13:45:00Z'
-    }
+      updatedAt: '2024-01-09T13:45:00Z',
+    },
   ];
 
   private nextId = 9;
@@ -162,17 +162,21 @@ export class MockApplicationService {
   }
 
   // CRUD operations
-  getAll(pagination: PaginationParams, filters?: ApplicationFilterParams): Observable<PaginatedResult<Application>> {
+  getAll(
+    pagination: PaginationParams,
+    filters?: ApplicationFilterParams,
+  ): Observable<PaginatedResult<Application>> {
     let filteredApps = [...this.applications];
 
     // Apply filters
     if (filters) {
       if (filters.search) {
         const searchTerm = filters.search.toLowerCase();
-        filteredApps = filteredApps.filter(app =>
-          app.name.toLowerCase().includes(searchTerm) ||
-          app.description.toLowerCase().includes(searchTerm) ||
-          app.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+        filteredApps = filteredApps.filter(
+          app =>
+            app.name.toLowerCase().includes(searchTerm) ||
+            app.description.toLowerCase().includes(searchTerm) ||
+            app.tags.some(tag => tag.toLowerCase().includes(searchTerm)),
         );
       }
 
@@ -185,7 +189,9 @@ export class MockApplicationService {
       }
 
       if (filters.category) {
-        filteredApps = filteredApps.filter(app => app.category.toLowerCase().includes(filters.category!.toLowerCase()));
+        filteredApps = filteredApps.filter(app =>
+          app.category.toLowerCase().includes(filters.category!.toLowerCase()),
+        );
       }
     }
 
@@ -218,7 +224,7 @@ export class MockApplicationService {
       pageNumber: page,
       pageSize: pageSize,
       hasNextPage: page < Math.ceil(filteredApps.length / pageSize),
-      hasPreviousPage: page > 1
+      hasPreviousPage: page > 1,
     };
 
     return this.simulateDelay(result);
@@ -237,7 +243,7 @@ export class MockApplicationService {
       ...application,
       id: this.nextId++,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
     this.applications.push(newApp);
     return this.simulateDelay(newApp);
@@ -252,7 +258,7 @@ export class MockApplicationService {
     this.applications[index] = {
       ...this.applications[index],
       ...application,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     return this.simulateDelay(this.applications[index]);
@@ -273,19 +279,31 @@ export class MockApplicationService {
   }
 
   // Application-specific methods
-  getByStatus(status: Application['status'], pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  getByStatus(
+    status: Application['status'],
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.getAll(pagination, { status });
   }
 
-  getByEnvironment(environment: Application['environment'], pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  getByEnvironment(
+    environment: Application['environment'],
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.getAll(pagination, { environment });
   }
 
-  getByCategory(category: string, pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  getByCategory(
+    category: string,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
     return this.getAll(pagination, { category });
   }
 
-  getByOwner(owner: string, pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  getByOwner(
+    owner: string,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Application>> {
     const filteredApps = this.applications.filter(app => app.owner === owner);
     const result: PaginatedResult<Application> = {
       items: filteredApps,
@@ -293,7 +311,7 @@ export class MockApplicationService {
       pageNumber: 1,
       pageSize: filteredApps.length,
       hasNextPage: false,
-      hasPreviousPage: false
+      hasPreviousPage: false,
     };
     return this.simulateDelay(result);
   }
@@ -383,15 +401,15 @@ export class MockApplicationService {
         environment: 'staging',
         version: '1.0.0',
         deployedAt: '2024-01-10T10:00:00Z',
-        status: 'success'
+        status: 'success',
       },
       {
         id: 2,
         environment: 'production',
         version: '1.0.0',
         deployedAt: '2024-01-12T14:00:00Z',
-        status: 'success'
-      }
+        status: 'success',
+      },
     ];
     return this.simulateDelay(history);
   }
@@ -403,20 +421,29 @@ export class MockApplicationService {
     byCategory: Record<string, number>;
   }> {
     const total = this.applications.length;
-    const byStatus = this.applications.reduce((acc, app) => {
-      acc[app.status] = (acc[app.status] || 0) + 1;
-      return acc;
-    }, {} as Record<Application['status'], number>);
+    const byStatus = this.applications.reduce(
+      (acc, app) => {
+        acc[app.status] = (acc[app.status] || 0) + 1;
+        return acc;
+      },
+      {} as Record<Application['status'], number>,
+    );
 
-    const byEnvironment = this.applications.reduce((acc, app) => {
-      acc[app.environment] = (acc[app.environment] || 0) + 1;
-      return acc;
-    }, {} as Record<Application['environment'], number>);
+    const byEnvironment = this.applications.reduce(
+      (acc, app) => {
+        acc[app.environment] = (acc[app.environment] || 0) + 1;
+        return acc;
+      },
+      {} as Record<Application['environment'], number>,
+    );
 
-    const byCategory = this.applications.reduce((acc, app) => {
-      acc[app.category] = (acc[app.category] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const byCategory = this.applications.reduce(
+      (acc, app) => {
+        acc[app.category] = (acc[app.category] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
     return this.simulateDelay({ total, byStatus, byEnvironment, byCategory });
   }

@@ -19,9 +19,12 @@ export interface UserManagementResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class UserManagementUseCase extends CompositeUseCase<UserManagementRequest, UserManagementResponse> {
+export class UserManagementUseCase extends CompositeUseCase<
+  UserManagementRequest,
+  UserManagementResponse
+> {
   // Mock users for demo purposes
   private users: User[] = [
     {
@@ -31,7 +34,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       role: 'admin',
       isActive: true,
       createdAt: '2024-01-15T10:00:00Z',
-      updatedAt: '2024-01-15T10:00:00Z'
+      updatedAt: '2024-01-15T10:00:00Z',
     },
     {
       id: 2,
@@ -40,7 +43,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       role: 'manager',
       isActive: true,
       createdAt: '2024-01-16T11:00:00Z',
-      updatedAt: '2024-01-16T11:00:00Z'
+      updatedAt: '2024-01-16T11:00:00Z',
     },
     {
       id: 3,
@@ -49,7 +52,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       role: 'user',
       isActive: true,
       createdAt: '2024-01-17T12:00:00Z',
-      updatedAt: '2024-01-17T12:00:00Z'
+      updatedAt: '2024-01-17T12:00:00Z',
     },
     {
       id: 4,
@@ -58,7 +61,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       role: 'user',
       isActive: false,
       createdAt: '2024-01-18T13:00:00Z',
-      updatedAt: '2024-01-18T13:00:00Z'
+      updatedAt: '2024-01-18T13:00:00Z',
     },
     {
       id: 5,
@@ -67,7 +70,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       role: 'manager',
       isActive: true,
       createdAt: '2024-01-19T14:00:00Z',
-      updatedAt: '2024-01-19T14:00:00Z'
+      updatedAt: '2024-01-19T14:00:00Z',
     },
     {
       id: 6,
@@ -76,7 +79,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       role: 'user',
       isActive: true,
       createdAt: '2024-01-20T15:00:00Z',
-      updatedAt: '2024-01-20T15:00:00Z'
+      updatedAt: '2024-01-20T15:00:00Z',
     },
     {
       id: 7,
@@ -85,7 +88,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       role: 'admin',
       isActive: true,
       createdAt: '2024-01-21T16:00:00Z',
-      updatedAt: '2024-01-21T16:00:00Z'
+      updatedAt: '2024-01-21T16:00:00Z',
     },
     {
       id: 8,
@@ -94,7 +97,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       role: 'user',
       isActive: false,
       createdAt: '2024-01-22T17:00:00Z',
-      updatedAt: '2024-01-22T17:00:00Z'
+      updatedAt: '2024-01-22T17:00:00Z',
     },
     {
       id: 9,
@@ -103,7 +106,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       role: 'manager',
       isActive: true,
       createdAt: '2024-01-23T18:00:00Z',
-      updatedAt: '2024-01-23T18:00:00Z'
+      updatedAt: '2024-01-23T18:00:00Z',
     },
     {
       id: 10,
@@ -112,8 +115,8 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       role: 'user',
       isActive: true,
       createdAt: '2024-01-24T19:00:00Z',
-      updatedAt: '2024-01-24T19:00:00Z'
-    }
+      updatedAt: '2024-01-24T19:00:00Z',
+    },
   ];
 
   private nextId = 11;
@@ -146,7 +149,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
         observer.next({
           success: false,
           message: 'Name and email are required',
-          affectedUsers: 0
+          affectedUsers: 0,
         });
         observer.complete();
       });
@@ -158,7 +161,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
         observer.next({
           success: false,
           message: 'Email already exists',
-          affectedUsers: 0
+          affectedUsers: 0,
         });
         observer.complete();
       });
@@ -168,7 +171,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       ...userData,
       id: this.nextId++,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     this.users.push(newUser);
@@ -178,13 +181,16 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
         success: true,
         data: newUser,
         message: 'User created successfully',
-        affectedUsers: 1
+        affectedUsers: 1,
       });
       observer.complete();
     });
   }
 
-  private handleUpdate(updateData: { id: number; data: Partial<User> }): Observable<UserManagementResponse> {
+  private handleUpdate(updateData: {
+    id: number;
+    data: Partial<User>;
+  }): Observable<UserManagementResponse> {
     const userIndex = this.users.findIndex(u => u.id === updateData.id);
 
     if (userIndex === -1) {
@@ -192,19 +198,22 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
         observer.next({
           success: false,
           message: 'User not found',
-          affectedUsers: 0
+          affectedUsers: 0,
         });
         observer.complete();
       });
     }
 
     // Validation
-    if (updateData.data.email && this.users.some(u => u.email === updateData.data.email && u.id !== updateData.id)) {
+    if (
+      updateData.data.email &&
+      this.users.some(u => u.email === updateData.data.email && u.id !== updateData.id)
+    ) {
       return new Observable(observer => {
         observer.next({
           success: false,
           message: 'Email already exists',
-          affectedUsers: 0
+          affectedUsers: 0,
         });
         observer.complete();
       });
@@ -213,7 +222,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
     this.users[userIndex] = {
       ...this.users[userIndex],
       ...updateData.data,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     return new Observable(observer => {
@@ -221,7 +230,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
         success: true,
         data: this.users[userIndex],
         message: 'User updated successfully',
-        affectedUsers: 1
+        affectedUsers: 1,
       });
       observer.complete();
     });
@@ -235,7 +244,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
         observer.next({
           success: false,
           message: 'User not found',
-          affectedUsers: 0
+          affectedUsers: 0,
         });
         observer.complete();
       });
@@ -247,7 +256,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       observer.next({
         success: true,
         message: 'User deleted successfully',
-        affectedUsers: 1
+        affectedUsers: 1,
       });
       observer.complete();
     });
@@ -288,18 +297,22 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       observer.next({
         success: affectedCount > 0,
         message: `Bulk operations completed. ${affectedCount} users affected.`,
-        affectedUsers: affectedCount
+        affectedUsers: affectedCount,
       });
       observer.complete();
     });
   }
 
-  private handleSearch(searchData: { query: string; pagination: PaginationParams }): Observable<UserManagementResponse> {
+  private handleSearch(searchData: {
+    query: string;
+    pagination: PaginationParams;
+  }): Observable<UserManagementResponse> {
     const query = searchData.query.toLowerCase();
-    const filteredUsers = this.users.filter(user =>
-      user.name.toLowerCase().includes(query) ||
-      user.email.toLowerCase().includes(query) ||
-      user.role.toLowerCase().includes(query)
+    const filteredUsers = this.users.filter(
+      user =>
+        user.name.toLowerCase().includes(query) ||
+        user.email.toLowerCase().includes(query) ||
+        user.role.toLowerCase().includes(query),
     );
 
     const startIndex = (searchData.pagination.page - 1) * searchData.pagination.pageSize;
@@ -311,8 +324,10 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       totalCount: filteredUsers.length,
       pageNumber: searchData.pagination.page,
       pageSize: searchData.pagination.pageSize,
-      hasNextPage: searchData.pagination.page < Math.ceil(filteredUsers.length / searchData.pagination.pageSize),
-      hasPreviousPage: searchData.pagination.page > 1
+      hasNextPage:
+        searchData.pagination.page <
+        Math.ceil(filteredUsers.length / searchData.pagination.pageSize),
+      hasPreviousPage: searchData.pagination.page > 1,
     };
 
     return new Observable(observer => {
@@ -320,22 +335,26 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
         success: true,
         data: result,
         message: `Found ${filteredUsers.length} users`,
-        affectedUsers: filteredUsers.length
+        affectedUsers: filteredUsers.length,
       });
       observer.complete();
     });
   }
 
-  private handleGetAll(pagination?: PaginationParams, filters?: FilterParams): Observable<UserManagementResponse> {
+  private handleGetAll(
+    pagination?: PaginationParams,
+    filters?: FilterParams,
+  ): Observable<UserManagementResponse> {
     let filteredUsers = [...this.users];
 
     if (filters) {
       if (filters.search) {
         const searchTerm = filters.search.toLowerCase();
-        filteredUsers = filteredUsers.filter(user =>
-          user.name.toLowerCase().includes(searchTerm) ||
-          user.email.toLowerCase().includes(searchTerm) ||
-          user.role.toLowerCase().includes(searchTerm)
+        filteredUsers = filteredUsers.filter(
+          user =>
+            user.name.toLowerCase().includes(searchTerm) ||
+            user.email.toLowerCase().includes(searchTerm) ||
+            user.role.toLowerCase().includes(searchTerm),
         );
       }
 
@@ -375,7 +394,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
       pageNumber: page,
       pageSize: pageSize,
       hasNextPage: page < Math.ceil(filteredUsers.length / pageSize),
-      hasPreviousPage: page > 1
+      hasPreviousPage: page > 1,
     };
 
     return new Observable(observer => {
@@ -383,7 +402,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
         success: true,
         data: result,
         message: `Retrieved ${paginatedUsers.length} users`,
-        affectedUsers: paginatedUsers.length
+        affectedUsers: paginatedUsers.length,
       });
       observer.complete();
     });
@@ -397,7 +416,7 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
         observer.next({
           success: false,
           message: 'User not found',
-          affectedUsers: 0
+          affectedUsers: 0,
         });
         observer.complete();
       });
@@ -408,46 +427,46 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
         success: true,
         data: user,
         message: 'User retrieved successfully',
-        affectedUsers: 1
+        affectedUsers: 1,
       });
       observer.complete();
     });
   }
 
   // Public methods for external use
-  public getUsers(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<User>> {
+  public getUsers(
+    pagination: PaginationParams,
+    filters?: FilterParams,
+  ): Observable<PaginatedResult<User>> {
     return this.execute({ action: 'get-all', pagination, filters }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
   public getUserById(id: number): Observable<User> {
-    return this.execute({ action: 'get-by-id', data: { id } }).pipe(
-      map(response => response.data)
-    );
+    return this.execute({ action: 'get-by-id', data: { id } }).pipe(map(response => response.data));
   }
 
   public createUser(userData: Omit<User, 'id'>): Observable<User> {
-    return this.execute({ action: 'create', data: userData }).pipe(
-      map(response => response.data)
-    );
+    return this.execute({ action: 'create', data: userData }).pipe(map(response => response.data));
   }
 
   public updateUser(id: number, userData: Partial<User>): Observable<User> {
     return this.execute({ action: 'update', data: { id, data: userData } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
   public deleteUser(id: number): Observable<boolean> {
-    return this.execute({ action: 'delete', data: { id } }).pipe(
-      map(response => response.success)
-    );
+    return this.execute({ action: 'delete', data: { id } }).pipe(map(response => response.success));
   }
 
-  public searchUsers(query: string, pagination: PaginationParams): Observable<PaginatedResult<User>> {
+  public searchUsers(
+    query: string,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<User>> {
     return this.execute({ action: 'search', data: { query, pagination } }).pipe(
-      map(response => response.data)
+      map(response => response.data),
     );
   }
 
@@ -455,23 +474,37 @@ export class UserManagementUseCase extends CompositeUseCase<UserManagementReques
     return this.getUsers(pagination, { isActive: true });
   }
 
-  public getUsersByRole(role: string, pagination: PaginationParams): Observable<PaginatedResult<User>> {
+  public getUsersByRole(
+    role: string,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<User>> {
     return this.getUsers(pagination, { role });
   }
 
-  public getUsersByStatus(isActive: boolean, pagination: PaginationParams): Observable<PaginatedResult<User>> {
+  public getUsersByStatus(
+    isActive: boolean,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<User>> {
     return this.getUsers(pagination, { isActive });
   }
 
-  public getUserStats(): Observable<{ total: number; active: number; inactive: number; byRole: Record<string, number> }> {
+  public getUserStats(): Observable<{
+    total: number;
+    active: number;
+    inactive: number;
+    byRole: Record<string, number>;
+  }> {
     const total = this.users.length;
     const active = this.users.filter(u => u.isActive).length;
     const inactive = total - active;
 
-    const byRole = this.users.reduce((acc, user) => {
-      acc[user.role] = (acc[user.role] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const byRole = this.users.reduce(
+      (acc, user) => {
+        acc[user.role] = (acc[user.role] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
     return new Observable(observer => {
       observer.next({ total, active, inactive, byRole });

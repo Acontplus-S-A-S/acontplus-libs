@@ -1,4 +1,12 @@
-import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit, ChangeDetectorRef, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  AfterViewInit,
+  ChangeDetectorRef,
+  inject,
+} from '@angular/core';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,7 +27,7 @@ import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontpl
 import {
   UserManagementUseCase,
   CachedUsersQuery,
-  ConditionalUserUpdateCommand
+  ConditionalUserUpdateCommand,
 } from '../../../application';
 import { User } from '../../../domain/user';
 import { PaginationParams, FilterParams, PaginatedResult } from '@acontplus-core';
@@ -43,8 +51,8 @@ import { PaginationParams, FilterParams, PaginatedResult } from '@acontplus-core
     MatChipsModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
-    MatDynamicTableComponent
-],
+    MatDynamicTableComponent,
+  ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',
 })
@@ -63,7 +71,7 @@ export class UserComponent implements OnInit, AfterViewInit {
     page: 1,
     pageSize: 10,
     sortBy: 'name',
-    sortDirection: 'asc'
+    sortDirection: 'asc',
   };
 
   // Pagination config for dynamic table
@@ -186,27 +194,26 @@ export class UserComponent implements OnInit, AfterViewInit {
 
   loadUsers(): void {
     this.isLoading = true;
-    this.userManagement.getUsers(this.pagination, this.filters)
-      .subscribe({
-        next: (result) => {
-          this.users = result.items;
-          this.totalUsers = result.totalCount;
+    this.userManagement.getUsers(this.pagination, this.filters).subscribe({
+      next: result => {
+        this.users = result.items;
+        this.totalUsers = result.totalCount;
 
-          // Update pagination config to match the result
-          this.userPaginationConfig.totalRecords = result.totalCount;
-          this.userPaginationConfig.pageIndex = result.pageNumber - 1; // Convert to 0-based index
-          this.userPaginationConfig.pageSize = result.pageSize;
+        // Update pagination config to match the result
+        this.userPaginationConfig.totalRecords = result.totalCount;
+        this.userPaginationConfig.pageIndex = result.pageNumber - 1; // Convert to 0-based index
+        this.userPaginationConfig.pageSize = result.pageSize;
 
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        },
-        error: (error) => {
-          console.error('Error loading users:', error);
-          this.snackBar.open('Error loading users', 'Close', { duration: 3000 });
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        }
-      });
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: error => {
+        console.error('Error loading users:', error);
+        this.snackBar.open('Error loading users', 'Close', { duration: 3000 });
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+    });
   }
 
   loadStatistics(): void {
@@ -263,23 +270,22 @@ export class UserComponent implements OnInit, AfterViewInit {
     }
 
     this.isCreating = true;
-    this.userManagement.createUser(this.newUser as Omit<User, 'id'>)
-      .subscribe({
-        next: (user) => {
-          this.snackBar.open('User created successfully', 'Close', { duration: 3000 });
-          this.newUser = {};
-          this.loadUsers();
-          this.loadStatistics();
-          this.isCreating = false;
-          this.cdr.markForCheck();
-        },
-        error: (error) => {
-          console.error('Error creating user:', error);
-          this.snackBar.open('Error creating user', 'Close', { duration: 3000 });
-          this.isCreating = false;
-          this.cdr.markForCheck();
-        }
-      });
+    this.userManagement.createUser(this.newUser as Omit<User, 'id'>).subscribe({
+      next: user => {
+        this.snackBar.open('User created successfully', 'Close', { duration: 3000 });
+        this.newUser = {};
+        this.loadUsers();
+        this.loadStatistics();
+        this.isCreating = false;
+        this.cdr.markForCheck();
+      },
+      error: error => {
+        console.error('Error creating user:', error);
+        this.snackBar.open('Error creating user', 'Close', { duration: 3000 });
+        this.isCreating = false;
+        this.cdr.markForCheck();
+      },
+    });
   }
 
   startEdit(user: User): void {
@@ -308,34 +314,33 @@ export class UserComponent implements OnInit, AfterViewInit {
       data: this.editUser,
       conditions: {
         checkActive: true,
-        requireApproval: true
-      }
+        requireApproval: true,
+      },
     };
 
-    this.conditionalCommand.execute(request)
-      .subscribe({
-        next: (user) => {
-          this.snackBar.open('User updated successfully', 'Close', { duration: 3000 });
-          this.editUserId = null;
-          this.editUser = {};
-          this.loadUsers();
-          this.loadStatistics();
-          this.isUpdating = false;
-          this.cdr.markForCheck();
-        },
-        error: (error) => {
-          console.error('Error updating user:', error);
-          this.snackBar.open(error.message || 'Error updating user', 'Close', { duration: 3000 });
-          this.isUpdating = false;
-          this.cdr.markForCheck();
-        }
-      });
+    this.conditionalCommand.execute(request).subscribe({
+      next: user => {
+        this.snackBar.open('User updated successfully', 'Close', { duration: 3000 });
+        this.editUserId = null;
+        this.editUser = {};
+        this.loadUsers();
+        this.loadStatistics();
+        this.isUpdating = false;
+        this.cdr.markForCheck();
+      },
+      error: error => {
+        console.error('Error updating user:', error);
+        this.snackBar.open(error.message || 'Error updating user', 'Close', { duration: 3000 });
+        this.isUpdating = false;
+        this.cdr.markForCheck();
+      },
+    });
   }
 
   deleteUser(userId: number): void {
     if (confirm('Are you sure you want to delete this user?')) {
       this.userManagement.deleteUser(userId).subscribe({
-        next: (success) => {
+        next: success => {
           if (success) {
             this.snackBar.open('User deleted successfully', 'Close', { duration: 3000 });
             this.loadUsers();
@@ -345,10 +350,10 @@ export class UserComponent implements OnInit, AfterViewInit {
             this.snackBar.open('Failed to delete user', 'Close', { duration: 3000 });
           }
         },
-        error: (error) => {
+        error: error => {
           console.error('Error deleting user:', error);
           this.snackBar.open('Error deleting user', 'Close', { duration: 3000 });
-        }
+        },
       });
     }
   }
@@ -364,22 +369,26 @@ export class UserComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.userManagement.execute({
-      action: 'bulk-operations',
-      data: { activateUsers: this.selectedUsers }
-    }).subscribe({
-      next: (response) => {
-        this.snackBar.open(response.message || 'Bulk operation completed', 'Close', { duration: 3000 });
-        this.selectedUsers = [];
-        this.loadUsers();
-        this.loadStatistics();
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error('Error in bulk operation:', error);
-        this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
-      }
-    });
+    this.userManagement
+      .execute({
+        action: 'bulk-operations',
+        data: { activateUsers: this.selectedUsers },
+      })
+      .subscribe({
+        next: response => {
+          this.snackBar.open(response.message || 'Bulk operation completed', 'Close', {
+            duration: 3000,
+          });
+          this.selectedUsers = [];
+          this.loadUsers();
+          this.loadStatistics();
+          this.cdr.markForCheck();
+        },
+        error: error => {
+          console.error('Error in bulk operation:', error);
+          this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
+        },
+      });
   }
 
   bulkDeactivateUsers(): void {
@@ -388,22 +397,26 @@ export class UserComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.userManagement.execute({
-      action: 'bulk-operations',
-      data: { deactivateUsers: this.selectedUsers }
-    }).subscribe({
-      next: (response) => {
-        this.snackBar.open(response.message || 'Bulk operation completed', 'Close', { duration: 3000 });
-        this.selectedUsers = [];
-        this.loadUsers();
-        this.loadStatistics();
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error('Error in bulk operation:', error);
-        this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
-      }
-    });
+    this.userManagement
+      .execute({
+        action: 'bulk-operations',
+        data: { deactivateUsers: this.selectedUsers },
+      })
+      .subscribe({
+        next: response => {
+          this.snackBar.open(response.message || 'Bulk operation completed', 'Close', {
+            duration: 3000,
+          });
+          this.selectedUsers = [];
+          this.loadUsers();
+          this.loadStatistics();
+          this.cdr.markForCheck();
+        },
+        error: error => {
+          console.error('Error in bulk operation:', error);
+          this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
+        },
+      });
   }
 
   bulkDeleteUsers(): void {
@@ -413,22 +426,26 @@ export class UserComponent implements OnInit, AfterViewInit {
     }
 
     if (confirm(`Are you sure you want to delete ${this.selectedUsers.length} users?`)) {
-      this.userManagement.execute({
-        action: 'bulk-operations',
-        data: { deleteUsers: this.selectedUsers }
-      }).subscribe({
-        next: (response) => {
-          this.snackBar.open(response.message || 'Bulk operation completed', 'Close', { duration: 3000 });
-          this.selectedUsers = [];
-          this.loadUsers();
-          this.loadStatistics();
-          this.cdr.markForCheck();
-        },
-        error: (error) => {
-          console.error('Error in bulk operation:', error);
-          this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
-        }
-      });
+      this.userManagement
+        .execute({
+          action: 'bulk-operations',
+          data: { deleteUsers: this.selectedUsers },
+        })
+        .subscribe({
+          next: response => {
+            this.snackBar.open(response.message || 'Bulk operation completed', 'Close', {
+              duration: 3000,
+            });
+            this.selectedUsers = [];
+            this.loadUsers();
+            this.loadStatistics();
+            this.cdr.markForCheck();
+          },
+          error: error => {
+            console.error('Error in bulk operation:', error);
+            this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
+          },
+        });
     }
   }
 
@@ -458,10 +475,14 @@ export class UserComponent implements OnInit, AfterViewInit {
 
   getRoleColor(role: string): string {
     switch (role.toLowerCase()) {
-      case 'admin': return 'accent';
-      case 'manager': return 'primary';
-      case 'user': return 'basic';
-      default: return 'basic';
+      case 'admin':
+        return 'accent';
+      case 'manager':
+        return 'primary';
+      case 'user':
+        return 'basic';
+      default:
+        return 'basic';
     }
   }
 }

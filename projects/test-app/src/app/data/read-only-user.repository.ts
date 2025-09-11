@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ReadOnlyRepository, FilterParams, PaginatedResult, PaginationParams } from '@acontplus-core';
+import {
+  ReadOnlyRepository,
+  FilterParams,
+  PaginatedResult,
+  PaginationParams,
+} from '@acontplus-core';
 import { User } from '../domain/user';
 import { MockUserService } from './mock-user.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ReadOnlyUserRepository extends ReadOnlyRepository<User> {
   protected entityName = 'users';
@@ -15,7 +20,10 @@ export class ReadOnlyUserRepository extends ReadOnlyRepository<User> {
     super();
   }
 
-  override getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<User>> {
+  override getAll(
+    pagination: PaginationParams,
+    filters?: FilterParams,
+  ): Observable<PaginatedResult<User>> {
     return this.mockService.getUsers(pagination, filters);
   }
 
