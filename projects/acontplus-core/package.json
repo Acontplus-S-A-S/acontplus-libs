@@ -1,7 +1,7 @@
 {
   "name": "acontplus-core",
   "version": "1.2.6",
-  "description": "Core utilities, services, and models for Angular applications",
+  "description": "Domain-Driven Design (DDD) core library for Angular applications with repository patterns, use cases, JWT authentication, multi-tenant support, pricing calculations, and HTTP interceptors",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,js,html,css,scss,json,md}\"",
@@ -38,24 +38,37 @@
     "node": ">=18.0.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "keywords": [
     "acontplus",
-    "core",
-    "utils",
-    "services",
-    "interceptors",
-    "models",
-    "pipes",
-    "environments",
     "angular",
+    "ddd",
+    "domain-driven-design",
+    "clean-architecture",
+    "repository-pattern",
+    "use-cases",
+    "jwt",
+    "authentication",
+    "interceptors",
+    "http-client",
+    "pricing",
+    "calculations",
+    "utilities",
+    "multi-tenant",
+    "tenant",
+    "correlation",
+    "notifications",
+    "toastr",
+    "response-handler",
+    "validators",
+    "decimal",
+    "environment",
+    "services",
     "typescript",
     "frontend",
-    "common",
-    "shared",
-    "library",
-    "helpers"
+    "library"
   ],
   "author": "Ivan Paz",
   "license": "MIT",
@@ -66,5 +79,10 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Acontplus-S-A-S/acontplus-libs.git"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
   }
 }

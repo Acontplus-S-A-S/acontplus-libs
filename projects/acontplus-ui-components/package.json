@@ -1,6 +1,7 @@
 {
   "name": "acontplus-ui-components",
   "version": "1.2.4",
+  "description": "Angular Material UI component library with dynamic tables, theming support, dialog wrappers, customer management components, and comprehensive styling utilities",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,js,html,css,scss,json,md}\"",
@@ -31,11 +32,29 @@
   "typings": "index.d.ts",
   "keywords": [
     "acontplus",
-    "components",
-    "services",
-    "angular-material",
     "angular",
+    "angular-material",
+    "material-design",
+    "ui-components",
+    "dynamic-table",
+    "tabulator",
+    "cards",
+    "dialog",
+    "snackbar",
+    "theme",
+    "theming",
+    "dark-mode",
+    "overlay",
+    "autocomplete",
+    "spinner",
     "interceptors",
+    "customer-ui",
+    "form-controls",
+    "directives",
+    "pipes",
+    "scss",
+    "styling",
+    "components",
     "typescript",
     "frontend",
     "library"
@@ -49,5 +68,14 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Acontplus-S-A-S/acontplus-libs.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
   }
 }
