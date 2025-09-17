@@ -1,6 +1,6 @@
 {
   "name": "acontplus-ui-components",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Angular Material UI component library with dynamic tables, theming support, dialog wrappers, customer management components, and comprehensive styling utilities",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,json,md}\"",
@@ -15,7 +15,7 @@
     "@angular/core": "^20.0.0",
     "@angular/material": "^20.0.0",
     "@angular/cdk": "^20.0.0",
-    "acontplus-core": "^1.2.6"
+    "acontplus-core": "^1.2.8"
   },
   "exports": {
     "./styles": "./styles/_index.scss",
@@ -70,8 +70,7 @@
     "url": "git+https://github.com/Acontplus-S-A-S/acontplus-libs.git"
   },
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "release": {
     "branches": [
