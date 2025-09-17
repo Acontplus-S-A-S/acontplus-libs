@@ -1,15 +1,18 @@
 # Acontplus Libraries
 
-A comprehensive collection of Angular libraries providing core utilities, UI
-components, and development tools with enterprise-grade architecture patterns.
+A comprehensive collection of Angular libraries providing Domain-Driven Design (DDD) architecture, core utilities, and Angular Material UI components for enterprise applications.
 
 ## 📚 Libraries
 
-- **acontplus-core**: Core utilities, services, interceptors, and models for
-  Angular applications
-- **acontplus-ui-components**: Reusable UI components built with Angular
-  Material
-- **test-app**: Demo application showcasing the libraries
+- **[acontplus-core](projects/acontplus-core/README.md)**: Domain-Driven Design (DDD) core library with repository patterns, use cases, JWT authentication, multi-tenant support, pricing calculations, and HTTP interceptors
+- **[acontplus-ui-components](projects/acontplus-ui-components/README.md)**: Angular Material UI component library with dynamic tables, theming support, dialog wrappers, customer management components, and comprehensive styling utilities  
+- **[test-app](projects/test-app/README.md)**: Demo application showcasing DDD architecture patterns and library usage
+
+## 📖 Documentation
+
+- **[API Response Handling](docs/api-response-handling.md)** - DDD patterns for standardized API response handling
+- **[Style Guide](docs/style-guide.md)** - Design principles and component guidelines
+- **[Development Setup](docs/linting-and-formatting-setup.md)** - Code quality tools and configuration
 
 ## 🚀 Quick Start
 
@@ -278,20 +281,14 @@ npm run pack-acontplus-ui-components
 
 ## 📚 **Documentation**
 
-Comprehensive documentation is available in the `docs/` directory:
+Comprehensive documentation is available across the project:
 
-- **[Documentation Overview](docs/README.md)** - Start here for an overview
-- **[Component API Reference](docs/component-api.md)** - Complete API
-  documentation
-- **[Component Examples](docs/component-examples.md)** - Practical usage
-  examples
-- **[Core Services](docs/core-services.md)** - Core library services
-  documentation
-- **[API Response Handling](docs/api-response-handling.md)** - API handling
-  guide
+- **[API Response Handling](docs/api-response-handling.md)** - DDD patterns for API handling
 - **[Style Guide](docs/style-guide.md)** - Design system guidelines
-- **[Development Setup](docs/linting-and-formatting-setup.md)** - Code quality
-  tools
+- **[Development Setup](docs/linting-and-formatting-setup.md)** - Code quality tools
+- **[Core Library Guide](projects/acontplus-core/README.md)** - Complete acontplus-core documentation
+- **[UI Components Guide](projects/acontplus-ui-components/README.md)** - Complete UI components documentation
+- **[Test App Guide](projects/test-app/README.md)** - DDD architecture demo
 
 ## 🤝 Contributing
 
@@ -340,8 +337,8 @@ for details.
 
 - **Issues**:
   [GitHub Issues](https://github.com/Acontplus-S-A-S/acontplus-libs/issues)
-- **Documentation**: [Project Documentation](docs/README.md)
-- **Contact**: [Ivan Paz](https://github.com/ivanpaz)
+- **Documentation**: See links in the Documentation section above
+- **Contact**: [Ivan Paz](https://github.com/iferpaz7)
 
 ## 🔄 Changelog
 

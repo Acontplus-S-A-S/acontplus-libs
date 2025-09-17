@@ -1,13 +1,11 @@
-# `acontplus/ui-components`
+# `acontplus-ui-components`
 
-A comprehensive UI component library for Acontplus applications built with Angular Material. This library provides a collection of reusable, customizable UI components to ensure consistency across Acontplus projects and accelerate development.
+Angular Material UI component library with dynamic tables, theming support, dialog wrappers, customer management components, and comprehensive styling utilities.
 
 ## Installation
 
-You can install this library using npm:
-
 ```bash
-npm install acontplus/ui-components
+npm install acontplus-ui-components
 ```
 
 ## Dependencies
@@ -15,89 +13,93 @@ npm install acontplus/ui-components
 This library requires the following peer dependencies:
 
 - Angular (version 20.x)
-- Angular Material
-- RxJS
+- Angular Material (version 20.x)
+- Angular CDK (version 20.x)
+- acontplus-core (version ^1.2.6)
 
-## Usage
+## 🧩 Available Components
 
-This library exports various UI components and related modules. Below are some common usage patterns.
+### Core Components
 
-### Components
+- **MatDynamicCardComponent** (`acp-mat-dynamic-card`) - Versatile card component with configurable header, content, and actions
+- **MatDynamicTableComponent** (`acp-mat-dynamic-table`) - Flexible data table with sorting, pagination, and filtering
+- **MatInputChipComponent** (`acp-mat-input-chip`) - Input field with chip functionality for tags and selections
 
-#### Cards
+### Dialog & Overlay
 
-The library includes various card components for displaying content in a structured way.
+- **DialogWrapperComponent** (`acp-dialog-wrapper`) - Draggable dialog wrapper with consistent styling
+- **AdvancedDialogService** - Service for enhanced dialog management
+- **OverlayService** - Service for overlay management
+
+### Theme & UI
+
+- **ThemeToggleComponent** (`acp-theme-toggle`) - Toggle component for switching between light/dark themes
+- **ThemeService** - Service for theme management
+- **MatThemeButtonComponent** (`acp-mat-theme-button`) - Theme-aware button component
+
+### Icons & Visual
+
+- **SvgIconComponent** (`acp-svg-icon`) - Scalable vector icon component
+- **IconUserComponent** (`acp-icon-user`) - User-specific icon component
+- **SpinnerComponent** (`acp-spinner`) - Loading indicator component
+
+### Tables & Data
+
+- **CustomTabulatorComponent** (`acp-custom-tabulator`) - Advanced table with Tabulator.js integration
+- **MatDynamicTableComponent** (`acp-mat-dynamic-table`) - Material Design data table
+
+### Notifications & Feedback
+
+- **SnackbarNotificationComponent** (`acp-snackbar-notification`) - Toast notification component
+- **SnackbarService** - Service for snackbar management
+
+### Utilities
+
+- **AutocompleteWrapperComponent** (`acp-autocomplete-wrapper`) - Enhanced autocomplete component
+- **AutocompleteWrapperService** - Service for autocomplete functionality
+- **ToUpperCaseDirective** - Directive for automatic text transformation
+
+### Customer Management
+
+- **CustomerAddEditComponent** (`acp-customer-add-edit`) - Customer form component
+- **CustomerCardComponent** (`acp-customer-card`) - Customer display card
+
+### Pipes
+
+- **GetTotalPipe** - Calculate totals from arrays
+- **StatusDisplayPipe** - Format status values for display
+
+## 🎨 Styling & Theming
+
+The library includes comprehensive SCSS utilities:
+
+- **Custom Buttons** (`acontplus-ui-components/styles/buttons`) - Enhanced button styles
+- **Dialog Theming** (`acontplus-ui-components/styles/dialog`) - Dialog customizations  
+- **Snackbar Theming** (`acontplus-ui-components/styles/snackbar`) - Snackbar styles
+- **Complete Styles** (`acontplus-ui-components/styles`) - All styles bundle
+
+## 🚀 Quick Start
+
+### Basic Setup
 
 ```typescript
-import { MatDynamicCardComponent } from 'acontplus/ui-components';
+import { MatDynamicCardComponent, ThemeToggleComponent } from 'acontplus-ui-components';
 
-// In your module
-@NgModule({
-  imports: [
-    // ...
-    MatDynamicCardComponent
-  ]
+@Component({
+  selector: 'app-example',
+  standalone: true,
+  imports: [MatDynamicCardComponent, ThemeToggleComponent],
+  template: `
+    <acp-theme-toggle></acp-theme-toggle>
+    <acp-mat-dynamic-card 
+      [cardTitle]="'Welcome'" 
+      [cardSubtitle]="'Getting started'"
+      [isHeaderVisible]="true">
+      Your content here
+    </acp-mat-dynamic-card>
+  `
 })
-
-// In your component template
-// <mat-dynamic-card [title]="'Card Title'" [content]="'Card content goes here'"></mat-dynamic-card>
-```
-
-#### Dialog Wrapper
-
-A wrapper component for Angular Material dialogs with consistent styling.
-
-```typescript
-import { DialogWrapperComponent } from 'acontplus/ui-components';
-
-// In your dialog service
-this.dialog.open(DialogWrapperComponent, {
-  data: {
-    title: 'Dialog Title',
-    content: 'Dialog content goes here',
-    actions: [
-      { label: 'Cancel', value: false },
-      { label: 'Confirm', value: true },
-    ],
-  },
-});
-```
-
-#### Icons
-
-Custom icon components that extend Material icons.
-
-```typescript
-import { IconComponent } from 'acontplus/ui-components';
-
-// In your module
-@NgModule({
-  imports: [
-    // ...
-    IconComponent
-  ]
-})
-
-// In your component template
-// <app-icon name="home"></app-icon>
-```
-
-#### Input Chip
-
-A component for displaying and managing input chips.
-
-```typescript
-import { MatInputChipComponent } from 'acontplus/ui-components';
-
-// In your module
-@NgModule({
-  imports: [
-    // ...
-    MatInputChipComponent
-  ]
-})
-
-// In your component template
+export class ExampleComponent { }
 // <mat-input-chip [items]="items" (itemsChange)="onItemsChange($event)"></mat-input-chip>
 ```
 
@@ -106,7 +108,7 @@ import { MatInputChipComponent } from 'acontplus/ui-components';
 A button component for toggling between themes.
 
 ```typescript
-import { MatThemeButtonComponent } from 'acontplus/ui-components';
+import { MatThemeButtonComponent } from 'acontplus-ui-components';
 
 // In your module
 @NgModule({
@@ -125,7 +127,7 @@ import { MatThemeButtonComponent } from 'acontplus/ui-components';
 A service for displaying snackbar notifications.
 
 ```typescript
-import { SnackbarService } from 'acontplus/ui-components';
+import { SnackbarService } from 'acontplus-ui-components';
 
 // In your component
 constructor(private snackbar: SnackbarService) {}
@@ -140,7 +142,7 @@ showNotification() {
 A loading spinner component.
 
 ```typescript
-import { SpinnerComponent } from 'acontplus/ui-components';
+import { SpinnerComponent } from 'acontplus-ui-components';
 
 // In your module
 @NgModule({
@@ -159,7 +161,7 @@ import { SpinnerComponent } from 'acontplus/ui-components';
 Customizable table components.
 
 ```typescript
-import { MatTableComponent } from 'acontplus/ui-components';
+import { MatTableComponent } from 'acontplus-ui-components';
 
 // In your module
 @NgModule({
@@ -178,7 +180,7 @@ import { MatTableComponent } from 'acontplus/ui-components';
 A component for toggling between light and dark themes.
 
 ```typescript
-import { ThemeToggleComponent } from 'acontplus/ui-components';
+import { ThemeToggleComponent } from 'acontplus-ui-components';
 
 // In your module
 @NgModule({
@@ -197,7 +199,7 @@ import { ThemeToggleComponent } from 'acontplus/ui-components';
 The library includes various directives to enhance HTML elements with additional functionality.
 
 ```typescript
-import { ClickOutsideDirective } from 'acontplus/ui-components';
+import { ClickOutsideDirective } from 'acontplus-ui-components';
 
 // In your module
 @NgModule({
@@ -216,7 +218,7 @@ import { ClickOutsideDirective } from 'acontplus/ui-components';
 Custom form input components.
 
 ```typescript
-import { CustomInputComponent } from 'acontplus/ui-components';
+import { CustomInputComponent } from 'acontplus-ui-components';
 
 // In your module
 @NgModule({
@@ -235,7 +237,7 @@ import { CustomInputComponent } from 'acontplus/ui-components';
 HTTP interceptors for handling API requests.
 
 ```typescript
-import { LoadingInterceptor } from 'acontplus/ui-components';
+import { LoadingInterceptor } from 'acontplus-ui-components';
 
 // In your app module
 @NgModule({
@@ -254,7 +256,7 @@ import { LoadingInterceptor } from 'acontplus/ui-components';
 Type definitions and interfaces for UI components.
 
 ```typescript
-import { TableColumn } from 'acontplus/ui-components';
+import { TableColumn } from 'acontplus-ui-components';
 
 const columns: TableColumn[] = [
   { name: 'id', label: 'ID' },
@@ -267,7 +269,7 @@ const columns: TableColumn[] = [
 Data transformation pipes for use in templates.
 
 ```typescript
-import { TruncatePipe } from 'acontplus/ui-components';
+import { TruncatePipe } from 'acontplus-ui-components';
 
 // In your module
 @NgModule({
@@ -286,7 +288,7 @@ import { TruncatePipe } from 'acontplus/ui-components';
 Utility services for UI-related functionality.
 
 ```typescript
-import { ThemeService } from 'acontplus/ui-components';
+import { ThemeService } from 'acontplus-ui-components';
 
 // In your component
 constructor(private themeService: ThemeService) {}
@@ -302,7 +304,7 @@ The library supports Angular Material theming. You can customize the theme by in
 
 ```scss
 /* In your styles.scss */
-@import 'acontplus/ui-components/theme';
+@import 'acontplus-ui-components/theme';
 
 /* Customize theme variables */
 $primary: mat.define-palette(mat.$indigo-palette);
