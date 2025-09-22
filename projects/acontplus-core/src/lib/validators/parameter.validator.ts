@@ -1,5 +1,5 @@
-import { InvalidParameterError } from '../models/custom-error.model';
-import { NumberUtils } from '../utils/number.utils';
+import { InvalidParameterError } from '../models';
+import { NumberUtils } from '../utils';
 
 export class ParameterValidator {
   static validateNumber(value: any, paramName: string): number {

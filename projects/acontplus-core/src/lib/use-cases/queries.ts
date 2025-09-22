@@ -1,12 +1,7 @@
 import { Observable } from 'rxjs';
-import {
-  FilterParams,
-  PaginatedResult,
-  PaginationParams,
-  ValidationError,
-  ErrorCategory,
-} from '../models';
+import { FilterParams, PaginatedResult, PaginationParams } from '../models';
 import { BaseUseCase } from './base.use-case';
+import { ErrorCategory, ValidationError } from '../interfaces';
 
 export abstract class Queries<TRequest, TResponse> extends BaseUseCase<TRequest, TResponse> {
   // Queries typically don't need validation by default

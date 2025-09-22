@@ -1,7 +1,7 @@
 {
   "name": "acontplus-core",
-  "version": "1.2.8",
-  "description": "Domain-Driven Design (DDD) core library for Angular applications with repository patterns, use cases, JWT authentication, multi-tenant support, pricing calculations, and HTTP interceptors",
+  "version": "1.3.0",
+  "description": "Core library for Angular applications with repository patterns, use cases, JWT authentication, multi-tenant support, pricing calculations, and HTTP interceptors",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,js,html,css,scss,json,md}\"",

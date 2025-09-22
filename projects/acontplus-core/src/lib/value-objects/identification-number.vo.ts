@@ -1,9 +1,9 @@
-import { SRI_IDENTIFICATION_CODE } from '../constants';
+import { SRI_DOCUMENT_TYPE } from '../constants';
 import { BaseVo } from './base.vo';
 
 export class IdentificationNumberVo extends BaseVo<string> {
   private readonly id: string;
-  private readonly type: SRI_IDENTIFICATION_CODE;
+  private readonly type: SRI_DOCUMENT_TYPE;
 
   constructor(id: string) {
     super(id);
@@ -15,17 +15,17 @@ export class IdentificationNumberVo extends BaseVo<string> {
     }
   }
 
-  private determineType(): SRI_IDENTIFICATION_CODE {
-    if (this.id.length === 10) return SRI_IDENTIFICATION_CODE.CEDULA;
-    if (this.id.length === 13) return SRI_IDENTIFICATION_CODE.RUC;
+  private determineType(): SRI_DOCUMENT_TYPE {
+    if (this.id.length === 10) return SRI_DOCUMENT_TYPE.CEDULA;
+    if (this.id.length === 13) return SRI_DOCUMENT_TYPE.RUC;
     throw new Error('Número de identificación debe tener 10 o 13 dígitos');
   }
 
   validate(): boolean {
-    if (this.type === SRI_IDENTIFICATION_CODE.CEDULA) {
+    if (this.type === SRI_DOCUMENT_TYPE.CEDULA) {
       return this.isValidCedulaAlgorithm();
     }
-    if (this.type === SRI_IDENTIFICATION_CODE.RUC) {
+    if (this.type === SRI_DOCUMENT_TYPE.RUC) {
       return this.isValidRucAlgorithm();
     }
     return false;
@@ -115,18 +115,18 @@ export class IdentificationNumberVo extends BaseVo<string> {
 
   // Métodos públicos mejorados
   public isValidCedula(): boolean {
-    return this.type === SRI_IDENTIFICATION_CODE.CEDULA && this.isValidCedulaAlgorithm();
+    return this.type === SRI_DOCUMENT_TYPE.CEDULA && this.isValidCedulaAlgorithm();
   }
 
   public isValidRuc(): boolean {
-    return this.type === SRI_IDENTIFICATION_CODE.RUC && this.isValidRucAlgorithm();
+    return this.type === SRI_DOCUMENT_TYPE.RUC && this.isValidRucAlgorithm();
   }
 
   public getId(): string {
     return this.id;
   }
 
-  public getType(): SRI_IDENTIFICATION_CODE {
+  public getType(): SRI_DOCUMENT_TYPE {
     return this.type;
   }
 
@@ -142,7 +142,7 @@ export class IdentificationNumberVo extends BaseVo<string> {
 
   // Método adicional para obtener información del tipo de RUC
   public getRucType(): string | null {
-    if (this.type !== SRI_IDENTIFICATION_CODE.RUC) return null;
+    if (this.type !== SRI_DOCUMENT_TYPE.RUC) return null;
 
     const tercerDigito = parseInt(this.id.charAt(2));
     if (tercerDigito < 6) return 'Persona Natural';

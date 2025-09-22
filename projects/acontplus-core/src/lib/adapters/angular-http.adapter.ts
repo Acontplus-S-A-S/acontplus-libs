@@ -1,6 +1,5 @@
-// src/infrastructure/adapters/angular-http.adapter.ts
 import { HttpClient } from '@angular/common/http';
-import { HttpPort, HttpOptions } from '../../application/interfaces/http.port';
+import { HttpPort, HttpOptions } from '../interfaces';
 import { lastValueFrom } from 'rxjs';
 
 function mergeUrl(baseURL: string | undefined, endpoint: string): string {

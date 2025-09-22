@@ -1,8 +1,9 @@
-import { Injectable, inject } from '@angular/core';
-import { Observable, Observer } from 'rxjs';
-import { ApiError, ApiResponse, UseCase, UseCaseResult, ValidationError } from '../models';
-import { ResponseHandlerService } from '../services/response-handler.service';
-import { LoggingService } from '../services/logging.service';
+import { inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ApiError, ApiResponse } from '../models';
+import { ResponseHandlerService } from '../services';
+import { LoggingService } from '../services';
+import { UseCase, UseCaseResult, ValidationError } from '../interfaces';
 
 export abstract class BaseUseCase<TRequest = void, TResponse = void>
   implements UseCase<TRequest, TResponse>

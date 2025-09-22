@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, combineLatest, switchMap, map, catchError, throwError } from 'rxjs';
 import { BaseUseCase } from './base.use-case';
-import { UseCaseResult } from '../models';
 
 export interface CompositeUseCaseContext {
   correlationId?: string;

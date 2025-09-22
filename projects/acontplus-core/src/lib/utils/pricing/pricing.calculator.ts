@@ -1,4 +1,4 @@
-import { PricingConfig } from '../../models/pricing.types';
+import { PricingConfig } from '../../models';
 import { DiscountCalculator } from './calculations/discount.calculator';
 import { LineItemCalculator } from './calculations/line-item.calculator';
 import { ProfitCalculator } from './calculations/profit.calculator';

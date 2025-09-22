@@ -1,4 +1,4 @@
-import { HttpPort, HttpOptions } from '../../application/interfaces/http.port';
+import { HttpPort, HttpOptions } from '../interfaces';
 import { HttpClientFactory } from './http-client-factory';
 
 export class FetchAdapter implements HttpPort {

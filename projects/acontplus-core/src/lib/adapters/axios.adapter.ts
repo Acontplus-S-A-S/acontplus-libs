@@ -1,5 +1,4 @@
-//import axios, { AxiosInstance } from 'axios';
-import { HttpPort, HttpOptions } from '../../application/interfaces/http.port';
+import { HttpPort, HttpOptions } from '../interfaces';
 //import { HttpClientFactory } from './HttpClientFactory';
 
 export class AxiosAdapter implements HttpPort {
