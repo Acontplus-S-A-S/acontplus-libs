@@ -19,7 +19,16 @@
         "outputPath": "dist/packages/utils",
         "main": "packages/utils/src/index.ts",
         "tsConfig": "packages/utils/tsconfig.lib.json",
-        "assets": ["packages/utils/*.md"]
+        "assets": ["packages/utils/*.md"],
+        "clean": true,
+        "packageJson": "packages/utils/package.json"
+      }
+    },
+    "publish": {
+      "executor": "@nx/js:npm-package",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "public"
       }
     },
     "nx-release-publish": {
