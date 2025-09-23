@@ -1,0 +1,121 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "test-app",
+  "projectType": "application",
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "sourceRoot": "projects/test-app/src",
+  "prefix": "app",
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "options": {
+        "outputPath": "dist/test-app",
+        "index": "projects/test-app/src/index.html",
+        "browser": "projects/test-app/src/main.ts",
+        "polyfills": [
+          "zone.js"
+        ],
+        "tsConfig": "projects/test-app/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "projects/test-app/public"
+          }
+        ],
+        "styles": [
+          "@angular/material/prebuilt-themes/rose-red.css",
+          "projects/test-app/src/styles.scss",
+          "node_modules/bootstrap/dist/css/bootstrap.min.css"
+        ],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "1MB",
+              "maximumError": "2MB"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kB",
+              "maximumError": "8kB"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "projects/test-app/src/environments/environment.ts",
+              "with": "projects/test-app/src/environments/environment.development.ts"
+            }
+          ]
+        }
+      },
+      "defaultConfiguration": "production",
+      "outputs": [
+        "{options.outputPath}"
+      ]
+    },
+    "serve": {
+      "executor": "@angular/build:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "test-app:build:production"
+        },
+        "development": {
+          "buildTarget": "test-app:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "ssl": true,
+        "sslCert": "./ssl/server.crt",
+        "sslKey": "./ssl/server.key"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular/build:extract-i18n"
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:jest",
+      "options": {
+        "tsConfig": "projects/test-app/tsconfig.spec.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "projects/test-app/public"
+          }
+        ],
+        "styles": [
+          "@angular/material/prebuilt-themes/rose-red.css",
+          "projects/test-app/src/styles.scss"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@angular-eslint/builder:lint",
+      "options": {
+        "lintFilePatterns": [
+          "projects/test-app/**/*.ts",
+          "projects/test-app/**/*.html"
+        ],
+        "eslintConfig": "eslint.config.js"
+      },
+      "outputs": [
+        "{options.outputFile}"
+      ]
+    }
+  }
+}

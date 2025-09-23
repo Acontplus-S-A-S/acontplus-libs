@@ -1,31 +1,28 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "useDefineForClassFields": false
+    "module": "preserve"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
+    "typeCheckHostBindings": true,
     "strictTemplates": true
   },
+  "files": [],
+  "include": [],
   "references": [
     {
-      "path": "./projects/acontplus-customers/tsconfig.lib.json"
+      "path": "./tsconfig.lib.json"
     },
     {
-      "path": "./projects/acontplus-customers/tsconfig.spec.json"
+      "path": "./tsconfig.spec.json"
     }
-  ],
-  "extends": "./tsconfig.base.json"
+  ]
 }

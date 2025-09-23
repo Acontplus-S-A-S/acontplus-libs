@@ -98,3 +98,5 @@ temp/
 
 # Angular specific
 .angular/
+
+.angular

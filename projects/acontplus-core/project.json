@@ -1,0 +1,46 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "acontplus-core",
+  "projectType": "library",
+  "sourceRoot": "projects/acontplus-core/src",
+  "prefix": "lib",
+  "targets": {
+    "build": {
+      "executor": "@angular/build:ng-packagr",
+      "options": {
+        "project": "projects/acontplus-core/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "projects/acontplus-core/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "projects/acontplus-core/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production",
+      "outputs": [
+        "{workspaceRoot}/dist/acontplus-core"
+      ]
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:jest",
+      "options": {
+        "tsConfig": "projects/acontplus-core/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@angular-eslint/builder:lint",
+      "options": {
+        "lintFilePatterns": [
+          "projects/acontplus-core/**/*.ts",
+          "projects/acontplus-core/**/*.html"
+        ],
+        "eslintConfig": "eslint.config.js"
+      },
+      "outputs": [
+        "{options.outputFile}"
+      ]
+    }
+  }
+}
