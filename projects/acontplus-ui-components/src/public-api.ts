@@ -11,4 +11,4 @@ export * from './lib/models';
 export * from './lib/pipes';
 export * from './lib/services';
 export * from './lib/types';
-export * from './lib/customers-ui';
+// export * from './lib/customers-ui';

@@ -7,7 +7,12 @@
       "@acontplus-ui-components/*": ["./dist/acontplus-ui-components/*"],
       "@acontplus-core": ["./dist/acontplus-core"],
       "@acontplus-core/*": ["./dist/acontplus-core/*"],
-      "acontplus-core": ["./dist/acontplus-core"]
+      "acontplus-core": [
+        "./dist/acontplus-core"
+      ],
+      "acontplus-customers": [
+        "./dist/acontplus-customers"
+      ]
     },
     "outDir": "./dist/out-tsc",
     "strict": true,
@@ -36,5 +41,13 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "references": [
+    {
+      "path": "./projects/acontplus-customers/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/acontplus-customers/tsconfig.spec.json"
+    }
+  ]
 }
