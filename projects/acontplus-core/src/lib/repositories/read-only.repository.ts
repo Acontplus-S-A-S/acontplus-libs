@@ -1,20 +1,20 @@
 import { Observable } from 'rxjs';
 import { BaseRepository } from './base.repository';
-import { BaseEntity, FilterParams, PaginatedResult, PaginationParams } from '../models';
+import { BaseEntity, FilterParams, PagedResult, PaginationParams } from '../models';
 
 export abstract class ReadOnlyRepository<T extends BaseEntity> extends BaseRepository<T> {
   // Read-only operations - must implement these
   abstract override getAll(
     pagination: PaginationParams,
     filters?: FilterParams,
-  ): Observable<PaginatedResult<T>>;
+  ): Observable<PagedResult<T>>;
 
   abstract override getById(id: number): Observable<T>;
 
   abstract override search(
     query: string,
     pagination: PaginationParams,
-  ): Observable<PaginatedResult<T>>;
+  ): Observable<PagedResult<T>>;
 
   // Override to prevent write operations
   override create(): never {

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { HttpPort, HttpOptions } from '../interfaces';
 import { lastValueFrom } from 'rxjs';
+import { HttpOptions, HttpPort } from '../ports';
 
 function mergeUrl(baseURL: string | undefined, endpoint: string): string {
   if (!baseURL) return endpoint;

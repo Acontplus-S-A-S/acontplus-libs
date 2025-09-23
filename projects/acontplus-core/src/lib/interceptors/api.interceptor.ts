@@ -145,6 +145,12 @@ function handleToastNotifications(
       if (response.message) {
         toastr.warning({ message: response.message });
       }
+      // Also show individual warning messages if they exist
+      if (response.warnings && response.warnings.length > 0) {
+        response.warnings.forEach(warning => {
+          toastr.warning({ message: warning.message });
+        });
+      }
       break;
     case 'error':
       if (response.message) {
@@ -231,6 +237,8 @@ function isValidApiResponse(response: any): response is ApiResponse<any> {
     typeof response === 'object' &&
     'status' in response &&
     'code' in response &&
-    ['success', 'error', 'warning'].includes(response.status)
+    ['success', 'error', 'warning'].includes(response.status) &&
+    // For warning responses, ensure warnings array exists
+    (response.status !== 'warning' || (response.warnings && Array.isArray(response.warnings)))
   );
 }

@@ -1,12 +1,5 @@
 import { Injectable } from '@angular/core';
-
-export interface ResponseResult<T> {
-  data?: T;
-  message?: string;
-  metadata?: Record<string, any>;
-  correlationId?: string;
-  traceId?: string;
-}
+import { ApiResponse } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -17,35 +10,40 @@ export class ResponseHandlerService {
    * @param response The response from the API (already processed by interceptor)
    * @returns A structured result with data and/or message
    */
-  handleResponse<T>(response: any): ResponseResult<T> {
+  handleResponse<T>(response: any): ApiResponse<T> {
     // If it's already extracted data (success with data)
     if (response && typeof response === 'object' && !('status' in response)) {
-      return { data: response as T };
+      return {
+        status: 'success',
+        code: '200',
+        message: 'Operation completed successfully',
+        data: response as T,
+        timestamp: new Date().toISOString(),
+      };
     }
 
     // If it's a full ApiResponse structure
     if (response?.status === 'success') {
-      const result: ResponseResult<T> = {
+      return {
+        status: 'success',
+        code: response.code || '200',
+        message: response.message,
+        data: response.data,
         metadata: response.metadata,
         correlationId: response.correlationId,
         traceId: response.traceId,
+        timestamp: response.timestamp || new Date().toISOString(),
       };
-
-      // Handle success with data
-      if (response.data !== undefined && response.data !== null) {
-        result.data = response.data;
-      }
-
-      // Handle success message
-      if (response.message) {
-        result.message = response.message;
-      }
-
-      return result;
     }
 
-    // For other cases, return as is
-    return { data: response as T };
+    // For other cases, return as success with data
+    return {
+      status: 'success',
+      code: '200',
+      message: 'Operation completed successfully',
+      data: response as T,
+      timestamp: new Date().toISOString(),
+    };
   }
 
   /**

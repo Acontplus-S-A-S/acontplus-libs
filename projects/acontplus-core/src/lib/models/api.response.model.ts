@@ -3,6 +3,7 @@ export interface ApiResponse<T = any> {
   code: string;
   message?: string;
   errors?: ApiError[];
+  warnings?: ApiError[];
   data?: T;
   metadata?: Record<string, any>;
   timestamp: string;
@@ -34,6 +35,7 @@ export interface ApiWarningResponse<T = any> extends Omit<ApiResponse<T>, 'statu
   status: 'warning';
   data?: T;
   message: string;
+  warnings: ApiError[];
 }
 
 export interface ApiErrorResponse extends Omit<ApiResponse, 'status' | 'data'> {
@@ -51,7 +53,7 @@ export function isApiSuccessMessageResponse(response: any): response is ApiSucce
 }
 
 export function isApiWarningResponse<T>(response: any): response is ApiWarningResponse<T> {
-  return response?.status === 'warning';
+  return response?.status === 'warning' && response?.warnings && response.warnings.length > 0;
 }
 
 export function isApiErrorResponse(response: any): response is ApiErrorResponse {

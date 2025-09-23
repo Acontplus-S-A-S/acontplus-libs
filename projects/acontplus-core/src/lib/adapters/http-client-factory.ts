@@ -1,4 +1,4 @@
-import { HttpPort } from '../interfaces';
+import { HttpPort } from '../ports';
 
 /**
  * Clase que actúa como fábrica y contenedor para un cliente HTTP configurable.

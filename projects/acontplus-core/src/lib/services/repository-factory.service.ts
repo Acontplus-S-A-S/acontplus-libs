@@ -8,6 +8,8 @@ export interface RepositoryConfig<T extends BaseRepository<any>> {
   type: Type<T>;
   entityName: string;
   baseUrl: string;
+  /** Optional alias key to register the repository under a custom name */
+  aliasKey?: string;
   options?: {
     enableCaching?: boolean;
     enableAuditing?: boolean;
@@ -45,7 +47,21 @@ export class RepositoryFactoryService {
     (repository as any).http = this.http;
 
     this.repositories.set(key, repository);
+
+    // If an alias key is provided, register the same repository under that alias
+    if (config.aliasKey) {
+      this.repositories.set(config.aliasKey, repository);
+    }
     return repository;
+  }
+
+  /**
+   * Register an existing repository instance under a custom alias key.
+   * Useful when consumers expect lookup by a known key (e.g. 'user').
+   */
+  registerRepository(aliasKey: string, repository: BaseRepository<any>): void {
+    if (!aliasKey || !repository) return;
+    this.repositories.set(aliasKey, repository);
   }
 
   /**

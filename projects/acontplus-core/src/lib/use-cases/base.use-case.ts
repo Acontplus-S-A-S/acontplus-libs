@@ -1,9 +1,8 @@
 import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiError, ApiResponse } from '../models';
-import { ResponseHandlerService } from '../services';
-import { LoggingService } from '../services';
-import { UseCase, UseCaseResult, ValidationError } from '../interfaces';
+import { ResponseHandlerService, LoggingService } from '../services';
+import { UseCase, ValidationError } from './use-case';
 
 export abstract class BaseUseCase<TRequest = void, TResponse = void>
   implements UseCase<TRequest, TResponse>
@@ -20,22 +19,22 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
   protected abstract executeInternal(request: TRequest): Observable<TResponse>;
 
   // Optional validation - override only when needed
-  protected validate(request: TRequest): ValidationError[] {
+  protected validate(_request: TRequest): ValidationError[] {
     return [];
   }
 
   // Optional authorization - override only when needed
-  protected async checkAuthorization(request: TRequest): Promise<boolean> {
+  protected async checkAuthorization(_request: TRequest): Promise<boolean> {
     return true;
   }
 
-  // Helper method to create ApiResponse-compatible success result
+  // Helper method to create ApiResponse success result
   protected createSuccessResult<T>(
     data: T,
     message?: string,
     code = 'SUCCESS',
     metadata?: Record<string, any>,
-  ): UseCaseResult<T> {
+  ): ApiResponse<T> {
     return {
       status: 'success',
       code,
@@ -46,30 +45,32 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
     };
   }
 
-  // Helper method to create ApiResponse-compatible warning result
+  // Helper method to create ApiResponse warning result
   protected createWarningResult<T>(
     data: T,
     code: string,
     message: string,
+    warnings?: ApiError[],
     metadata?: Record<string, any>,
-  ): UseCaseResult<T> {
+  ): ApiResponse<T> {
     return {
       status: 'warning',
       code,
       message,
       data,
+      warnings,
       metadata,
       timestamp: new Date().toISOString(),
     };
   }
 
-  // Helper method to create ApiResponse-compatible error result
+  // Helper method to create ApiResponse error result
   protected createErrorResult<T>(
     code: string,
     message: string,
     errors?: ApiError[],
     metadata?: Record<string, any>,
-  ): UseCaseResult<T> {
+  ): ApiResponse<T> {
     return {
       status: 'error',
       code,
@@ -81,7 +82,7 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
   }
 
   // Helper method to create validation error result
-  protected createValidationErrorResult<T>(validationErrors: ValidationError[]): UseCaseResult<T> {
+  protected createValidationErrorResult<T>(validationErrors: ValidationError[]): ApiResponse<T> {
     const apiErrors: ApiError[] = validationErrors.map(ve => ({
       code: ve.code,
       message: ve.message,
@@ -144,7 +145,7 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
   }
 
   // Centralized error handling that maps to ApiResponse structure
-  protected handleError(error: any): UseCaseResult<any> {
+  protected handleError(error: any): ApiResponse<any> {
     // If it's already an ApiResponse structure, return as is
     if (error?.status && ['success', 'error', 'warning'].includes(error.status)) {
       return error;
@@ -179,8 +180,8 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
     }
 
     if (response.status === 'warning') {
-      // Log warning but continue with data
-      this.loggingService.warn(`Use Case Warning [${response.code}]: ${response.message}`);
+      // Use the new warning handler
+      return this.handleWarningResponse(response);
     }
 
     return this.responseHandler.extractData<T>(response);
@@ -199,5 +200,55 @@ export abstract class BaseUseCase<TRequest = void, TResponse = void>
   // Helper to check if response has message
   protected hasMessageInResponse(response: any): boolean {
     return this.responseHandler.hasMessage(response);
+  }
+
+  // Helper to check if response has warnings
+  protected hasWarningsInResponse(response: any): boolean {
+    return response?.warnings && response.warnings.length > 0;
+  }
+
+  // Helper to extract warnings from API response
+  protected extractWarningsFromApiResponse(response: any): ApiError[] {
+    return response?.warnings || [];
+  }
+
+  // Helper to check if response is a warning response
+  protected isWarningResponse(response: any): boolean {
+    return response?.status === 'warning';
+  }
+
+  // Helper to handle warning responses (log warnings but continue with data)
+  protected handleWarningResponse<T>(response: ApiResponse<T>): T {
+    if (response.status === 'warning') {
+      // Log warning but continue with data
+      this.loggingService.warn(`Use Case Warning [${response.code}]: ${response.message}`);
+
+      // Log individual warnings if they exist
+      if (response.warnings && response.warnings.length > 0) {
+        response.warnings.forEach(warning => {
+          this.loggingService.warn(`  - ${warning.code}: ${warning.message}`);
+        });
+      }
+    }
+
+    return this.responseHandler.extractData<T>(response);
+  }
+
+  // Helper to create warning from API response (useful for propagating warnings)
+  protected createWarningFromApiResponse<T>(
+    response: ApiResponse<T>,
+    customMessage?: string,
+  ): ApiResponse<T> {
+    return {
+      status: 'warning',
+      code: response.code,
+      message: customMessage || response.message || 'Operation completed with warnings',
+      data: response.data,
+      warnings: response.warnings,
+      metadata: response.metadata,
+      correlationId: response.correlationId,
+      traceId: response.traceId,
+      timestamp: response.timestamp,
+    };
   }
 }

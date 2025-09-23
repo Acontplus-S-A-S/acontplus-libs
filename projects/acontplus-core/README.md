@@ -2,7 +2,7 @@
 
 A comprehensive core library for Angular applications providing utilities, services, interceptors, models, and more. This library implements **enterprise-grade architecture patterns** for building scalable, maintainable Angular applications with **flexible, optional-based patterns**.
 
-## 🚀 **Enterprise Features**
+## 🚀 Enterprise Features
 
 - **Clean Architecture**: Proper separation of concerns with distinct layers
 - **CQRS Pattern**: Command Query Responsibility Segregation implementation
@@ -174,21 +174,22 @@ export class CoreConfigService {
 }
 ```
 
-### **Repository Factory**
+### **Repository Factory (RepositoryFactoryService)**
 
-Centralized repository management for better scalability:
+Centralized repository management for better scalability. The library exposes `RepositoryFactoryService` with helpers to create and retrieve repositories:
 
 ```typescript
 @Injectable()
-export class RepositoryFactory {
-  register<T>(
-    key: string,
-    repository: Type<BaseRepository<T>>,
-    entityName: string,
-    baseUrl?: string,
-  ): void;
-  get<T>(key: string): BaseRepository<T> | undefined;
-  getByEntityName<T>(entityName: string): BaseRepository<T> | undefined;
+export class RepositoryFactoryService {
+  // Create a fully configured repository instance
+  createFullRepository<T extends BaseRepository<any>>(config: { type: Type<T>; entityName: string; baseUrl: string }): T;
+
+  // Convenience factory helpers
+  createReadOnlyRepository<T>(entityName: string, baseUrl: string): ReadOnlyRepository<T>;
+  createWriteOnlyRepository<T>(entityName: string, baseUrl: string): WriteOnlyRepository<T>;
+
+  // Retrieve a repository by key
+  getRepository<T extends BaseRepository<any>>(key: string): T | undefined;
 }
 ```
 
@@ -316,10 +317,15 @@ export class CreateUserCommand extends CreateCommand<User> {
 ```typescript
 @Injectable()
 export class UserService {
-  constructor(private repositoryFactory: RepositoryFactory) {}
+  // prefer inject() for modern Angular style
+  private repositoryFactory = inject(RepositoryFactoryService);
 
-  getUsers() {
-    const userRepo = this.repositoryFactory.getRequired<User>('user');
+  getUsers(pagination: any, filters: any) {
+    const userRepo = this.repositoryFactory.getRepository<User>('user');
+    if (!userRepo || !userRepo.getAll) {
+      throw new Error('User repository not registered');
+    }
+
     return userRepo.getAll(pagination, filters);
   }
 }
@@ -398,6 +404,103 @@ export class CachedUserRepository extends BaseRepository<User> {
 ```typescript
 @Injectable()
 export class CreateUserWithProfileCommand extends CreateCommand<User> {
+
+### PagedResult usage
+
+Shows how to work with the `PagedResult<T>` structure (maps to .NET PagedResult<T>):
+
+- Repository methods returning paginated results (search/getAll) using query params.
+- Component usage showing table rendering, pagination controls and metadata display.
+- Pagination service helpers for constructing params and computing page ranges.
+
+Key excerpt:
+
+```typescript
+// Repository: returns PagedResult<User>
+getAll(pagination: { pageIndex: number; pageSize: number }): Observable<PagedResult<User>> {
+  const params = {
+    pageIndex: pagination.pageIndex.toString(),
+    pageSize: pagination.pageSize.toString(),
+  };
+
+  return this.get<PagedResult<User>>(this.buildEntityUrl(), params);
+}
+
+// Component: consume and display PagedResult
+this.userRepository.getAll(pagination).subscribe({
+  next: (result) => {
+    this.pagedResult = result;
+    console.log('Loaded users:', result);
+  },
+  error: (error) => {
+    console.error('Error loading users:', error);
+  }
+});
+```
+
+Example shape for `PagedResult<T>` (mirrors .NET response):
+
+```ts
+{
+  items: [...],
+  pageIndex: 1,
+  pageSize: 10,
+  totalCount: 100,
+  totalPages: 10,
+  hasPreviousPage: false,
+  hasNextPage: true,
+  metadata: { traceId: 'abc123', durationMs: 45 }
+}
+```
+
+### Enhanced repository and warnings support
+
+Shows how to use the enhanced repository helpers that expose "full response" methods
+and warnings handling (useful when your API returns structured warnings alongside data).
+
+- Example repository methods: `getFullResponse<T>`, `postFullResponse<T>`, `putFullResponse<T>`.
+- Helper patterns for checking/logging/extracting warnings from `ApiResponse<T>`.
+- Example use-case and a global `WarningService` to surface warnings to UI components.
+
+Key excerpt:
+
+```typescript
+// create user and handle warnings
+createUserWithWarningHandling(userData: Omit<User, 'id'>): Observable<User> {
+  return this.postFullResponse<User>(this.buildEntityUrl(), userData).pipe(
+    map(response => {
+      // Log warnings if they exist
+      this.logWarnings(response, 'UserRepository');
+
+      // Handle warning responses
+      if (this.isWarningResponse(response)) {
+        const warnings = this.extractWarnings(response);
+        console.log('User created with warnings:', warnings);
+      }
+
+      return response.data!;
+    })
+  );
+}
+
+// Warning service example for global handling
+@Injectable({ providedIn: 'root' })
+export class WarningService {
+  private warningsSubject = new BehaviorSubject<ApiError[]>([]);
+  public warnings$ = this.warningsSubject.asObservable();
+
+  emitWarnings(warnings: ApiError[]): void {
+    this.warningsSubject.next(warnings);
+  }
+
+  clearWarnings(): void {
+    this.warningsSubject.next([]);
+  }
+}
+```
+
+You can copy the snippets above into your application code and adapt them to your domain models.
+
   constructor(
     private userRepository: UserRepository,
     private profileRepository: ProfileRepository,
@@ -465,6 +568,122 @@ export class ResilientUserQuery extends GetByIdQuery<User> {
         throw error;
       }),
     );
+  }
+}
+```
+
+## API Response Standardization
+
+All HTTP responses are standardized to a consistent `ApiResponse<T>` structure, ensuring predictable and robust handling across the frontend:
+
+### Standardization Examples
+```typescript
+// Raw data response → Standardized
+{ id: 1, name: "John" }
+// ↓
+{
+  status: 'success',
+  code: '200',
+  message: 'Operation completed successfully',
+  data: { id: 1, name: "John" },
+  timestamp: '2024-01-01T00:00:00Z'
+}
+
+// Primitive value → Standardized
+true
+// ↓
+{
+  status: 'success',
+  code: '200',
+  message: 'Operation completed successfully',
+  data: true,
+  timestamp: '2024-01-01T00:00:00Z'
+}
+
+// Already standardized → Unchanged
+{
+  status: 'success',
+  code: '200',
+  message: 'User created successfully',
+  data: { id: 1, name: "John" }
+}
+// ↓ (remains unchanged)
+```
+
+### Interceptor Responsibilities
+- Wraps raw data into `ApiResponse` structure
+- Handles different backend response formats
+- Standardizes error responses
+- Manages toast notifications based on response type and request method
+- Transforms responses for consumers (repositories, use cases)
+
+### Example Interceptor Implementation
+
+```typescript
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { ToastrNotificationService } from 'acontplus-core';
+
+export class ApiInterceptor implements HttpInterceptor {
+  constructor(private toastr: ToastrNotificationService) {}
+
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return next.handle(req).pipe(
+      tap({
+        next: event => {
+          // Handle successful responses
+          if (event instanceof HttpResponse) {
+            this.handleSuccess(event);
+          }
+        },
+        error: error => {
+          // Handle error responses
+          this.handleError(error);
+        },
+      }),
+    );
+  }
+
+  private handleSuccess(response: HttpResponse<any>): void {
+    // Wrap raw data in ApiResponse structure
+    if (response.body && !response.body.status) {
+      response = response.clone({
+        body: {
+          status: 'success',
+          code: '200',
+          message: 'Operation completed successfully',
+          data: response.body,
+          timestamp: new Date().toISOString(),
+        },
+      });
+    }
+  }
+
+  private handleError(error: any): void {
+    // Standardize error response
+    const errorResponse = {
+      status: 'error',
+      code: error.status || '500',
+      message: error.message || 'An unexpected error occurred',
+      data: null,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Show toastr notification based on error type
+    if (error.status === 401) {
+      this.toastr.error({
+        message: 'Unauthorized access - please log in',
+        title: 'Authentication Error',
+      });
+    } else {
+      this.toastr.error({
+        message: errorResponse.message,
+        title: 'Error',
+      });
+    }
+
+    throw errorResponse;
   }
 }
 ```
@@ -1077,24 +1296,6 @@ export class GetUserByIdQuery extends GetByIdQuery<User> {
 }
 ```
 
-### Utility Functions
-
-#### Color Utilities
-
-The library provides utility functions for working with colors:
-
-```typescript
-import { getRandomColor, getRandomHexColor } from 'acontplus-core';
-
-// Generate a random RGBA color with 50% opacity
-const rgbaColor = getRandomColor(0.5);
-console.log(rgbaColor); // e.g., "rgba(123, 45, 67, 0.5)"
-
-// Generate a random hex color
-const hexColor = getRandomHexColor();
-console.log(hexColor); // e.g., "#7b2d43"
-```
-
 ## 🔧 **Advanced Configuration**
 
 ### **Dynamic Configuration Updates**
@@ -1230,22 +1431,22 @@ describe('CreateUserCommand', () => {
 ### **Testing with Repository Factory**
 
 ```typescript
-describe('RepositoryFactory', () => {
-  let factory: RepositoryFactory;
+describe('RepositoryFactoryService', () => {
+  let factory: RepositoryFactoryService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [RepositoryFactory],
+      providers: [RepositoryFactoryService],
     });
-    factory = TestBed.inject(RepositoryFactory);
+    factory = TestBed.inject(RepositoryFactoryService);
   });
 
-  it('should register and retrieve repository', () => {
-    factory.register('user', UserRepository, 'users', '/api/users');
+  it('should create and retrieve repository', () => {
+    factory.createFullRepository({ type: UserRepository as any, entityName: 'users', baseUrl: '/api/users' });
 
-    const repository = factory.get<User>('user');
+    const repository = factory.getRepository<User>('UserRepository_users');
     expect(repository).toBeDefined();
-    expect(repository.entityName).toBe('users');
+    expect((repository as any).entityName).toBe('users');
   });
 });
 ```
@@ -1445,3 +1646,32 @@ For more information on using the Angular CLI, including detailed command refere
 The library now represents a **state-of-the-art, enterprise-ready foundation** that follows modern Angular development patterns. It's perfectly suited for multiple Angular applications and provides an excellent base for building scalable, maintainable applications.
 
 **This is exactly the kind of foundation you want for a multi-application Angular ecosystem.** 🚀
+
+## 🏗️ Recommended Folder Structure & Architecture Principles
+
+```
+projects/
+├── acontplus-core/           # Base services (HTTP, Config, Storage)
+├── acontplus-ui-components/  # Reusable UI components
+├── acontplus-customers/      # Feature: Customer management
+├── acontplus-inventory/      # Feature: Inventory management
+└── acontplus-orders/         # Feature: Order management
+```
+
+### Layered Architecture Example
+```
+src/lib/
+├── data/                 # Data layer
+│   ├── datasources/      # HTTP, LocalStorage
+│   ├── repositories/     # Implementations
+│   └── models/           # DTOs
+├── domain/               # Contracts
+│   ├── repositories/     # Interfaces
+│   └── models/           # Models
+└── presentation/         # UI
+    ├── services/         # Services with Signals
+    └── components/       # Components
+```
+
+- **Separation of Concerns**: Core for shared base functionality, Shared for utilities/validators/models, Features for business modules.
+- **Simplified Layered Architecture**: Data, Domain, Presentation layers for maintainability and scalability

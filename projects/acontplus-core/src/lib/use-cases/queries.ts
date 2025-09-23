@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
-import { FilterParams, PaginatedResult, PaginationParams } from '../models';
+import { FilterParams, PagedResult, PaginationParams } from '../models';
 import { BaseUseCase } from './base.use-case';
-import { ErrorCategory, ValidationError } from '../interfaces';
+import { ValidationError } from './use-case';
 
 export abstract class Queries<TRequest, TResponse> extends BaseUseCase<TRequest, TResponse> {
   // Queries typically don't need validation by default
@@ -24,7 +24,6 @@ export abstract class GetByIdQuery<TEntity> extends Queries<{ id: number }, TEnt
           field: 'id',
           message: 'ID must be a positive number',
           code: 'INVALID_ID',
-          type: ErrorCategory.VALIDATION,
         },
       ];
     }
@@ -34,7 +33,7 @@ export abstract class GetByIdQuery<TEntity> extends Queries<{ id: number }, TEnt
 
 export abstract class GetAllQuery<TEntity> extends Queries<
   { pagination: PaginationParams; filters?: FilterParams },
-  PaginatedResult<TEntity>
+  PagedResult<TEntity>
 > {
   // Specific validation for pagination queries
   protected override validate(request: {
@@ -48,15 +47,13 @@ export abstract class GetAllQuery<TEntity> extends Queries<
         field: 'pagination',
         message: 'Pagination parameters are required',
         code: 'MISSING_PAGINATION',
-        type: ErrorCategory.VALIDATION,
       });
     } else {
-      if (!request.pagination.page || request.pagination.page < 1) {
+      if (!request.pagination.pageIndex || request.pagination.pageIndex < 1) {
         errors.push({
-          field: 'pagination.page',
+          field: 'pagination.pageIndex',
           message: 'Page must be a positive number',
           code: 'INVALID_PAGE',
-          type: ErrorCategory.VALIDATION,
         });
       }
 
@@ -65,7 +62,6 @@ export abstract class GetAllQuery<TEntity> extends Queries<
           field: 'pagination.pageSize',
           message: 'Page size must be a positive number',
           code: 'INVALID_PAGE_SIZE',
-          type: ErrorCategory.VALIDATION,
         });
       }
     }
@@ -76,7 +72,7 @@ export abstract class GetAllQuery<TEntity> extends Queries<
 
 export abstract class SearchQuery<TEntity> extends Queries<
   { query: string; pagination: PaginationParams },
-  PaginatedResult<TEntity>
+  PagedResult<TEntity>
 > {
   // Specific validation for search queries
   protected override validate(request: {
@@ -90,7 +86,6 @@ export abstract class SearchQuery<TEntity> extends Queries<
         field: 'query',
         message: 'Search query is required',
         code: 'MISSING_QUERY',
-        type: ErrorCategory.VALIDATION,
       });
     }
 
@@ -109,15 +104,13 @@ export abstract class SearchQuery<TEntity> extends Queries<
         field: 'pagination',
         message: 'Pagination parameters are required',
         code: 'MISSING_PAGINATION',
-        type: ErrorCategory.VALIDATION,
       });
     } else {
-      if (!pagination.page || pagination.page < 1) {
+      if (!pagination.pageIndex || pagination.pageIndex < 1) {
         errors.push({
-          field: 'pagination.page',
+          field: 'pagination.pageIndex',
           message: 'Page must be a positive number',
           code: 'INVALID_PAGE',
-          type: ErrorCategory.VALIDATION,
         });
       }
 
@@ -126,7 +119,6 @@ export abstract class SearchQuery<TEntity> extends Queries<
           field: 'pagination.pageSize',
           message: 'Page size must be a positive number',
           code: 'INVALID_PAGE_SIZE',
-          type: ErrorCategory.VALIDATION,
         });
       }
     }
@@ -142,8 +134,8 @@ export abstract class CachedQuery<TRequest, TResponse> extends Queries<TRequest,
   protected abstract getCacheDuration(): number;
 
   override execute(request: TRequest): Observable<TResponse> {
-    const cacheKey = this.getCacheKey(request);
     // Implementation for caching logic
+    // const cacheKey = this.getCacheKey(request); // TODO: Implement caching
     return this.executeInternal(request);
   }
 }

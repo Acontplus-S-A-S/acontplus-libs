@@ -1,5 +1,5 @@
-import { HttpPort, HttpOptions } from '../interfaces';
 import { HttpClientFactory } from './http-client-factory';
+import { HttpOptions, HttpPort } from '../ports';
 
 export class FetchAdapter implements HttpPort {
   async get<T>(url: string, options?: HttpOptions): Promise<T> {

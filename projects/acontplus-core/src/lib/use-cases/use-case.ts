@@ -1,25 +1,12 @@
 // ===== CORE INTERFACES =====
 
-// Import your existing ApiResponse interface
+// Import your existing ApiError interface
 import { ApiError } from '../models';
 import { Observable } from 'rxjs';
 
 // Base use case interface
 export interface UseCase<TRequest = void, TResponse = void> {
   execute(request: TRequest): Observable<TResponse>;
-}
-
-// Use case result that maps to your ApiResponse structure
-export interface UseCaseResult<T> {
-  status: 'success' | 'error' | 'warning';
-  code: string;
-  message?: string;
-  data?: T;
-  errors?: ApiError[];
-  metadata?: Record<string, any>;
-  timestamp: string;
-  correlationId?: string;
-  traceId?: string;
 }
 
 export interface ValidationError {
@@ -55,11 +42,11 @@ export interface BusinessRuleError extends DomainError {
   businessContext?: string;
 }
 
-export interface ValidationError extends DomainError {
+export interface ValidationDomainError extends DomainError {
   type: ErrorCategory.VALIDATION;
   field: string;
   constraint?: string;
-  value?: any;
+  value?: unknown;
 }
 
 export interface AuthorizationError extends DomainError {

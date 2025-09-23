@@ -1,7 +1,7 @@
 import { Observable, throwError } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { BaseUseCase } from './base.use-case';
-import { ValidationError } from '../interfaces';
+import { ValidationError } from './use-case';
 
 export abstract class Command<TRequest, TResponse = void> extends BaseUseCase<TRequest, TResponse> {
   // Optional validation - can be overridden

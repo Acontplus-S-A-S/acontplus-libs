@@ -1,21 +1,4 @@
-export interface Result<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
-  message?: string;
-}
-
-export interface PaginationMeta {
-  totalItems: number;
-  totalPages: number;
-  currentPage?: number;
-  perPage?: number;
-}
-
-export interface PageResult<T> {
-  items: T[];
-  meta: PaginationMeta;
-}
+import { ApiResponse, PagedResult } from '../models';
 
 export interface RepositoryOptions<
   TEntity = any,
@@ -38,26 +21,26 @@ export interface Repository<T extends RepositoryOptions> {
    * Busca una entidad por ID.
    * Devuelve el GetDTO en lugar de TEntity
    */
-  getById(id: T['id']): Promise<Result<T['getDto']>>;
+  getById(id: T['id']): Promise<ApiResponse<T['getDto']>>;
 
   /**
    * Obtiene todas las entidades, soportando filtros y paginación.
-   * Devuelve un arreglo paginado de GetDTO
+   * Devuelve un arreglo paginado de GetDTO usando PagedResult
    */
-  getAll(request?: T['getAllRequest']): Promise<Result<PageResult<T['getDto']>>>;
+  getAll(request?: T['getAllRequest']): Promise<ApiResponse<PagedResult<T['getDto']>>>;
 
   /**
    * Crea una nueva entidad y devuelve el GetDTO.
    */
-  create(dto: T['createDto']): Promise<Result<T['getDto']>>;
+  create(dto: T['createDto']): Promise<ApiResponse<T['getDto']>>;
 
   /**
    * Actualiza una entidad y devuelve el GetDTO.
    */
-  update(dto: T['updateDto']): Promise<Result<T['getDto']>>;
+  update(dto: T['updateDto']): Promise<ApiResponse<T['getDto']>>;
 
   /**
    * Elimina una entidad por ID.
    */
-  delete(id: T['id']): Promise<Result<null>>;
+  delete(id: T['id']): Promise<ApiResponse<null>>;
 }

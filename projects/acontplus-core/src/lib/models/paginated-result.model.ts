@@ -1,8 +1,10 @@
-export interface PaginatedResult<T> {
+export interface PagedResult<T> {
   items: T[];
-  totalCount: number;
-  pageNumber: number;
+  pageIndex: number;
   pageSize: number;
-  hasNextPage: boolean;
+  totalCount: number;
+  totalPages: number;
   hasPreviousPage: boolean;
+  hasNextPage: boolean;
+  metadata?: Record<string, any>;
 }
