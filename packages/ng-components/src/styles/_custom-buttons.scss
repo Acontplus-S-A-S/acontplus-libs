@@ -1,0 +1,469 @@
+// src/styles/_custom-buttons.scss
+
+// This is the mixin that will generate all our button CSS.
+// It accepts one argument: the application's theme object ($theme).
+@mixin custom-button-theme($theme) {
+  // Bootstrap 5.3+ Color Palette (hardcoded)
+  $bootstrap-colors: (
+    primary: #0d6efd,
+    secondary: #6c757d,
+    success: #198754,
+    danger: #dc3545,
+    warning: #ffc107,
+    info: #0dcaf0,
+    light: #f8f9fa,
+    dark: #212529,
+  );
+
+  // Bootstrap contrast colors
+  $bootstrap-contrast: (
+    primary: #ffffff,
+    secondary: #ffffff,
+    success: #ffffff,
+    danger: #ffffff,
+    warning: #000000,
+    info: #000000,
+    light: #000000,
+    dark: #ffffff,
+  );
+
+  // Generate the global CSS variables (:root)
+  :root {
+    // Bootstrap colors
+    --primary-color: #{map-get($bootstrap-colors, primary)};
+    --on-primary-color: #{map-get($bootstrap-contrast, primary)};
+    --secondary-color: #{map-get($bootstrap-colors, secondary)};
+    --on-secondary-color: #{map-get($bootstrap-contrast, secondary)};
+    --success-color: #{map-get($bootstrap-colors, success)};
+    --on-success-color: #{map-get($bootstrap-contrast, success)};
+    --danger-color: #{map-get($bootstrap-colors, danger)};
+    --on-danger-color: #{map-get($bootstrap-contrast, danger)};
+    --warning-color: #{map-get($bootstrap-colors, warning)};
+    --on-warning-color: #{map-get($bootstrap-contrast, warning)};
+    --info-color: #{map-get($bootstrap-colors, info)};
+    --on-info-color: #{map-get($bootstrap-contrast, info)};
+    --light-color: #{map-get($bootstrap-colors, light)};
+    --on-light-color: #{map-get($bootstrap-contrast, light)};
+    --dark-color: #{map-get($bootstrap-colors, dark)};
+    --on-dark-color: #{map-get($bootstrap-contrast, dark)};
+
+    // Surface colors (from theme if available, fallback to defaults)
+    --surface-color: #ffffff;
+    --on-surface-color: #000000;
+
+    // Tertiary and error colors (Bootstrap-like alternatives)
+    --tertiary-color: #6f42c1; // Bootstrap purple
+    --on-tertiary-color: #ffffff;
+    --error-color: var(--danger-color);
+    --on-error-color: var(--on-danger-color);
+  }
+
+  // Button styles using Material Design tokens structure
+
+  /* Icon and text spacing */
+  .button-icon {
+    margin-inline-end: 8px;
+  }
+
+  /* Icon-only button needs no margin */
+  .mat-icon-button .button-icon,
+  .mat-fab .button-icon,
+  .mat-mini-fab .button-icon {
+    margin-inline-end: 0;
+  }
+
+  /* Custom border radius for buttons */
+  .mat-mdc-button,
+  .mat-mdc-icon-button,
+  .mat-mdc-unelevated-button,
+  .mat-mdc-outlined-button {
+    --mat-text-button-container-shape: 20px;
+    --mat-outlined-button-container-shape: 20px;
+    --mat-filled-button-container-shape: 20px;
+    --mat-protected-button-container-shape: 20px;
+    //margin: 0.25rem;
+    border-radius: 20px;
+
+    // Ensure consistent height
+    --mat-standard-button-container-height: 40px;
+    min-height: 40px;
+  }
+
+  /* Filled Button Variants using Bootstrap colors */
+  .btn-primary {
+    --mat-filled-button-container-color: var(--primary-color);
+    --mat-filled-button-label-text-color: var(--on-primary-color);
+    --mat-filled-button-hover-label-text-color: var(--on-primary-color);
+    --mat-filled-button-focus-label-text-color: var(--on-primary-color);
+    background-color: var(--primary-color) !important;
+    color: var(--on-primary-color) !important;
+
+    &:hover {
+      background-color: #0b5ed7 !important; // Bootstrap primary hover
+    }
+  }
+
+  .btn-secondary {
+    --mat-filled-button-container-color: var(--secondary-color);
+    --mat-filled-button-label-text-color: var(--on-secondary-color);
+    --mat-filled-button-hover-label-text-color: var(--on-secondary-color);
+    --mat-filled-button-focus-label-text-color: var(--on-secondary-color);
+    background-color: var(--secondary-color) !important;
+    color: var(--on-secondary-color) !important;
+
+    &:hover {
+      background-color: #5c636a !important; // Bootstrap secondary hover
+    }
+  }
+
+  .btn-success {
+    --mat-filled-button-container-color: var(--success-color);
+    --mat-filled-button-label-text-color: var(--on-success-color);
+    --mat-filled-button-hover-label-text-color: var(--on-success-color);
+    --mat-filled-button-focus-label-text-color: var(--on-success-color);
+    background-color: var(--success-color) !important;
+    color: var(--on-success-color) !important;
+
+    &:hover {
+      background-color: #157347 !important; // Bootstrap success hover
+    }
+  }
+
+  .btn-danger {
+    --mat-filled-button-container-color: var(--danger-color);
+    --mat-filled-button-label-text-color: var(--on-danger-color);
+    --mat-filled-button-hover-label-text-color: var(--on-danger-color);
+    --mat-filled-button-focus-label-text-color: var(--on-danger-color);
+    background-color: var(--danger-color) !important;
+    color: var(--on-danger-color) !important;
+
+    &:hover {
+      background-color: #bb2d3b !important; // Bootstrap danger hover
+    }
+  }
+
+  .btn-warning {
+    --mat-filled-button-container-color: var(--warning-color);
+    --mat-filled-button-label-text-color: var(--on-warning-color);
+    --mat-filled-button-hover-label-text-color: var(--on-warning-color);
+    --mat-filled-button-focus-label-text-color: var(--on-warning-color);
+    background-color: var(--warning-color) !important;
+    color: var(--on-warning-color) !important;
+
+    &:hover {
+      background-color: #ffca2c !important; // Bootstrap warning hover
+    }
+  }
+
+  .btn-info {
+    --mat-filled-button-container-color: var(--info-color);
+    --mat-filled-button-label-text-color: var(--on-info-color);
+    --mat-filled-button-hover-label-text-color: var(--on-info-color);
+    --mat-filled-button-focus-label-text-color: var(--on-info-color);
+    background-color: var(--info-color) !important;
+    color: var(--on-info-color) !important;
+
+    &:hover {
+      background-color: #31d2f2 !important; // Bootstrap info hover
+    }
+  }
+
+  .btn-light {
+    --mat-filled-button-container-color: var(--light-color);
+    --mat-filled-button-label-text-color: var(--on-light-color);
+    --mat-filled-button-hover-label-text-color: var(--on-light-color);
+    --mat-filled-button-focus-label-text-color: var(--on-light-color);
+    background-color: var(--light-color) !important;
+    color: var(--on-light-color) !important;
+    border: 1px solid #dee2e6 !important;
+
+    &:hover {
+      background-color: #e9ecef !important; // Bootstrap light hover
+    }
+  }
+
+  .btn-dark {
+    --mat-filled-button-container-color: var(--dark-color);
+    --mat-filled-button-label-text-color: var(--on-dark-color);
+    --mat-filled-button-hover-label-text-color: var(--on-dark-color);
+    --mat-filled-button-focus-label-text-color: var(--on-dark-color);
+    background-color: var(--dark-color) !important;
+    color: var(--on-dark-color) !important;
+
+    &:hover {
+      background-color: #1c1f23 !important; // Bootstrap dark hover
+    }
+  }
+
+  /* Outlined Button Variants using Bootstrap colors */
+  .btn-outlined {
+    --mat-outlined-button-outline-color: currentColor;
+    --mat-outlined-button-container-color: transparent;
+    background-color: transparent !important;
+    border: 1px solid currentColor !important;
+  }
+
+  .btn-primary.btn-outlined,
+  .mat-mdc-outlined-button.btn-primary {
+    --mat-outlined-button-label-text-color: var(--primary-color);
+    --mat-outlined-button-outline-color: var(--primary-color);
+    --mat-outlined-button-hover-label-text-color: var(--on-primary-color);
+    --mat-outlined-button-focus-label-text-color: var(--on-primary-color);
+    color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+
+    &:hover {
+      background-color: var(--primary-color) !important;
+      color: var(--on-primary-color) !important;
+    }
+  }
+
+  .btn-secondary.btn-outlined,
+  .mat-mdc-outlined-button.btn-secondary {
+    --mat-outlined-button-label-text-color: var(--secondary-color);
+    --mat-outlined-button-outline-color: var(--secondary-color);
+    --mat-outlined-button-hover-label-text-color: var(--on-secondary-color);
+    --mat-outlined-button-focus-label-text-color: var(--on-secondary-color);
+    color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+
+    &:hover {
+      background-color: var(--secondary-color) !important;
+      color: var(--on-secondary-color) !important;
+    }
+  }
+
+  .btn-success.btn-outlined,
+  .mat-mdc-outlined-button.btn-success {
+    --mat-outlined-button-label-text-color: var(--success-color);
+    --mat-outlined-button-outline-color: var(--success-color);
+    --mat-outlined-button-hover-label-text-color: var(--on-success-color);
+    --mat-outlined-button-focus-label-text-color: var(--on-success-color);
+    color: var(--success-color) !important;
+    border-color: var(--success-color) !important;
+
+    &:hover {
+      background-color: var(--success-color) !important;
+      color: var(--on-success-color) !important;
+    }
+  }
+
+  .btn-danger.btn-outlined,
+  .mat-mdc-outlined-button.btn-danger {
+    --mat-outlined-button-label-text-color: var(--danger-color);
+    --mat-outlined-button-outline-color: var(--danger-color);
+    --mat-outlined-button-hover-label-text-color: var(--on-danger-color);
+    --mat-outlined-button-focus-label-text-color: var(--on-danger-color);
+    color: var(--danger-color) !important;
+    border-color: var(--danger-color) !important;
+
+    &:hover {
+      background-color: var(--danger-color) !important;
+      color: var(--on-danger-color) !important;
+    }
+  }
+
+  .btn-warning.btn-outlined,
+  .mat-mdc-outlined-button.btn-warning {
+    --mat-outlined-button-label-text-color: var(--warning-color);
+    --mat-outlined-button-outline-color: var(--warning-color);
+    --mat-outlined-button-hover-label-text-color: var(--on-warning-color);
+    --mat-outlined-button-focus-label-text-color: var(--on-warning-color);
+    color: var(--warning-color) !important;
+    border-color: var(--warning-color) !important;
+
+    &:hover {
+      background-color: var(--warning-color) !important;
+      color: var(--on-warning-color) !important;
+    }
+  }
+
+  .btn-info.btn-outlined,
+  .mat-mdc-outlined-button.btn-info {
+    --mat-outlined-button-label-text-color: var(--info-color);
+    --mat-outlined-button-outline-color: var(--info-color);
+    --mat-outlined-button-hover-label-text-color: var(--on-info-color);
+    --mat-outlined-button-focus-label-text-color: var(--on-info-color);
+    color: var(--info-color) !important;
+    border-color: var(--info-color) !important;
+
+    &:hover {
+      background-color: var(--info-color) !important;
+      color: var(--on-info-color) !important;
+    }
+  }
+
+  .btn-light.btn-outlined,
+  .mat-mdc-outlined-button.btn-light {
+    --mat-outlined-button-label-text-color: var(--light-color);
+    --mat-outlined-button-outline-color: var(--light-color);
+    --mat-outlined-button-hover-label-text-color: var(--on-light-color);
+    --mat-outlined-button-focus-label-text-color: var(--on-light-color);
+    color: var(--light-color) !important;
+    border-color: var(--light-color) !important;
+
+    &:hover {
+      background-color: var(--light-color) !important;
+      color: var(--on-light-color) !important;
+    }
+  }
+
+  .btn-dark.btn-outlined,
+  .mat-mdc-outlined-button.btn-dark {
+    --mat-outlined-button-label-text-color: var(--dark-color);
+    --mat-outlined-button-outline-color: var(--dark-color);
+    --mat-outlined-button-hover-label-text-color: var(--on-dark-color);
+    --mat-outlined-button-focus-label-text-color: var(--on-dark-color);
+    color: var(--dark-color) !important;
+    border-color: var(--dark-color) !important;
+
+    &:hover {
+      background-color: var(--dark-color) !important;
+      color: var(--on-dark-color) !important;
+    }
+  }
+
+  /* Text Button Variants */
+  .mat-mdc-button {
+    --mat-text-button-container-color: transparent;
+
+    &.btn-primary {
+      --mat-text-button-label-text-color: var(--primary-color);
+      --mat-text-button-hover-label-text-color: var(--primary-color);
+      --mat-text-button-focus-label-text-color: var(--primary-color);
+      color: var(--primary-color) !important;
+
+      &:hover {
+        background-color: rgba(13, 110, 253, 0.1) !important;
+      }
+    }
+
+    &.btn-secondary {
+      --mat-text-button-label-text-color: var(--secondary-color);
+      --mat-text-button-hover-label-text-color: var(--secondary-color);
+      --mat-text-button-focus-label-text-color: var(--secondary-color);
+      color: var(--secondary-color) !important;
+
+      &:hover {
+        background-color: rgba(108, 117, 125, 0.1) !important;
+      }
+    }
+
+    &.btn-success {
+      --mat-text-button-label-text-color: var(--success-color);
+      --mat-text-button-hover-label-text-color: var(--success-color);
+      --mat-text-button-focus-label-text-color: var(--success-color);
+      color: var(--success-color) !important;
+
+      &:hover {
+        background-color: rgba(25, 135, 84, 0.1) !important;
+      }
+    }
+
+    &.btn-danger {
+      --mat-text-button-label-text-color: var(--danger-color);
+      --mat-text-button-hover-label-text-color: var(--danger-color);
+      --mat-text-button-focus-label-text-color: var(--danger-color);
+      color: var(--danger-color) !important;
+
+      &:hover {
+        background-color: rgba(220, 53, 69, 0.1) !important;
+      }
+    }
+
+    &.btn-warning {
+      --mat-text-button-label-text-color: var(--warning-color);
+      --mat-text-button-hover-label-text-color: var(--warning-color);
+      --mat-text-button-focus-label-text-color: var(--warning-color);
+      color: var(--warning-color) !important;
+
+      &:hover {
+        background-color: rgba(255, 193, 7, 0.1) !important;
+      }
+    }
+
+    &.btn-info {
+      --mat-text-button-label-text-color: var(--info-color);
+      --mat-text-button-hover-label-text-color: var(--info-color);
+      --mat-text-button-focus-label-text-color: var(--info-color);
+      color: var(--info-color) !important;
+
+      &:hover {
+        background-color: rgba(13, 202, 240, 0.1) !important;
+      }
+    }
+
+    &.btn-light {
+      --mat-text-button-label-text-color: var(--light-color);
+      --mat-text-button-hover-label-text-color: var(--light-color);
+      --mat-text-button-focus-label-text-color: var(--light-color);
+      color: var(--light-color) !important;
+
+      &:hover {
+        background-color: rgba(248, 249, 250, 0.1) !important;
+      }
+    }
+
+    &.btn-dark {
+      --mat-text-button-label-text-color: var(--dark-color);
+      --mat-text-button-hover-label-text-color: var(--dark-color);
+      --mat-text-button-focus-label-text-color: var(--dark-color);
+      color: var(--dark-color) !important;
+
+      &:hover {
+        background-color: rgba(33, 37, 41, 0.1) !important;
+      }
+    }
+  }
+
+  /* Hover and Focus Effects */
+  .mat-mdc-button:not([disabled]),
+  .mat-mdc-unelevated-button:not([disabled]),
+  .mat-mdc-outlined-button:not([disabled]) {
+    --mat-text-button-hover-state-layer-opacity: 0.08;
+    --mat-filled-button-hover-state-layer-opacity: 0.08;
+    --mat-outlined-button-hover-state-layer-opacity: 0.08;
+    --mat-text-button-focus-state-layer-opacity: 0.12;
+    --mat-filled-button-focus-state-layer-opacity: 0.12;
+    --mat-outlined-button-focus-state-layer-opacity: 0.12;
+
+    transition: all 0.2s ease-in-out;
+  }
+
+  /* Disabled state styling */
+  .mat-mdc-button:disabled,
+  .mat-mdc-unelevated-button:disabled,
+  .mat-mdc-outlined-button:disabled {
+    --mat-text-button-disabled-label-text-color: rgba(0, 0, 0, 0.38);
+    --mat-filled-button-disabled-container-color: rgba(0, 0, 0, 0.12);
+    --mat-filled-button-disabled-label-text-color: rgba(0, 0, 0, 0.38);
+    --mat-outlined-button-disabled-label-text-color: rgba(0, 0, 0, 0.38);
+    --mat-outlined-button-disabled-outline-color: rgba(0, 0, 0, 0.12);
+
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Ripple effect customization */
+  .mat-ripple-element {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+
+  /* High contrast mode support for accessibility */
+  @media (prefers-contrast: more) {
+    .mat-mdc-button,
+    .mat-mdc-unelevated-button,
+    .mat-mdc-outlined-button {
+      border: 2px solid currentColor;
+    }
+  }
+
+  /* Reduced motion support for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .mat-mdc-button,
+    .mat-mdc-unelevated-button,
+    .mat-mdc-outlined-button {
+      transition: none;
+    }
+  }
+}
