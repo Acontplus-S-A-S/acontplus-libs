@@ -1,6 +1,6 @@
 {
   "name": "@acontplus/utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Utility library",
   "type": "module",
   "main": "./src/index.js",
@@ -45,6 +45,7 @@
     "typescript": "5.0.0"
   },
   "dependencies": {
+    "decimal.js": "^10.6.0",
     "tslib": "^2.8.1"
   },
   "release": {
