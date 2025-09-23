@@ -1,7 +1,9 @@
-# ng-core
+# @acontplus/ng-core
 
-This library was generated with [Nx](https://nx.dev).
+Angular core library
 
-## Running unit tests
+## Installation
 
-Run `nx test ng-core` to execute the unit tests.
+```bash
+npm install @acontplus/ng-core
+```

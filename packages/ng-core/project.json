@@ -2,7 +2,7 @@
   "name": "ng-core",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/ng-core/src",
-  "prefix": "lib",
+  "prefix": "acp",
   "projectType": "library",
   "release": {
     "version": {
@@ -27,6 +27,13 @@
         "development": {}
       },
       "defaultConfiguration": "production"
+    },
+    "publish": {
+      "executor": "@nx/js:npm-package",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "public"
+      }
     },
     "nx-release-publish": {
       "options": {

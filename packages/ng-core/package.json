@@ -1,9 +1,66 @@
 {
   "name": "@acontplus/ng-core",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "peerDependencies": {
     "@angular/common": "^20.3.0",
     "@angular/core": "^20.3.0"
   },
-  "sideEffects": false
+  "dependencies": {
+    "@acontplus/core": "^1.0.2",
+    "jwt-decode": "^4.0.0",
+    "ngx-toastr": "^19.1.0"
+  },
+  "sideEffects": false,
+  "main": "fesm2022/ng-core.mjs",
+  "module": "fesm2022/ng-core.mjs",
+  "typings": "index.d.ts",
+  "files": [
+    "index.d.ts",
+    "*.d.ts",
+    "**/*.d.ts",
+    "fesm2022/**/*"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "acontplus",
+    "angular",
+    "repository-pattern",
+    "use-cases",
+    "jwt",
+    "authentication",
+    "interceptors",
+    "http-client",
+    "multi-tenant",
+    "tenant",
+    "correlation",
+    "notifications",
+    "toastr",
+    "response-handler",
+    "environment",
+    "services",
+    "typescript",
+    "frontend",
+    "library"
+  ],
+  "author": "Ivan Paz <ifer343@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Acontplus-S-A-S/acontplus-libs/issues"
+  },
+  "homepage": "https://github.com/Acontplus-S-A-S/acontplus-libs#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Acontplus-S-A-S/acontplus-libs.git"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  }
 }
