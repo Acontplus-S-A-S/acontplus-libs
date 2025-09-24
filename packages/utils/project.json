@@ -19,16 +19,19 @@
         "outputPath": "dist/packages/utils",
         "main": "packages/utils/src/index.ts",
         "tsConfig": "packages/utils/tsconfig.lib.json",
-        "assets": ["packages/utils/*.md"],
-        "clean": true,
+        "assets": [
+          "packages/utils/*.md"
+        ],
+        "clean": false,
         "packageJson": "packages/utils/package.json"
       }
     },
     "publish": {
-      "executor": "@nx/js:npm-package",
-      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
       "options": {
-        "command": "public"
+        "command": "npm publish --access=public",
+        "cwd": "dist/packages/utils",
+        "parallel": false
       }
     },
     "nx-release-publish": {

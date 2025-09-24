@@ -1,0 +1,31 @@
+<mat-card class="customer-card">
+  <!-- Header -->
+  <div class="card-header">
+    <div class="avatar" aria-label="Logo de cliente">{{ getLogoSliceBusinessName() }}</div>
+    <h5 class="businessName">{{ client().customer.businessName }}</h5>
+    <p class="tradeName">{{ client().customer.tradeName }}</p>
+  </div>
+
+  <!-- Card content -->
+  <mat-card-content>
+    <div class="info">
+      <p><strong>ID:</strong> {{ client().customer.idCard }} (RUC)</p>
+      <p><strong>Email:</strong> {{ client().email }}</p>
+      <p><strong>Teléfono:</strong> {{ client().phone }}</p>
+      <p><strong>Dirección:</strong>{{ client().address }}</p>
+    </div>
+  </mat-card-content>
+
+  <!-- Card actions -->
+  @if (!client().finalConsumer) {
+    <mat-card-actions class="actions gap-2">
+      <acp-mat-theme-button matStyle="icon" icon="edit" (handleClick)="editClientClick()" />
+      <acp-mat-theme-button
+        matStyle="icon"
+        icon="delete"
+        variant="danger"
+        (handleClick)="deleteClientClick()"
+      />
+    </mat-card-actions>
+  }
+</mat-card>
