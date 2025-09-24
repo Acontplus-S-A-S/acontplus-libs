@@ -23,8 +23,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontplus/ng-components';
-import { ProductRepository } from '../../../data';
-import { Product } from '../../../domain';
+import { ProductRepository } from '../../data';
+import { Product } from '../../domain';
 import { PaginationParams, FilterParams, PagedResult } from '@acontplus/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 
@@ -55,7 +55,7 @@ interface ProductFilters extends FilterParams {
     MatProgressSpinnerModule,
     MatDynamicTableComponent,
     CurrencyPipe,
-    DatePipe
+    DatePipe,
   ],
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss',
@@ -218,12 +218,14 @@ export class ProductComponent implements OnInit, AfterViewInit {
   }
 
   loadStatistics(): void {
-    this.productRepository.getProductStats().subscribe((stats: { total: number; active: number; totalValue: number }) => {
-      this.totalProducts = stats.total;
-      this.activeProducts = stats.active;
-      this.totalValue = stats.totalValue;
-      this.cdr.markForCheck();
-    });
+    this.productRepository
+      .getProductStats()
+      .subscribe((stats: { total: number; active: number; totalValue: number }) => {
+        this.totalProducts = stats.total;
+        this.activeProducts = stats.active;
+        this.totalValue = stats.totalValue;
+        this.cdr.markForCheck();
+      });
   }
 
   onPageChange(event: PageEvent): void {

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AdvancedDialogService } from '@acontplus/ng-components';
-import { TestDialogComponent } from '../../components/test-dialog/test-dialog.component';
+import { TestDialogComponent } from './test-dialog/test-dialog.component';
 import { MatThemeButtonComponent } from '@acontplus/ng-components';
 
 @Component({

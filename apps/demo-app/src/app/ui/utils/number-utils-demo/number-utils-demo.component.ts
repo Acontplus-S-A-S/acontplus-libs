@@ -3,8 +3,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-// Remove NumberUtils import since it doesn't exist in core
 import { MatButtonModule } from '@angular/material/button';
+import { NumberFormatter } from '@acontplus/utils';
 
 @Component({
   selector: 'app-number-utils-demo',
@@ -12,34 +12,37 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './number-utils-demo.component.html',
   styleUrl: './number-utils-demo.component.scss',
 })
-export class NumberUtilsDemoComponent {
-  value = 123.456;
-  decimals = 2;
+export class NumberFormatterDemoComponent {
+  value: any = '';
+  num1 = 0;
+  num2 = 0;
   fractionDigits = 2;
-  num1 = 10;
-  num2 = 20;
+
   result = '';
 
-  // Mock NumberUtils methods
   checkIsInteger() {
-    this.result = Number.isInteger(this.value) ? 'Es entero' : 'No es entero';
+    this.result = NumberFormatter.isInteger(this.value)
+      ? `${this.value} es un entero`
+      : `${this.value} NO es un entero`;
   }
 
   checkIsSafeInteger() {
-    this.result = Number.isSafeInteger(this.value) ? 'Es entero seguro' : 'No es entero seguro';
+    this.result = NumberFormatter.isSafeInteger(this.value)
+      ? `${this.value} es un entero seguro`
+      : `${this.value} NO es un entero seguro`;
   }
 
   formatToFixed() {
-    this.result = `Resultado: ${this.value.toFixed(this.fractionDigits)}`;
+    this.result = `Resultado: ${NumberFormatter.toFixed(this.value, this.fractionDigits, 'N/A')}`;
   }
 
   compareNumbers() {
-    const cmp = this.num1 - this.num2;
+    const cmp = NumberFormatter.compare(this.num1, this.num2);
     this.result =
-      cmp > 0
-        ? 'Primer número es mayor'
+      cmp === 0
+        ? `${this.num1} es igual a ${this.num2}`
         : cmp < 0
-          ? 'Segundo número es mayor'
-          : 'Los números son iguales';
+          ? `${this.num1} es menor que ${this.num2}`
+          : `${this.num1} es mayor que ${this.num2}`;
   }
 }

@@ -23,8 +23,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontplus/ng-components';
-import { UserRepository } from '../../../data';
-import { User } from '../../../domain';
+import { UserRepository } from '../../data';
+import { User } from '../../domain';
 import { PaginationParams, FilterParams, PagedResult } from '@acontplus/core';
 
 @Component({

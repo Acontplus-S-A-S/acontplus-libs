@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-// Remove ArrayUtils import since it doesn't exist in core
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
+import { ArrayHelper } from '@acontplus/utils';
 
 @Component({
   selector: 'app-array-utils-demo',
@@ -14,8 +14,8 @@ import { MatTableModule } from '@angular/material/table';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule,
     ReactiveFormsModule,
+    FormsModule,
     MatButtonModule,
     MatDividerModule,
     MatTableModule,
@@ -23,77 +23,92 @@ import { MatTableModule } from '@angular/material/table';
   templateUrl: './array-utils-demo.component.html',
   styleUrl: './array-utils-demo.component.scss',
 })
-export class ArrayUtilsDemoComponent {
+export class ArrayHelperDemoComponent {
   testArray: any[] = [1, 2, 3, 4, 5];
-  newItem = '';
+  newItem: any = '';
   insertIndex = 0;
-  candidates = [1, 2];
-  takeN = 2;
-  result: any = '';
+  takeN: number | null = null;
 
-  // Mock ArrayUtils methods
+  result = '';
+
+  // -----------------------
+  // Métodos de ArrayHelper
+  // -----------------------
   checkIsEmpty() {
-    this.result = this.testArray.length === 0;
+    this.result = ArrayHelper.isEmpty(this.testArray)
+      ? 'El array está vacío'
+      : 'El array tiene elementos';
   }
 
   checkIsNotEmpty() {
-    this.result = this.testArray.length > 0;
+    this.result = ArrayHelper.isNotEmpty(this.testArray)
+      ? 'El array tiene elementos'
+      : 'El array está vacío';
   }
 
   checkContains() {
-    this.result = this.testArray.includes(this.newItem);
+    this.result = ArrayHelper.contains(this.testArray, this.newItem)
+      ? `El array contiene ${this.newItem}`
+      : `El array NO contiene ${this.newItem}`;
   }
 
   checkContainsAny() {
-    this.result = this.candidates.some(item => this.testArray.includes(item));
+    const candidates = this.newItem
+      .toString()
+      .split(',')
+      .map((x: any) => x.trim());
+    this.result = ArrayHelper.containsAny(this.testArray, candidates)
+      ? `El array contiene alguno de [${candidates}]`
+      : `El array NO contiene ninguno de [${candidates}]`;
   }
 
   checkContainsAll() {
-    this.result = this.candidates.every(item => this.testArray.includes(item));
+    const candidates = this.newItem
+      .toString()
+      .split(',')
+      .map((x: any) => x.trim());
+    this.result = ArrayHelper.containsAll(this.testArray, candidates)
+      ? `El array contiene todos [${candidates}]`
+      : `El array NO contiene todos [${candidates}]`;
   }
 
   insertItem() {
-    const success = this.insertIndex >= 0 && this.insertIndex <= this.testArray.length;
-    if (success) {
-      this.testArray.splice(this.insertIndex, 0, this.newItem);
-    }
-    this.result = success ? 'Inserted successfully' : 'Insert failed';
+    const success = ArrayHelper.insert(this.testArray, this.insertIndex, this.newItem);
+    this.result = success
+      ? `Insertado ${this.newItem} en posición ${this.insertIndex}`
+      : `No se pudo insertar ${this.newItem}`;
   }
 
   removeItem() {
-    const success = this.testArray.includes(this.newItem);
-    if (success) {
-      const index = this.testArray.indexOf(this.newItem);
-      this.testArray.splice(index, 1);
-    }
-    this.result = success ? 'Removed successfully' : 'Item not found';
+    const success = ArrayHelper.remove(this.testArray, this.newItem);
+    this.result = success ? `Elemento ${this.newItem} eliminado` : `${this.newItem} no encontrado`;
   }
 
   maxItem() {
-    if (this.testArray.length === 0) {
-      this.result = 'Array is empty';
+    if (!this.testArray.length) {
+      this.result = 'Array vacío';
       return;
     }
-    const max = Math.max(...this.testArray);
-    this.result = `Max: ${max}`;
+    this.result = `Max: ${ArrayHelper.max(this.testArray as number[])}`;
   }
 
   minItem() {
-    if (this.testArray.length === 0) {
-      this.result = 'Array is empty';
+    if (!this.testArray.length) {
+      this.result = 'Array vacío';
       return;
     }
-    const min = Math.min(...this.testArray);
-    this.result = `Min: ${min}`;
+    this.result = `Min: ${ArrayHelper.min(this.testArray as number[])}`;
   }
 
   takeItems() {
-    const items = this.testArray.slice(0, this.takeN);
-    this.result = `First ${this.takeN} items: [${items.join(', ')}]`;
+    const n = this.takeN ?? undefined;
+    const items = ArrayHelper.take(this.testArray, n);
+    this.result = `Take ${n ?? 1}: [${items.join(', ')}]`;
   }
 
   takeRightItems() {
-    const items = this.testArray.slice(-this.takeN);
-    this.result = `Last ${this.takeN} items: [${items.join(', ')}]`;
+    const n = this.takeN ?? undefined;
+    const items = ArrayHelper.takeRight(this.testArray, n);
+    this.result = `TakeRight ${n ?? 1}: [${items.join(', ')}]`;
   }
 }

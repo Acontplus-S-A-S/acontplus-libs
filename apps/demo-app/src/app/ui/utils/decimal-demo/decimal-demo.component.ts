@@ -20,7 +20,7 @@ import { JsonPipe } from '@angular/common';
 import { DecimalConverter, DecimalError } from '@acontplus/utils';
 
 @Component({
-  selector: 'app-decimaldemo',
+  selector: 'app-decimal-demo',
   imports: [
     MatCardModule,
     MatTableModule,
@@ -37,9 +37,9 @@ import { DecimalConverter, DecimalError } from '@acontplus/utils';
     MatTab,
     JsonPipe,
   ],
-  templateUrl: './decimaldemo.component.html',
+  templateUrl: './decimal-demo.component.html',
 })
-export class DecimaldemoComponent {
+export class DecimalDemoComponent {
   constructor() {
     DecimalConverter.configure({
       precision: 2,

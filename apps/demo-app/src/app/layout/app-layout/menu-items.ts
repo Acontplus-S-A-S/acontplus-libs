@@ -5,8 +5,8 @@ import { CardsComponent } from '../../ui/cards/cards.component';
 import { TablesComponent } from '../../ui/tables/tables.component';
 import { UtilsComponent } from '../../ui/utils/utils.component';
 import { PricingDemoComponent } from '../../ui/pricing-demo/pricing-demo.component';
-import { ProductComponent } from '../../ui/pages/product/product.component';
-import { UserComponent } from '../../ui/pages/user/user.component';
+import { ProductComponent } from '../../ui/product/product.component';
+import { UserComponent } from '../../ui/user/user.component';
 
 export interface MenuItemList {
   icon: string;

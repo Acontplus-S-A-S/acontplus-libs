@@ -1,11 +1,10 @@
-// Remove DateUtils import since it doesn't exist in core
 import { Component } from '@angular/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+import { DateFormatter, TIME_OF_DAY } from '@acontplus/utils';
 
 @Component({
   selector: 'app-date-utils-demo',
@@ -15,104 +14,109 @@ import { MatButtonModule } from '@angular/material/button';
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
     MatButtonModule,
   ],
   templateUrl: './date-utils-demo.component.html',
   styleUrl: './date-utils-demo.component.scss',
 })
-export class DateUtilsDemoComponent {
-  selectedDate = new Date();
-  secondDate = new Date();
-  yearsToAdd = 1;
-  monthsToAdd = 1;
-  daysToAdd = 1;
-  hoursToAdd = 1;
-  minutesToAdd = 1;
-  secondsToAdd = 1;
-  format = 'yyyy-MM-dd';
-  formatString = 'yyyy-MM-dd';
+export class DateFormatterDemoComponent {
+  selectedDate: Date = new Date();
+  secondDate: Date = new Date();
   result = '';
 
-  // Mock DateUtils methods
+  yearsToAdd = 0;
+  monthsToAdd = 0;
+  daysToAdd = 0;
+  hoursToAdd = 0;
+  minutesToAdd = 0;
+  secondsToAdd = 0;
+
+  formatString = 'yyyy-MM-dd HH:mm:ss';
+
+  // -----------------------
+  // Métodos DateFormatter
+  // -----------------------
   addYears() {
-    this.selectedDate = new Date(this.selectedDate.getFullYear() + this.yearsToAdd, this.selectedDate.getMonth(), this.selectedDate.getDate());
-    this.result = `Nueva fecha: ${this.selectedDate.toISOString()}`;
+    this.selectedDate = DateFormatter.addYears(this.selectedDate, this.yearsToAdd);
+    this.result = `Nueva fecha: ${DateFormatter.toString(this.selectedDate, this.formatString)}`;
   }
 
   addMonths() {
-    this.selectedDate = new Date(this.selectedDate.getFullYear(), this.selectedDate.getMonth() + this.monthsToAdd, this.selectedDate.getDate());
-    this.result = `Nueva fecha: ${this.selectedDate.toISOString()}`;
+    this.selectedDate = DateFormatter.addMonths(this.selectedDate, this.monthsToAdd);
+    this.result = `Nueva fecha: ${DateFormatter.toString(this.selectedDate, this.formatString)}`;
   }
 
   addDays() {
-    this.selectedDate = new Date(this.selectedDate.getTime() + this.daysToAdd * 24 * 60 * 60 * 1000);
-    this.result = `Nueva fecha: ${this.selectedDate.toISOString()}`;
+    this.selectedDate = DateFormatter.addDays(this.selectedDate, this.daysToAdd);
+    this.result = `Nueva fecha: ${DateFormatter.toString(this.selectedDate, this.formatString)}`;
   }
 
   addHours() {
-    this.selectedDate = new Date(this.selectedDate.getTime() + this.hoursToAdd * 60 * 60 * 1000);
-    this.result = `Nueva fecha: ${this.selectedDate.toISOString()}`;
+    this.selectedDate = DateFormatter.addHours(this.selectedDate, this.hoursToAdd);
+    this.result = `Nueva fecha: ${DateFormatter.toString(this.selectedDate, this.formatString)}`;
   }
 
   addMinutes() {
-    this.selectedDate = new Date(this.selectedDate.getTime() + this.minutesToAdd * 60 * 1000);
-    this.result = `Nueva fecha: ${this.selectedDate.toISOString()}`;
+    this.selectedDate = DateFormatter.addMinutes(this.selectedDate, this.minutesToAdd);
+    this.result = `Nueva fecha: ${DateFormatter.toString(this.selectedDate, this.formatString)}`;
   }
 
   addSeconds() {
-    this.selectedDate = new Date(this.selectedDate.getTime() + this.secondsToAdd * 1000);
-    this.result = `Nueva fecha: ${this.selectedDate.toISOString()}`;
+    this.selectedDate = DateFormatter.addSeconds(this.selectedDate, this.secondsToAdd);
+    this.result = `Nueva fecha: ${DateFormatter.toString(this.selectedDate, this.formatString)}`;
   }
 
   compareDates() {
-    const cmp = this.selectedDate.getTime() - this.secondDate.getTime();
-    this.result = cmp > 0 ? 'First date is later' : cmp < 0 ? 'Second date is later' : 'Dates are equal';
+    const cmp = DateFormatter.compare(this.selectedDate, this.secondDate);
+    this.result =
+      cmp === 0 ? 'Fechas iguales' : cmp < 0 ? 'La primera es menor' : 'La primera es mayor';
   }
 
   formatDate() {
-    this.result = this.selectedDate.toISOString();
+    this.result = DateFormatter.toString(this.selectedDate, this.formatString);
   }
 
   formatUTCDate() {
-    this.result = this.selectedDate.toUTCString();
-  }
-
-  isValidDate() {
-    this.result = this.selectedDate instanceof Date && !isNaN(this.selectedDate.getTime()) ? 'Fecha válida' : 'Fecha inválida';
+    this.result = DateFormatter.toUTCString(this.selectedDate, this.formatString);
   }
 
   getToday() {
-    this.selectedDate = new Date();
-    this.result = `Hoy: ${this.selectedDate.toISOString()}`;
+    this.selectedDate = DateFormatter.getToday();
+    this.result = `Hoy: ${DateFormatter.toString(this.selectedDate, this.formatString)}`;
   }
 
-  isSame(unit?: string) {
-    this.result = this.selectedDate.getTime() === this.secondDate.getTime() ? 'Las fechas son iguales' : 'Las fechas son diferentes';
+  isValidDate() {
+    this.result = DateFormatter.isValid(this.selectedDate) ? 'Fecha válida' : 'Fecha inválida';
+  }
+
+  isSame(unit: 'year' | 'month' | 'day' | 'hour' | 'minute' | 'second' | 'millisecond') {
+    this.result = DateFormatter.isSame(this.selectedDate, this.secondDate, unit)
+      ? 'Fechas iguales'
+      : 'Fechas diferentes';
   }
 
   getDayOfWeek() {
-    const day = this.selectedDate.getDay();
-    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    this.result = `Día de la semana: ${days[day]}`;
+    const day = DateFormatter.getDayOfWeek(this.selectedDate);
+    this.result = `Día de la semana: ${day}`;
   }
 
   getDaysInMonth() {
-    const days = new Date(this.selectedDate.getFullYear(), this.selectedDate.getMonth() + 1, 0).getDate();
+    const days = DateFormatter.getDaysInMonth(this.selectedDate);
     this.result = `Días en el mes: ${days}`;
   }
 
   dateToTimestamp() {
-    const timestamp = this.selectedDate.getTime();
-    this.result = `Timestamp: ${timestamp}`;
+    this.result = `Timestamp: ${DateFormatter.dateToTimestamp(this.selectedDate)}`;
   }
 
   timestampToDate(timestamp: number) {
-    this.selectedDate = new Date(timestamp);
-    this.result = `Fecha: ${this.selectedDate.toISOString()}`;
+    this.selectedDate = DateFormatter.timestampToDate(timestamp);
+    this.result = `Fecha: ${DateFormatter.toString(this.selectedDate, this.formatString)}`;
   }
 
-  isInTimeRange(start: any, end: any) {
-    this.result = 'Time range check not implemented';
+  isInTimeRange(start: TIME_OF_DAY, end: TIME_OF_DAY) {
+    this.result = DateFormatter.isInTimeRange(this.selectedDate, start, end)
+      ? 'Dentro del rango'
+      : 'Fuera del rango';
   }
 }

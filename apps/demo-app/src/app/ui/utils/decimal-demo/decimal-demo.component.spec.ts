@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DecimaldemoComponent } from './decimaldemo.component';
+import { DecimalDemoComponent } from './decimal-demo.component';
 
-describe('DecimaldemoComponent', () => {
-  let component: DecimaldemoComponent;
-  let fixture: ComponentFixture<DecimaldemoComponent>;
+describe('DecimalDemoComponent', () => {
+  let component: DecimalDemoComponent;
+  let fixture: ComponentFixture<DecimalDemoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DecimaldemoComponent],
+      imports: [DecimalDemoComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DecimaldemoComponent);
+    fixture = TestBed.createComponent(DecimalDemoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

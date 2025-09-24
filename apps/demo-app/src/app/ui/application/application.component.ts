@@ -23,8 +23,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontplus/ng-components';
-import { ApplicationRepository } from '../../../data';
-import { Application } from '../../../domain/application';
+import { ApplicationRepository } from '../../data';
+import { Application } from '../../domain/application';
 import { PaginationParams, FilterParams, PagedResult } from '@acontplus/core';
 
 @Component({
@@ -287,7 +287,9 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
       },
       error: (error: any) => {
         console.error('Error updating application:', error);
-        this.snackBar.open(error.message || 'Error updating application', 'Close', { duration: 3000 });
+        this.snackBar.open(error.message || 'Error updating application', 'Close', {
+          duration: 3000,
+        });
         this.isUpdating = false;
         this.cdr.markForCheck();
       },
@@ -345,7 +347,9 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (confirm(`Are you sure you want to delete ${this.selectedApplications.length} applications?`)) {
+    if (
+      confirm(`Are you sure you want to delete ${this.selectedApplications.length} applications?`)
+    ) {
       // For bulk delete, we'll need to implement it in repository
       this.snackBar.open('Bulk delete not yet implemented', 'Close', { duration: 3000 });
     }
