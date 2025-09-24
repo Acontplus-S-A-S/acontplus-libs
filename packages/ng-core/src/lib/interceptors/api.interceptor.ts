@@ -3,242 +3,171 @@ import {
   HttpEvent,
   HttpResponse,
   HttpErrorResponse,
+  HttpRequest,
+  HttpContext,
+  HttpContextToken,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, map, retry } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { ToastrNotificationService } from '../services';
-import { ApiError, ApiResponse } from '@acontplus/core';
+import { ApiResponse } from '@acontplus/core';
+import { NotificationService } from '@acontplus/ng-notifications';
+
+// A token to use with HttpContext for skipping notifications on specific requests.
+export const SKIP_NOTIFICATION = new HttpContextToken<boolean>(() => false);
 
 export const apiInterceptor: HttpInterceptorFn = (req, next) => {
-  const toastr = inject(ToastrNotificationService);
+  const toastr = inject(NotificationService);
 
   return next(req).pipe(
+    // Retries the request up to 2 times on failure with a 1-second delay.
     retry({ count: 2, delay: 1000 }),
+    // Use the `map` operator to handle successful responses.
     map((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {
-        return handleSuccessResponse(event, toastr, req);
+        handleSuccessResponse(event, toastr, req);
       }
       return event;
     }),
+    // Use the `catchError` operator to handle any errors that occur.
     catchError((error: HttpErrorResponse) => handleErrorResponse(error, toastr)),
   );
 };
 
+// --- Helper Functions ---
+
+/**
+ * Handles successful HTTP responses and shows notifications.
+ */
 function handleSuccessResponse(
   event: HttpResponse<any>,
-  toastr: ToastrNotificationService,
-  req: any,
-): HttpResponse<any> {
-  const body = event.body;
-
-  // Standardize the response to always have ApiResponse structure
-  const standardizedResponse = standardizeApiResponse(body, req);
-
-  // Handle toast notifications based on standardized response
-  handleToastNotifications(standardizedResponse, toastr, req);
-
-  // Return the appropriate data based on response type
-  return transformResponseForConsumers(standardizedResponse, event);
-}
-
-function handleErrorResponse(error: HttpErrorResponse, toastr: ToastrNotificationService) {
-  const apiError = error.error;
-
-  // Standardize error response
-  const standardizedError = standardizeErrorResponse(apiError, error);
-
-  // Show error toast
-  const message = standardizedError.message || 'An error occurred';
-  toastr.error({ message });
-
-  return throwError(() => standardizedError);
-}
-
-/**
- * Standardizes any response to follow the ApiResponse structure
- */
-function standardizeApiResponse(body: any, req: any): ApiResponse<any> {
-  // If it's already a proper ApiResponse, return as is
-  if (isValidApiResponse(body)) {
-    return body;
-  }
-
-  // If it's a raw data response (no wrapper), wrap it
-  if (body && typeof body === 'object' && !('status' in body)) {
-    return {
-      status: 'success',
-      code: '200',
-      message: 'Operation completed successfully',
-      data: body,
-      timestamp: new Date().toISOString(),
-    };
-  }
-
-  // If it's a primitive value, wrap it
-  if (body !== null && body !== undefined && typeof body !== 'object') {
-    return {
-      status: 'success',
-      code: '200',
-      message: 'Operation completed successfully',
-      data: body,
-      timestamp: new Date().toISOString(),
-    };
-  }
-
-  // If it's null/undefined, create a success response without data
-  return {
-    status: 'success',
-    code: '200',
-    message: 'Operation completed successfully',
-    timestamp: new Date().toISOString(),
-  };
-}
-
-/**
- * Standardizes error responses
- */
-function standardizeErrorResponse(apiError: any, httpError: HttpErrorResponse): ApiError {
-  if (apiError?.status === 'error' && apiError?.errors?.length > 0) {
-    // Already a proper API error
-    return apiError.errors[0];
-  }
-
-  if (apiError?.code && apiError?.message) {
-    // Has error structure but not in array format
-    return {
-      code: apiError.code,
-      message: apiError.message,
-      target: apiError.target,
-      details: apiError.details,
-      severity: apiError.severity || 'error',
-      category: apiError.category || 'http',
-    };
-  }
-
-  // Fallback to HTTP error information
-  return {
-    code: httpError.status?.toString() || 'UNKNOWN_ERROR',
-    message: apiError?.message || httpError.message || 'An unexpected error occurred',
-    severity: 'error',
-    category: 'http',
-  };
-}
-
-/**
- * Handles toast notifications based on standardized response
- */
-function handleToastNotifications(
-  response: ApiResponse<any>,
-  toastr: ToastrNotificationService,
-  req: any,
+  notificationService: NotificationService,
+  req: HttpRequest<any>,
 ): void {
-  const shouldShowToast = shouldShowSuccessToast(req, response);
+  const response = event.body as ApiResponse<any>;
+
+  if (!response) return;
+
+  const shouldShowToast = shouldShowSuccessToast(req);
 
   switch (response.status) {
     case 'success':
       if (response.message && shouldShowToast) {
-        toastr.success({ message: response.message });
+        notificationService.success({ message: response.message });
       }
       break;
     case 'warning':
       if (response.message) {
-        toastr.warning({ message: response.message });
+        notificationService.warning({ message: response.message });
       }
-      // Also show individual warning messages if they exist
       if (response.warnings && response.warnings.length > 0) {
         response.warnings.forEach(warning => {
-          toastr.warning({ message: warning.message });
+          notificationService.warning({ message: warning.message });
         });
       }
       break;
     case 'error':
-      if (response.message) {
-        toastr.error({ message: response.message });
+      if (response.errors && response.errors.length > 0) {
+        response.errors.forEach(error => {
+          if (!req.context.get(SKIP_NOTIFICATION)) {
+            notificationService.error({ message: error.message });
+          }
+        });
+      } else if (response.message) {
+        notificationService.error({ message: response.message });
       }
       break;
   }
 }
 
 /**
- * Transforms the standardized response for consumers
+ * Handles HTTP errors (from the interceptor chain, not backend ApiResponse).
  */
-function transformResponseForConsumers(
-  response: ApiResponse<any>,
-  originalEvent: HttpResponse<any>,
-): HttpResponse<any> {
-  switch (response.status) {
-    case 'success':
-      // For success responses, return the data if it exists, otherwise the full response
-      if (response.data !== undefined && response.data !== null) {
-        return originalEvent.clone({ body: response.data });
-      }
-      // For message-only success responses, return the full response
-      return originalEvent.clone({ body: response });
+function handleErrorResponse(error: HttpErrorResponse, notificationService: NotificationService) {
+  const status = error.status;
 
-    case 'warning':
-      // For warnings, return data if it exists, otherwise the full response
-      if (response.data !== undefined && response.data !== null) {
-        return originalEvent.clone({ body: response.data });
-      }
-      return originalEvent.clone({ body: response });
+  // Only show notifications for critical HTTP-level errors.
+  // We avoid showing toasts for 4xx errors, which are handled by the component.
+  if (status !== null && shouldShowCriticalErrorNotification(status)) {
+    const message = getCriticalErrorMessage(error);
+    const title = getErrorTitle(status);
 
-    case 'error':
-      // Errors should be thrown, not returned
-      throw response;
-
-    default:
-      return originalEvent.clone({ body: response });
+    notificationService.error({
+      message: message,
+      title: title,
+      config: { duration: 5000 },
+    });
   }
+
+  // Always re-throw the error so components/services can handle it.
+  return throwError(() => error);
 }
 
 /**
- * Determines whether to show success toast notifications based on the request type
+ * Determines if we should show a notification for this HTTP error.
  */
-function shouldShowSuccessToast(req: any, response: ApiResponse<any>): boolean {
+function shouldShowCriticalErrorNotification(status: number): boolean {
+  // Show notifications for:
+  // - Network errors (status 0)
+  // - Server errors (5xx)
+  return status === 0 || (status >= 500 && status < 600);
+}
+
+/**
+ * Gets the appropriate title for error notifications.
+ */
+function getErrorTitle(status: number): string {
+  if (status === 0) return 'Connection Error';
+  if (status >= 500) return 'Server Error';
+  return 'Error';
+}
+
+/**
+ * Gets the appropriate message for critical errors.
+ */
+function getCriticalErrorMessage(error: HttpErrorResponse): string {
+  if (error.status === 0) {
+    return 'Unable to connect to the server. Please check your network connection.';
+  }
+
+  if (error.status >= 500) {
+    return (
+      error.error?.message || error.message || 'A server error occurred. Please try again later.'
+    );
+  }
+
+  return error.error?.message || error.message || 'An unexpected error occurred';
+}
+
+/**
+ * Determines whether to show success toast notifications based on the request type.
+ */
+function shouldShowSuccessToast(req: HttpRequest<any>): boolean {
   const url = req.url?.toLowerCase() || '';
   const method = req.method?.toLowerCase() || '';
 
-  // Don't show success toast for GET requests (queries/lists) by default
-  if (method === 'get') {
+  // Never show for these cases
+  const excludedPatterns = [
+    'get',
+    '/list',
+    '/search',
+    '/query',
+    '/page',
+    '/paginated',
+    '/health',
+    '/status',
+    '/ping',
+  ];
+
+  if (excludedPatterns.some(pattern => method === pattern || url.includes(pattern))) {
     return false;
   }
 
-  // Don't show success toast for list/query endpoints by default
-  if (url.includes('/list') || url.includes('/search') || url.includes('/query')) {
-    return false;
-  }
-
-  // Don't show success toast for pagination endpoints by default
-  if (url.includes('/page') || url.includes('/paginated')) {
-    return false;
-  }
-
-  // Don't show success toast for health check or status endpoints by default
-  if (url.includes('/health') || url.includes('/status') || url.includes('/ping')) {
-    return false;
-  }
-
-  // Show success toast for POST, PUT, PATCH, DELETE operations by default
+  // Always show for these methods
   if (['post', 'put', 'patch', 'delete'].includes(method)) {
     return true;
   }
 
-  // Default: show for non-GET requests, don't show for GET requests
+  // Default behavior
   return method !== 'get';
-}
-
-/**
- * Checks if a response is a valid ApiResponse
- */
-function isValidApiResponse(response: any): response is ApiResponse<any> {
-  return (
-    response &&
-    typeof response === 'object' &&
-    'status' in response &&
-    'code' in response &&
-    ['success', 'error', 'warning'].includes(response.status) &&
-    // For warning responses, ensure warnings array exists
-    (response.status !== 'warning' || (response.warnings && Array.isArray(response.warnings)))
-  );
 }

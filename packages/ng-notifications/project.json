@@ -28,6 +28,13 @@
       },
       "defaultConfiguration": "production"
     },
+    "publish": {
+      "executor": "@nx/js:npm-package",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "public"
+      }
+    },
     "nx-release-publish": {
       "options": {
         "packageRoot": "dist/{projectRoot}"

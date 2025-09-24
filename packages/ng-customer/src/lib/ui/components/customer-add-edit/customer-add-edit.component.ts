@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
 import { forkJoin, from, Observable } from 'rxjs';
-import { ToastrNotificationService } from '@acontplus/ng-core';
+import { NotificationService } from '@acontplus/ng-notifications';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -31,7 +31,12 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { SEPARADORES_REGEX, SEPARATOR_KEY_CODE, SRI_DOCUMENT_TYPE, isSuccessResponse } from '@acontplus/core';
+import {
+  SEPARADORES_REGEX,
+  SEPARATOR_KEY_CODE,
+  SRI_DOCUMENT_TYPE,
+  isSuccessResponse,
+} from '@acontplus/core';
 import { ToUpperCaseDirective } from '@acontplus/ng-components';
 import { CustomerUseCase } from '../../../application/use-cases/customer.use-case';
 import { CustomerExternalUseCase } from '../../../application/use-cases/customer-external.use-case';
@@ -63,7 +68,10 @@ import { CustomerExternalHttpRepository } from '../../../infrastructure/reposito
   styleUrl: './customer-add-edit.component.scss',
   providers: [
     provideNativeDateAdapter(),
-    { provide: CustomerUseCase, useFactory: () => new CustomerUseCase(new CustomerHttpRepository()) },
+    {
+      provide: CustomerUseCase,
+      useFactory: () => new CustomerUseCase(new CustomerHttpRepository()),
+    },
     {
       provide: CustomerExternalUseCase,
       useFactory: () => new CustomerExternalUseCase(new CustomerExternalHttpRepository()),
@@ -88,7 +96,7 @@ export class CustomerAddEditComponent implements OnInit {
 
   readonly params = this.paramsOptions.data;
 
-  private tS = inject(ToastrNotificationService);
+  private notificationService = inject(NotificationService);
 
   title = 'Nuevo Cliente';
 
@@ -170,7 +178,7 @@ export class CustomerAddEditComponent implements OnInit {
     from(this.customerUseCase.checkExistence(id)).subscribe(response => {
       if (isSuccessResponse(response) && response.data) {
         alert('El cliente ya se encuentra registrado en su empresa');
-        this.tS.show({
+        this.notificationService.toastr.show({
           type: 'warning',
           message: 'El cliente ya se encuentra registrado en su empresa',
         });
@@ -186,7 +194,7 @@ export class CustomerAddEditComponent implements OnInit {
       }
       from(this.customerExternalUseCase.getById(id)).subscribe(secondResponse => {
         if (!isSuccessResponse(secondResponse) || !secondResponse.data) {
-          this.tS.show({
+          this.notificationService.toastr.show({
             type: 'info',
             message: '  No se encontró información en el SRI',
           });
@@ -261,15 +269,23 @@ export class CustomerAddEditComponent implements OnInit {
           );
 
           if (dataIdentificacion) {
-            const idTipoIdentificacionCtrl = this.customerForm.get('idTipoIdentificacion') as FormControl<number> | null;
+            const idTipoIdentificacionCtrl = this.customerForm.get(
+              'idTipoIdentificacion',
+            ) as FormControl<number> | null;
             idTipoIdentificacionCtrl?.setValue(dataIdentificacion.idTipoIdentificacion as number);
 
-            const numeroIdentificacionCtrl = this.customerForm.get('numeroIdentificacion') as FormControl<string> | null;
+            const numeroIdentificacionCtrl = this.customerForm.get(
+              'numeroIdentificacion',
+            ) as FormControl<string> | null;
             numeroIdentificacionCtrl?.setValue(numeroIdentificacion as string);
 
-            const idTiempoCreditoCtrl = this.customerForm.get('idTiempoCredito') as FormControl<number> | null;
+            const idTiempoCreditoCtrl = this.customerForm.get(
+              'idTiempoCredito',
+            ) as FormControl<number> | null;
             idTiempoCreditoCtrl?.setValue(
-              this.tiemposCredito().length > 0 ? (this.tiemposCredito()[0].idTiempoCredito as number) : 0,
+              this.tiemposCredito().length > 0
+                ? (this.tiemposCredito()[0].idTiempoCredito as number)
+                : 0,
             );
             this.updateFormControlNumeroIdentificacion(dataIdentificacion.codigoSri);
 
@@ -285,14 +301,20 @@ export class CustomerAddEditComponent implements OnInit {
           );
 
           if (dataIdentificacion) {
-            const idTipoIdentificacionCtrl = this.customerForm.get('idTipoIdentificacion') as FormControl<number> | null;
+            const idTipoIdentificacionCtrl = this.customerForm.get(
+              'idTipoIdentificacion',
+            ) as FormControl<number> | null;
             idTipoIdentificacionCtrl?.setValue(dataIdentificacion.idTipoIdentificacion as number);
             this.setIdentificationTypeChange(dataIdentificacion.codigoSri);
           }
 
-          const idTiempoCreditoCtrl = this.customerForm.get('idTiempoCredito') as FormControl<number> | null;
+          const idTiempoCreditoCtrl = this.customerForm.get(
+            'idTiempoCredito',
+          ) as FormControl<number> | null;
           idTiempoCreditoCtrl?.setValue(
-            this.tiemposCredito().length > 0 ? (this.tiemposCredito()[0].idTiempoCredito as number) : 0,
+            this.tiemposCredito().length > 0
+              ? (this.tiemposCredito()[0].idTiempoCredito as number)
+              : 0,
           );
         } else {
           this.title = 'Editar Cliente';
@@ -375,8 +397,12 @@ export class CustomerAddEditComponent implements OnInit {
     }
     if (this.numeroIdentificacionControl?.invalid) return;
 
-    const idTipoIdentificacion = (this.customerForm.get('idTipoIdentificacion') as FormControl<number> | null)?.value as number;
-    const numeroIdentificacion = (this.customerForm.get('numeroIdentificacion') as FormControl<string> | null)?.value as string;
+    const idTipoIdentificacion = (
+      this.customerForm.get('idTipoIdentificacion') as FormControl<number> | null
+    )?.value as number;
+    const numeroIdentificacion = (
+      this.customerForm.get('numeroIdentificacion') as FormControl<string> | null
+    )?.value as string;
 
     const codigoSri = this.tiposIdentificacion().find(
       (x: any) => x.idTipoIdentificacion == idTipoIdentificacion,
@@ -407,7 +433,7 @@ export class CustomerAddEditComponent implements OnInit {
     };
 
     if (this.customerForm.invalid) {
-      this.tS.show({
+      this.notificationService.toastr.show({
         type: 'warning',
         message: 'Ingrese todos datos requeridos',
       });
@@ -420,7 +446,7 @@ export class CustomerAddEditComponent implements OnInit {
         data: dataForm,
       };
       from(this.customerUseCase.update(sendParams)).subscribe(response => {
-        this.tS.show({
+        this.notificationService.toastr.show({
           type: isSuccessResponse(response) ? 'success' : 'warning',
           message: `${response.message}`,
         });
@@ -434,7 +460,7 @@ export class CustomerAddEditComponent implements OnInit {
 
     if (this.isCreate()) {
       from(this.customerUseCase.create(dataForm)).subscribe(response => {
-        this.tS.show({
+        this.notificationService.toastr.show({
           type: isSuccessResponse(response) ? 'success' : 'warning',
           message: `${response.message}`,
         });

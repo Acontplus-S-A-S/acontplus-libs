@@ -1,7 +1,9 @@
-# ng-notifications
+# @acontplus/ng-notifications
 
-This library was generated with [Nx](https://nx.dev).
+Components for angular applications.
 
-## Running unit tests
+## Installation
 
-Run `nx test ng-notifications` to execute the unit tests.
+```bash
+npm install @acontplus/ng-notfications
+```

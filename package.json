@@ -42,7 +42,9 @@
   },
   "dependencies": {
     "@acontplus/core": "^1.0.3",
-    "@acontplus/ng-core": "^1.0.1",
+    "@acontplus/ng-core": "^1.0.3",
+    "@acontplus/ng-components": "^1.0.4",
+    "@acontplus/ng-notifications": "^1.0.0",
     "@acontplus/utils": "^1.0.1",
     "@angular/animations": "^20.3.1",
     "@angular/cdk": "^20.2.4",
