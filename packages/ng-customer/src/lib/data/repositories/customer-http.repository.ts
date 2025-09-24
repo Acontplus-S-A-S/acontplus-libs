@@ -23,16 +23,19 @@ export class CustomerHttpRepository implements CustomerRepository {
       tipo: 3,
     });
     return this.http.get<any>(`${this.url}?json=${searchPayload}`).then(response => {
-      const result = {
-        success: false,
+      const result: ApiResponse<any> = {
+        status: 'warning',
+        code: response.code ?? 'UNKNOWN_ERROR',
         data: null as any,
+        message: response.message ?? 'Unknown error occurred',
+        timestamp: new Date().toISOString(),
       };
       if (response.code === '1' && response.payload) {
         const parsedData = JSON.parse(response.payload);
         if (Array.isArray(parsedData) && parsedData.length > 0 && Array.isArray(parsedData[0])) {
           const [customer] = parsedData[0];
           if (customer) {
-            result.success = true;
+            result.status = 'success';
             result.data = customer;
           }
         }
@@ -41,18 +44,32 @@ export class CustomerHttpRepository implements CustomerRepository {
     });
   }
 
-  getFormData() {
+  getFormData(): Promise<ApiResponse<any>> {
     const json = CustomerFormDataMapper.toJson();
-    return this.http.get(`${this.url}?json=${json}`).then(response => {
-      return CustomerFormDataMapper.fromJson(response);
+    return this.http.get<any>(`${this.url}?json=${json}`).then((response: any) => {
+      const data = CustomerFormDataMapper.fromJson(response);
+      return {
+        status: 'success',
+        code: response.code ?? 'SUCCESS',
+        data,
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<any>;
     });
   }
 
   getAll<T>(obj: T): Promise<ApiResponse<PagedResult<any>>> {
     const json = ListCustomerMapper.toJson(obj);
     return this.http
-      .get(`${this.url}?json=${json}`)
-      .then(response => ListCustomerMapper.fromJson(response));
+      .get<any>(`${this.url}?json=${json}`)
+      .then((response: any) => {
+        const data = ListCustomerMapper.fromJson(response);
+        return {
+          status: 'success',
+          code: response.code ?? 'SUCCESS',
+          data,
+          timestamp: new Date().toISOString(),
+        } as ApiResponse<PagedResult<any>>;
+      });
   }
 
   create(dto: any): Promise<ApiResponse<any>> {
@@ -62,10 +79,12 @@ export class CustomerHttpRepository implements CustomerRepository {
         console.log(response);
         const data = CustomerCreateUpdateMapper.fromJson(response);
         return {
-          success: response.code === '1',
+          status: response.code === '1' ? 'success' : 'warning',
+          code: response.code ?? 'OPERATION_FAILED',
           data,
-          message: response.message,
-        };
+          message: response.message ?? 'Operation completed with issues',
+          timestamp: new Date().toISOString(),
+        } as ApiResponse<any>;
       });
   }
   update(dto: any): Promise<ApiResponse<any>> {
@@ -76,23 +95,36 @@ export class CustomerHttpRepository implements CustomerRepository {
       .then(response => {
         console.log(response);
         return {
-          success: response.code === '1',
-          message: response.message,
-        };
+          status: response.code === '1' ? 'success' : 'warning',
+          code: response.code ?? 'OPERATION_FAILED',
+          message: response.message ?? 'Operation completed with issues',
+          timestamp: new Date().toISOString(),
+        } as ApiResponse<any>;
       });
   }
-  updateState(id: number) {
+  updateState(id: number): Promise<ApiResponse<any>> {
     return this.http.delete<ApiResponse>(`${this.url}${id}`).then(response => {
       return {
-        success: response.code === '1',
+        status: response.code === '1' ? 'success' : 'warning',
+        code: response.code,
         message: response.message,
-      };
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<any>;
     });
   }
-  getById(id: number): Promise<Result<any>> {
+  getById(id: number): Promise<ApiResponse<any>> {
     return this.http
       .get<any>(`${this.url}GetId/${id}`)
-      .then(response => CustomerGetByIdMapper.fromJson(response));
+      .then(response => {
+        const data = CustomerGetByIdMapper.fromJson(response);
+        return {
+          status: response.code === '1' ? 'success' : 'warning',
+          code: response.code ?? 'OPERATION_FAILED',
+          data,
+          message: response.message ?? 'Operation completed with issues',
+          timestamp: new Date().toISOString(),
+        } as ApiResponse<any>;
+      });
   }
 
   search(params: CustomerSearchDTO): Promise<ApiResponse<any>> {
@@ -100,10 +132,12 @@ export class CustomerHttpRepository implements CustomerRepository {
     return this.http.get<ApiResponse>(`${this.url}Search?json=${json}`).then(response => {
       const data = CompanySearchMapper.fromJson(response);
       return {
-        success: response.code === '1',
+        status: response.code === '1' ? 'success' : 'warning',
+        code: response.code,
         data,
         message: response.message,
-      };
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<any>;
     });
   }
 }

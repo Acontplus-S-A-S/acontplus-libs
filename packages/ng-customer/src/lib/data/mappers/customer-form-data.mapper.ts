@@ -45,9 +45,6 @@ export class CustomerFormDataMapper {
       result.maritalStatuses = mainData[9] || [];
       result.employees = mainData[10] || [];
     }
-    return {
-      data: result,
-      success: true,
-    };
+    return result;
   }
 }

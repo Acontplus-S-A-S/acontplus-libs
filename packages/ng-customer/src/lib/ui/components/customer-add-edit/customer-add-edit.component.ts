@@ -31,7 +31,12 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { SEPARADORES_REGEX, SEPARATOR_KEY_CODE, SRI_DOCUMENT_TYPE } from '@acontplus/core';
+import { SEPARADORES_REGEX, SEPARATOR_KEY_CODE, SRI_DOCUMENT_TYPE, isSuccessResponse } from '@acontplus/core';
+import { ToUpperCaseDirective } from '@acontplus/ng-components';
+import { CustomerUseCase } from '../../../data/use-cases/customer.use-case';
+import { CustomerExternalUseCase } from '../../../data/use-cases/customer-external.use-case';
+import { CustomerHttpRepository } from '../../../data/repositories/customer-http.repository';
+import { CustomerExternalHttpRepository } from '../../../data/repositories/customer-external-http.repository';
 
 @Component({
   selector: 'acp-customer-add-edit',
@@ -56,11 +61,20 @@ import { SEPARADORES_REGEX, SEPARATOR_KEY_CODE, SRI_DOCUMENT_TYPE } from '@acont
   ],
   templateUrl: './customer-add-edit.component.html',
   styleUrl: './customer-add-edit.component.scss',
-  providers: [provideNativeDateAdapter()],
+  providers: [
+    provideNativeDateAdapter(),
+    { provide: CustomerUseCase, useFactory: () => new CustomerUseCase(new CustomerHttpRepository()) },
+    {
+      provide: CustomerExternalUseCase,
+      useFactory: () => new CustomerExternalUseCase(new CustomerExternalHttpRepository()),
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomerAddEditComponent implements OnInit {
   private readonly dialogRef = inject(MatDialogRef<CustomerAddEditComponent>);
+  private readonly customerUseCase = inject(CustomerUseCase);
+  private readonly customerExternalUseCase = inject(CustomerExternalUseCase);
   btnText = signal('Guardar');
 
   readonly paramsOptions = inject<{
@@ -155,8 +169,8 @@ export class CustomerAddEditComponent implements OnInit {
     this.customerForm.patchValue({
       validationSri: false,
     });
-    from(customerUseCase.checkExistence(id)).subscribe(response => {
-      if (response.success && response.data) {
+    from(this.customerUseCase.checkExistence(id)).subscribe(response => {
+      if (isSuccessResponse(response) && response.data) {
         alert('El cliente ya se encuentra registrado en su empresa');
         this.tS.show({
           type: 'warning',
@@ -172,8 +186,8 @@ export class CustomerAddEditComponent implements OnInit {
         });
         return;
       }
-      from(customerExternalUseCase.getById(id)).subscribe(secondResponse => {
-        if (!secondResponse.success || !secondResponse.data) {
+      from(this.customerExternalUseCase.getById(id)).subscribe(secondResponse => {
+        if (!isSuccessResponse(secondResponse) || !secondResponse.data) {
           this.tS.show({
             type: 'info',
             message: '  No se encontró información en el SRI',
@@ -210,11 +224,11 @@ export class CustomerAddEditComponent implements OnInit {
   getLoadData(): Observable<any> {
     if (this.isUpdate()) {
       return forkJoin([
-        from(customerUseCase.getFormData()),
-        from(customerUseCase.getById(this.params.id)),
+        from(this.customerUseCase.getFormData()),
+        from(this.customerUseCase.getById(this.params.id)),
       ]);
     }
-    return from(customerUseCase.getFormData());
+    return from(this.customerUseCase.getFormData());
   }
 
   ngOnInit(): void {
@@ -406,12 +420,12 @@ export class CustomerAddEditComponent implements OnInit {
         id: this.params.id,
         data: dataForm,
       };
-      from(customerUseCase.update(sendParams)).subscribe(response => {
+      from(this.customerUseCase.update(sendParams)).subscribe(response => {
         this.tS.show({
-          type: response.success ? 'success' : 'warning',
+          type: isSuccessResponse(response) ? 'success' : 'warning',
           message: `${response.message}`,
         });
-        if (response.success) {
+        if (isSuccessResponse(response)) {
           this.dialogRef.close({
             id: this.params.id,
           });
@@ -420,12 +434,12 @@ export class CustomerAddEditComponent implements OnInit {
     }
 
     if (this.isCreate()) {
-      from(customerUseCase.create(dataForm)).subscribe(response => {
+      from(this.customerUseCase.create(dataForm)).subscribe(response => {
         this.tS.show({
-          type: response.success ? 'success' : 'warning',
+          type: isSuccessResponse(response) ? 'success' : 'warning',
           message: `${response.message}`,
         });
-        if (response.success) {
+        if (isSuccessResponse(response)) {
           this.dialogRef.close(response.data);
         }
       });
