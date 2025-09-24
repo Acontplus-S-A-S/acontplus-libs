@@ -9,3 +9,4 @@ export class CustomerExternalUseCase {
     return this.repo.getById(idNumber);
   }
 }
+

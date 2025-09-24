@@ -4,7 +4,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
 import { MatThemeButtonComponent } from '@acontplus/ng-components';
-import { CustomerListItemDto } from '../../../data/dtos/customer.dto';
+import { CustomerListItemDto } from '../../../infrastructure/dtos/customer.dto';
 
 @Component({
   selector: 'acp-customer-card',

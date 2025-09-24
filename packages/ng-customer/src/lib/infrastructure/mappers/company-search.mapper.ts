@@ -1,7 +1,7 @@
-import { CustomerSearchDTO } from '../dtos/customer.dto';
+import { CustomerSearch } from '../../application/models/customer-search.model';
 
 export class CompanySearchMapper {
-  static toJson(params: CustomerSearchDTO) {
+  static toJson(params: CustomerSearch) {
     return JSON.stringify({
       textSearch: params.search,
     });
@@ -39,3 +39,4 @@ export class CompanySearchMapper {
     return customers;
   }
 }
+

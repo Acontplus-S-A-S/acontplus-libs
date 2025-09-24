@@ -66,3 +66,4 @@ export class ListCustomerMapper {
     return result;
   }
 }
+

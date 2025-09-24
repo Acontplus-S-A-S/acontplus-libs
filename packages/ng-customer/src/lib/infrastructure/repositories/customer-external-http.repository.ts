@@ -1,5 +1,5 @@
 import { ApiResponse, HttpClientFactory, IdentificationNumberVo } from '@acontplus/core';
-import { CUSTOMER_API } from '../constants';
+import { CUSTOMER_API } from '../constants/customer.constants';
 import { CustomerExternalRepository } from '../../domain';
 export class CustomerExternalHttpRepository implements CustomerExternalRepository {
   private get http() {
@@ -41,3 +41,4 @@ export class CustomerExternalHttpRepository implements CustomerExternalRepositor
     });
   }
 }
+

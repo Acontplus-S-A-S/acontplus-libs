@@ -33,10 +33,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { SEPARADORES_REGEX, SEPARATOR_KEY_CODE, SRI_DOCUMENT_TYPE, isSuccessResponse } from '@acontplus/core';
 import { ToUpperCaseDirective } from '@acontplus/ng-components';
-import { CustomerUseCase } from '../../../data/use-cases/customer.use-case';
-import { CustomerExternalUseCase } from '../../../data/use-cases/customer-external.use-case';
-import { CustomerHttpRepository } from '../../../data/repositories/customer-http.repository';
-import { CustomerExternalHttpRepository } from '../../../data/repositories/customer-external-http.repository';
+import { CustomerUseCase } from '../../../application/use-cases/customer.use-case';
+import { CustomerExternalUseCase } from '../../../application/use-cases/customer-external.use-case';
+import { CustomerHttpRepository } from '../../../infrastructure/repositories/customer-http.repository';
+import { CustomerExternalHttpRepository } from '../../../infrastructure/repositories/customer-external-http.repository';
 
 @Component({
   selector: 'acp-customer-add-edit',
@@ -129,9 +129,7 @@ export class CustomerAddEditComponent implements OnInit {
     idEmpresa: new FormControl(0),
     idFormaPagoSri: new FormControl<number>(0),
     idTipoClienteProveedor: new FormControl(0),
-    idTipoIdentificacion: new FormControl(0, Validators.required),
-    idSubContribuyente: new FormControl(0),
-    idTiempoCredito: new FormControl(0),
+    idTipoEntidad: new FormControl(0),
     idCiudad: new FormControl(0),
     idEmpleado: new FormControl<number | undefined>(0),
     nombreFiscal: new FormControl('', Validators.required),
@@ -200,7 +198,7 @@ export class CustomerAddEditComponent implements OnInit {
           idCard, // numeroRuc
           businessName, // razonSocial
           address, // direccion
-        } = secondResponse.data;
+        } = secondResponse.data as any;
 
         if (phone && typeof phone === 'string') {
           this.telephones = phone.split(SEPARADORES_REGEX) || [];
@@ -263,15 +261,16 @@ export class CustomerAddEditComponent implements OnInit {
           );
 
           if (dataIdentificacion) {
-            this.customerForm.patchValue({
-              idTipoIdentificacion: dataIdentificacion.idTipoIdentificacion,
-              numeroIdentificacion,
-            });
+            const idTipoIdentificacionCtrl = this.customerForm.get('idTipoIdentificacion') as FormControl<number> | null;
+            idTipoIdentificacionCtrl?.setValue(dataIdentificacion.idTipoIdentificacion as number);
 
-            this.customerForm.patchValue({
-              idTiempoCredito:
-                this.tiemposCredito().length > 0 ? this.tiemposCredito()[0].idTiempoCredito : 0,
-            });
+            const numeroIdentificacionCtrl = this.customerForm.get('numeroIdentificacion') as FormControl<string> | null;
+            numeroIdentificacionCtrl?.setValue(numeroIdentificacion as string);
+
+            const idTiempoCreditoCtrl = this.customerForm.get('idTiempoCredito') as FormControl<number> | null;
+            idTiempoCreditoCtrl?.setValue(
+              this.tiemposCredito().length > 0 ? (this.tiemposCredito()[0].idTiempoCredito as number) : 0,
+            );
             this.updateFormControlNumeroIdentificacion(dataIdentificacion.codigoSri);
 
             this.onKeyDownGovernmentId();
@@ -286,16 +285,15 @@ export class CustomerAddEditComponent implements OnInit {
           );
 
           if (dataIdentificacion) {
-            this.customerForm.patchValue({
-              idTipoIdentificacion: dataIdentificacion.idTipoIdentificacion,
-            });
+            const idTipoIdentificacionCtrl = this.customerForm.get('idTipoIdentificacion') as FormControl<number> | null;
+            idTipoIdentificacionCtrl?.setValue(dataIdentificacion.idTipoIdentificacion as number);
             this.setIdentificationTypeChange(dataIdentificacion.codigoSri);
           }
 
-          this.customerForm.patchValue({
-            idTiempoCredito:
-              this.tiemposCredito().length > 0 ? this.tiemposCredito()[0].idTiempoCredito : 0,
-          });
+          const idTiempoCreditoCtrl = this.customerForm.get('idTiempoCredito') as FormControl<number> | null;
+          idTiempoCreditoCtrl?.setValue(
+            this.tiemposCredito().length > 0 ? (this.tiemposCredito()[0].idTiempoCredito as number) : 0,
+          );
         } else {
           this.title = 'Editar Cliente';
           this.btnText.set('Actualizar');
@@ -377,7 +375,8 @@ export class CustomerAddEditComponent implements OnInit {
     }
     if (this.numeroIdentificacionControl?.invalid) return;
 
-    const { idTipoIdentificacion, numeroIdentificacion } = this.customerForm.value;
+    const idTipoIdentificacion = (this.customerForm.get('idTipoIdentificacion') as FormControl<number> | null)?.value as number;
+    const numeroIdentificacion = (this.customerForm.get('numeroIdentificacion') as FormControl<string> | null)?.value as string;
 
     const codigoSri = this.tiposIdentificacion().find(
       (x: any) => x.idTipoIdentificacion == idTipoIdentificacion,

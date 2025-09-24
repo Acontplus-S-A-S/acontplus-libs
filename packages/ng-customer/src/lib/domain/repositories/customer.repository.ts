@@ -1,5 +1,5 @@
 // Define las opciones del repositorio
-import { CustomerFilterDTO, CustomerSearchDTO } from '../../data';
+import { CustomerFilter, CustomerSearch } from '../../application/models/customer-search.model';
 import { ApiResponse, PagedResult } from '@acontplus/core';
 
 interface CustomerRepositoryOptions {
@@ -8,7 +8,7 @@ interface CustomerRepositoryOptions {
   createDto: any;
   updateDto: any;
   getDto: any;
-  getAllRequest: CustomerFilterDTO;
+  getAllRequest: CustomerFilter;
 }
 
 export interface CustomerRepository {
@@ -21,5 +21,5 @@ export interface CustomerRepository {
   getFormData(): Promise<ApiResponse<any>>;
   checkExistence(identificationNumber: string): Promise<ApiResponse<any>>;
   updateState(id: number): Promise<ApiResponse<any>>;
-  search(params: CustomerSearchDTO): Promise<ApiResponse<any>>;
+  search(params: CustomerSearch): Promise<ApiResponse<any>>;
 }

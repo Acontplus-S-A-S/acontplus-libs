@@ -1,3 +1,4 @@
 export const CUSTOMER_API = {
-  BILLING: '/FactElect',
+  BILLING: '/api',
 };
+

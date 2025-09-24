@@ -5,3 +5,4 @@ export interface CustomerExternalDTO {
   businessName: string; // razonSocial
   address: string; // direccion
 }
+

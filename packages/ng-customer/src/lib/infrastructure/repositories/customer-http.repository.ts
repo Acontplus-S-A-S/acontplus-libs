@@ -1,12 +1,12 @@
-import { CustomerFormDataMapper } from '../mappers';
-import { ListCustomerMapper } from '../mappers';
+import { CustomerFormDataMapper } from '../mappers/customer-form-data.mapper';
+import { ListCustomerMapper } from '../mappers/customer-list.mapper';
 import { CustomerRepository } from '../../domain';
-import { CustomerGetByIdMapper } from '../mappers';
-import { CustomerCreateUpdateMapper } from '../mappers';
-import { CustomerSearchDTO } from '../dtos';
-import { CompanySearchMapper } from '../mappers';
+import { CustomerGetByIdMapper } from '../mappers/customer-get-by-id.mapper';
+import { CustomerCreateUpdateMapper } from '../mappers/customer-create-update.mapper';
+import { CustomerSearch } from '../../application/models/customer-search.model';
+import { CompanySearchMapper } from '../mappers/company-search.mapper';
 import { ApiResponse, HttpClientFactory, PagedResult } from '@acontplus/core';
-import { CUSTOMER_API } from '../constants';
+import { CUSTOMER_API } from '../constants/customer.constants';
 
 export class CustomerHttpRepository implements CustomerRepository {
   private get http() {
@@ -127,7 +127,7 @@ export class CustomerHttpRepository implements CustomerRepository {
       });
   }
 
-  search(params: CustomerSearchDTO): Promise<ApiResponse<any>> {
+  search(params: CustomerSearch): Promise<ApiResponse<any>> {
     const json = CompanySearchMapper.toJson(params);
     return this.http.get<ApiResponse>(`${this.url}Search?json=${json}`).then(response => {
       const data = CompanySearchMapper.fromJson(response);
@@ -141,3 +141,4 @@ export class CustomerHttpRepository implements CustomerRepository {
     });
   }
 }
+
