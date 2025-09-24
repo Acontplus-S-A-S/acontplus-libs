@@ -23,6 +23,7 @@ import {
 } from '@acontplus/ng-core';
 
 import { spinnerInterceptor } from '@acontplus/ng-components';
+import { provideNotifications } from '../../../../packages/ng-notifications/src/lib/providers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -61,6 +62,7 @@ export const appConfig: ApplicationConfig = {
 
     provideToastr(),
     provideAnimationsAsync(),
+    provideNotifications(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     { provide: ENVIRONMENT, useValue: environment },
