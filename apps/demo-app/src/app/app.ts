@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 import { NxWelcome } from './nx-welcome';
 import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
 import { ApplicationService } from './providers';
-import { SnackbarService } from '@acontplus/ng-components';
 import { ThemeService } from '@acontplus/ng-components';
 
 @Component({
@@ -16,7 +15,6 @@ export class App {
   protected title = 'demo-app';
   isActive = true;
   private readonly _appService = inject(ApplicationService);
-  private readonly _notification = inject(SnackbarService);
   private readonly themeService = inject(ThemeService);
   saveSettings() {
     console.log('Settings saved!');

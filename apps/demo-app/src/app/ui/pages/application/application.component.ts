@@ -1,32 +1,31 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
+  Component,
+  OnInit,
+  AfterViewInit,
+  TemplateRef,
+  ViewChild,
+  ChangeDetectorRef,
+  inject,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSortModule, Sort } from '@angular/material/sort';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatBadgeModule } from '@angular/material/badge';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Subject, takeUntil, Observable } from 'rxjs';
-import { Application, ApplicationFilterParams } from '../../domain/application';
-import { ApplicationManagementUseCase } from '../../application/application-management.use-case';
-import { PaginationParams, PagedResult } from '@acontplus/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontplus/ng-components';
+import { ApplicationRepository } from '../../../data';
+import { Application } from '../../../domain/application';
+import { PaginationParams, FilterParams, PagedResult } from '@acontplus/core';
 
 @Component({
   selector: 'app-application',
@@ -35,359 +34,325 @@ import { PaginationParams, PagedResult } from '@acontplus/core';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MatCardModule,
-    MatButtonModule,
+    MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
-    MatChipsModule,
-    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule,
-    MatDialogModule,
-    MatTabsModule,
-    MatExpansionModule,
-    MatBadgeModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatIconModule,
+    MatChipsModule,
+    MatTooltipModule,
     MatProgressSpinnerModule,
+    MatDynamicTableComponent,
   ],
   templateUrl: './application.component.html',
   styleUrls: ['./application.component.scss'],
 })
-export class ApplicationComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
+export class ApplicationComponent implements OnInit, AfterViewInit {
+  private applicationRepository = inject(ApplicationRepository);
+  private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
 
   // Data
   applications: Application[] = [];
-  selectedApplication: Application | null = null;
-  totalApplications = 0;
-  loading = false;
+  selectedApplications: number[] = [];
+
+  // UI state
+  isLoading = false;
+  isCreating = false;
+  isUpdating = false;
 
   // Pagination
-  currentPage = 1;
-  pageSize = 10;
-  pageSizeOptions = [5, 10, 25, 50];
-
-  // Sorting
-  currentSort: Sort = { active: 'name', direction: 'asc' };
+  pagination = new PaginationParams({
+    pageIndex: 1,
+    pageSize: 10,
+  });
+  applicationPaginationConfig: Pagination = new Pagination(0, 10, 5, 0, [5, 10, 25, 50]);
 
   // Filters
-  filters: ApplicationFilterParams = {};
+  filters: FilterParams = {};
   searchQuery = '';
-  statusFilter: Application['status'] | '' = '';
-  environmentFilter: Application['environment'] | '' = '';
-  categoryFilter = '';
 
-  // Forms
-  applicationForm: FormGroup;
-  searchForm: FormGroup;
+  // Form data
+  newApplication: Partial<Application> = {};
+  editApplicationId: number | null = null;
+  editApplication: Partial<Application> = {};
 
-  // Statistics
-  stats$: Observable<{
-    total: number;
-    byStatus: Record<Application['status'], number>;
-    byEnvironment: Record<Application['environment'], number>;
-    byCategory: Record<string, number>;
-  }>;
+  // Template references
+  @ViewChild('actionsTemplate') actionsTemplate!: TemplateRef<any>;
+  @ViewChild('statusTemplate') statusTemplate!: TemplateRef<any>;
+  @ViewChild('environmentTemplate') environmentTemplate!: TemplateRef<any>;
 
-  // Table columns
-  displayedColumns = ['name', 'version', 'status', 'environment', 'category', 'owner', 'actions'];
+  // Column definitions
+  applicationColumns: ColumnDefinition<Application>[] = [];
 
   // Status options
   statusOptions: Application['status'][] = ['active', 'inactive', 'maintenance', 'deprecated'];
   environmentOptions: Application['environment'][] = ['development', 'staging', 'production'];
 
-  constructor(
-    private applicationUseCase: ApplicationManagementUseCase,
-    private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar,
-    private dialog: MatDialog,
-  ) {
-    this.applicationForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      description: ['', [Validators.required, Validators.minLength(10)]],
-      version: ['', [Validators.required, Validators.pattern(/^\d+\.\d+\.\d+$/)]],
-      status: ['active', Validators.required],
-      category: ['', Validators.required],
-      owner: ['', Validators.required],
-      environment: ['development', Validators.required],
-      isPublic: [false],
-      repositoryUrl: [''],
-      documentationUrl: [''],
-      dependencies: [[]],
-      tags: [[]],
-    });
-
-    this.searchForm = this.formBuilder.group({
-      searchQuery: [''],
-      status: [''],
-      environment: [''],
-      category: [''],
-    });
-
-    this.stats$ = this.applicationUseCase.getApplicationStatistics();
-  }
-
-  ngOnInit(): void {
+  ngOnInit() {
+    this.initializeColumns();
     this.loadApplications();
-    this.setupFormSubscriptions();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  ngAfterViewInit() {
+    this.updateColumnsWithTemplates();
   }
 
-  private setupFormSubscriptions(): void {
-    this.searchForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(values => {
-      this.filters = {
-        search: values.searchQuery || undefined,
-        status: values.status || undefined,
-        environment: values.environment || undefined,
-        category: values.category || undefined,
-      };
-      this.currentPage = 1;
-      this.loadApplications();
+  private initializeColumns(): void {
+    this.applicationColumns = [
+      new ColumnDefinition<Application>({
+        key: 'id',
+        label: 'ID',
+        type: 'number',
+        width: '80px',
+        order: 1,
+      }),
+      new ColumnDefinition<Application>({
+        key: 'name',
+        label: 'Name',
+        type: 'string',
+        isDefaultSearchField: true,
+        required: true,
+        order: 2,
+        width: '200px',
+      }),
+      new ColumnDefinition<Application>({
+        key: 'version',
+        label: 'Version',
+        type: 'string',
+        order: 3,
+        width: '120px',
+      }),
+      new ColumnDefinition<Application>({
+        key: 'status',
+        label: 'Status',
+        type: 'template',
+        order: 4,
+        width: '120px',
+      }),
+      new ColumnDefinition<Application>({
+        key: 'environment',
+        label: 'Environment',
+        type: 'template',
+        order: 5,
+        width: '140px',
+      }),
+      new ColumnDefinition<Application>({
+        key: 'category',
+        label: 'Category',
+        type: 'string',
+        order: 6,
+        width: '150px',
+      }),
+      new ColumnDefinition<Application>({
+        key: 'owner',
+        label: 'Owner',
+        type: 'string',
+        order: 7,
+        width: '150px',
+      }),
+      new ColumnDefinition<Application>({
+        key: 'op',
+        label: 'Actions',
+        columnType: 'template',
+        order: 8,
+        width: '200px',
+      }),
+    ].sort((a, b) => (a.order || 0) - (b.order || 0));
+  }
+
+  private updateColumnsWithTemplates(): void {
+    if (this.actionsTemplate && this.statusTemplate && this.environmentTemplate) {
+      // Update status column with template
+      const statusColumn = this.applicationColumns.find(col => col.key === 'status');
+      if (statusColumn) {
+        statusColumn.templateOutlet = this.statusTemplate;
+      }
+
+      // Update environment column with template
+      const environmentColumn = this.applicationColumns.find(col => col.key === 'environment');
+      if (environmentColumn) {
+        environmentColumn.templateOutlet = this.environmentTemplate;
+      }
+
+      // Update actions column with template
+      const actionsColumn = this.applicationColumns.find(col => col.key === 'op');
+      if (actionsColumn) {
+        actionsColumn.templateOutlet = this.actionsTemplate;
+      }
+    }
+  }
+
+  loadApplications(): void {
+    this.isLoading = true;
+    this.applicationRepository.getAll(this.pagination, this.filters).subscribe({
+      next: (result: PagedResult<Application>) => {
+        this.applications = result.items;
+        this.applicationPaginationConfig.totalRecords = result.totalCount;
+        this.applicationPaginationConfig.pageIndex = result.pageIndex - 1;
+        this.applicationPaginationConfig.pageSize = result.pageSize;
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: (error: any) => {
+        console.error('Error loading applications:', error);
+        this.snackBar.open('Error loading applications', 'Close', { duration: 3000 });
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
     });
-  }
-
-  private loadApplications(): void {
-    this.loading = true;
-    const pagination: PaginationParams = {
-      page: this.currentPage,
-      pageSize: this.pageSize,
-      sortBy: this.currentSort.active,
-      sortDirection: this.currentSort.direction,
-    };
-
-    this.applicationUseCase
-      .getApplications(pagination, this.filters)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: result => {
-          this.applications = result.items;
-          this.totalApplications = result.totalCount;
-          this.loading = false;
-        },
-        error: error => {
-          console.error('Error loading applications:', error);
-          this.snackBar.open('Error loading applications', 'Close', { duration: 3000 });
-          this.loading = false;
-        },
-      });
   }
 
   onPageChange(event: PageEvent): void {
-    this.currentPage = event.pageIndex + 1;
-    this.pageSize = event.pageSize;
+    this.pagination.pageIndex = event.pageIndex + 1;
+    this.pagination.pageSize = event.pageSize;
+    this.applicationPaginationConfig.pageIndex = event.pageIndex;
+    this.applicationPaginationConfig.pageSize = event.pageSize;
     this.loadApplications();
   }
 
-  onSortChange(sort: Sort): void {
-    this.currentSort = sort;
+  onSearch(): void {
+    const query = this.searchQuery.trim();
+    if (query) {
+      this.filters.search = query;
+    } else {
+      delete this.filters.search;
+    }
+    this.pagination.pageIndex = 1;
     this.loadApplications();
   }
 
-  onCreateApplication(): void {
-    if (this.applicationForm.valid) {
-      const applicationData = this.applicationForm.value;
-      this.loading = true;
+  clearFilters(): void {
+    this.filters = {};
+    this.searchQuery = '';
+    this.pagination.pageIndex = 1;
+    this.loadApplications();
+  }
 
-      this.applicationUseCase
-        .createApplication(applicationData)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: application => {
-            this.snackBar.open('Application created successfully', 'Close', { duration: 3000 });
-            this.applicationForm.reset({
-              status: 'active',
-              environment: 'development',
-              isPublic: false,
-              dependencies: [],
-              tags: [],
-            });
-            this.loadApplications();
-            this.loading = false;
-          },
-          error: error => {
-            console.error('Error creating application:', error);
-            this.snackBar.open('Error creating application', 'Close', { duration: 3000 });
-            this.loading = false;
-          },
-        });
+  createApplication(): void {
+    if (!this.newApplication.name || !this.newApplication.version) {
+      this.snackBar.open('Name and version are required', 'Close', { duration: 3000 });
+      return;
     }
-  }
 
-  onUpdateApplication(application: Application): void {
-    this.selectedApplication = application;
-    this.applicationForm.patchValue(application);
-  }
-
-  onSaveUpdate(): void {
-    if (this.selectedApplication && this.applicationForm.valid) {
-      const updateData = this.applicationForm.value;
-      this.loading = true;
-
-      this.applicationUseCase
-        .updateApplication(this.selectedApplication.id, updateData)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: application => {
-            this.snackBar.open('Application updated successfully', 'Close', { duration: 3000 });
-            this.selectedApplication = null;
-            this.applicationForm.reset({
-              status: 'active',
-              environment: 'development',
-              isPublic: false,
-              dependencies: [],
-              tags: [],
-            });
-            this.loadApplications();
-            this.loading = false;
-          },
-          error: error => {
-            console.error('Error updating application:', error);
-            this.snackBar.open('Error updating application', 'Close', { duration: 3000 });
-            this.loading = false;
-          },
-        });
-    }
-  }
-
-  onDeleteApplication(application: Application): void {
-    if (confirm(`Are you sure you want to delete ${application.name}?`)) {
-      this.loading = true;
-
-      this.applicationUseCase
-        .deleteApplication(application.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: success => {
-            if (success) {
-              this.snackBar.open('Application deleted successfully', 'Close', { duration: 3000 });
-              this.loadApplications();
-            } else {
-              this.snackBar.open('Failed to delete application', 'Close', { duration: 3000 });
-            }
-            this.loading = false;
-          },
-          error: error => {
-            console.error('Error deleting application:', error);
-            this.snackBar.open('Error deleting application', 'Close', { duration: 3000 });
-            this.loading = false;
-          },
-        });
-    }
-  }
-
-  onUpdateStatus(application: Application, status: Application['status']): void {
-    this.applicationUseCase
-      .updateApplicationStatus(application.id, status)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: updatedApp => {
-          this.snackBar.open(`Status updated to ${status}`, 'Close', { duration: 3000 });
-          this.loadApplications();
-        },
-        error: error => {
-          console.error('Error updating status:', error);
-          this.snackBar.open('Error updating status', 'Close', { duration: 3000 });
-        },
-      });
-  }
-
-  onDeploy(application: Application, environment: Application['environment']): void {
-    this.applicationUseCase
-      .deployApplication(application.id, environment)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: deployedApp => {
-          this.snackBar.open(`Application deployed to ${environment}`, 'Close', { duration: 3000 });
-          this.loadApplications();
-        },
-        error: error => {
-          console.error('Error deploying application:', error);
-          this.snackBar.open('Error deploying application', 'Close', { duration: 3000 });
-        },
-      });
-  }
-
-  onAddDependency(application: Application, dependency: string): void {
-    if (dependency.trim()) {
-      this.applicationUseCase
-        .addApplicationDependency(application.id, dependency.trim())
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: updatedApp => {
-            this.snackBar.open(`Dependency ${dependency} added`, 'Close', { duration: 3000 });
-            this.loadApplications();
-          },
-          error: error => {
-            console.error('Error adding dependency:', error);
-            this.snackBar.open('Error adding dependency', 'Close', { duration: 3000 });
-          },
-        });
-    }
-  }
-
-  onRemoveDependency(application: Application, dependency: string): void {
-    this.applicationUseCase
-      .removeApplicationDependency(application.id, dependency)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: updatedApp => {
-          this.snackBar.open(`Dependency ${dependency} removed`, 'Close', { duration: 3000 });
-          this.loadApplications();
-        },
-        error: error => {
-          console.error('Error removing dependency:', error);
-          this.snackBar.open('Error removing dependency', 'Close', { duration: 3000 });
-        },
-      });
-  }
-
-  onAddTag(application: Application, tag: string): void {
-    if (tag.trim()) {
-      this.applicationUseCase
-        .addApplicationTag(application.id, tag.trim())
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: updatedApp => {
-            this.snackBar.open(`Tag ${tag} added`, 'Close', { duration: 3000 });
-            this.loadApplications();
-          },
-          error: error => {
-            console.error('Error adding tag:', error);
-            this.snackBar.open('Error adding tag', 'Close', { duration: 3000 });
-          },
-        });
-    }
-  }
-
-  onRemoveTag(application: Application, tag: string): void {
-    this.applicationUseCase
-      .removeApplicationTag(application.id, tag)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: updatedApp => {
-          this.snackBar.open(`Tag ${tag} removed`, 'Close', { duration: 3000 });
-          this.loadApplications();
-        },
-        error: error => {
-          console.error('Error removing tag:', error);
-          this.snackBar.open('Error removing tag', 'Close', { duration: 3000 });
-        },
-      });
-  }
-
-  onCancelEdit(): void {
-    this.selectedApplication = null;
-    this.applicationForm.reset({
-      status: 'active',
-      environment: 'development',
-      isPublic: false,
-      dependencies: [],
-      tags: [],
+    this.isCreating = true;
+    this.applicationRepository.create(this.newApplication as Omit<Application, 'id'>).subscribe({
+      next: (application: Application) => {
+        this.snackBar.open('Application created successfully', 'Close', { duration: 3000 });
+        this.newApplication = {};
+        this.loadApplications();
+        this.isCreating = false;
+        this.cdr.markForCheck();
+      },
+      error: (error: any) => {
+        console.error('Error creating application:', error);
+        this.snackBar.open('Error creating application', 'Close', { duration: 3000 });
+        this.isCreating = false;
+        this.cdr.markForCheck();
+      },
     });
+  }
+
+  startEdit(application: Application): void {
+    this.editApplicationId = application.id;
+    this.editApplication = { ...application };
+    this.cdr.markForCheck();
+  }
+
+  cancelEdit(): void {
+    this.editApplicationId = null;
+    this.editApplication = {};
+    this.cdr.markForCheck();
+  }
+
+  updateApplication(): void {
+    if (!this.editApplicationId || !this.editApplication.name || !this.editApplication.version) {
+      this.snackBar.open('Valid application data is required', 'Close', { duration: 3000 });
+      return;
+    }
+
+    this.isUpdating = true;
+    this.applicationRepository.update(this.editApplicationId, this.editApplication).subscribe({
+      next: (application: Application) => {
+        this.snackBar.open('Application updated successfully', 'Close', { duration: 3000 });
+        this.editApplicationId = null;
+        this.editApplication = {};
+        this.loadApplications();
+        this.isUpdating = false;
+        this.cdr.markForCheck();
+      },
+      error: (error: any) => {
+        console.error('Error updating application:', error);
+        this.snackBar.open(error.message || 'Error updating application', 'Close', { duration: 3000 });
+        this.isUpdating = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  deleteApplication(applicationId: number): void {
+    if (confirm('Are you sure you want to delete this application?')) {
+      this.applicationRepository.delete(applicationId).subscribe({
+        next: (success: boolean) => {
+          if (success) {
+            this.snackBar.open('Application deleted successfully', 'Close', { duration: 3000 });
+            this.loadApplications();
+            this.cdr.markForCheck();
+          } else {
+            this.snackBar.open('Failed to delete application', 'Close', { duration: 3000 });
+          }
+        },
+        error: (error: any) => {
+          console.error('Error deleting application:', error);
+          this.snackBar.open('Error deleting application', 'Close', { duration: 3000 });
+        },
+      });
+    }
+  }
+
+  onRowSelected(selectedRows: Application[]): void {
+    this.selectedApplications = selectedRows.map(application => application.id);
+    this.cdr.markForCheck();
+  }
+
+  bulkActivateApplications(): void {
+    if (this.selectedApplications.length === 0) {
+      this.snackBar.open('No applications selected', 'Close', { duration: 3000 });
+      return;
+    }
+
+    // For bulk operations, we'll need to implement bulk update in repository
+    // For now, show a message
+    this.snackBar.open('Bulk operations not yet implemented', 'Close', { duration: 3000 });
+  }
+
+  bulkDeactivateApplications(): void {
+    if (this.selectedApplications.length === 0) {
+      this.snackBar.open('No applications selected', 'Close', { duration: 3000 });
+      return;
+    }
+
+    this.snackBar.open('Bulk operations not yet implemented', 'Close', { duration: 3000 });
+  }
+
+  bulkDeleteApplications(): void {
+    if (this.selectedApplications.length === 0) {
+      this.snackBar.open('No applications selected', 'Close', { duration: 3000 });
+      return;
+    }
+
+    if (confirm(`Are you sure you want to delete ${this.selectedApplications.length} applications?`)) {
+      // For bulk delete, we'll need to implement it in repository
+      this.snackBar.open('Bulk delete not yet implemented', 'Close', { duration: 3000 });
+    }
+  }
+
+  getSelectedCount(): number {
+    return this.selectedApplications.length;
   }
 
   getStatusColor(status: Application['status']): string {
@@ -401,7 +366,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
       case 'deprecated':
         return 'warn';
       default:
-        return 'primary';
+        return 'basic';
     }
   }
 
@@ -414,7 +379,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
       case 'production':
         return 'primary';
       default:
-        return 'primary';
+        return 'basic';
     }
   }
 }

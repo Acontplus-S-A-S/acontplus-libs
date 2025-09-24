@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 import { Application, ApplicationFilterParams } from '../domain/application';
-import { PagedResult as PaginatedResult, PaginationParams } from '@acontplus/core';
+import { PagedResult, PaginationParams } from '@acontplus/core';
 
 @Injectable({
   providedIn: 'root',
@@ -165,7 +165,7 @@ export class MockApplicationService {
   getAll(
     pagination: PaginationParams,
     filters?: ApplicationFilterParams,
-  ): Observable<PaginatedResult<Application>> {
+  ): Observable<PagedResult<Application>> {
     let filteredApps = [...this.applications];
 
     // Apply filters
@@ -218,7 +218,9 @@ export class MockApplicationService {
     const endIndex = startIndex + pageSize;
     const paginatedApps = filteredApps.slice(startIndex, endIndex);
 
-    const result: PaginatedResult<Application> = {
+    const result: PagedResult<Application> = {
+      hasNextPage: false,
+      hasPreviousPage: false,
       items: paginatedApps,
       totalCount: filteredApps.length,
       pageIndex: page,
@@ -273,7 +275,7 @@ export class MockApplicationService {
     return this.simulateDelay(true);
   }
 
-  search(query: string, pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  search(query: string, pagination: PaginationParams): Observable<PagedResult<Application>> {
     return this.getAll(pagination, { search: query });
   }
 
@@ -281,30 +283,28 @@ export class MockApplicationService {
   getByStatus(
     status: Application['status'],
     pagination: PaginationParams,
-  ): Observable<PaginatedResult<Application>> {
+  ): Observable<PagedResult<Application>> {
     return this.getAll(pagination, { status });
   }
 
   getByEnvironment(
     environment: Application['environment'],
     pagination: PaginationParams,
-  ): Observable<PaginatedResult<Application>> {
+  ): Observable<PagedResult<Application>> {
     return this.getAll(pagination, { environment });
   }
 
   getByCategory(
     category: string,
     pagination: PaginationParams,
-  ): Observable<PaginatedResult<Application>> {
+  ): Observable<PagedResult<Application>> {
     return this.getAll(pagination, { category });
   }
 
-  getByOwner(
-    owner: string,
-    pagination: PaginationParams,
-  ): Observable<PaginatedResult<Application>> {
+  getByOwner(owner: string, pagination: PaginationParams): Observable<PagedResult<Application>> {
     const filteredApps = this.applications.filter(app => app.owner === owner);
-    const result: PaginatedResult<Application> = {
+    const result: PagedResult<Application> = {
+      pageIndex: 0,
       items: filteredApps,
       totalCount: filteredApps.length,
       totalPages: 1,
@@ -315,7 +315,7 @@ export class MockApplicationService {
     return this.simulateDelay(result);
   }
 
-  getPublicApplications(pagination: PaginationParams): Observable<PaginatedResult<Application>> {
+  getPublicApplications(pagination: PaginationParams): Observable<PagedResult<Application>> {
     return this.getAll(pagination, { isPublic: true });
   }
 

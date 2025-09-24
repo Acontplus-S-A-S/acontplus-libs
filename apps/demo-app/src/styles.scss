@@ -5,9 +5,9 @@
 @use 'theme-colors' as custom-theme;
 
 // Import UI components' styles
-@use '@acontplus/ng-components/styles/snackbar-theme' as snackbar-theme;
-@use '@acontplus/ng-components/styles/custom-buttons' as buttons;
-@use '@acontplus/ng-components/styles/custom-dialog' as custom-dialog;
+// @use '@acontplus/ng-components/styles/snackbar-theme' as snackbar-theme; // Removed: file does not exist in new codebase
+// @use '@acontplus/ng-components/styles/custom-buttons' as buttons; // Removed: file does not exist in new codebase
+// @use '@acontplus/ng-components/styles/custom-dialog' as custom-dialog; // commented out: file missing in this environment
 @use 'ngx-toastr/toastr';
 
 // Include Angular Material Core foundational styles
@@ -79,7 +79,7 @@ body {
 //@include mat.form-field-density($compact-theme);
 
 // Custom button styles
-@include buttons.custom-button-theme($light-theme);
+//@include buttons.custom-button-theme($light-theme);
 
 // Dark theme
 .dark-theme {

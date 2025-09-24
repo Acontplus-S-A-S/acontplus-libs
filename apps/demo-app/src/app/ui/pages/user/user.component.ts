@@ -22,9 +22,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ColumnDefinition, MatDynamicTableComponent } from '@acontplus/ng-components';
-import { UserRepository } from '../../../data/user.repository';
-import { User } from '../../../domain/user';
+import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontplus/ng-components';
+import { UserRepository } from '../../../data';
+import { User } from '../../../domain';
 import { PaginationParams, FilterParams, PagedResult } from '@acontplus/core';
 
 @Component({
@@ -69,11 +69,7 @@ export class UserComponent implements OnInit, AfterViewInit {
     pageIndex: 1,
     pageSize: 10,
   });
-  userPaginationConfig = {
-    totalRecords: 0,
-    pageIndex: 0,
-    pageSize: 10,
-  };
+  userPaginationConfig: Pagination = new Pagination(0, 10, 5, 0, [5, 10, 25, 50]);
 
   // Filters
   filters: FilterParams = {};
@@ -310,22 +306,22 @@ export class UserComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.userRepository.bulkUpdate(
-      this.selectedUsers.map(id => ({ id, data: { isActive: true } }))
-    ).subscribe({
-      next: (users: User[]) => {
-        this.snackBar.open(`${users.length} users activated successfully`, 'Close', {
-          duration: 3000,
-        });
-        this.selectedUsers = [];
-        this.loadUsers();
-        this.cdr.markForCheck();
-      },
-      error: (error: any) => {
-        console.error('Error in bulk operation:', error);
-        this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
-      },
-    });
+    this.userRepository
+      .bulkUpdate(this.selectedUsers.map(id => ({ id, data: { isActive: true } })))
+      .subscribe({
+        next: (users: User[]) => {
+          this.snackBar.open(`${users.length} users activated successfully`, 'Close', {
+            duration: 3000,
+          });
+          this.selectedUsers = [];
+          this.loadUsers();
+          this.cdr.markForCheck();
+        },
+        error: (error: any) => {
+          console.error('Error in bulk operation:', error);
+          this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
+        },
+      });
   }
 
   bulkDeactivateUsers(): void {
@@ -334,22 +330,22 @@ export class UserComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.userRepository.bulkUpdate(
-      this.selectedUsers.map(id => ({ id, data: { isActive: false } }))
-    ).subscribe({
-      next: (users: User[]) => {
-        this.snackBar.open(`${users.length} users deactivated successfully`, 'Close', {
-          duration: 3000,
-        });
-        this.selectedUsers = [];
-        this.loadUsers();
-        this.cdr.markForCheck();
-      },
-      error: (error: any) => {
-        console.error('Error in bulk operation:', error);
-        this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
-      },
-    });
+    this.userRepository
+      .bulkUpdate(this.selectedUsers.map(id => ({ id, data: { isActive: false } })))
+      .subscribe({
+        next: (users: User[]) => {
+          this.snackBar.open(`${users.length} users deactivated successfully`, 'Close', {
+            duration: 3000,
+          });
+          this.selectedUsers = [];
+          this.loadUsers();
+          this.cdr.markForCheck();
+        },
+        error: (error: any) => {
+          console.error('Error in bulk operation:', error);
+          this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
+        },
+      });
   }
 
   bulkDeleteUsers(): void {

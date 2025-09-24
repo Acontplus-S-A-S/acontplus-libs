@@ -35,6 +35,11 @@ export class NumberUtilsDemoComponent {
 
   compareNumbers() {
     const cmp = this.num1 - this.num2;
-    this.result = cmp > 0 ? 'Primer número es mayor' : cmp < 0 ? 'Segundo número es mayor' : 'Los números son iguales';
+    this.result =
+      cmp > 0
+        ? 'Primer número es mayor'
+        : cmp < 0
+          ? 'Segundo número es mayor'
+          : 'Los números son iguales';
   }
 }

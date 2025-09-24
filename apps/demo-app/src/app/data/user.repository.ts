@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-  FilterParams,
-  PagedResult as PaginatedResult,
-  PaginationParams,
-} from '@acontplus/core';
-import { User } from '../domain/user';
+import { FilterParams, PagedResult as PaginatedResult, PaginationParams } from '@acontplus/core';
+import { User } from '../domain';
 import { MockUserService } from './mock-user.service';
 
 @Injectable({
@@ -17,10 +13,7 @@ export class UserRepository {
 
   constructor(private mockService: MockUserService) {}
 
-  getAll(
-    pagination: PaginationParams,
-    filters?: FilterParams
-  ): Observable<PaginatedResult<User>> {
+  getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<User>> {
     return this.mockService.getUsers(pagination, filters);
   }
 
@@ -28,10 +21,7 @@ export class UserRepository {
     return this.mockService.getUserById(id);
   }
 
-  search(
-    query: string,
-    pagination: PaginationParams
-  ): Observable<PaginatedResult<User>> {
+  search(query: string, pagination: PaginationParams): Observable<PaginatedResult<User>> {
     return this.mockService.searchUsers(query, pagination);
   }
 
@@ -39,10 +29,7 @@ export class UserRepository {
     return this.mockService.getActiveUsers(pagination);
   }
 
-  getUsersByRole(
-    role: string,
-    pagination: PaginationParams
-  ): Observable<PaginatedResult<User>> {
+  getUsersByRole(role: string, pagination: PaginationParams): Observable<PaginatedResult<User>> {
     return this.mockService.getUsersByRole(role, pagination);
   }
 

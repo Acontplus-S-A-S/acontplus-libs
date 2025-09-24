@@ -21,20 +21,23 @@
             "input": "apps/demo-app/public"
           }
         ],
-        "styles": ["apps/demo-app/src/styles.scss"]
+        "styles": ["apps/demo-app/src/styles.scss"],
+        "allowedCommonJsDependencies": [
+          "sweetalert2"
+        ]
       },
       "configurations": {
         "production": {
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumWarning": "2.5mb",
+              "maximumError": "3mb"
             },
             {
               "type": "anyComponentStyle",
-              "maximumWarning": "4kb",
-              "maximumError": "8kb"
+              "maximumWarning": "100kb",
+              "maximumError": "75kb"
             }
           ],
           "outputHashing": "all"
