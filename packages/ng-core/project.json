@@ -29,10 +29,11 @@
       "defaultConfiguration": "production"
     },
     "publish": {
-      "executor": "@nx/js:npm-package",
-      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
       "options": {
-        "command": "public"
+        "command": "npm publish --access=public",
+        "cwd": "dist/packages/ng-core",
+        "parallel": false
       }
     },
     "nx-release-publish": {
