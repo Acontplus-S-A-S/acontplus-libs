@@ -26,12 +26,12 @@ Este documento establece la arquitectura frontend para el ecosistema Acontplus, 
 
 ### Estructura Recomendada para el Ecosistema
 ```
-projects/
-├── acontplus-core/           # Servicios base (HTTP, Config, Storage)
-├── acontplus-ui-components/  # Componentes UI reutilizables
-├── acontplus-customers/      # Feature: Gestión de clientes
-├── acontplus-inventory/      # Feature: Gestión de inventario
-└── acontplus-orders/         # Feature: Gestión de pedidos
+packages/
+├── core/           # Servicios base (HTTP, Config, Storage)
+├── ng-components/  # Componentes UI reutilizables
+├── ng-customer/    # Feature: Gestión de clientes
+├── ng-notifications/ # Feature: Gestión de notificaciones
+└── utils/          # Utilidades compartidas
 ```
 
 ### Flutter Architecture para Librerías
@@ -175,7 +175,7 @@ export class CreateOrderUseCase {
 ### Estructura Detallada de Acontplus-Core
 
 ```typescript
-projects/acontplus-core/src/lib/
+packages/core/src/lib/
 ├── core/                       // 🔧 Servicios fundamentales
 │   ├── http/
 │   │   ├── api.service.ts     // Cliente HTTP base
@@ -1264,7 +1264,7 @@ La arquitectura de Flutter es **perfecta** para tu caso porque:
 ### 1. Public API (Exportaciones)
 
 ```typescript
-// projects/acontplus-core/src/public-api.ts
+// packages/core/src/public-api.ts
 
 // Core
 export * from './lib/core/http/api.service';
@@ -1282,14 +1282,21 @@ export * from './lib/features/customers/domain/usecases/get-customers.usecase';
 export * from './lib/features/customers/domain/usecases/create-customer.usecase';
 export * from './lib/features/customers/presentation/services/customer.service';
 
-// Módulos
-export * from './lib/acontplus-core.module';
+// Core exports (no module needed for library)
+export * from './lib/adapters';
+export * from './lib/constants';
+export * from './lib/environments';
+export * from './lib/models';
+export * from './lib/ports';
+export * from './lib/pricing';
+export * from './lib/types';
+export * from './lib/value-objects';
 ```
 
 ### 2. Módulo Principal
 
 ```typescript
-// projects/acontplus-core/src/lib/acontplus-core.module.ts
+// packages/core/src/lib/core.module.ts
 @NgModule({
   imports: [
     CommonModule,
@@ -1482,17 +1489,19 @@ export class AppModule { }
 
 ### Estructura del Workspace Completo
 ```
-acontplus-workspace/
-├── projects/
-│   ├── acontplus-core/              # Base library
-│   ├── acontplus-ui-components/     # UI components
-│   ├── acontplus-customers/         # Customer feature
-│   ├── acontplus-inventory/         # Inventory feature
-│   └── acontplus-orders/            # Orders feature
+acontplus-libs/
+├── packages/
+│   ├── core/                       # Base library
+│   ├── ng-components/              # UI components
+│   ├── ng-customer/                # Customer feature
+│   ├── ng-notifications/           # Notifications feature
+│   ├── ng-core/                    # Angular core services
+│   ├── ui-kit/                     # Additional UI components
+│   └── utils/                      # Shared utilities
 ├── apps/
-│   ├── erp-app/                    # Main ERP application
-│   ├── pos-app/                    # Point of sale app
-│   └── mobile-app/                 # Mobile companion
+│   ├── demo-app/                   # Demo application
+│   ├── demo-app-e2e/               # E2E tests
+│   └── erp-app/                    # Main ERP application (future)
 └── dist/                           # Built libraries
 ```
 
@@ -1502,13 +1511,14 @@ acontplus-workspace/
 
 #### 1. Configurar Monorepo
 ```bash
-ng new acontplus-workspace --create-application=false
-cd acontplus-workspace
-ng generate library acontplus-core
-ng generate library acontplus-ui-components
+npx create-nx-workspace@latest acontplus-libs --preset=angular-monorepo
+cd acontplus-libs
+npx nx g @nx/angular:library core --directory=packages
+npx nx g @nx/angular:library ng-components --directory=packages
+npx nx g @nx/angular:application demo-app --directory=apps
 ```
 
-#### 2. Implementar acontplus-core
+#### 2. Implementar core
 - ✅ Servicio HTTP base
 - ✅ Gestión de configuración  
 - ✅ Servicios de almacenamiento
@@ -1529,7 +1539,7 @@ ng generate library acontplus-customers
 #### 2. Implementar Arquitectura
 ```typescript
 // Estructura Flutter Architecture
-projects/acontplus-customers/
+packages/ng-customer/
 └── src/lib/
     ├── data/
     ├── domain/

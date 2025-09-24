@@ -145,7 +145,7 @@ The CI pipeline should run:
 ```bash
 npm run lint:all          # Lint + format check
 npm run test              # Run all tests
-npm run build-library     # Build verification
+npm run build:all         # Build verification
 ```
 
 ## 📊 Current Status
