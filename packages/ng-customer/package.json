@@ -1,17 +1,17 @@
 {
   "name": "@acontplus/ng-customer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Acontplus Angular Customer Module",
   "peerDependencies": {
-    "@acontplus/ng-components": "^1.0.6",
-    "@acontplus/ng-core": "^1.0.5",
-    "@acontplus/ng-notifications": "^1.0.1",
+    "@acontplus/ng-components": "^1.0.7",
+    "@acontplus/ng-core": "^1.0.6",
+    "@acontplus/ng-notifications": "^1.0.2",
     "@angular/common": "^20.3.1",
     "@angular/core": "^20.3.1"
   },
   "sideEffects": false,
-  "main": "fesm2022/ng-customer.mjs",
-  "module": "fesm2022/ng-customer.mjs",
+  "main": "fesm2022/acontplus-ng-customer.mjs",
+  "module": "fesm2022/acontplus-ng-customer.mjs",
   "typings": "index.d.ts",
   "files": [
     "index.d.ts",
