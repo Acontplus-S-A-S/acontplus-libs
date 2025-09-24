@@ -1,9 +1,9 @@
 {
   "name": "@acontplus/core",
-  "version": "1.0.8",
+  "version": "1.0.5",
   "description": "Core library for Acontplus projects, providing essential utilities and functionalities.",
   "peerDependencies": {
-    "@acontplus/utils": "^1.0.5",
+    "@acontplus/utils": "^1.0.2",
     "typescript": "^5.9.2",
     "uuid": "^13.0.0"
   },
@@ -12,17 +12,17 @@
   },
   "type": "module",
   "main": "./src/index.js",
-  "module": "./src/index.js",
   "types": "./src/index.d.ts",
   "exports": {
     ".": {
+      "types": "./src/index.d.ts",
       "import": "./src/index.js",
-      "types": "./src/index.d.ts"
+      "require": "./src/index.cjs"
     },
     "./package.json": "./package.json"
   },
   "files": [
-    "src/**",
+    "dist",
     "README.md"
   ],
   "scripts": {

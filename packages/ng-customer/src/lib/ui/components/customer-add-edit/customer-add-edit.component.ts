@@ -1,17 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
 import { forkJoin, from, Observable } from 'rxjs';
-<<<<<<<< HEAD:projects/acontplus-ui-components/src/lib/customers-ui/client/client-add-edit/client-add-edit.component.ts
-import {
-  clientUseCase,
-  customerExternalUseCase,
-  ToastrNotificationService,
-  SRI_IDENTIFICATION_CODE,
-  SEPARATOR_KEY_CODE,
-  SEPARADORES_REGEX,
-} from 'acontplus-core';
-========
 import { NotificationService } from '@acontplus/ng-notifications';
->>>>>>>> e8b4dd251833a4e8d200bdc036806a3191730767:packages/ng-customer/src/lib/ui/components/customer-add-edit/customer-add-edit.component.ts
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -22,11 +11,7 @@ import {
   MatDynamicCardComponent,
   MatInputChipComponent,
   MatThemeButtonComponent,
-<<<<<<<< HEAD:projects/acontplus-ui-components/src/lib/customers-ui/client/client-add-edit/client-add-edit.component.ts
-} from '../../../components';
-========
 } from '@acontplus/ng-components';
->>>>>>>> e8b4dd251833a4e8d200bdc036806a3191730767:packages/ng-customer/src/lib/ui/components/customer-add-edit/customer-add-edit.component.ts
 import { MatButtonModule } from '@angular/material/button';
 import {
   AbstractControl,
@@ -41,10 +26,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-<<<<<<<< HEAD:projects/acontplus-ui-components/src/lib/customers-ui/client/client-add-edit/client-add-edit.component.ts
-import { ToUpperCaseDirective } from '../../../directives';
-========
->>>>>>>> e8b4dd251833a4e8d200bdc036806a3191730767:packages/ng-customer/src/lib/ui/components/customer-add-edit/customer-add-edit.component.ts
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -63,7 +44,7 @@ import { CustomerHttpRepository } from '../../../infrastructure/repositories/cus
 import { CustomerExternalHttpRepository } from '../../../infrastructure/repositories/customer-external-http.repository';
 
 @Component({
-  selector: 'acp-client-add-edit',
+  selector: 'acp-customer-add-edit',
   imports: [
     MatDialogContent,
     MatDialogActions,
@@ -83,15 +64,6 @@ import { CustomerExternalHttpRepository } from '../../../infrastructure/reposito
     MatThemeButtonComponent,
     MatDynamicCardComponent,
   ],
-<<<<<<<< HEAD:projects/acontplus-ui-components/src/lib/customers-ui/client/client-add-edit/client-add-edit.component.ts
-  templateUrl: './client-add-edit.component.html',
-  styleUrl: './client-add-edit.component.scss',
-  providers: [provideNativeDateAdapter()],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ClientAddEditComponent implements OnInit {
-  private readonly dialogRef = inject(MatDialogRef<ClientAddEditComponent>);
-========
   templateUrl: './customer-add-edit.component.html',
   styleUrl: './customer-add-edit.component.scss',
   providers: [
@@ -111,7 +83,6 @@ export class CustomerAddEditComponent implements OnInit {
   private readonly dialogRef = inject(MatDialogRef<CustomerAddEditComponent>);
   private readonly customerUseCase = inject(CustomerUseCase);
   private readonly customerExternalUseCase = inject(CustomerExternalUseCase);
->>>>>>>> e8b4dd251833a4e8d200bdc036806a3191730767:packages/ng-customer/src/lib/ui/components/customer-add-edit/customer-add-edit.component.ts
   btnText = signal('Guardar');
 
   readonly paramsOptions = inject<{
@@ -204,13 +175,8 @@ export class CustomerAddEditComponent implements OnInit {
     this.customerForm.patchValue({
       validationSri: false,
     });
-<<<<<<<< HEAD:projects/acontplus-ui-components/src/lib/customers-ui/client/client-add-edit/client-add-edit.component.ts
-    from(clientUseCase.checkExistence(id)).subscribe(response => {
-      if (response.success && response.data) {
-========
     from(this.customerUseCase.checkExistence(id)).subscribe(response => {
       if (isSuccessResponse(response) && response.data) {
->>>>>>>> e8b4dd251833a4e8d200bdc036806a3191730767:packages/ng-customer/src/lib/ui/components/customer-add-edit/customer-add-edit.component.ts
         alert('El cliente ya se encuentra registrado en su empresa');
         this.notificationService.toastr.show({
           type: 'warning',
@@ -264,19 +230,11 @@ export class CustomerAddEditComponent implements OnInit {
   getLoadData(): Observable<any> {
     if (this.isUpdate()) {
       return forkJoin([
-<<<<<<<< HEAD:projects/acontplus-ui-components/src/lib/customers-ui/client/client-add-edit/client-add-edit.component.ts
-        from(clientUseCase.getFormData()),
-        from(clientUseCase.getById(this.params.id)),
-      ]);
-    }
-    return from(clientUseCase.getFormData());
-========
         from(this.customerUseCase.getFormData()),
         from(this.customerUseCase.getById(this.params.id)),
       ]);
     }
     return from(this.customerUseCase.getFormData());
->>>>>>>> e8b4dd251833a4e8d200bdc036806a3191730767:packages/ng-customer/src/lib/ui/components/customer-add-edit/customer-add-edit.component.ts
   }
 
   ngOnInit(): void {
@@ -487,15 +445,9 @@ export class CustomerAddEditComponent implements OnInit {
         id: this.params.id,
         data: dataForm,
       };
-<<<<<<<< HEAD:projects/acontplus-ui-components/src/lib/customers-ui/client/client-add-edit/client-add-edit.component.ts
-      from(clientUseCase.update(sendParams)).subscribe(response => {
-        this.tS.show({
-          type: response.success ? 'success' : 'warning',
-========
       from(this.customerUseCase.update(sendParams)).subscribe(response => {
         this.notificationService.toastr.show({
           type: isSuccessResponse(response) ? 'success' : 'warning',
->>>>>>>> e8b4dd251833a4e8d200bdc036806a3191730767:packages/ng-customer/src/lib/ui/components/customer-add-edit/customer-add-edit.component.ts
           message: `${response.message}`,
         });
         if (isSuccessResponse(response)) {
@@ -507,15 +459,9 @@ export class CustomerAddEditComponent implements OnInit {
     }
 
     if (this.isCreate()) {
-<<<<<<<< HEAD:projects/acontplus-ui-components/src/lib/customers-ui/client/client-add-edit/client-add-edit.component.ts
-      from(clientUseCase.create(dataForm)).subscribe(response => {
-        this.tS.show({
-          type: response.success ? 'success' : 'warning',
-========
       from(this.customerUseCase.create(dataForm)).subscribe(response => {
         this.notificationService.toastr.show({
           type: isSuccessResponse(response) ? 'success' : 'warning',
->>>>>>>> e8b4dd251833a4e8d200bdc036806a3191730767:packages/ng-customer/src/lib/ui/components/customer-add-edit/customer-add-edit.component.ts
           message: `${response.message}`,
         });
         if (isSuccessResponse(response)) {

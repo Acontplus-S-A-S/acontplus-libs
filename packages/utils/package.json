@@ -1,20 +1,20 @@
 {
   "name": "@acontplus/utils",
-  "version": "1.0.5",
+  "version": "1.0.2",
   "description": "Utility library",
   "type": "module",
   "main": "./src/index.js",
-  "module": "./src/index.js",
   "types": "./src/index.d.ts",
   "exports": {
     ".": {
+      "types": "./src/index.d.ts",
       "import": "./src/index.js",
-      "types": "./src/index.d.ts"
+      "require": "./src/index.cjs"
     },
     "./package.json": "./package.json"
   },
   "files": [
-    "src/**",
+    "dist",
     "README.md"
   ],
   "scripts": {
