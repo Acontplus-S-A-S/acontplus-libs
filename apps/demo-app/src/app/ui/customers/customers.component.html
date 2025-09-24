@@ -5,11 +5,7 @@
     <div class="mt-2">
       <div class="customer-list-container">
         @for (item of customers(); track $index) {
-<<<<<<< HEAD:projects/test-app/src/app/ui/customers/customers.component.html
-          <acp-client-card [client]="item" (editClient)="openEdit(item)" />
-=======
           <acp-customer-card [customer]="item" (editCustomer)="openEdit(item)" />
->>>>>>> e8b4dd251833a4e8d200bdc036806a3191730767:apps/demo-app/src/app/ui/customers/customers.component.html
         }
       </div>
     </div>
