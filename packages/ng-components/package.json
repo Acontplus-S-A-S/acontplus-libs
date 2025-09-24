@@ -1,0 +1,82 @@
+{
+  "name": "@acontplus/ng-components",
+  "version": "1.0.6",
+  "description": "Angular Material UI component library with dynamic tables, theming support, dialog wrappers, and comprehensive styling utilities",
+  "peerDependencies": {
+    "@acontplus/ng-core": "^1.0.5",
+    "@angular/cdk": "^20.2.4",
+    "@angular/common": "^20.3.1",
+    "@angular/core": "^20.3.1",
+    "@angular/material": "^20.2.4",
+    "tabulator-tables": "^6.3.1"
+  },
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "sass": "./styles/index.scss"
+    },
+    "./styles": "./styles/index.scss",
+    "./styles/buttons": "./styles/_custom-buttons.scss",
+    "./styles/dialog": "./styles/_custom-dialog.scss"
+  },
+  "main": "fesm2022/ng-components.mjs",
+  "module": "fesm2022/ng-components.mjs",
+  "typings": "index.d.ts",
+  "files": [
+    "index.d.ts",
+    "*.d.ts",
+    "**/*.d.ts",
+    "fesm2022/**/*"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "acontplus",
+    "angular",
+    "angular-material",
+    "material-design",
+    "ui-components",
+    "dynamic-table",
+    "tabulator",
+    "cards",
+    "dialog",
+    "snackbar",
+    "theme",
+    "theming",
+    "dark-mode",
+    "overlay",
+    "autocomplete",
+    "spinner",
+    "interceptors",
+    "customer-ui",
+    "form-controls",
+    "directives",
+    "pipes",
+    "scss",
+    "styling",
+    "components",
+    "typescript",
+    "frontend",
+    "library"
+  ],
+  "author": "Ivan Paz <ifer343@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Acontplus-S-A-S/acontplus-libs/issues"
+  },
+  "homepage": "https://github.com/Acontplus-S-A-S/acontplus-libs#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Acontplus-S-A-S/acontplus-libs.git"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  }
+}

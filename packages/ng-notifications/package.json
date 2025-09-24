@@ -1,0 +1,63 @@
+{
+  "name": "@acontplus/ng-notifications",
+  "version": "1.0.1",
+  "description": "A library of Angular components for notifications, including custom buttons, dialogs, and snackbars, built with Angular Material and styled with SCSS.",
+  "peerDependencies": {
+    "@angular/common": "^20.3.1",
+    "@angular/core": "^20.3.1",
+    "@angular/material": "^20.2.4",
+    "ngx-toastr": "^19.1.0",
+    "rxjs": "^7.8.2",
+    "sweetalert2": "^11.23.0"
+  },
+  "sideEffects": false,
+  "main": "fesm2022/ng-notifications.mjs",
+  "module": "fesm2022/ng-notifications.mjs",
+  "typings": "index.d.ts",
+  "files": [
+    "index.d.ts",
+    "*.d.ts",
+    "**/*.d.ts",
+    "fesm2022/**/*"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "acontplus",
+    "angular",
+    "angular-material",
+    "material-design",
+    "ui-components",
+    "notifications",
+    "ngx-toastr",
+    "sweetalert2",
+    "alerts",
+    "snackbar",
+    "scss",
+    "styling",
+    "components",
+    "typescript",
+    "frontend",
+    "library"
+  ],
+  "author": "Ivan Paz <ifer343@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Acontplus-S-A-S/acontplus-libs/issues"
+  },
+  "homepage": "https://github.com/Acontplus-S-A-S/acontplus-libs#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Acontplus-S-A-S/acontplus-libs.git"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  }
+}

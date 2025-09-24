@@ -1,0 +1,337 @@
+<div class="product-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Product Management</mat-card-title>
+      <mat-card-subtitle>Manage your product catalog</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Statistics Section -->
+      @if (!isLoading) {
+        <div class="stats-section">
+          <div class="stat-card">
+            <h3>Total Products</h3>
+            <p class="stat-number">{{ totalProducts }}</p>
+          </div>
+          <div class="stat-card">
+            <h3>Active Products</h3>
+            <p class="stat-number">{{ activeProducts }}</p>
+          </div>
+          <div class="stat-card">
+            <h3>Total Value</h3>
+            <p class="stat-number">{{ totalValue | currency: 'USD' }}</p>
+          </div>
+        </div>
+      }
+
+      <!-- Search and Filters -->
+      <div class="filters-section">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search Products</mat-label>
+          <input
+            matInput
+            [(ngModel)]="searchQuery"
+            placeholder="Search by name, category, or description"
+            (keyup.enter)="onSearch()"
+          />
+          <button mat-icon-button matSuffix (click)="onSearch()">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="category-filter">
+          <mat-label>Category</mat-label>
+          <mat-select [(ngModel)]="selectedCategory" (selectionChange)="onFilterChange()">
+            <mat-option value="">All Categories</mat-option>
+            @for (category of categories; track category) {
+              <mat-option [value]="category">
+                {{ category }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="price-filter">
+          <mat-label>Min Price</mat-label>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="minPrice"
+            placeholder="0"
+            (input)="onFilterChange()"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="price-filter">
+          <mat-label>Max Price</mat-label>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="maxPrice"
+            placeholder="1000"
+            (input)="onFilterChange()"
+          />
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="onSearch()">
+          <mat-icon>search</mat-icon>
+          Search
+        </button>
+        <button mat-button (click)="clearFilters()">
+          <mat-icon>clear</mat-icon>
+          Clear
+        </button>
+      </div>
+
+      <!-- Create Product Form -->
+      <div class="create-section">
+        <h3>Add New Product</h3>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Product Name</mat-label>
+            <input
+              matInput
+              [(ngModel)]="newProduct.name"
+              placeholder="Enter product name"
+              required
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Category</mat-label>
+            <mat-select [(ngModel)]="newProduct.category" required>
+              @for (category of categories; track category) {
+                <mat-option [value]="category">
+                  {{ category }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Price</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="newProduct.price"
+              placeholder="0.00"
+              step="0.01"
+              required
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Stock</mat-label>
+            <input matInput type="number" [(ngModel)]="newProduct.stock" placeholder="0" required />
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="description-field">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              [(ngModel)]="newProduct.description"
+              placeholder="Enter product description"
+              rows="3"
+            ></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Image URL</mat-label>
+            <input
+              matInput
+              [(ngModel)]="newProduct.imageUrl"
+              placeholder="https://example.com/image.jpg"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Available Date</mat-label>
+            <input
+              matInput
+              type="date"
+              [ngModel]="getDateString(newProduct.availableDate)"
+              (ngModelChange)="setDateFromString($event, 'newProduct')"
+              required
+            />
+          </mat-form-field>
+        </div>
+
+        <button mat-raised-button color="primary" (click)="createProduct()" [disabled]="isCreating">
+          <mat-icon>add</mat-icon>
+          {{ isCreating ? 'Creating...' : 'Create Product' }}
+        </button>
+      </div>
+
+      <!-- Bulk Operations -->
+      @if (selectedProducts.length > 0) {
+        <div class="bulk-operations">
+          <h3>Bulk Operations ({{ selectedProducts.length }} selected)</h3>
+          <div class="bulk-buttons">
+            <button mat-raised-button color="accent" (click)="bulkActivateProducts()">
+              <mat-icon>check_circle</mat-icon>
+              Activate
+            </button>
+            <button mat-raised-button color="warn" (click)="bulkDeactivateProducts()">
+              <mat-icon>cancel</mat-icon>
+              Deactivate
+            </button>
+            <button mat-raised-button color="warn" (click)="bulkDeleteProducts()">
+              <mat-icon>delete_forever</mat-icon>
+              Delete
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- Products Table -->
+      <div class="table-section">
+        <acp-mat-dynamic-table
+          [tableData]="products"
+          [columnDefinitions]="productColumns"
+          [showSelectBox]="true"
+          [showFooter]="true"
+          [enablePagination]="true"
+          [paginationConfig]="productPaginationConfig"
+          [showExpand]="true"
+          [expandedDetail]="expandedProductDetail"
+          [rowTemplate]="actionsTemplate"
+          (rowSelected)="onRowSelected($event)"
+          (pageEvent)="onPageChange($event)"
+        >
+        </acp-mat-dynamic-table>
+      </div>
+
+      <!-- Edit Product Dialog -->
+      @if (editProductId !== null) {
+        <div class="edit-section">
+          <h3>Edit Product</h3>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Product Name</mat-label>
+              <input
+                matInput
+                [(ngModel)]="editProduct.name"
+                placeholder="Enter product name"
+                required
+              />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Category</mat-label>
+              <mat-select [(ngModel)]="editProduct.category" required>
+                @for (category of categories; track category) {
+                  <mat-option [value]="category">
+                    {{ category }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Price</mat-label>
+              <input
+                matInput
+                type="number"
+                [(ngModel)]="editProduct.price"
+                placeholder="0.00"
+                step="0.01"
+                required
+              />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Stock</mat-label>
+              <input
+                matInput
+                type="number"
+                [(ngModel)]="editProduct.stock"
+                placeholder="0"
+                required
+              />
+            </mat-form-field>
+          </div>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="description-field">
+              <mat-label>Description</mat-label>
+              <textarea
+                matInput
+                [(ngModel)]="editProduct.description"
+                placeholder="Enter product description"
+                rows="3"
+              ></textarea>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Image URL</mat-label>
+              <input
+                matInput
+                [(ngModel)]="editProduct.imageUrl"
+                placeholder="https://example.com/image.jpg"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Available Date</mat-label>
+              <input
+                matInput
+                type="date"
+                [ngModel]="getDateString(editProduct.availableDate)"
+                (ngModelChange)="setDateFromString($event, 'editProduct')"
+                required
+              />
+            </mat-form-field>
+          </div>
+          <div class="edit-buttons">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="updateProduct()"
+              [disabled]="isUpdating"
+            >
+              <mat-icon>save</mat-icon>
+              {{ isUpdating ? 'Updating...' : 'Update Product' }}
+            </button>
+            <button mat-button (click)="cancelEdit()">
+              <mat-icon>cancel</mat-icon>
+              Cancel
+            </button>
+          </div>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<ng-template #actionsTemplate let-element="element" let-i="index">
+  <button mat-icon-button color="primary" (click)="startEdit(element)" matTooltip="Edit Product">
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button mat-icon-button color="warn" (click)="deleteProduct(element)" matTooltip="Delete Product">
+    <mat-icon>delete</mat-icon>
+  </button>
+</ng-template>
+
+<ng-template #productImageTemplate let-element="$implicit">
+  <img
+    [src]="element.imageUrl || 'assets/placeholder.png'"
+    alt="Product Image"
+    width="40"
+    height="40"
+    style="border-radius: 4px"
+    onerror="this.src='assets/placeholder.png'"
+  />
+</ng-template>
+
+<ng-template #expandedProductDetail let-element="$implicit" let-index="index">
+  <div style="padding: 16px; background-color: #f0f0f0; border-top: 1px solid #ccc">
+    <h3>Details for {{ element.name }}</h3>
+    <p><strong>Description:</strong> {{ element.description || 'No description available.' }}</p>
+    <p><strong>Category:</strong> {{ element.category }}</p>
+    <p><strong>Available On:</strong> {{ element.availableDate | date: 'fullDate' }}</p>
+    <p>
+      <strong>Status:</strong>
+      <span [class]="element.isActive ? 'status-active' : 'status-inactive'">
+        {{ element.isActive ? 'Active' : 'Inactive' }}
+      </span>
+    </p>
+    <p><strong>Created:</strong> {{ element.createdAt | date: 'medium' }}</p>
+    <p><strong>Last Updated:</strong> {{ element.updatedAt | date: 'medium' }}</p>
+  </div>
+</ng-template>

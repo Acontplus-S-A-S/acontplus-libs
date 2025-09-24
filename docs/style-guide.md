@@ -1,7 +1,7 @@
 # Acontplus UI Components Style Guide
 
 This document provides guidelines for consistent design and usage of components
-in the acontplus-ui-components library. Following these guidelines will ensure a
+in the ng-components library. Following these guidelines will ensure a
 cohesive user experience across applications that use these components.
 
 ## Table of Contents
@@ -23,7 +23,7 @@ cohesive user experience across applications that use these components.
 
 ## Design Principles
 
-The design of acontplus-ui-components is guided by the following principles:
+The design of ng-components is guided by the following principles:
 
 1. **Consistency**: Components should look and behave consistently across the
    application.
@@ -269,4 +269,4 @@ animations: [
 ```
 
 By following these guidelines, you'll create a consistent, accessible, and
-user-friendly experience with the acontplus-ui-components library.
+user-friendly experience with the ng-components library.

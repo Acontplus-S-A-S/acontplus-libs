@@ -1,0 +1,24 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "bundler",
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "lib": ["ES2022", "dom"],
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "paths": {
+      "@acontplus/core": ["packages/core/src/index.ts"],
+      "@acontplus/ng-components": ["packages/ng-components/src/index.ts"],
+      "@acontplus/ng-core": ["packages/ng-core/src/index.ts"],
+      "@acontplus/ng-customer": ["packages/ng-customer/src/index.ts"],
+      "@acontplus/ng-notifications": ["packages/ng-notifications/src/index.ts"],
+      "@acontplus/ui-kit": ["packages/ui-kit/src/index.ts"],
+      "@acontplus/utils": ["packages/utils/src/index.ts"]
+    }
+  }
+}
