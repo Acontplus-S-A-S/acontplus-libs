@@ -1,6 +1,6 @@
 import { ApiResponse, IdentificationNumberVo } from '@acontplus/core';
-import { CustomerExternalDTO } from '../../infrastructure/dtos/customer-external.dto';
+import { CustomerExternal } from '../entities/customer-external.entity';
 
 export interface CustomerExternalRepository {
-  getById(id: IdentificationNumberVo): Promise<ApiResponse<CustomerExternalDTO>>;
+  getById(id: IdentificationNumberVo): Promise<ApiResponse<CustomerExternal>>;
 }

@@ -1,3 +1,7 @@
 export interface CustomerExternal {
-  id: number;
+  phone: string;
+  email: string;
+  idCard: string; // numeroRuc
+  businessName: string; // razonSocial
+  address: string; // direccion
 }
