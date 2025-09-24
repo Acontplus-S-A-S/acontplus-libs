@@ -1,0 +1,12 @@
+{
+  "name": "@acontplus/ng-notifications",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^20.3.0",
+    "@angular/core": "^20.3.0",
+    "@angular/material": "^18.0.0",
+    "ngx-toastr": "^19.0.0",
+    "sweetalert2": "^11.23.0"
+  },
+  "sideEffects": false
+}
