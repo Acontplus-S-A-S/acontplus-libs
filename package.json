@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "start": "nx serve demo-app --ssl true --no-hmr",
+    "start": "nx serve demo-app --ssl true --hmr",
     "build": "nx build demo-app",
     "watch": "nx build demo-app --watch --configuration development",
     "test": "nx run-many --target=test --all",
@@ -26,11 +26,11 @@
     "e2e": "nx run demo-app-e2e:e2e"
   },
   "dependencies": {
-    "@acontplus/core": "^1.0.3",
-    "@acontplus/ng-components": "^1.0.4",
-    "@acontplus/ng-core": "^1.0.3",
-    "@acontplus/ng-notifications": "^1.0.0",
-    "@acontplus/utils": "^1.0.1",
+    "@acontplus/core": "^1.0.5",
+    "@acontplus/ng-components": "^1.0.6",
+    "@acontplus/ng-core": "^1.0.5",
+    "@acontplus/ng-notifications": "^1.0.1",
+    "@acontplus/utils": "^1.0.2",
     "@angular/animations": "^20.3.1",
     "@angular/cdk": "^20.2.4",
     "@angular/common": "^20.3.1",
