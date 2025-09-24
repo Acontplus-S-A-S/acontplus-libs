@@ -11,7 +11,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -19,13 +19,5 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "references": [
-    {
-      "path": "./projects/acontplus-customers/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/acontplus-customers/tsconfig.spec.json"
-    }
-  ],
   "extends": "./tsconfig.base.json"
 }

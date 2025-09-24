@@ -1,4 +1,5 @@
-export * from './base.repository';
-export * from './read-only.repository';
-export * from './write-only.repository';
-export * from './repository';
+export * from './base-http.repository';
+export * from './generic.repository';
+export * from './interfaces';
+export * from './repository-factory';
+export { REPOSITORY_CONFIG } from './generic.repository';

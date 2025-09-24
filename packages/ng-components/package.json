@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Angular Material UI component library with dynamic tables, theming support, dialog wrappers, and comprehensive styling utilities",
   "peerDependencies": {
-    "@acontplus/ng-core": "^1.0.0",
+    "@acontplus/ng-core": "^1.0.1",
     "@angular/common": "^20.0.0",
     "@angular/core": "^20.0.0",
     "@angular/material": "^20.0.0",

@@ -207,9 +207,9 @@ projects/acontplus-core/src/lib/
     │   ├── pagination.models.ts
     │   └── response.models.ts
     ├── utils/                 // Utilidades generales
-    │   ├── date.utils.ts
-    │   ├── string.utils.ts
-    │   ├── number.utils.ts
+    │   ├── date.formatter.ts
+    │   ├── string.formatter.ts
+    │   ├── number.formatter.ts
     │   └── validation.utils.ts
     ├── validators/            // Validadores compartidos
     │   ├── email.validator.ts
@@ -842,8 +842,8 @@ export class IdValidator {
 ### 2. Utility Functions
 
 ```typescript
-// shared/utils/date.utils.ts
-export class DateUtils {
+// shared/utils/date.formatter.ts
+export class DateFormatter {
   static formatDate(date: Date | string, format: 'short' | 'long' | 'iso' = 'short'): string {
     const d = typeof date === 'string' ? new Date(date) : date;
     
@@ -892,8 +892,8 @@ export class DateUtils {
   }
 }
 
-// shared/utils/string.utils.ts
-export class StringUtils {
+// shared/utils/string.formatter.ts
+export class StringFormatter {
   static capitalize(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
@@ -934,8 +934,8 @@ export class StringUtils {
   }
 }
 
-// shared/utils/number.utils.ts
-export class NumberUtils {
+// shared/utils/number.formatter.ts
+export class NumberFormatter {
   static formatCurrency(amount: number, currency: 'USD' | 'EUR' = 'USD'): string {
     return new Intl.NumberFormat('es-EC', {
       style: 'currency',
@@ -1109,7 +1109,7 @@ export class RoleGuard implements CanActivate {
 export class AcpDatePipe implements PipeTransform {
   transform(value: Date | string | null, format: 'short' | 'long' | 'iso' = 'short'): string {
     if (!value) return '';
-    return DateUtils.formatDate(value, format);
+    return DateFormatter.formatDate(value, format);
   }
 }
 
@@ -1118,7 +1118,7 @@ export class AcpDatePipe implements PipeTransform {
 export class AcpCurrencyPipe implements PipeTransform {
   transform(value: number | null, currency: 'USD' | 'EUR' = 'USD'): string {
     if (value === null || value === undefined) return '';
-    return NumberUtils.formatCurrency(value, currency);
+    return NumberFormatter.formatCurrency(value, currency);
   }
 }
 
@@ -1127,7 +1127,7 @@ export class AcpCurrencyPipe implements PipeTransform {
 export class AcpTruncatePipe implements PipeTransform {
   transform(value: string | null, length: number = 50, suffix: string = '...'): string {
     if (!value) return '';
-    return StringUtils.truncate(value, length, suffix);
+    return StringFormatter.truncate(value, length, suffix);
   }
 }
 ```

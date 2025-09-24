@@ -181,7 +181,7 @@ notifications based on HTTP method and URL patterns:
 ### Repository (Simplified)
 
 ```typescript
-export class UserRepository extends BaseRepository<User> {
+export class UserRepository extends BaseHttpRepository<User> {
   constructor(http: HttpClient) {
     super(http, '/api/users');
   }

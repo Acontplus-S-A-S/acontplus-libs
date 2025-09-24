@@ -1,6 +1,6 @@
 {
   "name": "@acontplus/core",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Core library for Acontplus projects, providing essential utilities and functionalities.",
   "type": "module",
   "main": "./src/index.js",

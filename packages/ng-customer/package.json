@@ -2,6 +2,8 @@
   "name": "@acontplus/ng-customer",
   "version": "0.0.1",
   "peerDependencies": {
+    "@acontplus/ng-core": "1.0.0",
+    "@acontplus/ng-components": "^1.0.0",
     "@angular/common": "^20.3.0",
     "@angular/core": "^20.3.0"
   },
