@@ -1,14 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BaseRepository } from '@acontplus-core';
+import { GenericRepository, REPOSITORY_CONFIG } from '@acontplus/ng-core';
 import { Application, ApplicationFilterParams } from '../domain/application';
-import { PaginationParams, PaginatedResult } from '@acontplus-core';
+import { PagedResult as PaginatedResult, PaginationParams } from '@acontplus/core';
 import { MockApplicationService } from './mock-application.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ApplicationRepository extends BaseRepository<Application> {
+export class ApplicationRepository {
   private mockService = inject(MockApplicationService);
 
   protected entityName = 'applications';
@@ -17,35 +17,33 @@ export class ApplicationRepository extends BaseRepository<Application> {
   /** Inserted by Angular inject() migration for backwards compatibility */
   constructor(...args: unknown[]);
 
-  constructor() {
-    super();
-  }
+  constructor() {}
 
   // Override base methods to use mock service for demonstration
-  override getAll(
+  getAll(
     pagination: PaginationParams,
     filters?: ApplicationFilterParams,
   ): Observable<PaginatedResult<Application>> {
     return this.mockService.getAll(pagination, filters);
   }
 
-  override getById(id: number): Observable<Application> {
+  getById(id: number): Observable<Application> {
     return this.mockService.getById(id);
   }
 
-  override create(application: Omit<Application, 'id'>): Observable<Application> {
+  create(application: Omit<Application, 'id'>): Observable<Application> {
     return this.mockService.create(application);
   }
 
-  override update(id: number, application: Partial<Application>): Observable<Application> {
+  update(id: number, application: Partial<Application>): Observable<Application> {
     return this.mockService.update(id, application);
   }
 
-  override delete(id: number): Observable<boolean> {
+  delete(id: number): Observable<boolean> {
     return this.mockService.delete(id);
   }
 
-  override search(
+  search(
     query: string,
     pagination: PaginationParams,
   ): Observable<PaginatedResult<Application>> {

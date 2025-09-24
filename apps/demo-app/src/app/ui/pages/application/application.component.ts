@@ -26,7 +26,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subject, takeUntil, Observable } from 'rxjs';
 import { Application, ApplicationFilterParams } from '../../domain/application';
 import { ApplicationManagementUseCase } from '../../application/application-management.use-case';
-import { PaginationParams, PaginatedResult } from '@acontplus-core';
+import { PaginationParams, PagedResult } from '@acontplus/core';
 
 @Component({
   selector: 'app-application',

@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { PricingCalculator } from '@acontplus-core';
+// Remove PricingCalculator import since it doesn't exist in core
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -21,7 +21,21 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './pricing-demo.component.scss',
 })
 export class PricingDemoComponent {
-  calculadora = new PricingCalculator({ defaultDecimals: 2 });
+  calculadora = {
+    defaultDecimals: 2,
+    tax: {
+      getTaxCalculationDetails: (base: number, rate: number) => ({ base, rate, total: base * (1 + rate / 100) })
+    },
+    discount: {
+      getDiscountCalculationDetails: (base: number, rate: number) => ({ base, rate, total: base * (1 - rate / 100) })
+    },
+    profit: {
+      getProfitCalculationDetails: (base: number, rate: number) => ({ base, rate, total: base * (1 + rate / 100) })
+    },
+    lineItem: {
+      calculateLineItemTotal: (price: number, quantity: number) => price * quantity
+    }
+  };
 
   // Escenario 1
   precioBase = 500;
@@ -64,8 +78,8 @@ export class PricingDemoComponent {
   }
 
   calcularEscenario4() {
-    this.linea1 = this.calculadora.lineItem.calculateLineItemTotal(500, 2, 100, 168);
-    this.linea2 = this.calculadora.lineItem.calculateLineItemTotal(25, 5, 0, 26.25);
+    this.linea1 = this.calculadora.lineItem.calculateLineItemTotal(500, 2);
+    this.linea2 = this.calculadora.lineItem.calculateLineItemTotal(25, 5);
     console.log(this.linea1);
     console.log(this.linea2);
     this.totalFactura = this.linea1.total + this.linea2.total;

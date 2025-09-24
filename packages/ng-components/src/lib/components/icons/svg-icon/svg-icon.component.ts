@@ -4,7 +4,7 @@ import { Component, input } from '@angular/core';
   selector: 'acp-svg-icon',
   imports: [],
   templateUrl: './svg-icon.component.html',
-  styleUrl: './svg-icon.component.css',
+  styleUrl: './svg-icon.component.scss',
 })
 export class SvgIconComponent {
   id = input('');

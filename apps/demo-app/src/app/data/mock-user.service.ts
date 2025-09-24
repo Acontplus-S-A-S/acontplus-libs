@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 import { User } from '../domain/user';
-import { PaginatedResult, PaginationParams, FilterParams } from '@acontplus-core';
+import { PagedResult as PaginatedResult, PaginationParams, FilterParams } from '@acontplus/core';
 
 @Injectable({
   providedIn: 'root',
@@ -146,16 +146,18 @@ export class MockUserService {
     }
 
     // Apply pagination
-    const startIndex = (pagination.page - 1) * pagination.pageSize;
+    const startIndex = (pagination.pageIndex - 1) * pagination.pageSize;
     const endIndex = startIndex + pagination.pageSize;
     const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
     const result: PaginatedResult<User> = {
       items: paginatedUsers,
-      total: filteredUsers.length,
-      page: pagination.page,
+      totalCount: filteredUsers.length,
+      pageIndex: pagination.pageIndex,
       pageSize: pagination.pageSize,
       totalPages: Math.ceil(filteredUsers.length / pagination.pageSize),
+      hasPreviousPage: pagination.pageIndex > 1,
+      hasNextPage: pagination.pageIndex < Math.ceil(filteredUsers.length / pagination.pageSize),
     };
 
     return of(result).pipe(delay(300)); // Simulate network delay

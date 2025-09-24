@@ -1,4 +1,4 @@
-import { BaseEntity, FilterParams } from '@acontplus-core';
+import { BaseEntity, FilterParams } from '@acontplus/core';
 
 export interface Application extends BaseEntity {
   name: string;

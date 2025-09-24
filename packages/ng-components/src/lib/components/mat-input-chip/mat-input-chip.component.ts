@@ -17,7 +17,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
   selector: 'acp-mat-input-chip',
   imports: [MatFormField, MatLabel, MatChipRow, MatIcon, MatHint, MatChipGrid, MatChipInput],
   templateUrl: './mat-input-chip.component.html',
-  styleUrl: './mat-input-chip.component.css',
+  styleUrl: './mat-input-chip.component.scss',
 })
 export class MatInputChipComponent {
   chips = input.required<string[]>();

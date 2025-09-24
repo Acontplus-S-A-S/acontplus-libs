@@ -1,7 +1,10 @@
 {
   "name": "@acontplus/ng-components",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Angular Material UI component library with dynamic tables, theming support, dialog wrappers, and comprehensive styling utilities",
+  "dependencies": {
+    "tabulator-tables": "^6.3.1"
+  },
   "peerDependencies": {
     "@acontplus/ng-core": "^1.0.1",
     "@angular/common": "^20.0.0",

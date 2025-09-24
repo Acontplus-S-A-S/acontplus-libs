@@ -29,7 +29,7 @@ export type MaterialButtonStyle =
   selector: 'acp-mat-theme-button',
   imports: [MatButton, NgClass, MatIcon, MatMiniFabButton, MatIconButton, MatFabButton],
   templateUrl: './mat-theme-button.component.html',
-  styleUrl: './mat-theme-button.component.css',
+  styleUrl: './mat-theme-button.component.scss',
 })
 export class MatThemeButtonComponent {
   variant = input<ButtonVariant>('primary');

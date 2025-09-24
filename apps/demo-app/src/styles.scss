@@ -5,9 +5,9 @@
 @use 'theme-colors' as custom-theme;
 
 // Import UI components' styles
-@use '@acontplus/ng-components/src/styles/snackbar-theme';
-@use '@acontplus/ng-components/src/styles/custom-buttons' as buttons;
-@use '@acontplus/ng-components/src/styles/custom-dialog';
+@use '@acontplus/ng-components/styles/snackbar-theme' as snackbar-theme;
+@use '@acontplus/ng-components/styles/custom-buttons' as buttons;
+@use '@acontplus/ng-components/styles/custom-dialog' as custom-dialog;
 @use 'ngx-toastr/toastr';
 
 // Include Angular Material Core foundational styles

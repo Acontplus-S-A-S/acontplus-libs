@@ -15,20 +15,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontplus/ng-components';
-import {
-  UserManagementUseCase,
-  CachedUsersQuery,
-  ConditionalUserUpdateCommand,
-} from '../../../application';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ColumnDefinition, MatDynamicTableComponent } from '@acontplus/ng-components';
+import { UserRepository } from '../../../data/user.repository';
 import { User } from '../../../domain/user';
 import { PaginationParams, FilterParams, PagedResult } from '@acontplus/core';
 
@@ -44,7 +39,6 @@ import { PaginationParams, FilterParams, PagedResult } from '@acontplus/core';
     MatCardModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule,
     MatCheckboxModule,
     MatSelectModule,
     MatIconModule,
@@ -54,67 +48,53 @@ import { PaginationParams, FilterParams, PagedResult } from '@acontplus/core';
     MatDynamicTableComponent,
   ],
   templateUrl: './user.component.html',
-  styleUrl: './user.component.scss',
+  styleUrls: ['./user.component.scss'],
 })
 export class UserComponent implements OnInit, AfterViewInit {
-  private userManagement = inject(UserManagementUseCase);
-  private cachedQuery = inject(CachedUsersQuery);
-  private conditionalCommand = inject(ConditionalUserUpdateCommand);
+  private userRepository = inject(UserRepository);
   private snackBar = inject(MatSnackBar);
   private cdr = inject(ChangeDetectorRef);
 
+  // Data
   users: User[] = [];
-  userColumns: ColumnDefinition<User>[] = [];
-
-  // Pagination
-  pagination: { pageIndex: number; pageSize: number; sortBy: string; sortDirection: string } = {
-    pageIndex: 1,
-    pageSize: 10,
-    sortBy: 'name',
-    sortDirection: 'asc',
-  };
-
-  // Pagination config for dynamic table
-  userPaginationConfig: Pagination = new Pagination(0, 10, 5, 0, [5, 10, 25, 50]);
-
-  // Filters
-  filters: FilterParams = {};
-
-  // Bulk operations
   selectedUsers: number[] = [];
 
-  // Loading states
+  // UI state
   isLoading = false;
   isCreating = false;
   isUpdating = false;
 
-  // Form data
-  newUser: Partial<User> = {};
-  editUser: Partial<User> = {};
-  editUserId: number | null = null;
+  // Pagination
+  pagination = new PaginationParams({
+    pageIndex: 1,
+    pageSize: 10,
+  });
+  userPaginationConfig = {
+    totalRecords: 0,
+    pageIndex: 0,
+    pageSize: 10,
+  };
 
-  // Search
+  // Filters
+  filters: FilterParams = {};
   searchQuery = '';
 
-  // Statistics
-  totalUsers = 0;
-  activeUsers = 0;
-  inactiveUsers = 0;
+  // Form data
+  newUser: Partial<User> = {};
+  editUserId: number | null = null;
+  editUser: Partial<User> = {};
 
   // Template references
   @ViewChild('actionsTemplate') actionsTemplate!: TemplateRef<any>;
   @ViewChild('roleTemplate') roleTemplate!: TemplateRef<any>;
   @ViewChild('statusTemplate') statusTemplate!: TemplateRef<any>;
 
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
-
-  constructor() {}
+  // Column definitions
+  userColumns: ColumnDefinition<User>[] = [];
 
   ngOnInit() {
     this.initializeColumns();
     this.loadUsers();
-    this.loadStatistics();
   }
 
   ngAfterViewInit() {
@@ -194,20 +174,16 @@ export class UserComponent implements OnInit, AfterViewInit {
 
   loadUsers(): void {
     this.isLoading = true;
-    this.userManagement.getUsers(this.pagination, this.filters).subscribe({
-      next: result => {
+    this.userRepository.getAll(this.pagination, this.filters).subscribe({
+      next: (result: PagedResult<User>) => {
         this.users = result.items;
-        this.totalUsers = result.totalCount;
-
-        // Update pagination config to match the result
         this.userPaginationConfig.totalRecords = result.totalCount;
-        this.userPaginationConfig.pageIndex = result.pageNumber - 1; // Convert to 0-based index
+        this.userPaginationConfig.pageIndex = result.pageIndex - 1;
         this.userPaginationConfig.pageSize = result.pageSize;
-
         this.isLoading = false;
         this.cdr.markForCheck();
       },
-      error: error => {
+      error: (error: any) => {
         console.error('Error loading users:', error);
         this.snackBar.open('Error loading users', 'Close', { duration: 3000 });
         this.isLoading = false;
@@ -216,51 +192,30 @@ export class UserComponent implements OnInit, AfterViewInit {
     });
   }
 
-  loadStatistics(): void {
-    this.userManagement.getUserStats().subscribe(stats => {
-      this.totalUsers = stats.total;
-      this.activeUsers = stats.active;
-      this.inactiveUsers = stats.inactive;
-      this.cdr.markForCheck();
-    });
-  }
-
   onPageChange(event: PageEvent): void {
-    // Update both pagination objects to keep them in sync
-    this.pagination.pageIndex = event.pageIndex + 1; // Convert from 0-based to 1-based
+    this.pagination.pageIndex = event.pageIndex + 1;
     this.pagination.pageSize = event.pageSize;
-
     this.userPaginationConfig.pageIndex = event.pageIndex;
     this.userPaginationConfig.pageSize = event.pageSize;
-
-    this.loadUsers();
-  }
-
-  onSortChange(sort: Sort): void {
-    this.pagination.sortBy = sort.active;
-    this.pagination.sortDirection = sort.direction === 'asc' ? 'asc' : 'desc';
-    this.loadUsers();
-  }
-
-  onFilterChange(): void {
-    this.pagination.pageIndex = 0; // Reset to first page
-    this.userPaginationConfig.pageSize = 1; // Reset to first page (0-based)
     this.loadUsers();
   }
 
   onSearch(): void {
-    if (this.searchQuery.trim()) {
-      this.filters.search = this.searchQuery.trim();
+    this.pagination.pageIndex = 1;
+    const query = this.searchQuery.trim();
+    if (query) {
+      this.filters.search = query;
     } else {
       delete this.filters.search;
     }
-    this.onFilterChange();
+    this.loadUsers();
   }
 
   clearFilters(): void {
     this.filters = {};
     this.searchQuery = '';
-    this.onFilterChange();
+    this.pagination.pageIndex = 1;
+    this.loadUsers();
   }
 
   createUser(): void {
@@ -270,16 +225,15 @@ export class UserComponent implements OnInit, AfterViewInit {
     }
 
     this.isCreating = true;
-    this.userManagement.createUser(this.newUser as Omit<User, 'id'>).subscribe({
-      next: user => {
+    this.userRepository.create(this.newUser as Omit<User, 'id'>).subscribe({
+      next: (user: User) => {
         this.snackBar.open('User created successfully', 'Close', { duration: 3000 });
         this.newUser = {};
         this.loadUsers();
-        this.loadStatistics();
         this.isCreating = false;
         this.cdr.markForCheck();
       },
-      error: error => {
+      error: (error: any) => {
         console.error('Error creating user:', error);
         this.snackBar.open('Error creating user', 'Close', { duration: 3000 });
         this.isCreating = false;
@@ -307,28 +261,16 @@ export class UserComponent implements OnInit, AfterViewInit {
     }
 
     this.isUpdating = true;
-
-    // Use conditional command with approval requirement
-    const request = {
-      id: this.editUserId,
-      data: this.editUser,
-      conditions: {
-        checkActive: true,
-        requireApproval: true,
-      },
-    };
-
-    this.conditionalCommand.execute(request).subscribe({
-      next: user => {
+    this.userRepository.update(this.editUserId, this.editUser).subscribe({
+      next: (user: User) => {
         this.snackBar.open('User updated successfully', 'Close', { duration: 3000 });
         this.editUserId = null;
         this.editUser = {};
         this.loadUsers();
-        this.loadStatistics();
         this.isUpdating = false;
         this.cdr.markForCheck();
       },
-      error: error => {
+      error: (error: any) => {
         console.error('Error updating user:', error);
         this.snackBar.open(error.message || 'Error updating user', 'Close', { duration: 3000 });
         this.isUpdating = false;
@@ -339,18 +281,17 @@ export class UserComponent implements OnInit, AfterViewInit {
 
   deleteUser(userId: number): void {
     if (confirm('Are you sure you want to delete this user?')) {
-      this.userManagement.deleteUser(userId).subscribe({
-        next: success => {
+      this.userRepository.delete(userId).subscribe({
+        next: (success: boolean) => {
           if (success) {
             this.snackBar.open('User deleted successfully', 'Close', { duration: 3000 });
             this.loadUsers();
-            this.loadStatistics();
             this.cdr.markForCheck();
           } else {
             this.snackBar.open('Failed to delete user', 'Close', { duration: 3000 });
           }
         },
-        error: error => {
+        error: (error: any) => {
           console.error('Error deleting user:', error);
           this.snackBar.open('Error deleting user', 'Close', { duration: 3000 });
         },
@@ -369,26 +310,22 @@ export class UserComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.userManagement
-      .execute({
-        action: 'bulk-operations',
-        data: { activateUsers: this.selectedUsers },
-      })
-      .subscribe({
-        next: response => {
-          this.snackBar.open(response.message || 'Bulk operation completed', 'Close', {
-            duration: 3000,
-          });
-          this.selectedUsers = [];
-          this.loadUsers();
-          this.loadStatistics();
-          this.cdr.markForCheck();
-        },
-        error: error => {
-          console.error('Error in bulk operation:', error);
-          this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
-        },
-      });
+    this.userRepository.bulkUpdate(
+      this.selectedUsers.map(id => ({ id, data: { isActive: true } }))
+    ).subscribe({
+      next: (users: User[]) => {
+        this.snackBar.open(`${users.length} users activated successfully`, 'Close', {
+          duration: 3000,
+        });
+        this.selectedUsers = [];
+        this.loadUsers();
+        this.cdr.markForCheck();
+      },
+      error: (error: any) => {
+        console.error('Error in bulk operation:', error);
+        this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
+      },
+    });
   }
 
   bulkDeactivateUsers(): void {
@@ -397,26 +334,22 @@ export class UserComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.userManagement
-      .execute({
-        action: 'bulk-operations',
-        data: { deactivateUsers: this.selectedUsers },
-      })
-      .subscribe({
-        next: response => {
-          this.snackBar.open(response.message || 'Bulk operation completed', 'Close', {
-            duration: 3000,
-          });
-          this.selectedUsers = [];
-          this.loadUsers();
-          this.loadStatistics();
-          this.cdr.markForCheck();
-        },
-        error: error => {
-          console.error('Error in bulk operation:', error);
-          this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
-        },
-      });
+    this.userRepository.bulkUpdate(
+      this.selectedUsers.map(id => ({ id, data: { isActive: false } }))
+    ).subscribe({
+      next: (users: User[]) => {
+        this.snackBar.open(`${users.length} users deactivated successfully`, 'Close', {
+          duration: 3000,
+        });
+        this.selectedUsers = [];
+        this.loadUsers();
+        this.cdr.markForCheck();
+      },
+      error: (error: any) => {
+        console.error('Error in bulk operation:', error);
+        this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
+      },
+    });
   }
 
   bulkDeleteUsers(): void {
@@ -426,49 +359,25 @@ export class UserComponent implements OnInit, AfterViewInit {
     }
 
     if (confirm(`Are you sure you want to delete ${this.selectedUsers.length} users?`)) {
-      this.userManagement
-        .execute({
-          action: 'bulk-operations',
-          data: { deleteUsers: this.selectedUsers },
-        })
-        .subscribe({
-          next: response => {
-            this.snackBar.open(response.message || 'Bulk operation completed', 'Close', {
-              duration: 3000,
-            });
+      this.userRepository.bulkDelete(this.selectedUsers).subscribe({
+        next: (success: boolean) => {
+          if (success) {
+            this.snackBar.open('Users deleted successfully', 'Close', { duration: 3000 });
             this.selectedUsers = [];
             this.loadUsers();
-            this.loadStatistics();
             this.cdr.markForCheck();
-          },
-          error: error => {
-            console.error('Error in bulk operation:', error);
-            this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
-          },
-        });
+          } else {
+            this.snackBar.open('Failed to delete users', 'Close', { duration: 3000 });
+          }
+        },
+        error: (error: any) => {
+          console.error('Error in bulk operation:', error);
+          this.snackBar.open('Error in bulk operation', 'Close', { duration: 3000 });
+        },
+      });
     }
   }
 
-  clearCache(): void {
-    this.cachedQuery.clearCache();
-    this.snackBar.open('Cache cleared', 'Close', { duration: 2000 });
-    this.cdr.markForCheck();
-  }
-
-  // For testing conditional commands
-  approveUser(userId: number): void {
-    this.conditionalCommand.setApprovalStatus(userId, true);
-    this.snackBar.open(`User ${userId} approved`, 'Close', { duration: 2000 });
-    this.cdr.markForCheck();
-  }
-
-  rejectUser(userId: number): void {
-    this.conditionalCommand.setApprovalStatus(userId, false);
-    this.snackBar.open(`User ${userId} rejected`, 'Close', { duration: 2000 });
-    this.cdr.markForCheck();
-  }
-
-  // Helper methods
   getSelectedCount(): number {
     return this.selectedUsers.length;
   }

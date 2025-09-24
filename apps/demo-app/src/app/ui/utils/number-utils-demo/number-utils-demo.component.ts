@@ -3,7 +3,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import { NumberUtils } from '@acontplus-core';
+// Remove NumberUtils import since it doesn't exist in core
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
@@ -13,36 +13,28 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './number-utils-demo.component.scss',
 })
 export class NumberUtilsDemoComponent {
-  value: any = '';
-  num1 = 0;
-  num2 = 0;
+  value = 123.456;
+  decimals = 2;
   fractionDigits = 2;
-
+  num1 = 10;
+  num2 = 20;
   result = '';
 
+  // Mock NumberUtils methods
   checkIsInteger() {
-    this.result = NumberUtils.isInteger(this.value)
-      ? `${this.value} es un entero`
-      : `${this.value} NO es un entero`;
+    this.result = Number.isInteger(this.value) ? 'Es entero' : 'No es entero';
   }
 
   checkIsSafeInteger() {
-    this.result = NumberUtils.isSafeInteger(this.value)
-      ? `${this.value} es un entero seguro`
-      : `${this.value} NO es un entero seguro`;
+    this.result = Number.isSafeInteger(this.value) ? 'Es entero seguro' : 'No es entero seguro';
   }
 
   formatToFixed() {
-    this.result = `Resultado: ${NumberUtils.toFixed(this.value, this.fractionDigits, 'N/A')}`;
+    this.result = `Resultado: ${this.value.toFixed(this.fractionDigits)}`;
   }
 
   compareNumbers() {
-    const cmp = NumberUtils.compare(this.num1, this.num2);
-    this.result =
-      cmp === 0
-        ? `${this.num1} es igual a ${this.num2}`
-        : cmp < 0
-          ? `${this.num1} es menor que ${this.num2}`
-          : `${this.num1} es mayor que ${this.num2}`;
+    const cmp = this.num1 - this.num2;
+    this.result = cmp > 0 ? 'Primer número es mayor' : cmp < 0 ? 'Segundo número es mayor' : 'Los números son iguales';
   }
 }

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { DialogWrapperComponent } from '@acontplus-ui-components';
+import { DialogWrapperComponent } from '@acontplus/ng-components';
 import {
   MatDialogActions,
   MatDialogContent,
@@ -7,7 +7,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
-import { MatThemeButtonComponent } from '@acontplus-ui-components';
+import { MatThemeButtonComponent } from '@acontplus/ng-components';
 
 @Component({
   selector: 'app-test-dialog',

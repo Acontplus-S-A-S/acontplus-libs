@@ -1,35 +1,64 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { WriteOnlyRepository } from '@acontplus-core';
+import {
+  FilterParams,
+  PagedResult as PaginatedResult,
+  PaginationParams,
+} from '@acontplus/core';
 import { User } from '../domain/user';
 import { MockUserService } from './mock-user.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class WriteOnlyUserRepository extends WriteOnlyRepository<User> {
+export class UserRepository {
   protected entityName = 'users';
   protected baseUrl = '/api/users';
 
-  constructor(private mockService: MockUserService) {
-    super();
+  constructor(private mockService: MockUserService) {}
+
+  getAll(
+    pagination: PaginationParams,
+    filters?: FilterParams
+  ): Observable<PaginatedResult<User>> {
+    return this.mockService.getUsers(pagination, filters);
   }
 
-  override create(entity: Omit<User, 'id'>): Observable<User> {
+  getById(id: number): Observable<User> {
+    return this.mockService.getUserById(id);
+  }
+
+  search(
+    query: string,
+    pagination: PaginationParams
+  ): Observable<PaginatedResult<User>> {
+    return this.mockService.searchUsers(query, pagination);
+  }
+
+  getActiveUsers(pagination: PaginationParams): Observable<PaginatedResult<User>> {
+    return this.mockService.getActiveUsers(pagination);
+  }
+
+  getUsersByRole(
+    role: string,
+    pagination: PaginationParams
+  ): Observable<PaginatedResult<User>> {
+    return this.mockService.getUsersByRole(role, pagination);
+  }
+
+  create(entity: Omit<User, 'id'>): Observable<User> {
     return this.mockService.createUser(entity);
   }
 
-  override update(id: number, entity: Partial<User>): Observable<User> {
+  update(id: number, entity: Partial<User>): Observable<User> {
     return this.mockService.updateUser(id, entity);
   }
 
-  override delete(id: number): Observable<boolean> {
+  delete(id: number): Observable<boolean> {
     return this.mockService.deleteUser(id);
   }
 
-  // Additional write operations specific to users
   bulkCreate(users: Omit<User, 'id'>[]): Observable<User[]> {
-    // For demo purposes, create users sequentially
     return new Observable(observer => {
       const createdUsers: User[] = [];
       let completed = 0;
@@ -51,7 +80,6 @@ export class WriteOnlyUserRepository extends WriteOnlyRepository<User> {
   }
 
   bulkUpdate(updates: { id: number; data: Partial<User> }[]): Observable<User[]> {
-    // For demo purposes, update users sequentially
     return new Observable(observer => {
       const updatedUsers: User[] = [];
       let completed = 0;

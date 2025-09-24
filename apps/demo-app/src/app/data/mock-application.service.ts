@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 import { Application, ApplicationFilterParams } from '../domain/application';
-import { PaginationParams, PaginatedResult } from '@acontplus-core';
+import { PagedResult as PaginatedResult, PaginationParams } from '@acontplus/core';
 
 @Injectable({
   providedIn: 'root',
@@ -212,7 +212,7 @@ export class MockApplicationService {
     }
 
     // Apply pagination
-    const page = pagination.page || 1;
+    const page = pagination.pageIndex || 1;
     const pageSize = pagination.pageSize || 10;
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
@@ -221,10 +221,9 @@ export class MockApplicationService {
     const result: PaginatedResult<Application> = {
       items: paginatedApps,
       totalCount: filteredApps.length,
-      pageNumber: page,
+      pageIndex: page,
       pageSize: pageSize,
-      hasNextPage: page < Math.ceil(filteredApps.length / pageSize),
-      hasPreviousPage: page > 1,
+      totalPages: Math.ceil(filteredApps.length / pageSize),
     };
 
     return this.simulateDelay(result);
@@ -308,7 +307,7 @@ export class MockApplicationService {
     const result: PaginatedResult<Application> = {
       items: filteredApps,
       totalCount: filteredApps.length,
-      pageNumber: 1,
+      totalPages: 1,
       pageSize: filteredApps.length,
       hasNextPage: false,
       hasPreviousPage: false,

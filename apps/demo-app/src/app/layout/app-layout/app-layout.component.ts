@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MenuItemList, menuItems } from './menu-items';
-import { ToastrNotificationService } from '@acontplus-core';
+// Remove ToastrNotificationService import since it doesn't exist in core
 
 @Component({
   selector: 'app-app-layout',
@@ -29,7 +29,7 @@ import { ToastrNotificationService } from '@acontplus-core';
   styleUrl: './app-layout.component.scss',
 })
 export class AppLayoutComponent implements OnInit {
-  private readonly tS = inject(ToastrNotificationService);
+  // Remove ToastrNotificationService injection
   private breakpointObserver = inject(BreakpointObserver);
   menuItems = signal<MenuItemList[]>(menuItems);
 
@@ -38,7 +38,9 @@ export class AppLayoutComponent implements OnInit {
     shareReplay(),
   );
 
+  constructor() {}
+
   ngOnInit() {
-    this.tS.success({ message: 'AppLayoutComponent initialized' });
+    // Component initialized
   }
 }

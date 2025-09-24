@@ -23,10 +23,10 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { DatePipe, JsonPipe } from '@angular/common';
-import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontplus-ui-components';
+import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontplus/ng-components';
 import { ProductManagementUseCase } from '../../../application';
 import { Product } from '../../../domain/product';
-import { PaginationParams, FilterParams, PaginatedResult } from '@acontplus-core';
+import { PagedResult as PaginatedResult, PaginationParams, FilterParams } from '@acontplus/core';
 
 // Extended filter interface for products
 interface ProductFilters extends FilterParams {
@@ -432,12 +432,12 @@ export class ProductComponent implements OnInit, AfterViewInit {
   categories: string[] = [];
 
   // Pagination
-  pagination: PaginationParams = {
-    page: 1,
+  pagination = new PaginationParams({
+    pageIndex: 1,
     pageSize: 10,
     sortBy: 'name',
     sortDirection: 'asc',
-  };
+  });
 
   // Filters
   filters: ProductFilters = {};
@@ -553,7 +553,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
 
         // Update pagination config to match the result
         this.productPaginationConfig.totalRecords = result.totalCount;
-        this.productPaginationConfig.pageIndex = result.pageNumber - 1; // Convert to 0-based index
+        this.productPaginationConfig.pageIndex = result.pageIndex - 1; // Convert to 0-based index
         this.productPaginationConfig.pageSize = result.pageSize;
 
         console.log('Updated products array:', this.products);
@@ -589,7 +589,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
 
   onPageChange(event: PageEvent): void {
     // Update both pagination objects to keep them in sync
-    this.pagination.page = event.pageIndex + 1; // Convert from 0-based to 1-based
+    this.pagination.pageIndex = event.pageIndex + 1; // Convert from 0-based to 1-based
     this.pagination.pageSize = event.pageSize;
 
     this.productPaginationConfig.pageIndex = event.pageIndex;
@@ -599,7 +599,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
   }
 
   onFilterChange(): void {
-    this.pagination.page = 1; // Reset to first page
+    this.pagination.pageIndex = 1; // Reset to first page
     this.productPaginationConfig.pageIndex = 0; // Reset to first page (0-based)
     this.loadProducts();
   }

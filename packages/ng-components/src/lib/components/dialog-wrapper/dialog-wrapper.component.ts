@@ -34,7 +34,7 @@ import { DialogWrapperConfig } from '../../services';
   standalone: true,
   imports: [CdkDrag, CdkDragHandle, MatDialogModule, MatIconModule, MatButtonModule],
   templateUrl: './dialog-wrapper.component.html',
-  styleUrls: ['./dialog-wrapper.component.css'],
+  styleUrls: ['./dialog-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DialogWrapperComponent implements AfterViewInit {

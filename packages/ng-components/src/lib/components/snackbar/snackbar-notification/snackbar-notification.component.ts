@@ -25,7 +25,7 @@ import { SNACKBAR_MESSAGES } from '../../../constants/snackbar.constants';
     MatIcon,
   ],
   templateUrl: './snackbar-notification.component.html',
-  styleUrl: './snackbar-notification.component.css',
+  styleUrl: './snackbar-notification.component.scss',
 })
 export class SnackbarNotificationComponent {
   private readonly snackbarService = inject(SnackbarService);

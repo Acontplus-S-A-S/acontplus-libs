@@ -9,7 +9,7 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'acp-theme-toggle',
   imports: [MatIconButton, MatIcon, AsyncPipe],
   templateUrl: './theme-toggle.component.html',
-  styleUrl: './theme-toggle.component.css',
+  styleUrl: './theme-toggle.component.scss',
 })
 export class ThemeToggleComponent {
   private themeService = inject(ThemeService);

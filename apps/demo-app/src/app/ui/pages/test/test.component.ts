@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { AdvancedDialogService } from '@acontplus-ui-components';
+import { AdvancedDialogService } from '@acontplus/ng-components';
 import { TestDialogComponent } from '../../components/test-dialog/test-dialog.component';
-import { MatThemeButtonComponent } from '@acontplus-ui-components';
+import { MatThemeButtonComponent } from '@acontplus/ng-components';
 
 @Component({
   selector: 'app-test',
