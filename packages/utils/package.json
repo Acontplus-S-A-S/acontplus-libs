@@ -1,0 +1,56 @@
+{
+  "name": "@acontplus/utils",
+  "version": "1.0.1",
+  "description": "Utility library",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js",
+      "require": "./src/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "nx build utils",
+    "test": "nx test utils"
+  },
+  "keywords": [
+    "utilities",
+    "typescript",
+    "utils",
+    "helpers"
+  ],
+  "author": "Ivan Paz <ifer343@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Acontplus-S-A-S/acontplus-libs/issues"
+  },
+  "homepage": "https://github.com/Acontplus-S-A-S/acontplus-libs#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Acontplus-S-A-S/acontplus-libs.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "peerDependencies": {
+    "typescript": "5.0.0"
+  },
+  "dependencies": {
+    "decimal.js": "^10.6.0",
+    "tslib": "^2.8.1"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  }
+}

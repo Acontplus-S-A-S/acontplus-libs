@@ -53,21 +53,34 @@ participating in this project.
 
 2. **Make your changes** following the [coding standards](#coding-standards).
 
-3. **Run tests** to ensure your changes don't break existing functionality:
+3. **Run affected tests** to ensure your changes don't break existing functionality:
 
    ```bash
-   npm test
+   npx nx affected:test
    ```
 
-4. **Build the libraries** to verify your changes:
+4. **Run affected linting** to check code quality:
 
    ```bash
-   npm run build-library
+   npx nx affected:lint
    ```
 
-5. **Commit your changes** with a descriptive commit message:
+5. **Build affected projects** to verify your changes compile:
 
    ```bash
+   npx nx affected:build
+   ```
+
+6. **Format code** if needed:
+
+   ```bash
+   npm run format
+   ```
+
+7. **Commit your changes** with a descriptive commit message:
+
+   ```bash
+   git add .
    git commit -m "feat: add new feature" # for features
    git commit -m "fix: resolve issue with component" # for bug fixes
    git commit -m "docs: update documentation" # for documentation changes
@@ -75,13 +88,21 @@ participating in this project.
    git commit -m "test: add tests for component" # for adding tests
    ```
 
-6. **Push your branch** to your fork:
+8. **Push your branch** to your fork:
 
    ```bash
    git push origin feature/your-feature-name
    ```
 
-7. **Create a pull request** from your fork to the main repository.
+9. **Create a pull request** from your fork to the main repository.
+
+### Nx-Specific Workflow Tips
+
+- **Use affected commands** to only run operations on projects affected by your changes
+- **Check the dependency graph** with `npx nx graph` to understand project relationships
+- **Use Nx Console** in VS Code for visual command execution
+- **Run full test suite** before submitting PR: `npm run test`
+- **Build all libraries** before submitting: `npm run build:libs`
 
 ## Pull Request Process
 

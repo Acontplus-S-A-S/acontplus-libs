@@ -1,0 +1,56 @@
+{
+  "name": "@acontplus/ng-customer",
+  "version": "1.0.1",
+  "description": "Acontplus Angular Customer Module",
+  "dependencies": {
+    "@acontplus/ng-core": "1.0.3",
+    "@acontplus/ng-components": "^1.0.4",
+    "@acontplus/ng-notifications": "^1.0.0"
+  },
+  "peerDependencies": {
+    "@angular/common": "^20.3.0",
+    "@angular/core": "^20.3.0"
+  },
+  "sideEffects": false,
+  "main": "fesm2022/ng-customer.mjs",
+  "module": "fesm2022/ng-customer.mjs",
+  "typings": "index.d.ts",
+  "files": [
+    "index.d.ts",
+    "*.d.ts",
+    "**/*.d.ts",
+    "fesm2022/**/*"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "acontplus",
+    "angular",
+    "angular-material",
+    "customer-ui",
+    "components",
+    "typescript",
+    "frontend",
+    "library"
+  ],
+  "author": "Emilio Senguana <sengua2017@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Acontplus-S-A-S/acontplus-libs/issues"
+  },
+  "homepage": "https://github.com/Acontplus-S-A-S/acontplus-libs#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Acontplus-S-A-S/acontplus-libs.git"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  }
+}

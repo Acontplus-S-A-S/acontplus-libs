@@ -1,0 +1,188 @@
+<div class="application-management-container">
+  <div class="header">
+    <h1>Application Management</h1>
+  </div>
+
+  <mat-card class="search-card">
+    <mat-card-content>
+      <div class="search-row">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search Applications</mat-label>
+          <input
+            matInput
+            [(ngModel)]="searchQuery"
+            placeholder="Search by name, version, or category..."
+          />
+          <button mat-icon-button matSuffix (click)="onSearch()">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <button mat-button (click)="clearFilters()" class="clear-btn">
+          <mat-icon>clear</mat-icon>
+          Clear Filters
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="create-card">
+    <mat-card-header>
+      <mat-card-title>Create New Application</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="newApplication.name" placeholder="Enter application name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Version</mat-label>
+          <input matInput [(ngModel)]="newApplication.version" placeholder="e.g., 1.0.0" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="newApplication.status">
+            @for (status of statusOptions; track status) {
+              <mat-option [value]="status">{{ status | titlecase }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Environment</mat-label>
+          <mat-select [(ngModel)]="newApplication.environment">
+            @for (env of environmentOptions; track env) {
+              <mat-option [value]="env">{{ env | titlecase }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Category</mat-label>
+          <input matInput [(ngModel)]="newApplication.category" placeholder="e.g., Web App, API" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Owner</mat-label>
+          <input matInput [(ngModel)]="newApplication.owner" placeholder="Enter owner name" />
+        </mat-form-field>
+      </div>
+
+      <button mat-raised-button color="primary" (click)="createApplication()" [disabled]="isCreating">
+        <mat-icon>add</mat-icon>
+        {{ isCreating ? 'Creating...' : 'Create Application' }}
+      </button>
+    </mat-card-content>
+  </mat-card>
+
+  @if (selectedApplications.length > 0) {
+    <mat-card class="bulk-card">
+      <mat-card-content>
+        <div class="bulk-header">
+          <span class="selected-count">{{ getSelectedCount() }} applications selected</span>
+          <div class="bulk-actions">
+            <button mat-button color="primary" (click)="bulkActivateApplications()">
+              <mat-icon>check_circle</mat-icon>
+              Activate
+            </button>
+            <button mat-button color="warn" (click)="bulkDeactivateApplications()">
+              <mat-icon>cancel</mat-icon>
+              Deactivate
+            </button>
+            <button mat-button color="warn" (click)="bulkDeleteApplications()">
+              <mat-icon>delete</mat-icon>
+              Delete
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <mat-card class="table-card">
+    <mat-card-content>
+      <div class="table-container">
+        <acp-mat-dynamic-table
+          [tableData]="applications"
+          [columnDefinitions]="applicationColumns"
+          [showSelectBox]="true"
+          [showFooter]="true"
+          [enablePagination]="true"
+          [paginationConfig]="applicationPaginationConfig"
+          [isLoadingData]="isLoading"
+          (rowSelected)="onRowSelected($event)"
+          (pageEvent)="onPageChange($event)"
+        >
+        </acp-mat-dynamic-table>
+
+        @if (!isLoading && applications.length === 0) {
+          <div class="no-data">
+            <mat-icon>apps</mat-icon>
+            <p>No applications found</p>
+          </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Template for Status Column -->
+  <ng-template #statusTemplate let-element="$implicit">
+    <mat-chip [color]="getStatusColor(element.status)" selected>
+      {{ element.status | titlecase }}
+    </mat-chip>
+  </ng-template>
+
+  <!-- Template for Environment Column -->
+  <ng-template #environmentTemplate let-element="$implicit">
+    <mat-chip [color]="getEnvironmentColor(element.environment)" selected>
+      {{ element.environment | titlecase }}
+    </mat-chip>
+  </ng-template>
+
+  <!-- Template for Actions Column -->
+  <ng-template #actionsTemplate let-element="$implicit">
+    <div class="action-buttons">
+      @if (editApplicationId === element.id) {
+        <mat-form-field appearance="outline" class="inline-edit">
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="editApplication.name" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="inline-edit">
+          <mat-label>Version</mat-label>
+          <input matInput [(ngModel)]="editApplication.version" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="inline-edit">
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="editApplication.status">
+            @for (status of statusOptions; track status) {
+              <mat-option [value]="status">{{ status | titlecase }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <button mat-icon-button color="primary" (click)="updateApplication()" [disabled]="isUpdating">
+          <mat-icon>{{ isUpdating ? 'hourglass_empty' : 'check' }}</mat-icon>
+        </button>
+        <button mat-icon-button (click)="cancelEdit()">
+          <mat-icon>close</mat-icon>
+        </button>
+      } @else {
+        <button mat-icon-button color="primary" (click)="startEdit(element)" matTooltip="Edit Application">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="deleteApplication(element.id)"
+          matTooltip="Delete Application"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      }
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,15 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "allowedNonPeerDependencies": ["."],
+  "assets": [
+    "src/styles/**/*.scss",
+    "src/styles/**/*.css",
+    "src/assets/**/*.svg",
+    "src/assets/**/*.png",
+    "src/assets/**/*.json"
+  ],
+  "dest": "../../dist/packages/ng-notifications",
+  "lib": {
+    "entryFile": "src/index.ts"
+  }
+}

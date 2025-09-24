@@ -1,0 +1,23 @@
+// Bootstrap 5.3+ Color Palette
+$bootstrap-colors: (
+  primary: #0d6efd,
+  secondary: #6c757d,
+  success: #198754,
+  danger: #dc3545,
+  warning: #ffc107,
+  info: #0dcaf0,
+  light: #f8f9fa,
+  dark: #212529,
+);
+
+// Contrast colors
+$bootstrap-contrast: (
+  primary: #ffffff,
+  secondary: #ffffff,
+  success: #ffffff,
+  danger: #ffffff,
+  warning: #000000,
+  info: #000000,
+  light: #000000,
+  dark: #ffffff,
+);
