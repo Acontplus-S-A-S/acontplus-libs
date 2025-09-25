@@ -1,1 +1,2 @@
-export * from './client';
+export * from './customer-add-edit';
+export * from './customer-card';

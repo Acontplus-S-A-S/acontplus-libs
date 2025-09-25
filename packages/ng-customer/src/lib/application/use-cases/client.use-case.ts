@@ -1,12 +1,8 @@
-<<<<<<<< HEAD:packages/ng-customer/src/lib/application/use-cases/client.use-case.ts
-import { ClientRepository } from '../../domain/repositories/client.repository';
-========
 import { CustomerRepository } from '../../domain';
 import { CustomerSearch } from '../models/customer-search.model';
->>>>>>>> e8b4dd251833a4e8d200bdc036806a3191730767:packages/ng-customer/src/lib/application/use-cases/customer.use-case.ts
 
 export class ClientUseCase {
-  constructor(private repo: ClientRepository) {}
+  constructor(private repo: CustomerRepository) {}
 
   getAll(params: any) {
     return this.repo.getAll(params);
@@ -35,11 +31,8 @@ export class ClientUseCase {
     return this.repo.updateState(id);
   }
 
-<<<<<<<< HEAD:packages/ng-customer/src/lib/application/use-cases/client.use-case.ts
-  search(filter: any) {
-========
+
   search(filter: CustomerSearch) {
->>>>>>>> e8b4dd251833a4e8d200bdc036806a3191730767:packages/ng-customer/src/lib/application/use-cases/customer.use-case.ts
     return this.repo.search(filter);
   }
 }
