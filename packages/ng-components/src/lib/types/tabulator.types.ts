@@ -27,7 +27,7 @@ export interface TabulatorColumn {
 }
 
 export interface TabulatorTheme {
-  name: 'default' | 'bootstrap5' | 'semantic-ui';
+  name: 'default' | 'modern' | 'midnight' | 'simple' | 'site' | 'site-dark';
   cssPath?: string;
 }
 

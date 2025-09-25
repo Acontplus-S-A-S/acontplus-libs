@@ -1,10 +1,10 @@
 {
   "name": "@acontplus/ng-core",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "description": "Angular core library for Acontplus projects, providing essential services and functionalities.",
   "dependencies": {
     "@acontplus/core": "^1.0.10",
-    "@acontplus/ng-notifications": "^1.0.5",
+    "@acontplus/ng-notifications": "^1.0.7",
     "jwt-decode": "^4.0.0"
   },
   "peerDependencies": {
