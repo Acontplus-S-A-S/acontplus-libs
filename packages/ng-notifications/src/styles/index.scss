@@ -1,2 +1,7 @@
-@import '~ngx-toastr/toastr.css';
-@import '~sweetalert2/dist/sweetalert2.min.css';
+// Import variables and mixins first
+@forward 'variables';
+@forward 'mixins';
+
+// Then component styles
+@forward 'custom-buttons';
+@forward 'custom-dialog';

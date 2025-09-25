@@ -1,39 +1,13 @@
 /* custom-tabulator.component.scss */
 
-// Import all themes at the top level
-@import 'tabulator-tables/dist/css/tabulator.min.css';
-@import 'tabulator-tables/dist/css/tabulator_bootstrap5.min.css';
-@import 'tabulator-tables/dist/css/tabulator_semanticui.min.css';
+// Note: Tabulator themes are imported globally in styles/index.scss
+// This component only contains custom styling enhancements
 
 // Base container styles
 .acp-tabulator-container {
   width: 100%;
 
-  // Theme-specific visibility control
-  &:not(.tabulator-bootstrap5):not(.tabulator-semanticui) {
-    // Default theme is active
-    .tabulator {
-      display: block;
-    }
-  }
-
-  &.tabulator-bootstrap5 {
-    // Bootstrap5 theme styling adjustments if needed
-    .tabulator {
-      border-radius: 0.375rem;
-    }
-  }
-
-  &.tabulator-semanticui {
-    // Semantic UI theme styling adjustments if needed
-    .tabulator {
-      font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    }
-  }
-}
-
-// Custom enhancements that work across all themes
-.acp-tabulator-container {
+  // Custom enhancements that work across all themes
   .tabulator-row.tabulator-selectable:hover {
     background-color: rgba(0, 0, 0, 0.04);
     cursor: pointer;
