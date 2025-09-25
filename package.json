@@ -29,7 +29,7 @@
     "@acontplus/core": "^1.0.8",
     "@acontplus/ng-components": "^1.0.7",
     "@acontplus/ng-core": "^1.0.'7",
-    "@acontplus/ng-notifications": "^1.0.3",
+    "@acontplus/ng-notifications": "^1.0.4",
     "@acontplus/utils": "^1.0.5",
     "@angular/animations": "^20.3.1",
     "@angular/cdk": "^20.2.4",
