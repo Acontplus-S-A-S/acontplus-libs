@@ -1,6 +1,6 @@
 {
   "name": "@acontplus/ng-notifications",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A library of Angular components for notifications, including custom buttons, dialogs, and snackbars, built with Angular Material and styled with SCSS.",
   "peerDependencies": {
     "@angular/common": "^20.3.1",
