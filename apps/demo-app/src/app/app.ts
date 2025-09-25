@@ -29,6 +29,8 @@ export class App implements OnInit {
       message: 'App initialized',
       config: { timer: 3000, showCancelButton: true },
     });
+
+    this.notificationService.show({ type: 'info', message: 'App initialized via show method' });
   }
 
   saveSettings() {

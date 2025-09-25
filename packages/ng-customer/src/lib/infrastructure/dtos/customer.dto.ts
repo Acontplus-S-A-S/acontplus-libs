@@ -43,4 +43,3 @@ export interface CustomerSearchDTO {
   /** Índice de página (0-based) */
   pageIndex?: number;
 }
-

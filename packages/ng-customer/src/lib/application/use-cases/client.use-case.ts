@@ -1,7 +1,7 @@
 import { CustomerRepository } from '../../domain';
 import { CustomerSearch } from '../models/customer-search.model';
 
-export class CustomerUseCase {
+export class ClientUseCase {
   constructor(private repo: CustomerRepository) {}
 
   getAll(params: any) {
@@ -31,7 +31,9 @@ export class CustomerUseCase {
     return this.repo.updateState(id);
   }
 
+
   search(filter: CustomerSearch) {
     return this.repo.search(filter);
   }
 }
+
