@@ -1,3 +1,11 @@
+// Import Tabulator table styles
+@import '~tabulator-tables/dist/css/tabulator.min.css';
+@import '~tabulator-tables/dist/css/tabulator_modern.min.css';
+@import '~tabulator-tables/dist/css/tabulator_midnight.min.css';
+@import '~tabulator-tables/dist/css/tabulator_simple.min.css';
+@import '~tabulator-tables/dist/css/tabulator_site.min.css';
+@import '~tabulator-tables/dist/css/tabulator_site_dark.min.css';
+
 // Import variables and mixins first
 @forward 'variables';
 @forward 'mixins';
