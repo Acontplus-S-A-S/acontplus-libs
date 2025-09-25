@@ -16,6 +16,9 @@ import { NotificationService } from '@acontplus/ng-notifications';
 // A token to use with HttpContext for skipping notifications on specific requests.
 export const SKIP_NOTIFICATION = new HttpContextToken<boolean>(() => false);
 
+// A token to use with HttpContext for forcing notifications on specific requests (overrides exclusion patterns).
+export const SHOW_NOTIFICATIONS = new HttpContextToken<boolean | undefined>(() => undefined);
+
 export const apiInterceptor: HttpInterceptorFn = (req, next) => {
   const toastr = inject(NotificationService);
 
@@ -49,34 +52,40 @@ function handleSuccessResponse(
   if (!response) return;
 
   const shouldShowToast = shouldShowSuccessToast(req);
+  const forceShow = req.context.get(SHOW_NOTIFICATIONS);
+  const skipNotification = req.context.get(SKIP_NOTIFICATION);
 
-  switch (response.status) {
-    case 'success':
-      if (response.message && shouldShowToast) {
-        notificationService.success({ message: response.message });
-      }
-      break;
-    case 'warning':
-      if (response.message) {
-        notificationService.warning({ message: response.message });
-      }
-      if (response.warnings && response.warnings.length > 0) {
-        response.warnings.forEach(warning => {
-          notificationService.warning({ message: warning.message });
-        });
-      }
-      break;
-    case 'error':
-      if (response.errors && response.errors.length > 0) {
-        response.errors.forEach(error => {
-          if (!req.context.get(SKIP_NOTIFICATION)) {
-            notificationService.error({ message: error.message });
-          }
-        });
-      } else if (response.message) {
-        notificationService.error({ message: response.message });
-      }
-      break;
+  // Determine if we should show notifications, considering overrides
+  const showNotifications = forceShow !== undefined ? forceShow : shouldShowToast;
+
+  if (skipNotification) return;
+
+  // Dynamic handling: Use show() for runtime type selection
+  if (response.message && showNotifications && ['success', 'warning', 'error'].includes(response.status)) {
+    notificationService.show({
+      type: response.status as 'success' | 'warning' | 'error',
+      message: response.message,
+    });
+  }
+
+  // Handle warnings separately if needed
+  if (response.status === 'warning' && response.warnings && response.warnings.length > 0) {
+    response.warnings.forEach(warning => {
+      notificationService.show({
+        type: 'warning',
+        message: warning.message,
+      });
+    });
+  }
+
+  // Handle errors separately if needed
+  if (response.status === 'error' && response.errors && response.errors.length > 0) {
+    response.errors.forEach(error => {
+      notificationService.show({
+        type: 'error',
+        message: error.message,
+      });
+    });
   }
 }
 

@@ -1,12 +1,7 @@
-<<<<<<<< HEAD:packages/ng-customer/src/lib/infrastructure/mappers/client-search.mapper.ts
-export class ClientSearchMapper {
-  static toJson(params: any) {
-========
 import { CustomerSearch } from '../../application/models/customer-search.model';
 
 export class CompanySearchMapper {
   static toJson(params: CustomerSearch) {
->>>>>>>> e8b4dd251833a4e8d200bdc036806a3191730767:packages/ng-customer/src/lib/infrastructure/mappers/company-search.mapper.ts
     return JSON.stringify({
       textSearch: params.search,
     });

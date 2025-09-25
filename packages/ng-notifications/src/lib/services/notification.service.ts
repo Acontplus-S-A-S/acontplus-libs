@@ -68,6 +68,14 @@ export class NotificationService {
     return this.currentProvider.confirm(config);
   }
 
+  show(props: { type: NotificationType } & NotificationCallProps): void | Observable<NotificationResult> {
+    return this.currentProvider[props.type]({
+      message: props.message,
+      title: props.title,
+      config: props.config,
+    });
+  }
+
   // Provider-specific methods maintaining your current API
   get toastr(): ToastrProvider {
     return this.providers.get('toastr') as ToastrProvider;
