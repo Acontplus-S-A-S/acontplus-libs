@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FilterParams, PagedResult as PaginatedResult, PaginationParams } from '@acontplus/core';
+import { PagedResult as PaginatedResult, PaginationParams } from '@acontplus/core';
 import { Product } from '../domain';
 import { MockProductService } from './mock-product.service';
 
@@ -13,8 +13,8 @@ export class ProductRepository {
 
   constructor(private mockService: MockProductService) {}
 
-  getAll(pagination: PaginationParams, filters?: FilterParams): Observable<PaginatedResult<Product>> {
-    return this.mockService.getProducts(pagination, filters);
+  getAll(pagination: PaginationParams): Observable<PaginatedResult<Product>> {
+    return this.mockService.getProducts(pagination);
   }
 
   getById(id: number): Observable<Product> {

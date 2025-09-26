@@ -26,8 +26,8 @@
     "e2e": "nx run demo-app-e2e:e2e"
   },
   "dependencies": {
-    "@acontplus/core": "^1.0.10",
-    "@acontplus/ng-components": "^1.0.10",
+    "@acontplus/core": "^1.0.11",
+    "@acontplus/ng-components": "^1.0.11",
     "@acontplus/ng-core": "^1.0.10",
     "@acontplus/ng-notifications": "^1.0.7",
     "@acontplus/utils": "^1.0.5",

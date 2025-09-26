@@ -2,7 +2,7 @@ import { Injectable, Inject, InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseHttpRepository } from './base-http.repository';
 import { Repository, RepositoryConfig, SearchableRepository } from './interfaces';
-import { PagedResult, PaginationParams, FilterParams } from '@acontplus/core';
+import { PagedResult, PaginationParams } from '@acontplus/core';
 
 // Create an injection token for RepositoryConfig
 export const REPOSITORY_CONFIG = new InjectionToken<RepositoryConfig>('REPOSITORY_CONFIG');
@@ -23,8 +23,8 @@ export class GenericRepository<TEntity = any, TId extends string | number = numb
     return this.get<TEntity>(id.toString());
   }
 
-  getAll(pagination?: PaginationParams, filters?: FilterParams): Observable<PagedResult<TEntity>> {
-    const params = this.buildParams(pagination, filters);
+  getAll(pagination?: PaginationParams): Observable<PagedResult<TEntity>> {
+    const params = this.buildParams(pagination);
     return this.get<PagedResult<TEntity>>('', params);
   }
 
@@ -40,7 +40,7 @@ export class GenericRepository<TEntity = any, TId extends string | number = numb
     return super.delete<void>(id.toString());
   }
 
-  protected buildParams(pagination?: PaginationParams, filters?: FilterParams): any {
+  protected buildParams(pagination?: PaginationParams, filters?: Record<string, any>): any {
     const params: any = {};
 
     if (pagination) {
@@ -51,7 +51,7 @@ export class GenericRepository<TEntity = any, TId extends string | number = numb
     }
 
     if (filters) {
-      Object.assign(params, filters as Record<string, any>);
+      Object.assign(params, filters);
     }
 
     return params;
@@ -64,7 +64,7 @@ export class SearchableGenericRepository<TEntity = any, TId extends string | num
   implements SearchableRepository<TEntity, TId>
 {
   search(query: string, pagination: PaginationParams): Observable<PagedResult<TEntity>> {
-    const searchFilters = { q: query } as FilterParams;
+    const searchFilters = { q: query };
     const params = this.buildParams(pagination, searchFilters);
     return this.get<PagedResult<TEntity>>('search', params);
   }
