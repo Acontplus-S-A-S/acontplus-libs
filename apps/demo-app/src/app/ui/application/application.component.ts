@@ -25,7 +25,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontplus/ng-components';
 import { ApplicationRepository } from '../../data';
 import { Application } from '../../domain/application';
-import { PaginationParams, FilterParams, PagedResult } from '@acontplus/core';
+import { PaginationParams, PagedResult } from '@acontplus/core';
 
 @Component({
   selector: 'app-application',
@@ -73,7 +73,7 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
   applicationPaginationConfig: Pagination = new Pagination(0, 10, 5, 0, [5, 10, 25, 50]);
 
   // Filters
-  filters: FilterParams = {};
+  filters: Record<string, any> = {};
   searchQuery = '';
 
   // Form data
@@ -189,7 +189,7 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
 
   loadApplications(): void {
     this.isLoading = true;
-    this.applicationRepository.getAll(this.pagination, this.filters).subscribe({
+    this.applicationRepository.getAll(this.pagination).subscribe({
       next: (result: PagedResult<Application>) => {
         this.applications = result.items;
         this.applicationPaginationConfig.totalRecords = result.totalCount;
@@ -218,9 +218,9 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
   onSearch(): void {
     const query = this.searchQuery.trim();
     if (query) {
-      this.filters.search = query;
+      this.filters['search'] = query;
     } else {
-      delete this.filters.search;
+      delete this.filters['search'];
     }
     this.pagination.pageIndex = 1;
     this.loadApplications();

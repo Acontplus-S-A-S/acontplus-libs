@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
-import { Application, ApplicationFilterParams } from '../domain/application';
+import { Application } from '../domain/application';
 import { PagedResult, PaginationParams } from '@acontplus/core';
 
 @Injectable({
@@ -164,36 +164,8 @@ export class MockApplicationService {
   // CRUD operations
   getAll(
     pagination: PaginationParams,
-    filters?: ApplicationFilterParams,
   ): Observable<PagedResult<Application>> {
     let filteredApps = [...this.applications];
-
-    // Apply filters
-    if (filters) {
-      if (filters.search) {
-        const searchTerm = filters.search.toLowerCase();
-        filteredApps = filteredApps.filter(
-          app =>
-            app.name.toLowerCase().includes(searchTerm) ||
-            app.description.toLowerCase().includes(searchTerm) ||
-            app.tags.some(tag => tag.toLowerCase().includes(searchTerm)),
-        );
-      }
-
-      if (filters.status) {
-        filteredApps = filteredApps.filter(app => app.status === filters.status);
-      }
-
-      if (filters.environment) {
-        filteredApps = filteredApps.filter(app => app.environment === filters.environment);
-      }
-
-      if (filters.category) {
-        filteredApps = filteredApps.filter(app =>
-          app.category.toLowerCase().includes(filters.category!.toLowerCase()),
-        );
-      }
-    }
 
     // Apply sorting
     if (pagination.sortBy) {
@@ -276,7 +248,7 @@ export class MockApplicationService {
   }
 
   search(query: string, pagination: PaginationParams): Observable<PagedResult<Application>> {
-    return this.getAll(pagination, { search: query });
+    return this.getAll(pagination);
   }
 
   // Application-specific methods
@@ -284,21 +256,21 @@ export class MockApplicationService {
     status: Application['status'],
     pagination: PaginationParams,
   ): Observable<PagedResult<Application>> {
-    return this.getAll(pagination, { status });
+    return this.getAll(pagination);
   }
 
   getByEnvironment(
     environment: Application['environment'],
     pagination: PaginationParams,
   ): Observable<PagedResult<Application>> {
-    return this.getAll(pagination, { environment });
+    return this.getAll(pagination);
   }
 
   getByCategory(
     category: string,
     pagination: PaginationParams,
   ): Observable<PagedResult<Application>> {
-    return this.getAll(pagination, { category });
+    return this.getAll(pagination);
   }
 
   getByOwner(owner: string, pagination: PaginationParams): Observable<PagedResult<Application>> {
@@ -316,7 +288,7 @@ export class MockApplicationService {
   }
 
   getPublicApplications(pagination: PaginationParams): Observable<PagedResult<Application>> {
-    return this.getAll(pagination, { isPublic: true });
+    return this.getAll(pagination);
   }
 
   updateStatus(id: number, status: Application['status']): Observable<Application> {

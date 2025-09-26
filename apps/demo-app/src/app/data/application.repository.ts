@@ -1,53 +1,63 @@
 import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { GenericRepository, REPOSITORY_CONFIG } from '@acontplus/ng-core';
 import { Application, ApplicationFilterParams } from '../domain/application';
 import { PagedResult as PaginatedResult, PaginationParams } from '@acontplus/core';
-import { MockApplicationService } from './mock-application.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApplicationRepository {
-  private mockService = inject(MockApplicationService);
+  private http = inject(HttpClient);
 
-  protected entityName = 'applications';
-  protected baseUrl = 'https://api.example.com/v1';
-
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
-
-  constructor() {}
+  protected entityName = 'aplicaciones';
 
   // Override base methods to use mock service for demonstration
   getAll(
     pagination: PaginationParams,
     filters?: ApplicationFilterParams,
   ): Observable<PaginatedResult<Application>> {
-    return this.mockService.getAll(pagination, filters);
+    let params = new HttpParams()
+      .set('page', pagination.pageIndex.toString())
+      .set('size', pagination.pageSize.toString());
+    if (filters) {
+      if (filters.status) params = params.set('status', filters.status);
+      if (filters.environment) params = params.set('environment', filters.environment);
+      if (filters.category) params = params.set('category', filters.category);
+      if (filters.isPublic !== undefined) params = params.set('isPublic', filters.isPublic.toString());
+    }
+    return this.http.get<PaginatedResult<Application>>(`${this.entityName}`, { params });
+  }
+
+  get(): Observable<Application[]> {
+    return this.http.get<Application[]>(`${this.entityName}`);
   }
 
   getById(id: number): Observable<Application> {
-    return this.mockService.getById(id);
+    return this.http.get<Application>(`${this.entityName}/${id}`);
   }
 
   create(application: Omit<Application, 'id'>): Observable<Application> {
-    return this.mockService.create(application);
+    return this.http.post<Application>(`${this.entityName}`, application);
   }
 
   update(id: number, application: Partial<Application>): Observable<Application> {
-    return this.mockService.update(id, application);
+    return this.http.put<Application>(`${this.entityName}/${id}`, application);
   }
 
   delete(id: number): Observable<boolean> {
-    return this.mockService.delete(id);
+    return this.http.delete<boolean>(`${this.entityName}/${id}`);
   }
 
   search(
     query: string,
     pagination: PaginationParams,
   ): Observable<PaginatedResult<Application>> {
-    return this.mockService.search(query, pagination);
+    const params = new HttpParams()
+      .set('q', query)
+      .set('page', pagination.pageIndex.toString())
+      .set('size', pagination.pageSize.toString());
+    return this.http.get<PaginatedResult<Application>>(`${this.entityName}/search`, { params });
   }
 
   // Application-specific methods
@@ -55,64 +65,84 @@ export class ApplicationRepository {
     status: Application['status'],
     pagination: PaginationParams,
   ): Observable<PaginatedResult<Application>> {
-    return this.mockService.getByStatus(status, pagination);
+    const params = new HttpParams()
+      .set('status', status)
+      .set('page', pagination.pageIndex.toString())
+      .set('size', pagination.pageSize.toString());
+    return this.http.get<PaginatedResult<Application>>(`${this.entityName}`, { params });
   }
 
   getByEnvironment(
     environment: Application['environment'],
     pagination: PaginationParams,
   ): Observable<PaginatedResult<Application>> {
-    return this.mockService.getByEnvironment(environment, pagination);
+    const params = new HttpParams()
+      .set('environment', environment)
+      .set('page', pagination.pageIndex.toString())
+      .set('size', pagination.pageSize.toString());
+    return this.http.get<PaginatedResult<Application>>(`${this.entityName}`, { params });
   }
 
   getByCategory(
     category: string,
     pagination: PaginationParams,
   ): Observable<PaginatedResult<Application>> {
-    return this.mockService.getByCategory(category, pagination);
+    const params = new HttpParams()
+      .set('category', category)
+      .set('page', pagination.pageIndex.toString())
+      .set('size', pagination.pageSize.toString());
+    return this.http.get<PaginatedResult<Application>>(`${this.entityName}`, { params });
   }
 
   getByOwner(
     owner: string,
     pagination: PaginationParams,
   ): Observable<PaginatedResult<Application>> {
-    return this.mockService.getByOwner(owner, pagination);
+    const params = new HttpParams()
+      .set('owner', owner)
+      .set('page', pagination.pageIndex.toString())
+      .set('size', pagination.pageSize.toString());
+    return this.http.get<PaginatedResult<Application>>(`${this.entityName}`, { params });
   }
 
   getPublicApplications(pagination: PaginationParams): Observable<PaginatedResult<Application>> {
-    return this.mockService.getPublicApplications(pagination);
+    const params = new HttpParams()
+      .set('isPublic', 'true')
+      .set('page', pagination.pageIndex.toString())
+      .set('size', pagination.pageSize.toString());
+    return this.http.get<PaginatedResult<Application>>(`${this.entityName}`, { params });
   }
 
   updateStatus(id: number, status: Application['status']): Observable<Application> {
-    return this.mockService.updateStatus(id, status);
+    return this.http.put<Application>(`${this.entityName}/${id}/status`, { status });
   }
 
   updateVersion(id: number, version: string): Observable<Application> {
-    return this.mockService.updateVersion(id, version);
+    return this.http.put<Application>(`${this.entityName}/${id}/version`, { version });
   }
 
   addDependency(id: number, dependency: string): Observable<Application> {
-    return this.mockService.addDependency(id, dependency);
+    return this.http.post<Application>(`${this.entityName}/${id}/dependencies`, { dependency });
   }
 
   removeDependency(id: number, dependency: string): Observable<Application> {
-    return this.mockService.removeDependency(id, dependency);
+    return this.http.delete<Application>(`${this.entityName}/${id}/dependencies/${dependency}`);
   }
 
   addTag(id: number, tag: string): Observable<Application> {
-    return this.mockService.addTag(id, tag);
+    return this.http.post<Application>(`${this.entityName}/${id}/tags`, { tag });
   }
 
   removeTag(id: number, tag: string): Observable<Application> {
-    return this.mockService.removeTag(id, tag);
+    return this.http.delete<Application>(`${this.entityName}/${id}/tags/${tag}`);
   }
 
   deploy(id: number, environment: Application['environment']): Observable<Application> {
-    return this.mockService.deploy(id, environment);
+    return this.http.post<Application>(`${this.entityName}/${id}/deploy`, { environment });
   }
 
   getDeploymentHistory(id: number): Observable<any[]> {
-    return this.mockService.getDeploymentHistory(id);
+    return this.http.get<any[]>(`${this.entityName}/${id}/deployments`);
   }
 
   getApplicationStats(): Observable<{
@@ -121,6 +151,11 @@ export class ApplicationRepository {
     byEnvironment: Record<Application['environment'], number>;
     byCategory: Record<string, number>;
   }> {
-    return this.mockService.getApplicationStats();
+    return this.http.get<{
+      total: number;
+      byStatus: Record<Application['status'], number>;
+      byEnvironment: Record<Application['environment'], number>;
+      byCategory: Record<string, number>;
+    }>(`${this.entityName}/stats`);
   }
 }

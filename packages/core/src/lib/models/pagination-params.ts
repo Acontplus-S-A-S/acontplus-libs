@@ -1,12 +1,10 @@
 export type SortDirection = 'asc' | 'desc';
 
-export interface PaginationFilters {
-  [key: string]: any;
-}
+export type PaginationFilters = Record<string, any>;
 
 export class PaginationParams {
-  private _pageIndex: number = 1;
-  private _pageSize: number = 10;
+  private _pageIndex = 1;
+  private _pageSize = 10;
 
   public sortBy?: string;
   public sortDirection: SortDirection = 'asc';

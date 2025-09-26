@@ -67,9 +67,8 @@ export class UserRepository extends GenericRepository<User, number> {
   // Repository handles response transformation based on backend format
   getAll(
     pagination: PaginationParams,
-    filters?: FilterParams,
   ): Observable<PagedResult<User>> {
-    const params = this.buildParams(pagination, filters);
+    const params = this.buildParams(pagination);
     return this.get<PagedResult<User>>('', params);
   }
 
@@ -271,9 +270,8 @@ export class UserRepository extends BaseHttpRepository<User> {
   // The interceptor handles all standardization - repository is very simple
   getAll(
     pagination: PaginationParams,
-    filters?: FilterParams,
   ): Observable<PaginatedResult<User>> {
-    const params = this.buildQueryParams(pagination, filters);
+    const params = this.buildQueryParams(pagination);
     return this.get<PaginatedResult<User>>(this.buildUrl(''), params);
   }
 

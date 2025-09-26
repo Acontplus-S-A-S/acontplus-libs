@@ -51,7 +51,6 @@ export class ApplicationRepository extends BaseHttpRepository<Application> {
   // Override base methods for custom implementations
   override getAll(
     pagination: PaginationParams,
-    filters?: FilterParams,
   ): Observable<PaginatedResult<Application>>;
   override getById(id: number): Observable<Application>;
   override create(application: Omit<Application, 'id'>): Observable<Application>;
@@ -103,7 +102,6 @@ export class MockApplicationService {
   // Implements all repository methods with mock data
   getAll(
     pagination: PaginationParams,
-    filters?: FilterParams,
   ): Observable<PaginatedResult<Application>>;
   // ... more methods
 }

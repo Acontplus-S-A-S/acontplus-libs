@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 import { User } from '../domain/user';
-import { PagedResult as PaginatedResult, PaginationParams, FilterParams } from '@acontplus/core';
+import { PagedResult as PaginatedResult, PaginationParams } from '@acontplus/core';
 
 @Injectable({
   providedIn: 'root',
@@ -104,30 +104,8 @@ export class MockUserService {
 
   getUsers(
     pagination: PaginationParams,
-    filters?: FilterParams,
   ): Observable<PaginatedResult<User>> {
     let filteredUsers = [...this.users];
-
-    // Apply filters
-    if (filters) {
-      if (filters.search) {
-        const searchTerm = filters.search.toLowerCase();
-        filteredUsers = filteredUsers.filter(
-          user =>
-            user.name.toLowerCase().includes(searchTerm) ||
-            user.email.toLowerCase().includes(searchTerm) ||
-            user.role.toLowerCase().includes(searchTerm),
-        );
-      }
-
-      if (filters.isActive !== undefined) {
-        filteredUsers = filteredUsers.filter(user => user.isActive === filters.isActive);
-      }
-
-      if (filters.role) {
-        filteredUsers = filteredUsers.filter(user => user.role === filters.role);
-      }
-    }
 
     // Apply sorting
     if (pagination.sortBy) {
@@ -209,15 +187,15 @@ export class MockUserService {
   }
 
   searchUsers(query: string, pagination: PaginationParams): Observable<PaginatedResult<User>> {
-    return this.getUsers(pagination, { search: query });
+    return this.getUsers(pagination);
   }
 
   getActiveUsers(pagination: PaginationParams): Observable<PaginatedResult<User>> {
-    return this.getUsers(pagination, { isActive: true });
+    return this.getUsers(pagination);
   }
 
   getUsersByRole(role: string, pagination: PaginationParams): Observable<PaginatedResult<User>> {
-    return this.getUsers(pagination, { role });
+    return this.getUsers(pagination);
   }
 
   // Bulk operations
