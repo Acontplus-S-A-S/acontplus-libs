@@ -1,4 +1,4 @@
-import { CustomerSearch } from '../../application/models/customer-search.model';
+import { CustomerSearch } from '../../application/models/customer-search';
 
 export class CompanySearchMapper {
   static toJson(params: CustomerSearch) {

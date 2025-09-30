@@ -1,7 +1,7 @@
-import { FieldDefinition } from './field-definition.model';
+import { FieldDefinition } from './field-definition';
 import { TemplateRef } from '@angular/core';
 
-// column-definition.model.ts
+// column-definition.ts
 export interface TableContext<T = any> {
   $implicit: T;
   index?: number;

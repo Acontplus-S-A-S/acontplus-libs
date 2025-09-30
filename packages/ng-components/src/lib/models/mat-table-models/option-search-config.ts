@@ -1,4 +1,4 @@
-import { ColumnDefinition } from './column-definition.model';
+import { ColumnDefinition } from './column-definition';
 
 export interface OptionSearchConfig<T> {
   displayedColumns?: string[];

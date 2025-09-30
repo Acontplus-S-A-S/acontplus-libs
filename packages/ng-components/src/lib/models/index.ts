@@ -1,3 +1,3 @@
 export * from './mat-table-models';
-export * from './pagination.model';
-export * from './autocomplete-wrapper.model';
+export * from './pagination';
+export * from './autocomplete-wrapper';
