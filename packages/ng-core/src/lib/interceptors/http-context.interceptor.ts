@@ -1,4 +1,5 @@
 import { inject, InjectionToken } from '@angular/core'; // Import InjectionToken
+import { Router } from '@angular/router';
 import {
   HttpContextToken,
   HttpContext,
@@ -15,7 +16,7 @@ import { ENVIRONMENT } from '../environments';
 import { TenantService } from '../services/tenant.service';
 import { CorrelationService } from '../services/correlation.service';
 import { LoggingService } from '../services/logging.service';
-import { JwtTokenService } from '../services/jwt-token.service';
+import { TokenRepository } from '../repositories/token.repository';
 
 // HTTP Context tokens
 const CUSTOM_URL = new HttpContextToken<boolean>(() => false);
@@ -73,7 +74,8 @@ export const HTTP_CONTEXT_CONFIG = new InjectionToken<HttpContextConfig>('HTTP_C
 });
 
 export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
-  const jwtTokenService = inject(JwtTokenService);
+  const tokenRepository = inject(TokenRepository);
+  const router = inject(Router);
   const tenantService = inject(TenantService);
   const correlationService = inject(CorrelationService);
   const loggingService = inject(LoggingService);
@@ -146,7 +148,7 @@ export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
 
   // Add authorization header if configured and available
   if (config.includeAuthToken) {
-    const authToken = jwtTokenService.getToken();
+    const authToken = tokenRepository.getAccessToken();
     if (authToken) {
       headers['Authorization'] = `Bearer ${authToken}`;
     }
@@ -216,7 +218,9 @@ export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
       // Handle specific error scenarios
       switch (error.status) {
         case 401:
-          jwtTokenService.handleUnauthorized();
+          console.error('Unauthorized access - token expired or invalid');
+          tokenRepository.clearTokens();
+          router.navigate(['/login']);
           break;
         case 403:
           tenantService.handleForbidden();
