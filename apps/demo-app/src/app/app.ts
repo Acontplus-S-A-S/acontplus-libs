@@ -1,13 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NxWelcome } from './nx-welcome';
+
 import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
 import { ApplicationService } from './providers';
 import { ThemeService } from '@acontplus/ng-components';
 import { NotificationService } from '@acontplus/ng-notifications';
 
 @Component({
-  imports: [NxWelcome, RouterModule, AppLayoutComponent],
+  imports: [RouterModule, AppLayoutComponent],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',

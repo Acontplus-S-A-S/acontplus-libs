@@ -1,6 +1,137 @@
 {
   "graph": {
     "nodes": {
+      "ng-infrastructure": {
+        "name": "ng-infrastructure",
+        "type": "lib",
+        "data": {
+          "root": "packages/ng-infrastructure",
+          "targets": {
+            "eslint:lint": {
+              "cache": true,
+              "options": {
+                "cwd": "packages/ng-infrastructure",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.js",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": [
+                    "eslint"
+                  ]
+                }
+              ],
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "metadata": {
+                "technologies": [
+                  "eslint"
+                ],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "npx eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": [
+                "^nx-release-publish"
+              ],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "@nx/angular:package",
+              "outputs": [
+                "{workspaceRoot}/dist/{projectRoot}"
+              ],
+              "options": {
+                "project": "packages/ng-infrastructure/ng-package.json"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "test": {
+              "executor": "@nx/jest:jest",
+              "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+              ],
+              "options": {
+                "jestConfig": "packages/ng-infrastructure/jest.config.ts",
+                "tsConfig": "packages/ng-infrastructure/tsconfig.spec.json"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production"
+              ]
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "default"
+              ]
+            }
+          },
+          "name": "ng-infrastructure",
+          "tags": [
+            "npm:public",
+            "npm:acontplus",
+            "npm:angular",
+            "npm:infrastructure",
+            "npm:interceptors",
+            "npm:repositories",
+            "npm:typescript",
+            "npm:frontend",
+            "npm:library"
+          ],
+          "metadata": {
+            "targetGroups": {},
+            "description": "Acontplus Angular Infrastructure Module",
+            "js": {
+              "packageName": "@acontplus/ng-infrastructure",
+              "packageVersion": "1.0.0",
+              "packageMain": "fesm2022/acontplus-ng-infrastructure.mjs",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "packages/ng-infrastructure/src",
+          "prefix": "lib",
+          "projectType": "library",
+          "implicitDependencies": [
+            "ng-config"
+          ]
+        }
+      },
       "ng-notifications": {
         "name": "ng-notifications",
         "type": "lib",
@@ -101,12 +232,11 @@
               ]
             },
             "publish": {
-              "executor": "@nx/js:npm-package",
-              "dependsOn": [
-                "build"
-              ],
+              "executor": "nx:run-commands",
               "options": {
-                "command": "public"
+                "command": "npm publish --access=public",
+                "cwd": "dist/packages/ng-notifications",
+                "parallel": false
               },
               "configurations": {},
               "parallelism": true
@@ -147,7 +277,8 @@
             "description": "A library of Angular components for notifications, including custom buttons, dialogs, and snackbars, built with Angular Material and styled with SCSS.",
             "js": {
               "packageName": "@acontplus/ng-notifications",
-              "packageMain": "fesm2022/ng-notifications.mjs",
+              "packageVersion": "1.0.7",
+              "packageMain": "fesm2022/acontplus-ng-notifications.mjs",
               "isInPackageManagerWorkspaces": true
             }
           },
@@ -267,12 +398,11 @@
               ]
             },
             "publish": {
-              "executor": "@nx/js:npm-package",
-              "dependsOn": [
-                "build"
-              ],
+              "executor": "nx:run-commands",
               "options": {
-                "command": "public"
+                "command": "npm publish --access=public",
+                "cwd": "dist/packages/ng-components",
+                "parallel": false
               },
               "configurations": {},
               "parallelism": true
@@ -324,15 +454,8 @@
             "description": "Angular Material UI component library with dynamic tables, theming support, dialog wrappers, and comprehensive styling utilities",
             "js": {
               "packageName": "@acontplus/ng-components",
-              "packageExports": {
-                ".": {
-                  "sass": "./styles/index.scss"
-                },
-                "./styles": "./styles/index.scss",
-                "./styles/buttons": "./styles/_custom-buttons.scss",
-                "./styles/dialog": "./styles/_custom-dialog.scss"
-              },
-              "packageMain": "fesm2022/ng-components.mjs",
+              "packageVersion": "1.0.10",
+              "packageMain": "fesm2022/acontplus-ng-components.mjs",
               "isInPackageManagerWorkspaces": true
             }
           },
@@ -452,12 +575,11 @@
               ]
             },
             "publish": {
-              "executor": "@nx/js:npm-package",
-              "dependsOn": [
-                "build"
-              ],
+              "executor": "nx:run-commands",
               "options": {
-                "command": "public"
+                "command": "npm publish --access=public",
+                "cwd": "dist/packages/ng-customer",
+                "parallel": false
               },
               "configurations": {},
               "parallelism": true
@@ -490,7 +612,8 @@
             "description": "Acontplus Angular Customer Module",
             "js": {
               "packageName": "@acontplus/ng-customer",
-              "packageMain": "fesm2022/ng-customer.mjs",
+              "packageVersion": "1.0.6",
+              "packageMain": "fesm2022/acontplus-ng-customer.mjs",
               "isInPackageManagerWorkspaces": true
             }
           },
@@ -507,6 +630,135 @@
               "fallbackCurrentVersionResolver": "disk"
             }
           },
+          "implicitDependencies": []
+        }
+      },
+      "ng-config": {
+        "name": "ng-config",
+        "type": "lib",
+        "data": {
+          "root": "packages/ng-config",
+          "targets": {
+            "eslint:lint": {
+              "cache": true,
+              "options": {
+                "cwd": "packages/ng-config",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.js",
+                "{workspaceRoot}/packages/ng-config/eslint.config.cjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": [
+                    "eslint"
+                  ]
+                }
+              ],
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "metadata": {
+                "technologies": [
+                  "eslint"
+                ],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "npx eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/jest:jest",
+              "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+              ],
+              "options": {
+                "jestConfig": "packages/ng-config/jest.config.ts",
+                "tsConfig": "packages/ng-config/tsconfig.spec.json"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production"
+              ]
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": [
+                "^nx-release-publish"
+              ],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "@nx/angular:package",
+              "outputs": [
+                "{workspaceRoot}/dist/{projectRoot}"
+              ],
+              "options": {
+                "project": "packages/ng-config/ng-package.json"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "default"
+              ]
+            }
+          },
+          "name": "ng-config",
+          "tags": [
+            "npm:public",
+            "npm:acontplus",
+            "npm:angular",
+            "npm:configuration",
+            "npm:environment",
+            "npm:typescript",
+            "npm:frontend",
+            "npm:library"
+          ],
+          "metadata": {
+            "targetGroups": {},
+            "description": "Acontplus Angular Configuration Module",
+            "js": {
+              "packageName": "@acontplus/ng-config",
+              "packageVersion": "1.0.0",
+              "packageMain": "fesm2022/acontplus-ng-config.mjs",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "packages/ng-config/src",
+          "prefix": "lib",
+          "projectType": "library",
           "implicitDependencies": []
         }
       },
@@ -669,7 +921,8 @@
                 {
                   "target": "e2e-ci--src/example.spec.ts",
                   "projects": "self",
-                  "params": "forward"
+                  "params": "forward",
+                  "options": "forward"
                 }
               ],
               "metadata": {
@@ -690,13 +943,42 @@
               "configurations": {},
               "options": {},
               "parallelism": true
+            },
+            "e2e-ci--merge-reports": {
+              "executor": "@nx/playwright:merge-reports",
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                {
+                  "externalDependencies": [
+                    "@playwright/test"
+                  ]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/dist/.playwright/apps/demo-app-e2e/playwright-report"
+              ],
+              "options": {
+                "config": "playwright.config.ts",
+                "expectedSuites": 1
+              },
+              "metadata": {
+                "technologies": [
+                  "playwright"
+                ],
+                "description": "Merges Playwright blob reports from atomized tasks to produce unified reports for the configured reporters."
+              },
+              "configurations": {},
+              "parallelism": true
             }
           },
           "metadata": {
             "targetGroups": {
               "E2E (CI)": [
                 "e2e-ci--src/example.spec.ts",
-                "e2e-ci"
+                "e2e-ci",
+                "e2e-ci--merge-reports"
               ]
             }
           },
@@ -710,23 +992,22 @@
           "tags": []
         }
       },
-      "ng-core": {
-        "name": "ng-core",
+      "ng-auth": {
+        "name": "ng-auth",
         "type": "lib",
         "data": {
-          "root": "packages/ng-core",
+          "root": "packages/ng-auth",
           "targets": {
             "eslint:lint": {
               "cache": true,
               "options": {
-                "cwd": "packages/ng-core",
+                "cwd": "packages/ng-auth",
                 "command": "eslint ."
               },
               "inputs": [
                 "default",
                 "^default",
                 "{workspaceRoot}/eslint.config.js",
-                "{workspaceRoot}/packages/ng-core/eslint.config.cjs",
                 "{workspaceRoot}/tools/eslint-rules/**/*",
                 {
                   "externalDependencies": [
@@ -755,31 +1036,12 @@
               "configurations": {},
               "parallelism": true
             },
-            "test": {
-              "executor": "@nx/jest:jest",
-              "outputs": [
-                "{workspaceRoot}/coverage/{projectRoot}"
-              ],
-              "options": {
-                "jestConfig": "packages/ng-core/jest.config.ts",
-                "tsConfig": "packages/ng-core/tsconfig.spec.json"
-              },
-              "configurations": {},
-              "parallelism": true,
-              "cache": true,
-              "inputs": [
-                "default",
-                "^production"
-              ]
-            },
             "nx-release-publish": {
               "executor": "@nx/js:release-publish",
               "dependsOn": [
                 "^nx-release-publish"
               ],
-              "options": {
-                "packageRoot": "dist/packages/ng-core"
-              },
+              "options": {},
               "configurations": {},
               "parallelism": true
             },
@@ -789,16 +1051,9 @@
                 "{workspaceRoot}/dist/{projectRoot}"
               ],
               "options": {
-                "project": "packages/ng-core/ng-package.json",
-                "tsConfig": "packages/ng-core/tsconfig.lib.json"
+                "project": "packages/ng-auth/ng-package.json"
               },
-              "configurations": {
-                "production": {
-                  "tsConfig": "packages/ng-core/tsconfig.lib.prod.json"
-                },
-                "development": {}
-              },
-              "defaultConfiguration": "production",
+              "configurations": {},
               "parallelism": true,
               "cache": true,
               "dependsOn": [
@@ -809,16 +1064,22 @@
                 "^production"
               ]
             },
-            "publish": {
-              "executor": "@nx/js:npm-package",
-              "dependsOn": [
-                "build"
+            "test": {
+              "executor": "@nx/jest:jest",
+              "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
               ],
               "options": {
-                "command": "public"
+                "jestConfig": "packages/ng-auth/jest.config.ts",
+                "tsConfig": "packages/ng-auth/tsconfig.spec.json"
               },
               "configurations": {},
-              "parallelism": true
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production"
+              ]
             },
             "lint": {
               "executor": "@nx/eslint:lint",
@@ -831,51 +1092,36 @@
               ]
             }
           },
-          "name": "ng-core",
+          "name": "ng-auth",
           "tags": [
             "npm:public",
             "npm:acontplus",
             "npm:angular",
-            "npm:repository-pattern",
-            "npm:use-cases",
-            "npm:jwt",
             "npm:authentication",
-            "npm:interceptors",
-            "npm:http-client",
-            "npm:multi-tenant",
-            "npm:tenant",
-            "npm:correlation",
-            "npm:notifications",
-            "npm:toastr",
-            "npm:response-handler",
-            "npm:environment",
-            "npm:services",
+            "npm:jwt",
+            "npm:guards",
             "npm:typescript",
             "npm:frontend",
             "npm:library"
           ],
           "metadata": {
             "targetGroups": {},
+            "description": "Acontplus Angular Authentication Module",
             "js": {
-              "packageName": "@acontplus/ng-core",
-              "packageMain": "fesm2022/ng-core.mjs",
+              "packageName": "@acontplus/ng-auth",
+              "packageVersion": "1.0.0",
+              "packageMain": "fesm2022/acontplus-ng-auth.mjs",
               "isInPackageManagerWorkspaces": true
             }
           },
           "$schema": "../../node_modules/nx/schemas/project-schema.json",
-          "sourceRoot": "packages/ng-core/src",
-          "prefix": "acp",
+          "sourceRoot": "packages/ng-auth/src",
+          "prefix": "lib",
           "projectType": "library",
-          "release": {
-            "version": {
-              "manifestRootsToUpdate": [
-                "dist/{projectRoot}"
-              ],
-              "currentVersionResolver": "git-tag",
-              "fallbackCurrentVersionResolver": "disk"
-            }
-          },
-          "implicitDependencies": []
+          "implicitDependencies": [
+            "ng-infrastructure",
+            "ng-config"
+          ]
         }
       },
       "ui-kit": {
@@ -1149,6 +1395,14 @@
             "targetGroups": {},
             "js": {
               "packageName": "@acontplus/ui-kit",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "import": "./index.js",
+                  "types": "./index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
               "packageMain": "./index.js",
               "isInPackageManagerWorkspaces": true
             }
@@ -1268,7 +1522,7 @@
                 "assets": [
                   "packages/utils/*.md"
                 ],
-                "clean": true,
+                "clean": false,
                 "packageJson": "packages/utils/package.json"
               },
               "configurations": {},
@@ -1283,12 +1537,11 @@
               ]
             },
             "publish": {
-              "executor": "@nx/js:npm-package",
-              "dependsOn": [
-                "build"
-              ],
+              "executor": "nx:run-commands",
               "options": {
-                "command": "public"
+                "command": "npm publish --access=public",
+                "cwd": "dist/packages/utils",
+                "parallel": false
               },
               "configurations": {},
               "parallelism": true
@@ -1311,11 +1564,11 @@
             "description": "Utility library",
             "js": {
               "packageName": "@acontplus/utils",
+              "packageVersion": "1.0.5",
               "packageExports": {
                 ".": {
-                  "types": "./src/index.d.ts",
                   "import": "./src/index.js",
-                  "require": "./src/index.cjs"
+                  "types": "./src/index.d.ts"
                 },
                 "./package.json": "./package.json"
               },
@@ -1401,7 +1654,7 @@
                     }
                   }
                 },
-                "scriptContent": "nx test utils",
+                "scriptContent": "nx test core",
                 "runCommand": "npm run test"
               },
               "configurations": {},
@@ -1435,7 +1688,7 @@
                 "assets": [
                   "packages/core/*.md"
                 ],
-                "clean": true,
+                "clean": false,
                 "packageJson": "packages/core/package.json"
               },
               "configurations": {},
@@ -1450,12 +1703,11 @@
               ]
             },
             "publish": {
-              "executor": "@nx/js:npm-package",
-              "dependsOn": [
-                "build"
-              ],
+              "executor": "nx:run-commands",
               "options": {
-                "command": "public"
+                "command": "npm publish --access=public",
+                "cwd": "dist/packages/core",
+                "parallel": false
               },
               "configurations": {},
               "parallelism": true
@@ -1479,11 +1731,11 @@
             "description": "Core library for Acontplus projects, providing essential utilities and functionalities.",
             "js": {
               "packageName": "@acontplus/core",
+              "packageVersion": "1.0.11",
               "packageExports": {
                 ".": {
-                  "types": "./src/index.d.ts",
                   "import": "./src/index.js",
-                  "require": "./src/index.cjs"
+                  "types": "./src/index.d.ts"
                 },
                 "./package.json": "./package.json"
               },
@@ -1747,6 +1999,7 @@
             "targetGroups": {},
             "js": {
               "packageName": "acontplus-libs",
+              "packageVersion": "1.0.0",
               "isInPackageManagerWorkspaces": true
             }
           },
@@ -1756,23 +2009,39 @@
       }
     },
     "dependencies": {
-      "ng-notifications": [],
-      "ng-components": [
+      "ng-infrastructure": [
         {
-          "source": "ng-components",
-          "target": "ng-core",
+          "source": "ng-infrastructure",
+          "target": "ng-config",
+          "type": "implicit"
+        },
+        {
+          "source": "ng-infrastructure",
+          "target": "core",
+          "type": "static"
+        },
+        {
+          "source": "ng-infrastructure",
+          "target": "ng-notifications",
+          "type": "static"
+        },
+        {
+          "source": "ng-infrastructure",
+          "target": "ng-config",
           "type": "static"
         }
       ],
+      "ng-notifications": [],
+      "ng-components": [],
       "ng-customer": [
         {
           "source": "ng-customer",
-          "target": "ng-core",
+          "target": "ng-components",
           "type": "static"
         },
         {
           "source": "ng-customer",
-          "target": "ng-components",
+          "target": "ng-auth",
           "type": "static"
         },
         {
@@ -1791,6 +2060,13 @@
           "type": "static"
         }
       ],
+      "ng-config": [
+        {
+          "source": "ng-config",
+          "target": "core",
+          "type": "static"
+        }
+      ],
       "demo-app-e2e": [
         {
           "source": "demo-app-e2e",
@@ -1798,15 +2074,30 @@
           "type": "implicit"
         }
       ],
-      "ng-core": [
+      "ng-auth": [
         {
-          "source": "ng-core",
+          "source": "ng-auth",
+          "target": "ng-infrastructure",
+          "type": "implicit"
+        },
+        {
+          "source": "ng-auth",
+          "target": "ng-config",
+          "type": "implicit"
+        },
+        {
+          "source": "ng-auth",
           "target": "core",
           "type": "static"
         },
         {
-          "source": "ng-core",
-          "target": "ng-notifications",
+          "source": "ng-auth",
+          "target": "ng-infrastructure",
+          "type": "static"
+        },
+        {
+          "source": "ng-auth",
+          "target": "ng-config",
           "type": "static"
         }
       ],
@@ -1822,17 +2113,27 @@
       "demo-app": [
         {
           "source": "demo-app",
-          "target": "ng-core",
+          "target": "ng-config",
           "type": "static"
         },
         {
           "source": "demo-app",
-          "target": "ng-components",
+          "target": "ng-infrastructure",
+          "type": "static"
+        },
+        {
+          "source": "demo-app",
+          "target": "ng-auth",
           "type": "static"
         },
         {
           "source": "demo-app",
           "target": "ng-notifications",
+          "type": "static"
+        },
+        {
+          "source": "demo-app",
+          "target": "ng-components",
           "type": "static"
         },
         {
@@ -1855,16 +2156,6 @@
         {
           "source": "acontplus-libs",
           "target": "core",
-          "type": "static"
-        },
-        {
-          "source": "acontplus-libs",
-          "target": "ng-components",
-          "type": "static"
-        },
-        {
-          "source": "acontplus-libs",
-          "target": "ng-core",
           "type": "static"
         },
         {

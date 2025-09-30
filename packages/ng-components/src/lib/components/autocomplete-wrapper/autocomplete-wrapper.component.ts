@@ -2,7 +2,6 @@ import {
   Component,
   Input,
   TemplateRef,
-  ViewChild,
   ElementRef,
   computed,
   signal,
@@ -11,6 +10,7 @@ import {
   input,
   OnInit,
   OnDestroy,
+  viewChild
 } from '@angular/core';
 import { Subject, takeUntil, debounceTime, Observable, of } from 'rxjs';
 
@@ -47,12 +47,12 @@ import { AutocompleteWrapperService } from '../../services';
   styleUrl: './autocomplete-wrapper.component.scss',
 })
 export class ReusableAutocompleteComponent implements OnInit, OnDestroy {
-  @Input() dataSource: AutocompleteWrapperItem[] = []; // Para búsqueda local
+  readonly dataSource = input<AutocompleteWrapperItem[]>([]); // Para búsqueda local
   @Input() config: AutocompleteWrapperConfig = AUTOCOMPLETE_WRAPPER_DEFAULT_CONFIG;
-  @Input() itemTemplate?: TemplateRef<any>;
-  @Input() searchFunction?: AutocompleteWrapperSearchFunction;
+  readonly itemTemplate = input<TemplateRef<any>>();
+  readonly searchFunction = input<AutocompleteWrapperSearchFunction>();
 
-  @Input() notFoundTemplate?: TemplateRef<any>;
+  readonly notFoundTemplate = input<TemplateRef<any>>();
 
   overlayWidth = input('auto');
   overlayMaxHeight = input('400px');
@@ -66,9 +66,9 @@ export class ReusableAutocompleteComponent implements OnInit, OnDestroy {
   allResultsClicked = output<string>();
   createClicked = output<string>();
 
-  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('historyListElement') historyListElement?: ElementRef<HTMLUListElement>;
-  @ViewChild('resultsListElement') resultsListElement?: ElementRef<HTMLUListElement>;
+  readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
+  readonly historyListElement = viewChild<ElementRef<HTMLUListElement>>('historyListElement');
+  readonly resultsListElement = viewChild<ElementRef<HTMLUListElement>>('resultsListElement');
 
   // State
   query = '';
@@ -187,8 +187,9 @@ export class ReusableAutocompleteComponent implements OnInit, OnDestroy {
     }
 
     // ESTRATEGIA A: Función de búsqueda personalizada
-    if (this.searchFunction) {
-      return this.searchFunction(
+    const searchFunction = this.searchFunction();
+    if (searchFunction) {
+      return searchFunction(
         query,
         this.filters,
         this.currentPage(),
@@ -207,7 +208,7 @@ export class ReusableAutocompleteComponent implements OnInit, OnDestroy {
     }
 
     // ESTRATEGIA C: Búsqueda local (fallback)
-    return this.autocompleteService.searchLocal(this.dataSource, query, this.filters, this.config);
+    return this.autocompleteService.searchLocal(this.dataSource(), query, this.filters, this.config);
   }
 
   private loadHistory() {
@@ -337,7 +338,7 @@ export class ReusableAutocompleteComponent implements OnInit, OnDestroy {
     this.itemSelected.emit(item);
 
     setTimeout(() => {
-      this.searchInput?.nativeElement?.focus();
+      this.searchInput()?.nativeElement?.focus();
     }, 100);
   }
 
@@ -346,7 +347,7 @@ export class ReusableAutocompleteComponent implements OnInit, OnDestroy {
     this.filteredItems.set([]);
     this.selectedIndex.set(-1);
     this.currentPage.set(1);
-    this.searchInput?.nativeElement?.focus();
+    this.searchInput()?.nativeElement?.focus();
     this.searchChanged.emit('');
   }
 
@@ -441,8 +442,8 @@ export class ReusableAutocompleteComponent implements OnInit, OnDestroy {
 
   private scrollToSelected() {
     const listElement = this.isHistoryVisible()
-      ? this.historyListElement?.nativeElement
-      : this.resultsListElement?.nativeElement;
+      ? this.historyListElement()?.nativeElement
+      : this.resultsListElement()?.nativeElement;
 
     if (listElement) {
       const selectedElement = listElement.children[this.selectedIndex()] as HTMLElement;
@@ -495,6 +496,6 @@ export class ReusableAutocompleteComponent implements OnInit, OnDestroy {
   }
 
   public focus() {
-    this.searchInput?.nativeElement?.focus();
+    this.searchInput()?.nativeElement?.focus();
   }
 }

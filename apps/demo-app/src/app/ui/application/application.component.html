@@ -107,8 +107,7 @@
   <mat-card class="table-card">
     <mat-card-content>
       <div class="table-container">
-        <acp-mat-dynamic-table
-          [tableData]="applications"
+        <acp-mat-dynamic-table [tableData]="applications"
           [columnDefinitions]="applicationColumns"
           [showSelectBox]="true"
           [showFooter]="true"
@@ -117,8 +116,7 @@
           [isLoadingData]="isLoading"
           (rowSelected)="onRowSelected($event)"
           (pageEvent)="onPageChange($event)"
-        >
-        </acp-mat-dynamic-table>
+         />
 
         @if (!isLoading && applications.length === 0) {
           <div class="no-data">

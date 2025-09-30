@@ -82,8 +82,7 @@
   <mat-card class="table-card">
     <mat-card-content>
       <div class="table-container">
-        <acp-mat-dynamic-table
-          [tableData]="users"
+        <acp-mat-dynamic-table [tableData]="users"
           [columnDefinitions]="userColumns"
           [showSelectBox]="true"
           [showFooter]="true"
@@ -92,8 +91,7 @@
           [isLoadingData]="isLoading"
           (rowSelected)="onRowSelected($event)"
           (pageEvent)="onPageChange($event)"
-        >
-        </acp-mat-dynamic-table>
+         />
 
         @if (!isLoading && users.length === 0) {
           <div class="no-data">

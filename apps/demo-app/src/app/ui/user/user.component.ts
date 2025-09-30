@@ -2,10 +2,10 @@ import {
   Component,
   OnInit,
   TemplateRef,
-  ViewChild,
   AfterViewInit,
   ChangeDetectorRef,
   inject,
+  viewChild
 } from '@angular/core';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -81,9 +81,9 @@ export class UserComponent implements OnInit, AfterViewInit {
   editUser: Partial<User> = {};
 
   // Template references
-  @ViewChild('actionsTemplate') actionsTemplate!: TemplateRef<any>;
-  @ViewChild('roleTemplate') roleTemplate!: TemplateRef<any>;
-  @ViewChild('statusTemplate') statusTemplate!: TemplateRef<any>;
+  readonly actionsTemplate = viewChild.required<TemplateRef<any>>('actionsTemplate');
+  readonly roleTemplate = viewChild.required<TemplateRef<any>>('roleTemplate');
+  readonly statusTemplate = viewChild.required<TemplateRef<any>>('statusTemplate');
 
   // Column definitions
   userColumns: ColumnDefinition<User>[] = [];
@@ -147,23 +147,26 @@ export class UserComponent implements OnInit, AfterViewInit {
   }
 
   private updateColumnsWithTemplates(): void {
-    if (this.actionsTemplate && this.roleTemplate && this.statusTemplate) {
+    const actionsTemplate = this.actionsTemplate();
+    const roleTemplate = this.roleTemplate();
+    const statusTemplate = this.statusTemplate();
+    if (actionsTemplate && roleTemplate && statusTemplate) {
       // Update role column with template
       const roleColumn = this.userColumns.find(col => col.key === 'role');
       if (roleColumn) {
-        roleColumn.templateOutlet = this.roleTemplate;
+        roleColumn.templateOutlet = roleTemplate;
       }
 
       // Update status column with template
       const statusColumn = this.userColumns.find(col => col.key === 'isActive');
       if (statusColumn) {
-        statusColumn.templateOutlet = this.statusTemplate;
+        statusColumn.templateOutlet = statusTemplate;
       }
 
       // Update actions column with template
       const actionsColumn = this.userColumns.find(col => col.key === 'op');
       if (actionsColumn) {
-        actionsColumn.templateOutlet = this.actionsTemplate;
+        actionsColumn.templateOutlet = actionsTemplate;
       }
     }
   }

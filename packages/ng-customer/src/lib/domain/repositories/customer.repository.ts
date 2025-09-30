@@ -1,5 +1,5 @@
 // Define las opciones del repositorio
-import { CustomerFilter, CustomerSearch } from '../../application/models/customer-search.model';
+import { CustomerFilter, CustomerSearch } from '../../application/models/customer-search';
 import { ApiResponse, PagedResult } from '@acontplus/core';
 
 interface CustomerRepositoryOptions {

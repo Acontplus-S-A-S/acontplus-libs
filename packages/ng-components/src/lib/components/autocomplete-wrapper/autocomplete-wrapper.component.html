@@ -36,7 +36,7 @@
 
     @if (isLoading()) {
       <div class="autocomplete-wrapper-loading-spinner">
-        <mat-spinner diameter="20"></mat-spinner>
+        <mat-spinner diameter="20" />
       </div>
     }
   </div>
@@ -80,13 +80,11 @@
                   >
                     <mat-icon class="autocomplete-wrapper-history-icon">history</mat-icon>
                     <div class="autocomplete-wrapper-item-details">
-                      <ng-container
-                        *ngTemplateOutlet="
-                          itemTemplate || defaultItemTemplate;
+                      <ng-container *ngTemplateOutlet="
+                          itemTemplate() || defaultItemTemplate;
                           context: { $implicit: item }
                         "
-                      >
-                      </ng-container>
+                       />
                     </div>
                   </div>
                   <button
@@ -213,13 +211,11 @@
                       (click)="selectItem(item)"
                     >
                       <div class="autocomplete-wrapper-item-info">
-                        <ng-container
-                          *ngTemplateOutlet="
-                            itemTemplate || defaultItemTemplate;
+                        <ng-container *ngTemplateOutlet="
+                            itemTemplate() || defaultItemTemplate;
                             context: { $implicit: item }
                           "
-                        >
-                        </ng-container>
+                         />
                       </div>
                     </div>
                   </li>
@@ -234,13 +230,11 @@
           <div class="autocomplete-wrapper-no-results">
             <mat-icon class="autocomplete-wrapper-no-results-icon">search_off</mat-icon>
             <div class="autocomplete-wrapper-no-results-content">
-              <ng-container
-                *ngTemplateOutlet="
-                  notFoundTemplate || defaultNotFoundTemplate;
+              <ng-container *ngTemplateOutlet="
+                  notFoundTemplate() || defaultNotFoundTemplate;
                   context: { $implicit: noResultsText() }
                 "
-              >
-              </ng-container>
+               />
             </div>
           </div>
         }

@@ -2,16 +2,15 @@
 import {
   AfterViewInit,
   Component,
-  EventEmitter,
-  Input,
   OnChanges,
   OnDestroy,
-  Output,
   SimpleChanges,
   ViewEncapsulation,
+  input,
+  output
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PageModule, ReactiveDataModule, TabulatorFull as Tabulator } from 'tabulator-tables';
+
+import { Tabulator, PageModule, ReactiveDataModule } from 'tabulator-tables';
 import { TabulatorTheme } from '../../../types';
 
 Tabulator.registerModule([PageModule, ReactiveDataModule]);
@@ -19,46 +18,46 @@ Tabulator.registerModule([PageModule, ReactiveDataModule]);
 @Component({
   selector: 'acp-tabulator',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './custom-tabulator.component.html',
   styleUrls: ['./custom-tabulator.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class CustomTabulatorComponent implements OnChanges, AfterViewInit, OnDestroy {
   // Data inputs
-  @Input() data: any[] = [];
-  @Input() columns: any[] = [];
+  readonly data = input<any[]>([]);
+  readonly columns = input<any[]>([]);
 
   // Layout inputs
-  @Input() height: string | number | false = '400px';
-  @Input() layout: 'fitData' | 'fitColumns' | 'fitDataFill' | 'fitDataStretch' = 'fitData';
+  readonly height = input<string | number | false>('400px');
+  readonly layout = input<'fitData' | 'fitColumns' | 'fitDataFill' | 'fitDataStretch'>('fitData');
 
   // Tree structure inputs
-  @Input() dataTree = false;
-  @Input() dataTreeChildField = 'children';
-  @Input() dataTreeStartExpanded = false;
-  @Input() dataTreeSelectPropagate = false;
+  readonly dataTree = input(false);
+  readonly dataTreeChildField = input('children');
+  readonly dataTreeStartExpanded = input(false);
+  readonly dataTreeSelectPropagate = input(false);
 
   // Behavior inputs
-  @Input() selectable = true;
-  @Input() reactiveData = true;
-  @Input() placeholder = 'No data available';
-  @Input() autoResize = true;
+  readonly selectable = input(true);
+  readonly reactiveData = input(true);
+  readonly placeholder = input('No data available');
+  readonly autoResize = input(true);
 
   // Theme configuration
-  @Input() theme: TabulatorTheme = { name: 'default' };
+  readonly theme = input<TabulatorTheme>({ name: 'default' });
 
   // Custom styling
-  @Input() customClass = '';
+  readonly customClass = input('');
 
   // Custom options
-  @Input() options: Record<string, any> = {};
+  readonly options = input<Record<string, any>>({});
 
   // Events
-  @Output() cellEdited = new EventEmitter<any>();
-  @Output() rowClick = new EventEmitter<any>();
-  @Output() rowSelected = new EventEmitter<any>();
-  @Output() tableReady = new EventEmitter<Tabulator>();
+  readonly cellEdited = output<any>();
+  readonly rowClick = output<any>();
+  readonly rowSelected = output<any>();
+  readonly tableReady = output<Tabulator>();
 
   private _tabulator!: Tabulator;
 
@@ -83,7 +82,7 @@ export class CustomTabulatorComponent implements OnChanges, AfterViewInit, OnDes
     }
 
     if (changes['customClass'] && !changes['customClass'].isFirstChange()) {
-      this.applyCustomClass(changes['customClass'].previousValue, this.customClass);
+      this.applyCustomClass(changes['customClass'].previousValue, this.customClass());
     }
   }
 
@@ -103,21 +102,21 @@ export class CustomTabulatorComponent implements OnChanges, AfterViewInit, OnDes
     }
 
     const config: any = {
-      data: this.data,
-      columns: this.columns,
-      height: this.height,
-      layout: this.layout,
-      dataTree: this.dataTree,
-      dataTreeChildField: this.dataTreeChildField,
-      dataTreeStartExpanded: this.dataTreeStartExpanded,
-      dataTreeSelectPropagate: this.dataTreeSelectPropagate,
-      reactiveData: this.reactiveData,
-      placeholder: this.placeholder,
-      autoResize: this.autoResize,
-      selectable: this.selectable,
+      data: this.data(),
+      columns: this.columns(),
+      height: this.height(),
+      layout: this.layout(),
+      dataTree: this.dataTree(),
+      dataTreeChildField: this.dataTreeChildField(),
+      dataTreeStartExpanded: this.dataTreeStartExpanded(),
+      dataTreeSelectPropagate: this.dataTreeSelectPropagate(),
+      reactiveData: this.reactiveData(),
+      placeholder: this.placeholder(),
+      autoResize: this.autoResize(),
+      selectable: this.selectable(),
       renderVertical: 'virtual',
       renderVerticalBuffer: 300,
-      ...this.options,
+      ...this.options(),
     };
 
     try {
@@ -145,12 +144,13 @@ export class CustomTabulatorComponent implements OnChanges, AfterViewInit, OnDes
       );
 
       // Add current theme class (skip 'default' as it uses base styles)
-      if (this.theme.name !== 'default') {
-        tableElement.classList.add(`tabulator-${this.theme.name}`);
+      const theme = this.theme();
+      if (theme.name !== 'default') {
+        tableElement.classList.add(`tabulator-${theme.name}`);
       }
 
       // Apply custom classes
-      this.applyCustomClass('', this.customClass);
+      this.applyCustomClass('', this.customClass());
     }
   }
 
@@ -188,13 +188,13 @@ export class CustomTabulatorComponent implements OnChanges, AfterViewInit, OnDes
 
   private updateData(): void {
     if (this._tabulator) {
-      this._tabulator.replaceData(this.data);
+      this._tabulator.replaceData(this.data());
     }
   }
 
   private updateColumns(): void {
     if (this._tabulator) {
-      this._tabulator.setColumns(this.columns);
+      this._tabulator.setColumns(this.columns());
     }
   }
 

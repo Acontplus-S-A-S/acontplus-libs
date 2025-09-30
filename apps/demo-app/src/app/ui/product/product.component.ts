@@ -2,10 +2,10 @@ import {
   Component,
   OnInit,
   TemplateRef,
-  ViewChild,
   AfterViewInit,
   ChangeDetectorRef,
   inject,
+  viewChild
 } from '@angular/core';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -110,9 +110,9 @@ export class ProductComponent implements OnInit, AfterViewInit {
 
   productPaginationConfig: Pagination = new Pagination(0, 10, 5, 0, [5, 10, 25, 50]);
 
-  @ViewChild('actionsTemplate') actionsTemplate!: TemplateRef<any>;
-  @ViewChild('productImageTemplate') productImageTemplate!: TemplateRef<any>;
-  @ViewChild('expandedProductDetail') expandedProductDetail!: TemplateRef<any>;
+  readonly actionsTemplate = viewChild.required<TemplateRef<any>>('actionsTemplate');
+  readonly productImageTemplate = viewChild.required<TemplateRef<any>>('productImageTemplate');
+  readonly expandedProductDetail = viewChild.required<TemplateRef<any>>('expandedProductDetail');
 
   /** Inserted by Angular inject() migration for backwards compatibility */
   constructor(...args: unknown[]);
@@ -540,24 +540,26 @@ export class ProductComponent implements OnInit, AfterViewInit {
 
   private updateColumnsWithTemplates(): void {
     // Update columns with template references after ViewChild is available
-    if (this.actionsTemplate && this.productImageTemplate) {
+    const actionsTemplate = this.actionsTemplate();
+    const productImageTemplate = this.productImageTemplate();
+    if (actionsTemplate && productImageTemplate) {
       // Update image column with template
       const imageColumn = this.productColumns.find(col => col.key === 'imageUrl');
       if (imageColumn) {
-        imageColumn.templateOutlet = this.productImageTemplate;
+        imageColumn.templateOutlet = productImageTemplate;
       }
 
       // Update actions column with template
       const actionsColumn = this.productColumns.find(col => col.key === 'op');
       if (actionsColumn) {
-        actionsColumn.templateOutlet = this.actionsTemplate;
+        actionsColumn.templateOutlet = actionsTemplate;
       }
 
       console.log('Columns updated with templates:', this.productColumns);
     } else {
       console.log('Templates not ready yet:', {
-        actionsTemplate: !!this.actionsTemplate,
-        productImageTemplate: !!this.productImageTemplate,
+        actionsTemplate: !!actionsTemplate,
+        productImageTemplate: !!productImageTemplate,
       });
     }
   }

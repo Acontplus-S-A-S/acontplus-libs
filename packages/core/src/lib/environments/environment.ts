@@ -4,4 +4,5 @@ export interface Environment {
   tokenKey: string;
   refreshTokenKey: string;
   clientId: string;
+  loginRoute: string;
 }

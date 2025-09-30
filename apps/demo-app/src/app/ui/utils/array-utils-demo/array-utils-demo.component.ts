@@ -23,7 +23,7 @@ import { ArrayHelper } from '@acontplus/utils';
   templateUrl: './array-utils-demo.component.html',
   styleUrl: './array-utils-demo.component.scss',
 })
-export class ArrayHelperDemoComponent {
+export class ArrayUtilsDemoComponent {
   testArray: any[] = [1, 2, 3, 4, 5];
   newItem: any = '';
   insertIndex = 0;

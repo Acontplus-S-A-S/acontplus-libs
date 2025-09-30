@@ -13,16 +13,14 @@ import { provideTransloco } from '@jsverse/transloco';
 import { TranslocoHttpLoader } from './providers';
 import { provideToastr } from 'ngx-toastr';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { ENVIRONMENT } from '@acontplus/ng-config';
 import {
-  ENVIRONMENT,
   apiInterceptor,
   httpContextInterceptor,
-  provideCoreConfig,
-  createCoreConfig,
-  provideHttpContext,
-} from '@acontplus/ng-core';
-
-import { spinnerInterceptor } from '@acontplus/ng-components';
+  spinnerInterceptor,
+  TOKEN_PROVIDER,
+} from '@acontplus/ng-infrastructure';
+import { AuthTokenService } from '@acontplus/ng-auth';
 import { provideNotifications } from '../../../../packages/ng-notifications/src/lib/providers';
 
 export const appConfig: ApplicationConfig = {
@@ -30,24 +28,12 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
-    provideCoreConfig(
-      createCoreConfig({
-        apiBaseUrl: environment.apiBaseUrl,
-        enableCorrelationTracking: true,
-        enableRequestLogging: !environment.isProduction,
-        enableErrorLogging: true,
-        customHeaders: {
-          'Client-Version': '1.0.0',
-          'Client-Id': 'test-app',
-        },
-        excludeUrls: ['/health', '/metrics'],
-      }),
-    ),
     provideAppInitializer(initHttpFactory()),
 
     provideHttpClient(
       withInterceptors([apiInterceptor, spinnerInterceptor, httpContextInterceptor]),
     ),
+    { provide: TOKEN_PROVIDER, useClass: AuthTokenService },
     provideTransloco({
       config: {
         availableLangs: ['en', 'es'],
@@ -66,8 +52,5 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     { provide: ENVIRONMENT, useValue: environment },
-    provideHttpContext({
-      includeAuthToken: false,
-    }),
   ],
 };

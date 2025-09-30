@@ -19,7 +19,7 @@ import { DateFormatter, TIME_OF_DAY } from '@acontplus/utils';
   templateUrl: './date-utils-demo.component.html',
   styleUrl: './date-utils-demo.component.scss',
 })
-export class DateFormatterDemoComponent {
+export class DateUtilsDemoComponent {
   selectedDate: Date = new Date();
   secondDate: Date = new Date();
   result = '';

@@ -3,7 +3,7 @@ import { ListCustomerMapper } from '../mappers/customer-list.mapper';
 import { CustomerRepository } from '../../domain';
 import { CustomerGetByIdMapper } from '../mappers/customer-get-by-id.mapper';
 import { CustomerCreateUpdateMapper } from '../mappers/customer-create-update.mapper';
-import { CustomerSearch } from '../../application/models/customer-search.model';
+import { CustomerSearch } from '../../application/models/customer-search';
 import { CompanySearchMapper } from '../mappers/company-search.mapper';
 import { ApiResponse, HttpClientFactory, PagedResult } from '@acontplus/core';
 import { CUSTOMER_API } from '../constants/customer.constants';

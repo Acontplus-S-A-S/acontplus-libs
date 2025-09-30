@@ -1,5 +1,5 @@
 import { CustomerRepository } from '../../domain';
-import { CustomerSearch } from '../models/customer-search.model';
+import { CustomerSearch } from '../models/customer-search';
 
 export class ClientUseCase {
   constructor(private repo: CustomerRepository) {}

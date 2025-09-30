@@ -1,0 +1,51 @@
+{
+  "name": "@acontplus/ng-config",
+  "version": "1.0.0",
+  "description": "Acontplus Angular Configuration library for managing application settings and environment configurations.",
+  "peerDependencies": {
+    "@acontplus/core": "^1.0.12",
+    "@angular/common": "^20.3.2",
+    "@angular/core": "^20.3.2"
+  },
+  "sideEffects": false,
+  "main": "fesm2022/acontplus-ng-config.mjs",
+  "module": "fesm2022/acontplus-ng-config.mjs",
+  "typings": "index.d.ts",
+  "files": [
+    "index.d.ts",
+    "*.d.ts",
+    "**/*.d.ts",
+    "fesm2022/**/*"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "acontplus",
+    "angular",
+    "configuration",
+    "environment",
+    "typescript",
+    "frontend",
+    "library"
+  ],
+  "author": "Ivan Paz <ifer343@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Acontplus-S-A-S/acontplus-libs/issues"
+  },
+  "homepage": "https://github.com/Acontplus-S-A-S/acontplus-libs#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Acontplus-S-A-S/acontplus-libs.git"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  }
+}

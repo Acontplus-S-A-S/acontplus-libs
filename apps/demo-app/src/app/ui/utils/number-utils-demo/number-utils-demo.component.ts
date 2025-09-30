@@ -12,7 +12,7 @@ import { NumberFormatter } from '@acontplus/utils';
   templateUrl: './number-utils-demo.component.html',
   styleUrl: './number-utils-demo.component.scss',
 })
-export class NumberFormatterDemoComponent {
+export class NumberUtilsDemoComponent {
   value: any = '';
   num1 = 0;
   num2 = 0;

@@ -1,11 +1,11 @@
 import {
   Component,
-  ViewChild,
   ViewContainerRef,
   AfterViewInit,
   ElementRef,
   ChangeDetectionStrategy,
   inject,
+  viewChild
 } from '@angular/core';
 
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
@@ -45,14 +45,13 @@ export class DialogWrapperComponent implements AfterViewInit {
    * A template reference that acts as an anchor for dynamic content.
    * This is where the component specified in the config will be rendered.
    */
-  @ViewChild('contentHost', { read: ViewContainerRef, static: true })
-  contentHost!: ViewContainerRef;
+  readonly contentHost = viewChild.required('contentHost', { read: ViewContainerRef });
 
   /**
    * A reference to the header element for the z-index focus logic.
    * Used to bring the dialog to the front when clicked.
    */
-  @ViewChild('dialogHeader', { static: false }) header?: ElementRef;
+  readonly header = viewChild<ElementRef>('dialogHeader');
 
   /**
    * Static counter to track the highest z-index for multiple dialogs.
@@ -77,8 +76,8 @@ export class DialogWrapperComponent implements AfterViewInit {
    */
   ngAfterViewInit(): void {
     // Dynamically create the content component after the view is ready.
-    this.contentHost.clear();
-    const componentRef = this.contentHost.createComponent(this.config.component);
+    this.contentHost().clear();
+    const componentRef = this.contentHost().createComponent(this.config.component);
 
     // Pass the provided data directly to the new component's instance.
     // This requires the content component to have an @Input() property named 'data'.
@@ -100,7 +99,7 @@ export class DialogWrapperComponent implements AfterViewInit {
    * Called when the dialog header is clicked.
    */
   bringToFront(): void {
-    const pane = this.header?.nativeElement.closest('.cdk-overlay-pane') as HTMLElement;
+    const pane = this.header()?.nativeElement.closest('.cdk-overlay-pane') as HTMLElement;
     if (pane) {
       pane.style.zIndex = (++DialogWrapperComponent.lastZIndex).toString();
     }

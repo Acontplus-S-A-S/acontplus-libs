@@ -7,7 +7,7 @@ import {
   AutocompleteWrapperItem,
   AutocompleteWrapperSearchFunction,
   AutocompleteWrapperSearchResult,
-} from '../models/autocomplete-wrapper.model';
+} from '../models/autocomplete-wrapper';
 
 @Injectable({
   providedIn: 'root',

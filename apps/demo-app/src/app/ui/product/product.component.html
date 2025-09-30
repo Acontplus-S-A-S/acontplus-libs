@@ -187,8 +187,7 @@
 
       <!-- Products Table -->
       <div class="table-section">
-        <acp-mat-dynamic-table
-          [tableData]="products"
+        <acp-mat-dynamic-table [tableData]="products"
           [columnDefinitions]="productColumns"
           [showSelectBox]="true"
           [showFooter]="true"
@@ -199,8 +198,7 @@
           [rowTemplate]="actionsTemplate"
           (rowSelected)="onRowSelected($event)"
           (pageEvent)="onPageChange($event)"
-        >
-        </acp-mat-dynamic-table>
+         />
       </div>
 
       <!-- Edit Product Dialog -->

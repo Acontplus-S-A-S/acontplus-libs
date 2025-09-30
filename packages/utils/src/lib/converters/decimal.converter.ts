@@ -1,4 +1,4 @@
-import Decimal from 'decimal.js';
+import { Decimal } from 'decimal.js';
 
 // Tipos más específicos y flexibles
 type DecimalInput = string | number | Decimal;
@@ -439,7 +439,7 @@ export class DecimalConverter {
       return this.processResult(new Decimal(0), options, 'sum');
     }
 
-    const result = values.reduce((acc: Decimal, val) => {
+    const result = values.reduce<Decimal>((acc, val) => {
       const decimal = this.createDecimal(val, 'sum');
       return acc.plus(decimal);
     }, new Decimal(0));
