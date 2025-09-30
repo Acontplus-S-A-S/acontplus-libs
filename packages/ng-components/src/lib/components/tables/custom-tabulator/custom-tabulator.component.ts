@@ -10,8 +10,8 @@ import {
   SimpleChanges,
   ViewEncapsulation,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PageModule, ReactiveDataModule, TabulatorFull as Tabulator } from 'tabulator-tables';
+
+import { Tabulator, PageModule, ReactiveDataModule } from 'tabulator-tables';
 import { TabulatorTheme } from '../../../types';
 
 Tabulator.registerModule([PageModule, ReactiveDataModule]);
@@ -19,7 +19,7 @@ Tabulator.registerModule([PageModule, ReactiveDataModule]);
 @Component({
   selector: 'acp-tabulator',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './custom-tabulator.component.html',
   styleUrls: ['./custom-tabulator.component.scss'],
   encapsulation: ViewEncapsulation.None,
