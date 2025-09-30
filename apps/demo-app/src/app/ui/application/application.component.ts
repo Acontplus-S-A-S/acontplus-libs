@@ -3,9 +3,9 @@ import {
   OnInit,
   AfterViewInit,
   TemplateRef,
-  ViewChild,
   ChangeDetectorRef,
   inject,
+  viewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -82,9 +82,9 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
   editApplication: Partial<Application> = {};
 
   // Template references
-  @ViewChild('actionsTemplate') actionsTemplate!: TemplateRef<any>;
-  @ViewChild('statusTemplate') statusTemplate!: TemplateRef<any>;
-  @ViewChild('environmentTemplate') environmentTemplate!: TemplateRef<any>;
+  readonly actionsTemplate = viewChild.required<TemplateRef<any>>('actionsTemplate');
+  readonly statusTemplate = viewChild.required<TemplateRef<any>>('statusTemplate');
+  readonly environmentTemplate = viewChild.required<TemplateRef<any>>('environmentTemplate');
 
   // Column definitions
   applicationColumns: ColumnDefinition<Application>[] = [];
@@ -166,23 +166,26 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
   }
 
   private updateColumnsWithTemplates(): void {
-    if (this.actionsTemplate && this.statusTemplate && this.environmentTemplate) {
+    const actionsTemplate = this.actionsTemplate();
+    const statusTemplate = this.statusTemplate();
+    const environmentTemplate = this.environmentTemplate();
+    if (actionsTemplate && statusTemplate && environmentTemplate) {
       // Update status column with template
       const statusColumn = this.applicationColumns.find(col => col.key === 'status');
       if (statusColumn) {
-        statusColumn.templateOutlet = this.statusTemplate;
+        statusColumn.templateOutlet = statusTemplate;
       }
 
       // Update environment column with template
       const environmentColumn = this.applicationColumns.find(col => col.key === 'environment');
       if (environmentColumn) {
-        environmentColumn.templateOutlet = this.environmentTemplate;
+        environmentColumn.templateOutlet = environmentTemplate;
       }
 
       // Update actions column with template
       const actionsColumn = this.applicationColumns.find(col => col.key === 'op');
       if (actionsColumn) {
-        actionsColumn.templateOutlet = this.actionsTemplate;
+        actionsColumn.templateOutlet = actionsTemplate;
       }
     }
   }

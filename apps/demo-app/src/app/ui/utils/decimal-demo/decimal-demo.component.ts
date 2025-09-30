@@ -10,7 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
+
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -26,7 +26,6 @@ import { DecimalConverter, DecimalError } from '@acontplus/utils';
     MatTableModule,
     MatExpansionModule,
     MatButtonModule,
-    MatIcon,
     MatToolbarModule,
     ReactiveFormsModule,
     FormsModule,

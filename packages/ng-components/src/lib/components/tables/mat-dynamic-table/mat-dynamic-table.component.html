@@ -3,24 +3,22 @@
     <table #sort="matSort" [dataSource]="dataSource.data" mat-table matSort>
       @if (columnDefinitions) {
         <!-- Checkbox Column -->
-        @if (showSelectBox) {
+        @if (showSelectBox()) {
           <ng-container matColumnDef="select">
             <th *matHeaderCellDef mat-header-cell>
-              <mat-checkbox
-                (change)="$event ? masterToggle() : null"
+              <mat-checkbox (change)="$event ? masterToggle() : null"
                 (click)="$event.stopPropagation()"
                 [aria-label]="checkboxLabel()"
                 [checked]="selection.hasValue() && isAllSelected()"
                 [indeterminate]="selection.hasValue() && !isAllSelected()"
-              ></mat-checkbox>
+               />
             </th>
             <td *matCellDef="let row" mat-cell>
-              <mat-checkbox
-                (change)="$event ? selection.toggle(row) : null"
+              <mat-checkbox (change)="$event ? selection.toggle(row) : null"
                 (click)="$event.stopPropagation()"
                 [aria-label]="checkboxLabel(row)"
                 [checked]="selection.isSelected(row)"
-              ></mat-checkbox>
+               />
             </td>
             <td *matFooterCellDef mat-footer-cell></td>
           </ng-container>
@@ -36,13 +34,12 @@
             <td
               mat-cell
               *matCellDef="let element; let i = index"
-              [ngClass]="{ highlighted: highlightRowIndex === i }"
+              [ngClass]="{ highlighted: highlightRowIndex() === i }"
             >
               @if (col.key === 'op') {
                 <div class="d-flex flex-row gap-1">
-                  <ng-container
-                    *ngTemplateOutlet="rowTemplate; context: { $implicit: element, index: i }"
-                  ></ng-container>
+                  <ng-container *ngTemplateOutlet="rowTemplate(); context: { $implicit: element, index: i }"
+                   />
                 </div>
               } @else {
                 @switch (col.type) {
@@ -55,7 +52,7 @@
                     />
                   }
                   @case ('number') {
-                    <div>{{ element[col.key] | number: '1.2' : locale }}</div>
+                    <div>{{ element[col.key] | number: '1.2' : locale() }}</div>
                   }
                   @case ('date') {
                     <div>{{ element[col.key] | date: 'dd.MM.yyyy' }}</div>
@@ -74,15 +71,14 @@
                     </button>
                   }
                   @case ('template') {
-                    <ng-container
-                      *ngTemplateOutlet="
+                    <ng-container *ngTemplateOutlet="
                         col.templateOutlet;
                         context: { $implicit: element, index: i }
                       "
-                    ></ng-container>
+                     />
                   }
                   @case ('custom') {
-                    <ng-container #dynamicContent></ng-container>
+                    <ng-container #dynamicContent />
                   }
                   @default {
                     <div>{{ element[col.key] }}</div>
@@ -103,7 +99,7 @@
         }
 
         <!-- Expanded Detail Row -->
-        @if (showExpand && expandedDetail) {
+        @if (showExpand() && expandedDetail) {
           <ng-container matColumnDef="expandedDetail">
             <td
               mat-cell
@@ -114,9 +110,8 @@
                 class="m-0 p-0"
                 [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed'"
               >
-                <ng-container
-                  *ngTemplateOutlet="expandedDetail; context: { $implicit: element, index: i }"
-                ></ng-container>
+                <ng-container *ngTemplateOutlet="expandedDetail; context: { $implicit: element, index: i }"
+                 />
               </div>
             </td>
           </ng-container>
@@ -139,7 +134,7 @@
         ></tr>
 
         <!-- Expanded Row -->
-        @if (showExpand && expandedDetail) {
+        @if (showExpand() && expandedDetail) {
           <tr
             mat-row
             *matRowDef="let row; columns: ['expandedDetail']; when: isExpandedRow"
@@ -155,17 +150,16 @@
         </tr>
 
         <!-- Footer -->
-        @if (showFooter && dataSource.data.length > 0) {
+        @if (showFooter() && dataSource.data.length > 0) {
           <tr mat-footer-row *matFooterRowDef="columnsToDisplayWithExpand"></tr>
         }
       }
     </table>
   </div>
 
-  @if (enablePagination && paginationConfig) {
-    <mat-paginator
-      #paginator
-      [disabled]="isLoadingData"
+  @if (enablePagination() && paginationConfig) {
+    <mat-paginator #paginator
+      [disabled]="isLoadingData()"
       (page)="handlePageEvent($event)"
       [length]="paginationConfig.totalRecords"
       [pageSize]="paginationConfig.pageSize"
@@ -173,6 +167,6 @@
       [showFirstLastButtons]="true"
       [pageIndex]="paginationConfig.pageIndex"
       aria-label="Select page"
-    ></mat-paginator>
+     />
   }
 </div>

@@ -4,7 +4,7 @@ import { from } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { AdvancedDialogService, MatThemeButtonComponent } from '@acontplus/ng-components';
 import { CustomerAddEditComponent, CustomerCardComponent } from '@acontplus/ng-customer';
-import { MatChip, MatChipSet } from '@angular/material/chips';
+
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
@@ -13,8 +13,6 @@ import { MatButtonModule } from '@angular/material/button';
     MatCardModule,
     MatThemeButtonComponent,
     CustomerCardComponent,
-    MatChipSet,
-    MatChip,
     MatButtonModule,
     MatThemeButtonComponent,
     CustomerCardComponent,

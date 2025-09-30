@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PagedResult as PaginatedResult, PaginationParams } from '@acontplus/core';
 import { User } from '../domain';
@@ -8,10 +8,10 @@ import { MockUserService } from './mock-user.service';
   providedIn: 'root',
 })
 export class UserRepository {
+  private mockService = inject(MockUserService);
+
   protected entityName = 'users';
   protected baseUrl = '/api/users';
-
-  constructor(private mockService: MockUserService) {}
 
   getAll(pagination: PaginationParams): Observable<PaginatedResult<User>> {
     return this.mockService.getUsers(pagination);

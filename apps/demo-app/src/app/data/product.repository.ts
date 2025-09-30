@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PagedResult as PaginatedResult, PaginationParams } from '@acontplus/core';
 import { Product } from '../domain';
@@ -8,10 +8,10 @@ import { MockProductService } from './mock-product.service';
   providedIn: 'root',
 })
 export class ProductRepository {
+  private mockService = inject(MockProductService);
+
   protected entityName = 'products';
   protected baseUrl = '/api/products';
-
-  constructor(private mockService: MockProductService) {}
 
   getAll(pagination: PaginationParams): Observable<PaginatedResult<Product>> {
     return this.mockService.getProducts(pagination);

@@ -3,23 +3,22 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ContentChild,
-  ContentChildren,
-  EventEmitter,
   inject,
   Injector,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
-  Output,
-  QueryList,
   SimpleChanges,
   TemplateRef,
-  ViewChild,
   ViewContainerRef,
   ComponentRef,
   EmbeddedViewRef,
+  input,
+  output,
+  contentChildren,
+  contentChild,
+  viewChild
 } from '@angular/core';
 import {
   MatColumnDef,
@@ -76,25 +75,25 @@ export class MatDynamicTableComponent<T extends TableRow>
   private embeddedViews: EmbeddedViewRef<any>[] = [];
   private cdr = inject(ChangeDetectorRef);
 
-  @Input() showExpand = false;
-  @Input() showFooter = false;
-  @Input() locale = 'en-US';
-  @Input() highlightRowIndex = 0;
+  readonly showExpand = input(false);
+  readonly showFooter = input(false);
+  readonly locale = input('en-US');
+  readonly highlightRowIndex = input(0);
   @Input() visibleColumns: string[] = [];
   @Input() columnDefinitions: ColumnDefinition<T>[] = [];
-  @Input() showSelectBox = false;
-  @Input() tableData: T[] = [];
-  @Input() rowTemplate: TemplateRef<TableContext<T>> | null = null;
+  readonly showSelectBox = input(false);
+  readonly tableData = input<T[]>([]);
+  readonly rowTemplate = input<TemplateRef<TableContext<T>> | null>(null);
   @Input() expandedDetail: TemplateRef<TableContext<T>> | null = null;
-  @Input() enablePagination = false;
+  readonly enablePagination = input(false);
   @Input() paginationConfig: Pagination | null = null;
-  @Input() isLoadingData = false;
+  readonly isLoadingData = input(false);
 
-  @Output() rowSelected = new EventEmitter<T[]>();
-  @Output() copyRow = new EventEmitter<T>();
-  @Output() showExpanded = new EventEmitter<T>();
-  @Output() hideExpanded = new EventEmitter<T>();
-  @Output() pageEvent = new EventEmitter<PageEvent>();
+  readonly rowSelected = output<T[]>();
+  readonly copyRow = output<T>();
+  readonly showExpanded = output<T>();
+  readonly hideExpanded = output<T>();
+  readonly pageEvent = output<PageEvent>();
 
   isNormalRow = (_: number, row: T) => this.expandedElement !== row;
   isExpandedRow = (_: number, row: T) => this.expandedElement === row;
@@ -104,14 +103,14 @@ export class MatDynamicTableComponent<T extends TableRow>
   expandedElement: T | null = null;
   columnsToDisplayWithExpand: string[] = [];
 
-  @ContentChildren(MatHeaderRowDef) headerRowDefs!: QueryList<MatHeaderRowDef>;
-  @ContentChildren(MatRowDef) rowDefs!: QueryList<MatRowDef<T>>;
-  @ContentChildren(MatFooterRowDef) footerRowDefs!: QueryList<MatFooterRowDef>;
-  @ContentChildren(MatColumnDef) columnDefs!: QueryList<MatColumnDef>;
-  @ContentChild(MatNoDataRow) noDataRow!: MatNoDataRow;
+  readonly headerRowDefs = contentChildren(MatHeaderRowDef);
+  readonly rowDefs = contentChildren(MatRowDef);
+  readonly footerRowDefs = contentChildren(MatFooterRowDef);
+  readonly columnDefs = contentChildren(MatColumnDef);
+  readonly noDataRow = contentChild.required(MatNoDataRow);
 
-  @ViewChild(MatTable, { static: true }) table!: MatTable<T>;
-  @ContentChildren(ViewContainerRef) rows!: QueryList<ViewContainerRef>;
+  readonly table = viewChild.required(MatTable);
+  readonly rows = contentChildren(ViewContainerRef);
 
   ngOnInit(): void {
     this.updateColumnsToDisplay();
@@ -146,7 +145,7 @@ export class MatDynamicTableComponent<T extends TableRow>
     this.selection.clear();
 
     // Update data source
-    this.dataSource.data = this.tableData || [];
+    this.dataSource.data = this.tableData() || [];
 
     // Reset expanded element if it's no longer in the new data
     if (this.expandedElement && !this.dataSource.data.includes(this.expandedElement)) {
@@ -165,11 +164,11 @@ export class MatDynamicTableComponent<T extends TableRow>
 
     const newColumns: string[] = [...this.visibleColumns];
 
-    if (this.showSelectBox && !newColumns.includes('select')) {
+    if (this.showSelectBox() && !newColumns.includes('select')) {
       newColumns.unshift('select');
     }
 
-    if (this.showExpand && this.expandedDetail) {
+    if (this.showExpand() && this.expandedDetail) {
       if (!this.columnDefinitions?.some(col => col.key === 'expand')) {
         this.columnDefinitions = [
           ...(this.columnDefinitions || []),
@@ -195,23 +194,24 @@ export class MatDynamicTableComponent<T extends TableRow>
   }
 
   private registerTableContent(): void {
-    this.columnDefs.forEach(columnDef => this.table.addColumnDef(columnDef));
-    this.rowDefs.forEach(rowDef => this.table.addRowDef(rowDef));
-    this.headerRowDefs.forEach(headerRowDef => this.table.addHeaderRowDef(headerRowDef));
+    this.columnDefs().forEach(columnDef => this.table().addColumnDef(columnDef));
+    this.rowDefs().forEach(rowDef => this.table().addRowDef(rowDef));
+    this.headerRowDefs().forEach(headerRowDef => this.table().addHeaderRowDef(headerRowDef));
 
-    if (this.showFooter) {
-      this.footerRowDefs.forEach(footerRowDef => this.table.addFooterRowDef(footerRowDef));
+    if (this.showFooter()) {
+      this.footerRowDefs().forEach(footerRowDef => this.table().addFooterRowDef(footerRowDef));
     } else {
-      this.footerRowDefs.forEach(footerRowDef => this.table.removeFooterRowDef(footerRowDef));
+      this.footerRowDefs().forEach(footerRowDef => this.table().removeFooterRowDef(footerRowDef));
     }
 
-    if (this.noDataRow) {
-      this.table.setNoDataRow(this.noDataRow);
+    const noDataRow = this.noDataRow();
+    if (noDataRow) {
+      this.table().setNoDataRow(noDataRow);
     }
   }
 
   private initializeTable(): void {
-    this.dataSource = new MatTableDataSource<T>(this.tableData || []);
+    this.dataSource = new MatTableDataSource<T>(this.tableData() || []);
   }
 
   private cleanupDynamicComponents(): void {

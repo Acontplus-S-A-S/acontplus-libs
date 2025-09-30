@@ -1,4 +1,4 @@
-import { Injectable, Inject, InjectionToken } from '@angular/core';
+import { Injectable, InjectionToken, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseHttpRepository } from './base-http.repository';
 import { Repository, RepositoryConfig, SearchableRepository } from './interfaces';
@@ -14,7 +14,9 @@ export class GenericRepository<TEntity = any, TId extends string | number = numb
 {
   protected override config: RepositoryConfig;
 
-  constructor(@Inject(REPOSITORY_CONFIG) config: RepositoryConfig) {
+  constructor() {
+    const config = inject<RepositoryConfig>(REPOSITORY_CONFIG);
+
     super();
     this.config = config;
   }

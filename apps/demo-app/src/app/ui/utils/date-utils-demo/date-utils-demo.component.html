@@ -4,15 +4,15 @@
     <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Seleccionar fecha</mat-label>
       <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" />
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
+      <mat-datepicker-toggle matSuffix [for]="picker" />
+      <mat-datepicker #picker />
     </mat-form-field>
 
     <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Segunda fecha para comparar</mat-label>
       <input matInput [matDatepicker]="picker2" [(ngModel)]="secondDate" />
-      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-      <mat-datepicker #picker2></mat-datepicker>
+      <mat-datepicker-toggle matSuffix [for]="picker2" />
+      <mat-datepicker #picker2 />
     </mat-form-field>
 
     <mat-form-field appearance="fill" style="width: 100%">

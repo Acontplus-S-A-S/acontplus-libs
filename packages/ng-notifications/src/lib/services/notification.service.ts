@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import {
   NotificationProviderBase,
@@ -21,18 +21,18 @@ import { NOTIFICATION_MESSAGES } from '../constants/notification.constants';
   providedIn: 'root',
 })
 export class NotificationService {
+  private config = inject<NotificationProviderConfig>(NOTIFICATION_CONFIG);
+  private toastrProvider = inject(ToastrProvider);
+  private snackbarProvider = inject(SnackbarProvider);
+  private sweetAlertProvider = inject(SweetAlertProvider);
+
   private providers: Map<NotificationProvider, NotificationProviderBase> = new Map();
   private currentProvider: NotificationProviderBase;
 
   // Expose predefined messages
   readonly messages = NOTIFICATION_MESSAGES;
 
-  constructor(
-    @Inject(NOTIFICATION_CONFIG) private config: NotificationProviderConfig,
-    private toastrProvider: ToastrProvider,
-    private snackbarProvider: SnackbarProvider,
-    private sweetAlertProvider: SweetAlertProvider,
-  ) {
+  constructor() {
     this.providers.set('toastr', this.toastrProvider);
     this.providers.set('snackbar', this.snackbarProvider);
     this.providers.set('sweetalert', this.sweetAlertProvider);
