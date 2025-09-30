@@ -249,7 +249,7 @@ The `api.interceptor.ts` automatically handles user notifications based on API r
 ### Skipping Notifications
 
 ```typescript
-import { SKIP_NOTIFICATION } from '@acontplus/ng-core';
+import { SKIP_NOTIFICATION } from '@acontplus/ng-infrastructure';
 
 // Skip notifications for this request
 this.http.post('/api/silent-operation', data, {

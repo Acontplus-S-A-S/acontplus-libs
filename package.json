@@ -26,11 +26,12 @@
     "e2e": "nx run demo-app-e2e:e2e"
   },
   "dependencies": {
-    "@acontplus/core": "^1.0.11",
+    "@acontplus/core": "^1.0.12",
+    "@acontplus/ng-config": "^1.0.0",
     "@acontplus/ng-components": "^1.0.11",
-    "@acontplus/ng-core": "^1.0.11",
+    "@acontplus/ng-infrastructure": "^1.0.0",
     "@acontplus/ng-notifications": "^1.0.7",
-    "@acontplus/utils": "^1.0.5",
+    "@acontplus/utils": "^1.0.6",
     "@angular/animations": "20.3.2",
     "@angular/cdk": "20.2.5",
     "@angular/common": "20.3.2",

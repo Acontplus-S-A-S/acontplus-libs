@@ -1,0 +1,56 @@
+{
+  "name": "@acontplus/ng-infrastructure",
+  "version": "1.0.0",
+  "description": "Acontplus Angular Infrastructure library for managing HTTP interceptors and repositories.",
+  "dependencies": {},
+  "peerDependencies": {
+    "@acontplus/core": "^1.0.12",
+    "@acontplus/ng-config": "^1.0.0",
+    "@acontplus/ng-notifications": "^1.0.7",
+    "@acontplus/ng-components": "^1.0.11",
+    "@angular/common": "^20.3.2",
+    "@angular/core": "^20.3.2"
+  },
+  "sideEffects": false,
+  "main": "fesm2022/acontplus-ng-infrastructure.mjs",
+  "module": "fesm2022/acontplus-ng-infrastructure.mjs",
+  "typings": "index.d.ts",
+  "files": [
+    "index.d.ts",
+    "*.d.ts",
+    "**/*.d.ts",
+    "fesm2022/**/*"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "acontplus",
+    "angular",
+    "infrastructure",
+    "interceptors",
+    "repositories",
+    "typescript",
+    "frontend",
+    "library"
+  ],
+  "author": "Ivan Paz <ifer343@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Acontplus-S-A-S/acontplus-libs/issues"
+  },
+  "homepage": "https://github.com/Acontplus-S-A-S/acontplus-libs#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Acontplus-S-A-S/acontplus-libs.git"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  }
+}
