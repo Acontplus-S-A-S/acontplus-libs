@@ -9,9 +9,7 @@
 // @use '@acontplus/ng-components/styles/custom-buttons' as buttons; // Removed: file does not exist in new codebase
 // @use '@acontplus/ng-components/styles/custom-dialog' as custom-dialog; // commented out: file missing in this environment
 @use 'ngx-toastr/toastr';
-@use 'node_modules/bootstrap/dist/css/bootstrap.min.css';
-@import 'sweetalert2/themes/material-ui.css';
-@import 'tabulator-tables/dist/css/tabulator_materialize.min.css';
+@use "node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 // Include Angular Material Core foundational styles
 @include mat.core();
