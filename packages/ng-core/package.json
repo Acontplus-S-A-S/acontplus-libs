@@ -8,8 +8,8 @@
     "jwt-decode": "^4.0.0"
   },
   "peerDependencies": {
-    "@angular/common": "^20.3.1",
-    "@angular/core": "^20.3.1"
+    "@angular/common": "^20.3.2",
+    "@angular/core": "^20.3.2"
   },
   "sideEffects": false,
   "main": "fesm2022/acontplus-ng-core.mjs",
