@@ -1,16 +1,15 @@
 {
   "name": "@acontplus/ng-components",
-  "version": "1.0.7",
+  "version": "1.0.10",
   "description": "Angular Material UI component library with dynamic tables, theming support, dialog wrappers, and comprehensive styling utilities",
   "peerDependencies": {
-    "@acontplus/ng-core": "^1.0.6",
-    "@angular/cdk": "^20.2.4",
-    "@angular/common": "^20.3.1",
-    "@angular/core": "^20.3.1",
-    "@angular/material": "^20.2.4",
+    "@angular/cdk": "^20.2.5",
+    "@angular/common": "^20.3.2",
+    "@angular/core": "^20.3.2",
+    "@angular/material": "^20.2.5",
     "tabulator-tables": "^6.3.1"
   },
-  "sideEffects": false,
+  "sideEffects": true,
   "main": "fesm2022/acontplus-ng-components.mjs",
   "module": "fesm2022/acontplus-ng-components.mjs",
   "typings": "index.d.ts",
@@ -18,7 +17,8 @@
     "index.d.ts",
     "*.d.ts",
     "**/*.d.ts",
-    "fesm2022/**/*"
+    "fesm2022/**/*",
+    "src/**/*"
   ],
   "engines": {
     "node": ">=18.0.0"

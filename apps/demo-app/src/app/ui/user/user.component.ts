@@ -25,7 +25,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontplus/ng-components';
 import { UserRepository } from '../../data';
 import { User } from '../../domain';
-import { PaginationParams, FilterParams, PagedResult } from '@acontplus/core';
+import { PaginationParams, PagedResult } from '@acontplus/core';
 
 @Component({
   selector: 'app-user',
@@ -72,7 +72,7 @@ export class UserComponent implements OnInit, AfterViewInit {
   userPaginationConfig: Pagination = new Pagination(0, 10, 5, 0, [5, 10, 25, 50]);
 
   // Filters
-  filters: FilterParams = {};
+  filters: Record<string, any> = {};
   searchQuery = '';
 
   // Form data
@@ -170,7 +170,7 @@ export class UserComponent implements OnInit, AfterViewInit {
 
   loadUsers(): void {
     this.isLoading = true;
-    this.userRepository.getAll(this.pagination, this.filters).subscribe({
+    this.userRepository.getAll(this.pagination).subscribe({
       next: (result: PagedResult<User>) => {
         this.users = result.items;
         this.userPaginationConfig.totalRecords = result.totalCount;
@@ -200,9 +200,9 @@ export class UserComponent implements OnInit, AfterViewInit {
     this.pagination.pageIndex = 1;
     const query = this.searchQuery.trim();
     if (query) {
-      this.filters.search = query;
+      this.filters['search'] = query;
     } else {
-      delete this.filters.search;
+      delete this.filters['search'];
     }
     this.loadUsers();
   }

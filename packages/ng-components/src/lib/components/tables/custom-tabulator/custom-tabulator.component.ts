@@ -48,6 +48,9 @@ export class CustomTabulatorComponent implements OnChanges, AfterViewInit, OnDes
   // Theme configuration
   @Input() theme: TabulatorTheme = { name: 'default' };
 
+  // Custom styling
+  @Input() customClass = '';
+
   // Custom options
   @Input() options: Record<string, any> = {};
 
@@ -77,6 +80,10 @@ export class CustomTabulatorComponent implements OnChanges, AfterViewInit, OnDes
 
     if (changes['theme'] && !changes['theme'].isFirstChange()) {
       this.applyTheme();
+    }
+
+    if (changes['customClass'] && !changes['customClass'].isFirstChange()) {
+      this.applyCustomClass(changes['customClass'].previousValue, this.customClass);
     }
   }
 
@@ -124,17 +131,44 @@ export class CustomTabulatorComponent implements OnChanges, AfterViewInit, OnDes
   }
 
   private applyTheme(): void {
-    const container = document.getElementById(this.containerId);
-    if (container) {
+    if (this._tabulator) {
+      // Tabulator themes are applied via CSS classes on the table element
+      const tableElement = this._tabulator.element as HTMLElement;
+
       // Remove existing theme classes
-      container.classList.remove(
-        'tabulator-default',
-        'tabulator-bootstrap5',
-        'tabulator-semanticui',
+      tableElement.classList.remove(
+        'tabulator-modern',
+        'tabulator-midnight',
+        'tabulator-simple',
+        'tabulator-site',
+        'tabulator-site-dark'
       );
 
-      // Add current theme class
-      container.classList.add(`tabulator-${this.theme.name}`);
+      // Add current theme class (skip 'default' as it uses base styles)
+      if (this.theme.name !== 'default') {
+        tableElement.classList.add(`tabulator-${this.theme.name}`);
+      }
+
+      // Apply custom classes
+      this.applyCustomClass('', this.customClass);
+    }
+  }
+
+  private applyCustomClass(previousClass: string, newClass: string): void {
+    if (this._tabulator) {
+      const tableElement = this._tabulator.element as HTMLElement;
+
+      // Remove previous custom classes
+      if (previousClass) {
+        const prevClasses = previousClass.split(' ').filter(cls => cls.trim());
+        prevClasses.forEach(cls => tableElement.classList.remove(cls));
+      }
+
+      // Add new custom classes
+      if (newClass) {
+        const newClasses = newClass.split(' ').filter(cls => cls.trim());
+        newClasses.forEach(cls => tableElement.classList.add(cls));
+      }
     }
   }
 

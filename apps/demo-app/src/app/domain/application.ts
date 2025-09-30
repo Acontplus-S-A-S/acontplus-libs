@@ -1,4 +1,4 @@
-import { BaseEntity, FilterParams } from '@acontplus/core';
+import { BaseEntity } from '@acontplus/core';
 
 export interface Application extends BaseEntity {
   name: string;
@@ -16,7 +16,12 @@ export interface Application extends BaseEntity {
   documentationUrl?: string;
 }
 
-export interface ApplicationFilterParams extends FilterParams {
+export interface ApplicationFilterParams {
+  search?: string;
+  role?: string;
+  isActive?: boolean;
+  dateFrom?: string;
+  dateTo?: string;
   status?: Application['status'];
   environment?: Application['environment'];
   category?: string;

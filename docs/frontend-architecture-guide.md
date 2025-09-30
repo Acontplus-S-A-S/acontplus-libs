@@ -714,13 +714,6 @@ export interface PaginationParams {
   page: number;
   pageSize: number;
 }
-
-export interface FilterParams {
-  search?: string;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-  filters?: Record<string, any>;
-}
 ```
 
 ## Shared Utilities 🛠️
@@ -1166,13 +1159,6 @@ export interface PaginationMeta {
 export interface PaginationParams {
   page: number;
   pageSize: number;
-}
-
-export interface FilterParams {
-  search?: string;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-  filters?: Record<string, any>;
 }
 
 // shared/models/response.models.ts

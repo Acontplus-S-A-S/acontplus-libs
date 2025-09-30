@@ -7,6 +7,7 @@ import { UtilsComponent } from '../../ui/utils/utils.component';
 import { PricingDemoComponent } from '../../ui/pricing-demo/pricing-demo.component';
 import { ProductComponent } from '../../ui/product/product.component';
 import { UserComponent } from '../../ui/user/user.component';
+import { ApplicationComponent } from '../../ui/application/application.component';
 
 export interface MenuItemList {
   icon: string;
@@ -17,6 +18,7 @@ export interface MenuItemList {
 }
 
 export const menuItems: MenuItemList[] = [
+  { icon: 'apps', label: 'Applications', route: 'applications', component: ApplicationComponent },
   { icon: 'utils', label: 'Utils', route: 'utils', component: UtilsComponent },
   { icon: 'pricing', label: 'Pricing', route: 'pricing', component: PricingDemoComponent },
   { icon: 'products', label: 'Products', route: 'products', component: ProductComponent },

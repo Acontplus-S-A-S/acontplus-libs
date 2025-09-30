@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 import { Product } from '../domain/product';
-import { PagedResult as PaginatedResult, PaginationParams, FilterParams } from '@acontplus/core';
+import { PagedResult as PaginatedResult, PaginationParams } from '@acontplus/core';
 
 @Injectable({
   providedIn: 'root',
@@ -164,40 +164,8 @@ export class MockProductService {
 
   getProducts(
     pagination: PaginationParams,
-    filters?: FilterParams,
   ): Observable<PaginatedResult<Product>> {
     let filteredProducts = [...this.products];
-
-    // Apply filters
-    if (filters) {
-      if (filters.search) {
-        const searchTerm = filters.search.toLowerCase();
-        filteredProducts = filteredProducts.filter(
-          product =>
-            product.name.toLowerCase().includes(searchTerm) ||
-            product.category.toLowerCase().includes(searchTerm) ||
-            (product.description && product.description.toLowerCase().includes(searchTerm)),
-        );
-      }
-
-      if ((filters as any).category) {
-        filteredProducts = filteredProducts.filter(product =>
-          product.category.toLowerCase().includes((filters as any).category.toLowerCase()),
-        );
-      }
-
-      if ((filters as any).minPrice !== undefined) {
-        filteredProducts = filteredProducts.filter(product => product.price >= (filters as any).minPrice);
-      }
-
-      if ((filters as any).maxPrice !== undefined) {
-        filteredProducts = filteredProducts.filter(product => product.price <= (filters as any).maxPrice);
-      }
-
-      if (filters.isActive !== undefined) {
-        filteredProducts = filteredProducts.filter(product => product.isActive === filters.isActive);
-      }
-    }
 
     // Apply sorting
     if (pagination.sortBy) {
@@ -279,15 +247,15 @@ export class MockProductService {
   }
 
   searchProducts(query: string, pagination: PaginationParams): Observable<PaginatedResult<Product>> {
-    return this.getProducts(pagination, { search: query });
+    return this.getProducts(pagination);
   }
 
   getActiveProducts(pagination: PaginationParams): Observable<PaginatedResult<Product>> {
-    return this.getProducts(pagination, { isActive: true });
+    return this.getProducts(pagination);
   }
 
   getProductsByCategory(category: string, pagination: PaginationParams): Observable<PaginatedResult<Product>> {
-    return this.getProducts(pagination, { category } as any);
+    return this.getProducts(pagination);
   }
 
   // Bulk operations

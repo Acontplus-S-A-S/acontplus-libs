@@ -25,11 +25,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontplus/ng-components';
 import { ProductRepository } from '../../data';
 import { Product } from '../../domain';
-import { PaginationParams, FilterParams, PagedResult } from '@acontplus/core';
+import { PaginationParams, PagedResult } from '@acontplus/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 
 // Extended filter interface for products
-interface ProductFilters extends FilterParams {
+interface ProductFilters {
+  search?: string;
+  role?: string;
+  isActive?: boolean;
+  dateFrom?: string;
+  dateTo?: string;
   category?: string;
   minPrice?: number;
   maxPrice?: number;
@@ -184,7 +189,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
       this.filters.maxPrice = this.maxPrice;
     }
 
-    this.productRepository.getAll(this.pagination, this.filters).subscribe({
+    this.productRepository.getAll(this.pagination).subscribe({
       next: (result: PagedResult<Product>) => {
         console.log('Products loaded successfully:', result);
         this.products = result.items;

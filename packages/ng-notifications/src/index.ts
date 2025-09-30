@@ -8,3 +8,4 @@ export * from './lib/providers/toastr.provider';
 export * from './lib/providers/snackbar.provider';
 export * from './lib/providers/sweetalert.provider';
 export * from './lib/services/notification.service';
+export * from './lib/providers';

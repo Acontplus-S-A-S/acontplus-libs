@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { PagedResult, PaginationParams, FilterParams } from '@acontplus/core';
+import { PagedResult, PaginationParams } from '@acontplus/core';
 import { Repository, RepositoryConfig } from './interfaces';
 
 @Injectable({ providedIn: 'root' })
@@ -17,7 +17,7 @@ export class RepositoryFactory {
       return `${baseUrl}${version}/${endpoint}`.replace(/\/+/g, '/');
     };
 
-    const buildParams = (pagination?: PaginationParams, filters?: FilterParams) => {
+    const buildParams = (pagination?: PaginationParams) => {
       const params: any = {};
       if (pagination) {
         params.page = pagination.pageIndex?.toString() || '1';
@@ -25,7 +25,6 @@ export class RepositoryFactory {
         if (pagination.sortBy) params.sortBy = pagination.sortBy;
         if (pagination.sortDirection) params.sortDirection = pagination.sortDirection;
       }
-      if (filters) Object.assign(params, filters as Record<string, any>);
       return params;
     };
 
@@ -41,9 +40,9 @@ export class RepositoryFactory {
     return {
       getById: (id: TId) => this.http.get<TEntity>(buildUrl(idToString(id))),
 
-      getAll: (pagination?, filters?) =>
+      getAll: (pagination?) =>
         this.http.get<PagedResult<TEntity>>(buildUrl(), {
-          params: buildParams(pagination, filters),
+          params: buildParams(pagination),
         }),
 
       create: (entity: Partial<TEntity>) => this.http.post<TEntity>(buildUrl(), entity),
