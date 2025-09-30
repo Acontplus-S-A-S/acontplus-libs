@@ -1,4 +1,5 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { jwtDecode } from 'jwt-decode';
 import { AuthTokens } from '@acontplus/core';
 import { ENVIRONMENT } from '@acontplus/ng-config';
@@ -8,13 +9,19 @@ import { ENVIRONMENT } from '@acontplus/ng-config';
 })
 export class TokenRepository {
   private environment = inject(ENVIRONMENT);
+  private platformId = inject(PLATFORM_ID);
 
   saveTokens(tokens: AuthTokens, rememberMe = false): void {
-    this.setToken(tokens.token, rememberMe);
-    this.setRefreshToken(tokens.refreshToken, rememberMe);
+    if (isPlatformBrowser(this.platformId)) {
+      this.setToken(tokens.token, rememberMe);
+      this.setRefreshToken(tokens.refreshToken, rememberMe);
+    }
   }
 
   getAccessToken(): string | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
     return (
       localStorage.getItem(this.environment.tokenKey) ||
       sessionStorage.getItem(this.environment.tokenKey)
@@ -22,13 +29,16 @@ export class TokenRepository {
   }
 
   getRefreshToken(): string | null {
-    return (
-      localStorage.getItem(this.environment.refreshTokenKey) ||
-      sessionStorage.getItem(this.environment.refreshTokenKey)
-    );
+    // Refresh tokens are now stored in HttpOnly cookies by the server
+    // We can't read them directly from client-side code for security
+    // They are automatically sent with requests when withCredentials: true is used
+    return null;
   }
 
   setToken(token: string, rememberMe = false): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
     if (rememberMe) {
       localStorage.setItem(this.environment.tokenKey, token);
     } else {
@@ -36,15 +46,16 @@ export class TokenRepository {
     }
   }
 
-  setRefreshToken(refreshToken: string, rememberMe = false): void {
-    if (rememberMe) {
-      localStorage.setItem(this.environment.refreshTokenKey, refreshToken);
-    } else {
-      sessionStorage.setItem(this.environment.refreshTokenKey, refreshToken);
-    }
+  setRefreshToken(_refreshToken: string, _rememberMe = false): void {
+    // Refresh tokens are now set by the server as HttpOnly cookies
+    // Client-side code cannot set HttpOnly cookies for security reasons
+    // They are set in response to successful login/register requests
   }
 
   clearTokens(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
     localStorage.removeItem(this.environment.tokenKey);
     localStorage.removeItem(this.environment.refreshTokenKey);
     sessionStorage.removeItem(this.environment.tokenKey);
@@ -53,9 +64,8 @@ export class TokenRepository {
 
   isAuthenticated(): boolean {
     const accessToken = this.getAccessToken();
-    const refreshToken = this.getRefreshToken();
 
-    if (!accessToken || !refreshToken) {
+    if (!accessToken) {
       return false;
     }
 
@@ -64,24 +74,7 @@ export class TokenRepository {
       const accessExpiration = Number(decodedAccessToken.exp);
       const currentTimeUTC = Math.floor(Date.now() / 1000);
 
-      if (accessExpiration > currentTimeUTC) {
-        return true;
-      }
-
-      return this.isRefreshTokenValid();
-    } catch {
-      return false;
-    }
-  }
-
-  private isRefreshTokenValid(): boolean {
-    const refreshToken = this.getRefreshToken();
-    if (!refreshToken) {
-      return false;
-    }
-
-    try {
-      return true; // Backend validates expiration
+      return accessExpiration > currentTimeUTC;
     } catch {
       return false;
     }
