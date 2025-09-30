@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MenuItemList, menuItems } from './menu-items';
-// Remove ToastrNotificationService import since it doesn't exist in core
+import { LogoutUseCase } from '@acontplus/ng-auth';
 
 @Component({
   selector: 'app-app-layout',
@@ -29,8 +29,8 @@ import { MenuItemList, menuItems } from './menu-items';
   styleUrl: './app-layout.component.scss',
 })
 export class AppLayoutComponent implements OnInit {
-  // Remove ToastrNotificationService injection
   private breakpointObserver = inject(BreakpointObserver);
+  private logoutUseCase = inject(LogoutUseCase);
   menuItems = signal<MenuItemList[]>(menuItems);
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
@@ -42,5 +42,9 @@ export class AppLayoutComponent implements OnInit {
 
   ngOnInit() {
     // Component initialized
+  }
+
+  logout() {
+    this.logoutUseCase.execute().subscribe();
   }
 }

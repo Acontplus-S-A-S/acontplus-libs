@@ -36,7 +36,7 @@ export class UserRepository {
 
       const userData: UserData = {
         email: email.toString(),
-        name: name?.toString() ?? 'Unknown User',
+        displayName: name?.toString() ?? 'Unknown User',
       };
 
       return userData;
