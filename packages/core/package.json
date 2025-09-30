@@ -1,6 +1,6 @@
 {
   "name": "@acontplus/core",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Core library for Acontplus projects, providing essential utilities and functionalities.",
   "dependencies": {
     "@acontplus/utils": "^1.0.6",

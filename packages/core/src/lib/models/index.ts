@@ -1,4 +1,5 @@
 export * from './api-response';
+export * from './auth';
 export * from './base-entity';
 export * from './paginated-result';
 export * from './pagination-params';
