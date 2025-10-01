@@ -126,3 +126,163 @@ export class AppModule { }
 ## Running unit tests
 
 Run `nx test ng-auth` to execute the unit tests.
+
+## Login Component
+
+The `LoginComponent` provides a flexible, themeable authentication UI component with support for custom fields and dynamic content.
+
+### Basic Usage
+
+```typescript
+import { LoginComponent } from '@acontplus/ng-auth/ui/login';
+
+@Component({
+  template: `
+    <acp-login 
+      title="Welcome Back"
+      [showRegisterButton]="true">
+    </acp-login>
+  `,
+  imports: [LoginComponent]
+})
+export class AuthPageComponent {}
+```
+
+### Flexible Form Fields
+
+The component supports additional form fields through two approaches:
+
+#### 1. Additional Form Controls via Inputs
+
+Pass additional form controls programmatically:
+
+```typescript
+import { FormControl, Validators } from '@angular/forms';
+
+@Component({...})
+export class AuthPageComponent {
+  signinExtras = {
+    companyId: new FormControl('', Validators.required),
+    rememberMe: new FormControl(false)
+  };
+
+  signupExtras = {
+    companyId: new FormControl('', Validators.required),
+    role: new FormControl('', Validators.required),
+    validationPin: new FormControl('', [Validators.required, Validators.pattern(/^\d{6}$/)])
+  };
+}
+```
+
+```html
+<acp-login
+  [additionalSigninControls]="signinExtras"
+  [additionalSignupControls]="signupExtras">
+</acp-login>
+```
+
+#### 2. Content Projection for Custom Templates
+
+Use content projection slots for custom field templates:
+
+```html
+<acp-login>
+  <!-- Additional fields for signin form -->
+  <div signin-fields>
+    <mat-form-field class="w-100">
+      <mat-label>Company</mat-label>
+      <mat-select formControlName="companyId">
+        @for (company of companies; track company.id) {
+        <mat-option [value]="company.id">
+          {{ company.name }}
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Additional fields for signup form -->
+  <div signup-fields>
+    <mat-form-field class="w-100">
+      <mat-label>Company</mat-label>
+      <mat-select formControlName="companyId" required>
+        @for (company of companies; track company.id) {
+        <mat-option [value]="company.id">
+          {{ company.name }}
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role" required>
+        <mat-option value="admin">Administrator</mat-option>
+        <mat-option value="user">User</mat-option>
+        <mat-option value="manager">Manager</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <mat-label>Validation PIN</mat-label>
+      <input matInput type="text" placeholder="Enter PIN" formControlName="validationPin" required />
+    </mat-form-field>
+  </div>
+</acp-login>
+```
+
+### Dynamic Footer Content
+
+Customize the footer with dynamic content:
+
+```html
+<ng-template #customFooter>
+  <div class="row mt-3">
+    <div class="col-12 text-center">
+      <a mat-button color="primary" href="/terms">Terms of Service</a>
+      <a mat-button color="primary" href="/privacy">Privacy Policy</a>
+    </div>
+  </div>
+</ng-template>
+
+<acp-login [footerContent]="customFooter">
+  <!-- form content -->
+</acp-login>
+```
+
+### Theme Color Inheritance
+
+The component uses CSS custom properties to inherit colors from the parent app's theme:
+
+- Background gradient: Uses `--mdc-theme-primary` and `--mdc-theme-secondary`
+- Title color: Uses `--mdc-theme-on-surface`
+- Error alerts: Uses `--mdc-theme-error`, `--mdc-theme-error-container`, `--mdc-theme-on-error-container`
+
+Fallback colors use Angular Material's Material Design 3 (M3) neutral color tokens:
+- Primary: #5c5f5c (M3 neutral primary)
+- Secondary: #79747e (M3 neutral secondary)
+- On surface: #1c1b1f (M3 on-surface)
+- Error: #ba1a1a (M3 error)
+- Error container: #ffdad6 (M3 error-container)
+- On error container: #410002 (M3 on-error-container)
+
+To customize colors, define these CSS variables in your app's global styles:
+
+```css
+:root {
+  --mdc-theme-primary: #your-primary-color;
+  --mdc-theme-secondary: #your-secondary-color;
+  --mdc-theme-on-surface: #your-text-color;
+  --mdc-theme-error: #your-error-color;
+  --mdc-theme-error-container: #your-error-bg;
+  --mdc-theme-on-error-container: #your-error-text;
+}
+```
+
+### Component Inputs
+
+- `title: string` - The title displayed in the card header (default: 'Login')
+- `showRegisterButton: boolean` - Whether to show the register button (default: true)
+- `additionalSigninControls: Record<string, AbstractControl>` - Additional controls for signin form
+- `additionalSignupControls: Record<string, AbstractControl>` - Additional controls for signup form
+- `footerContent: TemplateRef<any> | null` - Custom footer template

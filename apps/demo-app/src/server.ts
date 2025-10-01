@@ -7,12 +7,16 @@ import {
 import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import jwt from 'jsonwebtoken';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
+
+// JWT secret for demo
+const JWT_SECRET = 'demo-jwt-secret-key-change-in-production';
 
 // Fake backend data storage
 interface User {
@@ -29,14 +33,45 @@ interface Session {
   expiresAt: number;
 }
 
-const users: User[] = [];
+const users: User[] = [
+  {
+    id: 'user-1',
+    email: 'admin@acontplus.test',
+    displayName: 'Admin User',
+    // NOTE: Plaintext passwords are OK for the demo server only
+    password: 'Password123',
+  },
+  {
+    id: 'user-2',
+    email: 'user@acontplus.test',
+    displayName: 'Demo User',
+    password: 'Password123',
+  },
+];
 const sessions: Session[] = [];
+const csrfTokens = new Set<string>();
 
 // Middleware to parse JSON
 app.use(express.json());
 
+// CSRF token endpoint
+app.get('/csrf-token', (req, res) => {
+  const token = `csrf-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  csrfTokens.add(token);
+  res.json({ token });
+});
+
+// Middleware to check CSRF token
+const checkCsrf = (req: any, res: any, next: any) => {
+  const token = req.headers['x-csrf-token'];
+  if (!token || !csrfTokens.has(token)) {
+    return res.status(403).json({ error: 'Invalid CSRF token' });
+  }
+  next();
+};
+
 // Fake auth API endpoints
-app.post('/account/login', (req: any, res: any): void => {
+app.post('/account/login', checkCsrf, (req: any, res: any): void => {
   const { email, password } = req.body;
 
   const user = users.find(u => u.email === email && u.password === password);
@@ -45,11 +80,21 @@ app.post('/account/login', (req: any, res: any): void => {
     return;
   }
 
+  // Create JWT tokens
+  const accessToken = jwt.sign(
+    { sub: user.id, email: user.email, type: 'access' },
+    JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+  const refreshToken = jwt.sign(
+    { sub: user.id, email: user.email, type: 'refresh' },
+    JWT_SECRET,
+    { expiresIn: '7d' }
+  );
+
   // Create session
-  const token = `fake-jwt-token-${Date.now()}`;
-  const refreshToken = `fake-refresh-token-${Date.now()}`;
   const session: Session = {
-    token,
+    token: accessToken,
     refreshToken,
     email,
     expiresAt: Date.now() + 3600000 // 1 hour
@@ -58,12 +103,12 @@ app.post('/account/login', (req: any, res: any): void => {
   sessions.push(session);
 
   res.json({
-    token,
+    token: accessToken,
     refreshToken
   });
 });
 
-app.post('/account/register', (req: any, res: any): void => {
+app.post('/account/register', checkCsrf, (req: any, res: any): void => {
   const { email, displayName, password } = req.body;
 
   const existingUser = users.find(u => u.email === email);
@@ -88,37 +133,55 @@ app.post('/account/register', (req: any, res: any): void => {
   });
 });
 
-app.post('/account/refresh', (req: any, res: any): void => {
+app.post('/account/refresh', checkCsrf, (req: any, res: any): void => {
   const { email, refreshToken } = req.body;
 
-  const session = sessions.find(s => s.email === email && s.refreshToken === refreshToken);
-  if (!session) {
+  try {
+    // Verify the refresh token
+    const decoded = jwt.verify(refreshToken, JWT_SECRET) as any;
+    if (decoded.type !== 'refresh' || decoded.email !== email) {
+      throw new Error('Invalid token');
+    }
+
+    const user = users.find(u => u.id === decoded.sub);
+    if (!user) {
+      res.status(401).json({ error: 'User not found' });
+      return;
+    }
+
+    // Create new tokens
+    const newAccessToken = jwt.sign(
+      { sub: user.id, email: user.email, type: 'access' },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+    const newRefreshToken = jwt.sign(
+      { sub: user.id, email: user.email, type: 'refresh' },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    // Update session
+    const sessionIndex = sessions.findIndex(s => s.email === email && s.refreshToken === refreshToken);
+    if (sessionIndex !== -1) {
+      sessions[sessionIndex] = {
+        token: newAccessToken,
+        refreshToken: newRefreshToken,
+        email,
+        expiresAt: Date.now() + 3600000
+      };
+    }
+
+    res.json({
+      token: newAccessToken,
+      refreshToken: newRefreshToken
+    });
+  } catch (error) {
     res.status(401).json({ error: 'Invalid refresh token' });
-    return;
   }
-
-  // Create new session
-  const newToken = `fake-jwt-token-${Date.now()}`;
-  const newRefreshToken = `fake-refresh-token-${Date.now()}`;
-  const newSession: Session = {
-    token: newToken,
-    refreshToken: newRefreshToken,
-    email,
-    expiresAt: Date.now() + 3600000
-  };
-
-  // Remove old session
-  const index = sessions.indexOf(session);
-  sessions.splice(index, 1);
-  sessions.push(newSession);
-
-  res.json({
-    token: newToken,
-    refreshToken: newRefreshToken
-  });
 });
 
-app.post('/account/logout', (req: any, res: any): void => {
+app.post('/account/logout', checkCsrf, (req: any, res: any): void => {
   const { email, refreshToken } = req.body;
 
   const index = sessions.findIndex(s => s.email === email && s.refreshToken === refreshToken);

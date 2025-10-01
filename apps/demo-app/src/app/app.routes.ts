@@ -1,7 +1,7 @@
 import { Route, Routes } from '@angular/router';
 import { MenuItemList, menuItems } from './layout/app-layout/menu-items';
 import { authGuard } from '@acontplus/ng-auth';
-import { LoginComponent } from '@acontplus/ng-auth';
+import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
 
 const itemToRoute = (i: MenuItemList): Route => {
   const route = {} as Route;
@@ -18,7 +18,7 @@ const itemToRoute = (i: MenuItemList): Route => {
 export const appRoutes: Routes = [
   {
     path: 'auth',
-    component: LoginComponent,
+    component: AuthLayoutComponent,
   },
   {
     path: '',

@@ -1,12 +1,8 @@
 // Components
-export * from './test/test-dialog';
-
-// Pages
 export * from './autocomplete/autocomplete.component';
 export * from './cards/cards.component';
 export * from './customers/customers.component';
 export * from './product/product.component';
-export * from './test/test.component';
 export * from './user/user.component';
 export * from './pricing-demo/pricing-demo.component';
 export * from './tables/tables.component';
