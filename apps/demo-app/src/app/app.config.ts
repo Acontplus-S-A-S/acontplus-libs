@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { initHttpFactory } from './init-http-factory';
 import { provideTransloco } from '@jsverse/transloco';
@@ -20,11 +20,13 @@ import {
   spinnerInterceptor,
   TOKEN_PROVIDER,
 } from '@acontplus/ng-infrastructure';
-import { AuthTokenService } from '@acontplus/ng-auth';
+import { AuthTokenService, authProviders } from '@acontplus/ng-auth';
 import { provideNotifications } from '../../../../packages/ng-notifications/src/lib/providers';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideClientHydration(withEventReplay()),
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
@@ -32,8 +34,10 @@ export const appConfig: ApplicationConfig = {
 
     provideHttpClient(
       withInterceptors([apiInterceptor, spinnerInterceptor, httpContextInterceptor]),
+      withFetch(),
     ),
     { provide: TOKEN_PROVIDER, useClass: AuthTokenService },
+    ...authProviders,
     provideTransloco({
       config: {
         availableLangs: ['en', 'es'],

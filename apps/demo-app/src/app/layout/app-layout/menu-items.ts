@@ -1,5 +1,6 @@
 import { Type } from '@angular/core';
 import { CustomersComponent } from '../../ui/customers/customers.component';
+import { DashboardComponent } from '../../ui/dashboard/dashboard.component';
 import { AutocompleteComponent } from '../../ui/autocomplete/autocomplete.component';
 import { CardsComponent } from '../../ui/cards/cards.component';
 import { TablesComponent } from '../../ui/tables/tables.component';
@@ -18,6 +19,7 @@ export interface MenuItemList {
 }
 
 export const menuItems: MenuItemList[] = [
+  { icon: 'dashboard', label: 'Dashboard', route: 'dashboard', component: DashboardComponent },
   { icon: 'apps', label: 'Applications', route: 'applications', component: ApplicationComponent },
   { icon: 'utils', label: 'Utils', route: 'utils', component: UtilsComponent },
   { icon: 'pricing', label: 'Pricing', route: 'pricing', component: PricingDemoComponent },

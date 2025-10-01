@@ -2,12 +2,14 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
+import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
 import { ApplicationService } from './providers';
 import { ThemeService } from '@acontplus/ng-components';
 import { NotificationService } from '@acontplus/ng-notifications';
+import { AuthStore } from '@acontplus/ng-auth';
 
 @Component({
-  imports: [RouterModule, AppLayoutComponent],
+  imports: [RouterModule, AppLayoutComponent, AuthLayoutComponent],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -18,6 +20,10 @@ export class App implements OnInit {
   private readonly _appService = inject(ApplicationService);
   private readonly themeService = inject(ThemeService);
   private readonly notificationService = inject(NotificationService);
+  private readonly authStore = inject(AuthStore);
+
+  // expose readonly signal to template
+  readonly isAuthenticated = this.authStore.isAuthenticated;
 
   ngOnInit() {
     this.notificationService.toastr.info({

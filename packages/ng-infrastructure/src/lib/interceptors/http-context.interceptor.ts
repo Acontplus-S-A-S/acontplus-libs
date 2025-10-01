@@ -6,7 +6,7 @@ import {
   HttpInterceptorFn,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { catchError, throwError } from 'rxjs';
+import { catchError, throwError, switchMap, Observable } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
 // Environment and configuration
@@ -50,6 +50,8 @@ export interface HttpContextConfig {
   excludeUrls?: string[];
   includeAuthToken?: boolean;
   baseUrlInjection?: boolean;
+  refreshTokenCallback?: () => Observable<{ token: string; refreshToken?: string }>;
+  logoutCallback?: () => void;
 }
 
 // Default configuration
@@ -66,6 +68,8 @@ const DEFAULT_CONFIG: Required<HttpContextConfig> = {
   excludeUrls: [],
   includeAuthToken: true,
   baseUrlInjection: true,
+  refreshTokenCallback: undefined as any,
+  logoutCallback: undefined as any,
 };
 
 // Injection token for configuration - FIXED
@@ -109,6 +113,9 @@ export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
+  // Skip auth for login, register, and refresh endpoints
+  const skipAuth = req.url.includes('/login') || req.url.includes('/register') || req.url.includes('/refresh');
+
   // Handle URL transformation
   const baseUrl = environment.apiBaseUrl;
   const finalUrl = isCustomUrl || !config.baseUrlInjection ? req.url : `${baseUrl}${req.url}`;
@@ -147,7 +154,7 @@ export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   // Add authorization header if configured and available
-  if (config.includeAuthToken) {
+  if (config.includeAuthToken && !skipAuth) {
     const authToken = tokenProvider?.getToken();
     if (authToken) {
       headers['Authorization'] = `Bearer ${authToken}`;
@@ -193,49 +200,114 @@ export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
     });
   }
 
-  return next(enhancedReq).pipe(
-    catchError((error: HttpErrorResponse) => {
-      // Enhanced error logging with context
-      if (config.enableErrorLogging) {
-        loggingService.logHttpError({
-          method: req.method,
-          url: finalUrl,
-          originalUrl: req.url,
-          requestId,
-          correlationId,
-          tenantId,
-          status: error.status,
-          statusText: error.statusText,
-          message: error.message,
-          timestamp: new Date().toISOString(),
-          errorDetails: error.error,
-          environment: environment.clientId,
-          isCustomUrl,
-          headers: [], // Headers are not included in HttpErrorResponse by default, adjust if needed
-        });
-      }
+  // If request has auth header, handle with refresh logic
+  if (headers['Authorization'] && config.refreshTokenCallback) {
+    return next(enhancedReq).pipe(
+      catchError(error => {
+        // If 401 Unauthorized, try to refresh token
+        if (error.status === 401) {
+          const refreshToken = tokenProvider?.getRefreshToken?.();
+          if (refreshToken && refreshToken.trim().length > 0) {
+            return config.refreshTokenCallback()!.pipe(
+              switchMap(newTokens => {
+                // Retry the original request with new token
+                const retryReq = req.clone({
+                  url: finalUrl,
+                  setHeaders: { ...headers, 'Authorization': `Bearer ${newTokens.token}` },
+                });
+                return next(retryReq);
+              }),
+              catchError(refreshError => {
+                // Refresh failed, logout user
+                config.logoutCallback?.();
+                return throwError(() => refreshError);
+              }),
+            );
+          }
+        }
 
-      // Handle specific error scenarios
-      switch (error.status) {
-        case 401:
-          console.error('Unauthorized access - token expired or invalid');
-          // Note: Token clearing should be handled by the auth service, not infrastructure
-          router.navigate(['/login']);
-          break;
-        case 403:
-          tenantService.handleForbidden();
-          break;
-        case 0:
-          loggingService.logNetworkError(correlationId);
-          break;
-        case 429:
-          loggingService.logRateLimitError(correlationId, finalUrl);
-          break;
-      }
+        // Enhanced error logging with context
+        if (config.enableErrorLogging) {
+          loggingService.logHttpError({
+            method: req.method,
+            url: finalUrl,
+            originalUrl: req.url,
+            requestId,
+            correlationId,
+            tenantId,
+            status: error.status,
+            statusText: error.statusText,
+            message: error.message,
+            timestamp: new Date().toISOString(),
+            errorDetails: error.error,
+            environment: environment.clientId,
+            isCustomUrl,
+            headers: [], // Headers are not included in HttpErrorResponse by default, adjust if needed
+          });
+        }
 
-      return throwError(() => error);
-    }),
-  );
+        // Handle other error scenarios
+        switch (error.status) {
+          case 403:
+            tenantService.handleForbidden();
+            break;
+          case 0:
+            loggingService.logNetworkError(correlationId);
+            break;
+          case 429:
+            loggingService.logRateLimitError(correlationId, finalUrl);
+            break;
+        }
+
+        return throwError(() => error);
+      }),
+    );
+  } else {
+    // No auth header, use standard error handling
+    return next(enhancedReq).pipe(
+      catchError((error: HttpErrorResponse) => {
+        // Enhanced error logging with context
+        if (config.enableErrorLogging) {
+          loggingService.logHttpError({
+            method: req.method,
+            url: finalUrl,
+            originalUrl: req.url,
+            requestId,
+            correlationId,
+            tenantId,
+            status: error.status,
+            statusText: error.statusText,
+            message: error.message,
+            timestamp: new Date().toISOString(),
+            errorDetails: error.error,
+            environment: environment.clientId,
+            isCustomUrl,
+            headers: [], // Headers are not included in HttpErrorResponse by default, adjust if needed
+          });
+        }
+
+        // Handle specific error scenarios
+        switch (error.status) {
+          case 401:
+            console.error('Unauthorized access - token expired or invalid');
+            // Note: Token clearing should be handled by the auth service, not infrastructure
+            router.navigate(['/login']);
+            break;
+          case 403:
+            tenantService.handleForbidden();
+            break;
+          case 0:
+            loggingService.logNetworkError(correlationId);
+            break;
+          case 429:
+            loggingService.logRateLimitError(correlationId, finalUrl);
+            break;
+        }
+
+        return throwError(() => error);
+      }),
+    );
+  }
 };
 
 // Supporting interfaces for type safety

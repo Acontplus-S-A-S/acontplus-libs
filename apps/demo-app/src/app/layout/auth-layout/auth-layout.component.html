@@ -1,0 +1,60 @@
+<div class="auth-layout">
+  <div class="auth-container">
+    <acp-login
+      title="Welcome to Acontplus"
+      [showRegisterButton]="true"
+      [additionalSigninControls]="signinExtras"
+      [additionalSignupControls]="signupExtras"
+      [additionalSigninFields]="signinFields"
+      [additionalSignupFields]="signupFields"
+    >
+      <!-- Additional signin fields -->
+      <ng-template #signinFields>
+        <mat-form-field class="w-100">
+          <mat-label>Company</mat-label>
+          <mat-select [formControl]="signinExtras.companyId">
+            @for (company of companies; track company.id) {
+              <mat-option [value]="company.id">
+                {{ company.name }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </ng-template>
+
+      <!-- Additional signup fields -->
+      <ng-template #signupFields>
+        <mat-form-field class="w-100">
+          <mat-label>Company</mat-label>
+          <mat-select [formControl]="signupExtras.companyId" required>
+            @for (company of companies; track company.id) {
+              <mat-option [value]="company.id">
+                {{ company.name }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-100">
+          <mat-label>Role</mat-label>
+          <mat-select [formControl]="signupExtras.role" required>
+            <mat-option value="admin">Administrator</mat-option>
+            <mat-option value="user">User</mat-option>
+            <mat-option value="manager">Manager</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-100">
+          <mat-label>Validation PIN</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Enter PIN"
+            [formControl]="signupExtras.validationPin"
+            required
+          />
+        </mat-form-field>
+      </ng-template>
+    </acp-login>
+  </div>
+</div>

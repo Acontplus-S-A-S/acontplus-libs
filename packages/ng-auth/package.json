@@ -1,16 +1,22 @@
 {
   "name": "@acontplus/ng-auth",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Acontplus Angular Authentication Module",
   "dependencies": {
-    "@acontplus/ng-infrastructure": "^1.0.0",
-    "@acontplus/ng-config": "^1.0.0"
+    "@acontplus/ng-infrastructure": "^1.0.1",
+    "@acontplus/ng-config": "^1.0.1",
+    "jwt-decode": "^4.0.0",
+    "rxjs": "^7.8.1"
   },
   "peerDependencies": {
-    "@acontplus/core": "^1.0.12",
+    "@acontplus/core": "^1.0.13",
     "@angular/common": "^20.3.2",
     "@angular/core": "^20.3.2",
-    "@angular/router": "^20.3.2"
+    "@angular/router": "^20.3.2",
+    "@angular/forms": "^20.3.2",
+    "@angular/platform-browser": "^20.3.2",
+    "@angular/material": "^20.0.0",
+    "@angular/cdk": "^20.0.0"
   },
   "sideEffects": false,
   "main": "fesm2022/acontplus-ng-auth.mjs",

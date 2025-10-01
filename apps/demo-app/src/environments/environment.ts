@@ -1,6 +1,9 @@
 export const environment = {
   isProduction: true,
-  apiBaseUrl: 'https://localhost:7043/api/',
-  storageKey: 'app-test-token',
-  clientId: 'app-test-client',
+  apiBaseUrl: '',
+  storageKey: 'demo-app-token',
+  clientId: 'demo-app-client',
+  loginRoute: '/auth',
+  tokenKey: 'demo-app-token',
+  refreshTokenKey: 'demo-app-refresh-token',
 };
