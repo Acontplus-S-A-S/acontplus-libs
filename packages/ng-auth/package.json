@@ -1,6 +1,6 @@
 {
   "name": "@acontplus/ng-auth",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Acontplus Angular Authentication Module",
   "dependencies": {
     "@acontplus/ng-infrastructure": "^1.0.1",

@@ -5,4 +5,5 @@ export * from './lib/models';
 export * from './lib/ports';
 export * from './lib/pricing';
 export * from './lib/types';
+export * from './lib/use-cases';
 export * from './lib/value-objects';
