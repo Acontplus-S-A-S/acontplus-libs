@@ -1,8 +1,8 @@
 // src/lib/application/use-cases/refresh-token.use-case.ts
 import { Injectable, inject } from '@angular/core';
 import { Observable, throwError, catchError, tap } from 'rxjs';
+import { BaseUseCase, UserRepository } from '@acontplus/ng-infrastructure';
 import { AuthRepository } from '../../domain/repositories/auth.repository';
-import { UserRepository } from '@acontplus/ng-infrastructure';
 import { TokenRepository } from '../../repositories/token.repository';
 import { AuthTokens } from '@acontplus/core';
 import { AuthStore } from '../../ui/stores/auth.store';
@@ -10,7 +10,7 @@ import { AuthStore } from '../../ui/stores/auth.store';
 @Injectable({
   providedIn: 'root',
 })
-export class RefreshTokenUseCase {
+export class RefreshTokenUseCase extends BaseUseCase<void, AuthTokens> {
   private readonly authRepository = inject(AuthRepository);
   private readonly userRepository = inject(UserRepository);
   private readonly tokenRepository = inject(TokenRepository);
@@ -32,8 +32,10 @@ export class RefreshTokenUseCase {
       })
       .pipe(
         tap(tokens => {
+          // Preserve the rememberMe preference from the current token storage
+          const rememberMe = this.tokenRepository.isRememberMeEnabled();
           // Update authentication state
-          this.authStore.setAuthenticated(tokens);
+          this.authStore.setAuthenticated(tokens, rememberMe);
         }),
         catchError(error => {
           // Don't logout here, let the interceptor handle it

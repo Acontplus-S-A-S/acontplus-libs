@@ -29,10 +29,13 @@ export class TokenRepository {
   }
 
   getRefreshToken(): string | null {
-    // Refresh tokens are now stored in HttpOnly cookies by the server
-    // We can't read them directly from client-side code for security
-    // They are automatically sent with requests when withCredentials: true is used
-    return null;
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+    return (
+      localStorage.getItem(this.environment.refreshTokenKey) ||
+      sessionStorage.getItem(this.environment.refreshTokenKey)
+    );
   }
 
   setToken(token: string, rememberMe = false): void {
@@ -46,10 +49,15 @@ export class TokenRepository {
     }
   }
 
-  setRefreshToken(_refreshToken: string, _rememberMe = false): void {
-    // Refresh tokens are now set by the server as HttpOnly cookies
-    // Client-side code cannot set HttpOnly cookies for security reasons
-    // They are set in response to successful login/register requests
+  setRefreshToken(refreshToken: string, rememberMe = false): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    if (rememberMe) {
+      localStorage.setItem(this.environment.refreshTokenKey, refreshToken);
+    } else {
+      sessionStorage.setItem(this.environment.refreshTokenKey, refreshToken);
+    }
   }
 
   clearTokens(): void {
@@ -107,5 +115,20 @@ export class TokenRepository {
     } catch (error) {
       return null;
     }
+  }
+
+  /**
+   * Determines if tokens are stored persistently (localStorage) vs session (sessionStorage)
+   */
+  isRememberMeEnabled(): boolean {
+    if (!isPlatformBrowser(this.platformId)) {
+      return false;
+    }
+
+    // Check if tokens exist in localStorage (persistent storage)
+    const tokenInLocalStorage = localStorage.getItem(this.environment.tokenKey);
+    const refreshTokenInLocalStorage = localStorage.getItem(this.environment.refreshTokenKey);
+
+    return !!(tokenInLocalStorage || refreshTokenInLocalStorage);
   }
 }

@@ -12,6 +12,8 @@ npm install @acontplus/ng-auth
 
 - **Auth Guard**: Route protection with automatic redirect to login page
 - **Auth Token Service**: JWT token management and authentication state handling
+- **URL Redirection Strategy**: Automatically redirects users back to their intended destination after login
+- **Session Expiry Handling**: Manages session expiry during HTTP requests with automatic redirection
 - **CSRF Protection**: Built-in CSRF token management for secure API requests
 - **Token Repository**: Secure token storage and retrieval with local storage support
 - **Authentication Use Cases**: Login, register, refresh token, and logout functionality
@@ -20,26 +22,165 @@ npm install @acontplus/ng-auth
 - **Angular Integration**: Seamless integration with Angular Router and HTTP client
 - **Type Safety**: Full TypeScript support with comprehensive type definitions
 
-## Usage
+## URL Redirection Strategy
 
-### Route Protection with Auth Guard
+The module includes a comprehensive URL redirection strategy that ensures users are returned to their intended destination after authentication, even when sessions expire.
+
+### Components
+
+1. **UrlRedirectService** - Manages URL storage and redirection logic
+2. **Enhanced Auth Guard** - Captures URLs before redirecting to login
+3. **Enhanced Login Use Case** - Redirects to stored URLs after successful authentication
+4. **Auth Redirect Interceptor** - Handles session expiry during HTTP requests (optional)
+
+### Basic Setup
 
 ```typescript
+// app.config.ts
 import { authGuard } from '@acontplus/ng-auth';
 
 const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'admin',
-    component: AdminComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard] // Automatically captures URL if not authenticated
   }
 ];
 ```
+
+### Complete Setup (with session expiry handling)
+
+```typescript
+// app.config.ts
+import { authRedirectInterceptor } from '@acontplus/ng-auth';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideHttpClient(
+      withInterceptors([
+        authRedirectInterceptor, // Handles session expiry during API calls
+      ])
+    ),
+  ],
+};
+```
+
+### How It Works
+
+**Scenario 1 - Route Protection:**
+```
+User → /dashboard → Auth Guard → Store URL → Login → Success → Redirect to /dashboard
+```
+
+**Scenario 2 - Session Expiry (with interceptor):**
+```
+User on /reports → API Call → 401 Error → Store URL → Login → Success → Redirect to /reports
+```
+
+### Manual Usage
+
+```typescript
+import { UrlRedirectService } from '@acontplus/ng-auth';
+
+@Component({...})
+export class MyComponent {
+  constructor(private urlRedirectService: UrlRedirectService) {}
+
+  navigateToForm() {
+    // Store current URL before potentially losing session
+    this.urlRedirectService.storeCurrentUrlIfAllowed();
+  }
+}
+```
+
+## Usage
+
+## Usage
+
+### Authentication Service
+
+```typescript
+import { AuthTokenService } from '@acontplus/ng-auth';
+
+@Component({...})
+export class MyComponent {
+  constructor(private authService: AuthTokenService) {}
+
+  isUserAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+}
+```
+
+### Using Authentication Use Cases
+
+```typescript
+import { LoginUseCase, LogoutUseCase } from '@acontplus/ng-auth';
+
+@Component({...})
+export class AuthComponent {
+  constructor(
+    private loginUseCase: LoginUseCase,
+    private logoutUseCase: LogoutUseCase
+  ) {}
+
+  async login(credentials: LoginCredentials) {
+    try {
+      // The LoginUseCase automatically handles URL redirection after success
+      const result = await this.loginUseCase.execute(credentials);
+    } catch (error) {
+      // Handle login error
+    }
+  }
+}
+```
+
+## Login UI Component
+
+The library includes a comprehensive login UI component with Material Design styling.
+
+### Basic Usage
+
+```html
+<acp-login
+  title="Welcome Back"
+  [showRegisterButton]="true">
+</acp-login>
+```
+
+### Component Features
+
+- **Dual Mode Support**: Toggle between login and signup modes
+- **Material Design**: Built with Angular Material components  
+- **Responsive Layout**: Works on desktop and mobile devices
+- **Theme Integration**: Automatically inherits your app's theme colors
+- **Validation**: Built-in form validation with error messaging
+- **Customizable**: Support for additional form fields and custom footer content
+
+## API Reference
+
+### Core Services
+
+- **AuthTokenService**: JWT token management and authentication state
+- **UrlRedirectService**: URL storage and redirection management  
+- **CsrfService**: CSRF token management for secure API requests
+- **TokenRepository**: Secure token storage and retrieval
+
+### Guards and Interceptors
+
+- **authGuard**: Route protection with automatic URL capture
+- **authRedirectInterceptor**: Session expiry handling during HTTP requests (optional)
+
+### Use Cases
+
+- **LoginUseCase**: Handles user login with automatic redirection
+- **RegisterUseCase**: Handles user registration
+- **LogoutUseCase**: Handles user logout
+- **RefreshTokenUseCase**: Handles token refresh
+
+## Architecture
+
+This library follows Clean Architecture principles with clear separation of concerns organized in domain, application, data, and presentation layers.
 
 ### Authentication Service
 

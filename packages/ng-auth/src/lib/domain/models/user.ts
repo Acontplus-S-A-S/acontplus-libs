@@ -4,6 +4,7 @@ import { BaseEntity } from '@acontplus/core';
 export interface LoginRequest {
   email: string;
   password: string;
+  rememberMe?: boolean;
 }
 
 export interface RegisterRequest {
@@ -18,9 +19,8 @@ export interface RefreshTokenRequest {
 }
 
 export interface RegisterResponse {
-  id: string;
-  email: string;
-  displayName: string;
+  token: string;
+  refreshToken: string;
 }
 
 export class User implements BaseEntity {
