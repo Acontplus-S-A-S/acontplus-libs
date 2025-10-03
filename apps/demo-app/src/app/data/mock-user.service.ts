@@ -102,10 +102,8 @@ export class MockUserService {
 
   private nextId = 11;
 
-  getUsers(
-    pagination: PaginationParams,
-  ): Observable<PaginatedResult<User>> {
-    let filteredUsers = [...this.users];
+  getUsers(pagination: PaginationParams): Observable<PaginatedResult<User>> {
+    const filteredUsers = [...this.users];
 
     // Apply sorting
     if (pagination.sortBy) {

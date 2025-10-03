@@ -1,2 +1,2 @@
 // src/lib/domain/models/index.ts
-export * from './user';
+export * from './auth';

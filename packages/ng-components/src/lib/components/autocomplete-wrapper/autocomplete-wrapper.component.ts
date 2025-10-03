@@ -10,7 +10,7 @@ import {
   input,
   OnInit,
   OnDestroy,
-  viewChild
+  viewChild,
 } from '@angular/core';
 import { Subject, takeUntil, debounceTime, Observable, of } from 'rxjs';
 
@@ -208,7 +208,12 @@ export class ReusableAutocompleteComponent implements OnInit, OnDestroy {
     }
 
     // ESTRATEGIA C: Búsqueda local (fallback)
-    return this.autocompleteService.searchLocal(this.dataSource(), query, this.filters, this.config);
+    return this.autocompleteService.searchLocal(
+      this.dataSource(),
+      query,
+      this.filters,
+      this.config,
+    );
   }
 
   private loadHistory() {

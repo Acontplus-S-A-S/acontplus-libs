@@ -1,0 +1,45 @@
+.table-container {
+  position: relative;
+  min-height: 200px;
+  max-height: 400px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+tr.mat-dynamic-table-detail-row {
+  height: 0;
+}
+
+tr.mat-dynamic-table-row:not(.mat-dynamic-table-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.mat-dynamic-table-row:not(.mat-dynamic-table-expanded-row):active {
+  background: #efefef;
+}
+
+.mat-dynamic-table-row td {
+  border-bottom-width: 0;
+}
+
+/* New CSS-based animations for detail expansion */
+.detail-expand {
+  height: 0;
+  overflow: hidden;
+  transition: height 150ms ease-in-out;
+}
+
+.detail-expand.expanded {
+  height: auto;
+  overflow: visible;
+}
+
+/* Smooth expand/collapse animation using CSS transitions */
+@starting-style {
+  .detail-expand.expanded {
+    height: 0;
+  }
+}

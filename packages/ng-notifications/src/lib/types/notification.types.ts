@@ -1,5 +1,4 @@
-import { IndividualConfig } from 'ngx-toastr';
-import { MatSnackBarConfig } from '@angular/material/snack-bar';
+// Type definitions for notifications
 
 export type NotificationType = 'success' | 'error' | 'warning' | 'info';
 export type NotificationPosition =
@@ -18,7 +17,7 @@ export interface BaseNotificationConfig {
 }
 
 export interface NotificationCallProps extends BaseNotificationConfig {
-  readonly config?: any;
+  readonly config?: unknown;
 }
 
 export interface SweetAlertConfig extends BaseNotificationConfig {
@@ -34,5 +33,5 @@ export interface NotificationResult {
   isConfirmed?: boolean;
   isDenied?: boolean;
   isDismissed?: boolean;
-  value?: any;
+  value?: unknown;
 }

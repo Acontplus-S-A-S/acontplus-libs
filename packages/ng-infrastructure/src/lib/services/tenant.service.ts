@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { LoggingService } from './logging.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TenantService {
   private tenantId: string | null = null;
+  private logger = inject(LoggingService);
 
   getTenantId(): string {
     if (!this.tenantId) {
@@ -32,7 +34,7 @@ export class TenantService {
   }
 
   handleForbidden(): void {
-    console.error('Access forbidden for tenant:', this.tenantId);
+    this.logger.error('Access forbidden for tenant:', this.tenantId);
     // Redirect to tenant selection or show error message
     // this.router.navigate(['/tenant-access-denied']);
   }

@@ -27,14 +27,6 @@ module.exports = [
       ],
     },
   },
-  {
-    files: ['**/*.html'],
-    // Override or add rules here
-    ignores: ['**/node_modules/*', 'dist/**/*'],
-    extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
-    rules: {
-      '@angular-eslint/template/no-positive-tabindex': 'error',
-      '@angular-eslint/template/click-events-have-key-events': 'error',
-    },
-  },
+  // HTML template configuration is already handled by base config
+  // No need for additional template config here since baseConfig includes it
 ];

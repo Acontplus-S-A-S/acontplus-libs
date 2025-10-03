@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   NotificationProviderBase,
   NOTIFICATION_CONFIG,
@@ -26,7 +26,7 @@ export class NotificationService {
   private snackbarProvider = inject(SnackbarProvider);
   private sweetAlertProvider = inject(SweetAlertProvider);
 
-  private providers: Map<NotificationProvider, NotificationProviderBase> = new Map();
+  private providers = new Map<NotificationProvider, NotificationProviderBase>();
   private currentProvider: NotificationProviderBase;
 
   // Expose predefined messages
@@ -68,7 +68,9 @@ export class NotificationService {
     return this.currentProvider.confirm(config);
   }
 
-  show(props: { type: NotificationType } & NotificationCallProps): void | Observable<NotificationResult> {
+  show(
+    props: { type: NotificationType } & NotificationCallProps,
+  ): void | Observable<NotificationResult> {
     return this.currentProvider[props.type]({
       message: props.message,
       title: props.title,

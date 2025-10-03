@@ -11,7 +11,7 @@ import { environment } from '../environments/environment';
 import { initHttpFactory } from './init-http-factory';
 import { provideTransloco } from '@jsverse/transloco';
 import { TranslocoHttpLoader } from './providers';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+
 import { ENVIRONMENT } from '@acontplus/ng-config';
 import {
   apiInterceptor,
@@ -25,18 +25,29 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideClientHydration(withEventReplay()),
+    // Core Angular providers
     provideBrowserGlobalErrorListeners(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideZoneChangeDetection({
+      eventCoalescing: true,
+      runCoalescing: true,
+    }),
     provideRouter(appRoutes),
+
+    // Enable hydration with timeout handling
+    provideClientHydration(withEventReplay()), // App initialization
     provideAppInitializer(initHttpFactory()),
 
+    // HTTP configuration
     provideHttpClient(
       withInterceptors([apiInterceptor, spinnerInterceptor, httpContextInterceptor]),
       withFetch(),
     ),
+
+    // Authentication
     { provide: TOKEN_PROVIDER, useClass: AuthTokenService },
     ...authProviders,
+
+    // Internationalization
     provideTransloco({
       config: {
         availableLangs: ['en', 'es'],
@@ -48,12 +59,13 @@ export const appConfig: ApplicationConfig = {
       },
       loader: TranslocoHttpLoader,
     }),
-    provideAnimationsAsync(),
+
+    // Notifications
     provideNotifications({
       defaultProvider: 'sweetalert',
     }),
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(appRoutes),
+
+    // Environment
     { provide: ENVIRONMENT, useValue: environment },
   ],
 };

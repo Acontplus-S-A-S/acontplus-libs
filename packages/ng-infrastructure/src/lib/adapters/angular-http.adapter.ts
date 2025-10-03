@@ -22,7 +22,7 @@ export class AngularHttpAdapter implements HttpPort {
   private async request<T>(params: {
     method: 'get' | 'post' | 'put' | 'delete';
     url: string;
-    data?: any;
+    data?: unknown;
     options?: HttpOptions;
   }): Promise<T> {
     const fullUrl = mergeUrl(this.baseURL, params.url);
@@ -42,12 +42,12 @@ export class AngularHttpAdapter implements HttpPort {
   }
 
   /** POST */
-  post<T>(url: string, data?: any, options?: HttpOptions): Promise<T> {
+  post<T>(url: string, data?: unknown, options?: HttpOptions): Promise<T> {
     return this.request({ method: 'post', url, data, options });
   }
 
   /** PUT */
-  put<T>(url: string, data?: any, options?: HttpOptions): Promise<T> {
+  put<T>(url: string, data?: unknown, options?: HttpOptions): Promise<T> {
     return this.request({ method: 'put', url, data, options });
   }
 

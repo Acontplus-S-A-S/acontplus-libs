@@ -224,9 +224,7 @@
                       <mat-label>Fecha Nacimiento</mat-label>
                       <input matInput [matDatepicker]="birthDate" formControlName="birthDate" />
                       <mat-hint>MM/DD/YYYY</mat-hint>
-                      <mat-datepicker-toggle matIconSuffix
-                        [for]="birthDate"
-                       />
+                      <mat-datepicker-toggle matIconSuffix [for]="birthDate" />
                       <mat-datepicker #birthDate />
                       @if (birthDateCtrl?.invalid && birthDateCtrl?.touched) {
                         <mat-error> Fecha inválida </mat-error>
@@ -455,8 +453,7 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <div class="hstack gap-2">
-  <acp-mat-theme-button type="submit" form="formCompanyCustomer" [text]="btnText()" />
-  <acp-mat-theme-button type="button" variant="dark" text="Cerrar" (handleClick)="close()" />
-
+    <acp-mat-theme-button type="submit" form="formCompanyCustomer" [text]="btnText()" />
+    <acp-mat-theme-button type="button" variant="dark" text="Cerrar" (handleClick)="close()" />
   </div>
 </mat-dialog-actions>

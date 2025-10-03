@@ -1,17 +1,24 @@
 # 🏗️ Arquitectura Frontend Acontplus - Documento para el Equipo
 
 ## 📋 Visión General
-Este documento establece la arquitectura frontend para el ecosistema Acontplus, diseñada para maximizar la reutilización, mantenibilidad y escalabilidad across múltiples aplicaciones y librerías.
+
+Este documento establece la arquitectura frontend para el ecosistema Acontplus,
+diseñada para maximizar la reutilización, mantenibilidad y escalabilidad across
+múltiples aplicaciones y librerías.
 
 ## 🎯 Estrategia de Arquitectura Dual
 
-### Para Librerías (acontplus-*)
+### Para Librerías (acontplus-\*)
+
 **Flutter Architecture** - Simple, eficiente y enfocada en reutilización
 
-### Para Aplicaciones Monolíticas Grandes  
-**DDD + Clean Architecture** - Robustez, mantenibilidad y escalabilidad para negocio complejo
+### Para Aplicaciones Monolíticas Grandes
+
+**DDD + Clean Architecture** - Robustez, mantenibilidad y escalabilidad para
+negocio complejo
 
 ## 📋 Tabla de Contenidos
+
 - [Estrategia de Arquitectura](#estrategia-de-arquitectura-dual)
 - [Arquitectura para Librerías](#arquitectura-para-librerías-acontplus)
 - [Arquitectura para Aplicaciones](#arquitectura-para-aplicaciones-monolíticas)
@@ -22,9 +29,10 @@ Este documento establece la arquitectura frontend para el ecosistema Acontplus, 
 - [Configuración y Uso](#configuración-y-uso)
 - [Mejores Prácticas](#convenciones-y-mejores-prácticas)
 
-## 📦 Arquitectura para Librerías (acontplus-*)
+## 📦 Arquitectura para Librerías (acontplus-\*)
 
 ### Estructura Recomendada para el Ecosistema
+
 ```
 packages/
 ├── core/           # Servicios base (HTTP, Config, Storage)
@@ -35,6 +43,7 @@ packages/
 ```
 
 ### Flutter Architecture para Librerías
+
 ```
 src/lib/
 ├── data/                 # Capa de datos
@@ -52,13 +61,16 @@ src/lib/
 ### Principios Fundamentales para Librerías 📋
 
 #### 1. Separación Clara de Responsabilidades
+
 - **Core**: Funcionalidades base compartidas (HTTP, Config, Storage)
 - **Shared**: Utilidades, validadores y modelos comunes
-- **Features**: Módulos de negocio específicos (implementados por las aplicaciones)
+- **Features**: Módulos de negocio específicos (implementados por las
+  aplicaciones)
 
 #### 2. Arquitectura por Capas Simplificada
+
 ```
-Aplicación Consumer 
+Aplicación Consumer
     ↓
 Core Library (HTTP, Config, Utils)
     ↓
@@ -66,17 +78,19 @@ External APIs / Storage
 ```
 
 #### 3. Inspiración en Flutter Architecture
+
 - **Core Layer**: Servicios fundamentales y configuración
 - **Shared Layer**: Utilidades y herramientas comunes
 - **Clean Abstractions**: Interfaces claras y reutilizables
 
 ### Ejemplo de Implementación (Flutter Architecture)
+
 ```typescript
 // customer.service.ts (Flutter Architecture)
 @Injectable()
 export class CustomerService {
   private _state = signal<CustomerState>(initialState);
-  
+
   readonly customers = computed(() => this._state().customers);
   readonly loading = computed(() => this._state().loading);
 
@@ -91,7 +105,7 @@ export class CustomerService {
       this.updateState({ loading: false, error: 'Failed to load' });
     }
   }
-  
+
   private updateState(partialState: Partial<CustomerState>): void {
     this._state.update(state => ({ ...state, ...partialState }));
   }
@@ -101,6 +115,7 @@ export class CustomerService {
 ## 🏢 Arquitectura para Aplicaciones Monolíticas
 
 ### Estructura Recomendada (DDD + Clean Architecture)
+
 ```
 src/
 ├── app/
@@ -117,13 +132,14 @@ src/
 ```
 
 ### DDD + Clean Architecture para Apps Complejas
+
 ```typescript
 // features/orders/domain/order.entity.ts
 export class Order implements AggregateRoot {
   constructor(
     public readonly id: OrderId,
     private items: OrderItem[],
-    private status: OrderStatus
+    private status: OrderStatus,
   ) {}
 
   addItem(productId: ProductId, quantity: number): void {
@@ -140,7 +156,7 @@ export class Order implements AggregateRoot {
 export class CreateOrderUseCase {
   constructor(
     private orderRepository: OrderRepository,
-    private customerRepository: CustomerRepository
+    private customerRepository: CustomerRepository,
   ) {}
 
   async execute(command: CreateOrderCommand): Promise<OrderId> {
@@ -149,13 +165,13 @@ export class CreateOrderUseCase {
     if (!customer) {
       throw new DomainError('Customer not found');
     }
-    
+
     // Crear orden con lógica de dominio
     const order = Order.create(command.customerId, command.items);
-    
+
     // Persistir
     await this.orderRepository.save(order);
-    
+
     return order.id;
   }
 }
@@ -163,14 +179,14 @@ export class CreateOrderUseCase {
 
 ### 📊 Cuándo Usar Cada Arquitectura
 
-| Criterio | Flutter Architecture | DDD + Clean Architecture |
-|----------|---------------------|--------------------------|
-| **Tipo de Proyecto** | Librerías reutilizables | Apps empresariales complejas |
-| **Lógica de Negocio** | Simple (CRUD) | Compleja con reglas de negocio |
-| **Equipo** | 1-5 desarrolladores | 5+ desarrolladores |
-| **Tiempo de Desarrollo** | Rápido | Medio (mayor inversión) |
-| **Mantenibilidad** | Bueno | Excelente |
-| **Testing** | Simple | Completo (mejor coverage) |
+| Criterio                 | Flutter Architecture    | DDD + Clean Architecture       |
+| ------------------------ | ----------------------- | ------------------------------ |
+| **Tipo de Proyecto**     | Librerías reutilizables | Apps empresariales complejas   |
+| **Lógica de Negocio**    | Simple (CRUD)           | Compleja con reglas de negocio |
+| **Equipo**               | 1-5 desarrolladores     | 5+ desarrolladores             |
+| **Tiempo de Desarrollo** | Rápido                  | Medio (mayor inversión)        |
+| **Mantenibilidad**       | Bueno                   | Excelente                      |
+| **Testing**              | Simple                  | Completo (mejor coverage)      |
 
 ### Estructura Detallada de Acontplus-Core
 
@@ -234,43 +250,43 @@ packages/core/src/lib/
 export class ApiService {
   private http = inject(HttpClient);
   private config = inject(ConfigService);
-  
+
   private baseUrl = signal(this.config.getApiUrl());
-  
+
   get<T>(endpoint: string, options?: HttpOptions): Observable<T> {
     return this.http.get<T>(`${this.baseUrl()}${endpoint}`, {
       ...this.getDefaultOptions(),
-      ...options
+      ...options,
     });
   }
-  
+
   post<T>(endpoint: string, body: any, options?: HttpOptions): Observable<T> {
     return this.http.post<T>(`${this.baseUrl()}${endpoint}`, body, {
       ...this.getDefaultOptions(),
-      ...options
+      ...options,
     });
   }
-  
+
   put<T>(endpoint: string, body: any, options?: HttpOptions): Observable<T> {
     return this.http.put<T>(`${this.baseUrl()}${endpoint}`, body, {
       ...this.getDefaultOptions(),
-      ...options
+      ...options,
     });
   }
-  
+
   delete<T>(endpoint: string, options?: HttpOptions): Observable<T> {
     return this.http.delete<T>(`${this.baseUrl()}${endpoint}`, {
       ...this.getDefaultOptions(),
-      ...options
+      ...options,
     });
   }
-  
+
   private getDefaultOptions(): any {
     return {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.config.getToken()}`
-      }
+        Authorization: `Bearer ${this.config.getToken()}`,
+      },
     };
   }
 }
@@ -287,23 +303,27 @@ export interface HttpAdapter {
 export class AngularHttpAdapter implements HttpAdapter {
   constructor(
     private readonly http: HttpClient,
-    private readonly baseURL?: string
+    private readonly baseURL?: string,
   ) {}
 
   async get<T>(url: string, options?: HttpOptions): Promise<T> {
     const fullUrl = this.mergeUrl(this.baseURL, url);
-    return firstValueFrom(this.http.get<T>(fullUrl, this.buildOptions(options)));
+    return firstValueFrom(
+      this.http.get<T>(fullUrl, this.buildOptions(options)),
+    );
   }
 
   async post<T>(url: string, body: any, options?: HttpOptions): Promise<T> {
     const fullUrl = this.mergeUrl(this.baseURL, url);
-    return firstValueFrom(this.http.post<T>(fullUrl, body, this.buildOptions(options)));
+    return firstValueFrom(
+      this.http.post<T>(fullUrl, body, this.buildOptions(options)),
+    );
   }
 
   private buildOptions(options?: HttpOptions) {
     return {
       headers: options?.headers ?? {},
-      params: options?.params ?? {}
+      params: options?.params ?? {},
     };
   }
 
@@ -321,33 +341,34 @@ export class AngularHttpAdapter implements HttpAdapter {
 @Injectable({ providedIn: 'root' })
 export class ConfigService {
   private config = signal<AppConfig | null>(null);
-  
+
   initialize(config: AppConfig): void {
     this.config.set(config);
     console.log('Acontplus Core initialized with config:', config);
   }
-  
+
   getApiUrl(): string {
     return this.config()?.apiUrl ?? '';
   }
-  
+
   getToken(): string {
-    const token = this.config()?.authToken ?? localStorage.getItem('auth_token');
+    const token =
+      this.config()?.authToken ?? localStorage.getItem('auth_token');
     return token ?? '';
   }
-  
+
   getFeature(featureName: string): boolean {
     return this.config()?.features?.[featureName] ?? false;
   }
-  
+
   getTheme(): string {
     return this.config()?.theme ?? 'default';
   }
-  
+
   isProduction(): boolean {
     return this.config()?.environment === 'production';
   }
-  
+
   isDevelopment(): boolean {
     return this.config()?.environment === 'development';
   }
@@ -357,19 +378,19 @@ export class ConfigService {
 @Injectable({ providedIn: 'root' })
 export class EnvironmentService {
   private environment = signal<Environment>('development');
-  
+
   setEnvironment(env: Environment): void {
     this.environment.set(env);
   }
-  
+
   isProduction(): boolean {
     return this.environment() === 'production';
   }
-  
+
   isDevelopment(): boolean {
     return this.environment() === 'development';
   }
-  
+
   isTesting(): boolean {
     return this.environment() === 'testing';
   }
@@ -382,7 +403,6 @@ export class EnvironmentService {
 // core/storage/storage.service.ts
 @Injectable({ providedIn: 'root' })
 export class StorageService {
-  
   // LocalStorage methods
   setItem(key: string, value: any): void {
     try {
@@ -391,7 +411,7 @@ export class StorageService {
       console.error('Error saving to localStorage:', error);
     }
   }
-  
+
   getItem<T>(key: string): T | null {
     try {
       const item = localStorage.getItem(key);
@@ -401,15 +421,15 @@ export class StorageService {
       return null;
     }
   }
-  
+
   removeItem(key: string): void {
     localStorage.removeItem(key);
   }
-  
+
   clear(): void {
     localStorage.clear();
   }
-  
+
   // SessionStorage methods
   setSessionItem(key: string, value: any): void {
     try {
@@ -418,7 +438,7 @@ export class StorageService {
       console.error('Error saving to sessionStorage:', error);
     }
   }
-  
+
   getSessionItem<T>(key: string): T | null {
     try {
       const item = sessionStorage.getItem(key);
@@ -428,11 +448,11 @@ export class StorageService {
       return null;
     }
   }
-  
+
   removeSessionItem(key: string): void {
     sessionStorage.removeItem(key);
   }
-  
+
   clearSession(): void {
     sessionStorage.clear();
   }
@@ -451,16 +471,16 @@ export class CacheService {
 
   get<T>(key: string): T | null {
     const item = this.cache.get(key);
-    
+
     if (!item) {
       return null;
     }
-    
+
     if (Date.now() > item.expiresAt) {
       this.cache.delete(key);
       return null;
     }
-    
+
     return item.value as T;
   }
 
@@ -499,38 +519,38 @@ interface CacheItem {
 @Injectable({ providedIn: 'root' })
 export class JwtService {
   private storageService = inject(StorageService);
-  
+
   private tokenKey = 'auth_token';
   private refreshTokenKey = 'refresh_token';
-  
+
   setToken(token: string): void {
     this.storageService.setItem(this.tokenKey, token);
   }
-  
+
   getToken(): string | null {
     return this.storageService.getItem<string>(this.tokenKey);
   }
-  
+
   setRefreshToken(token: string): void {
     this.storageService.setItem(this.refreshTokenKey, token);
   }
-  
+
   getRefreshToken(): string | null {
     return this.storageService.getItem<string>(this.refreshTokenKey);
   }
-  
+
   removeTokens(): void {
     this.storageService.removeItem(this.tokenKey);
     this.storageService.removeItem(this.refreshTokenKey);
   }
-  
+
   isTokenExpired(token?: string): boolean {
     const actualToken = token || this.getToken();
-    
+
     if (!actualToken) {
       return true;
     }
-    
+
     try {
       const payload = this.decodeToken(actualToken);
       const currentTime = Date.now() / 1000;
@@ -539,7 +559,7 @@ export class JwtService {
       return true;
     }
   }
-  
+
   decodeToken(token: string): any {
     try {
       const payload = token.split('.')[1];
@@ -548,14 +568,14 @@ export class JwtService {
       throw new Error('Invalid token format');
     }
   }
-  
+
   getTokenExpiration(token?: string): Date | null {
     const actualToken = token || this.getToken();
-    
+
     if (!actualToken) {
       return null;
     }
-    
+
     try {
       const payload = this.decodeToken(actualToken);
       return new Date(payload.exp * 1000);
@@ -570,14 +590,14 @@ export class JwtService {
 export class TokenService {
   private jwtService = inject(JwtService);
   private currentToken = signal<string | null>(null);
-  
+
   readonly hasValidToken = computed(() => {
     const token = this.currentToken();
     return token !== null && !this.jwtService.isTokenExpired(token);
   });
-  
+
   readonly isAuthenticated = computed(() => this.hasValidToken());
-  
+
   constructor() {
     // Initialize with stored token
     const storedToken = this.jwtService.getToken();
@@ -585,36 +605,38 @@ export class TokenService {
       this.currentToken.set(storedToken);
     }
   }
-  
+
   setToken(token: string): void {
     this.jwtService.setToken(token);
     this.currentToken.set(token);
   }
-  
+
   getToken(): string | null {
     return this.currentToken();
   }
-  
+
   removeToken(): void {
     this.jwtService.removeTokens();
     this.currentToken.set(null);
   }
-  
+
   refreshToken(): Observable<string> {
     const refreshToken = this.jwtService.getRefreshToken();
-    
+
     if (!refreshToken) {
       return throwError(() => new Error('No refresh token available'));
     }
-    
+
     // Implementación específica depende de tu API
     // Este es un ejemplo genérico
-    return inject(HttpClient).post<{ access_token: string }>('/auth/refresh', {
-      refresh_token: refreshToken
-    }).pipe(
-      tap(response => this.setToken(response.access_token)),
-      map(response => response.access_token)
-    );
+    return inject(HttpClient)
+      .post<{ access_token: string }>('/auth/refresh', {
+        refresh_token: refreshToken,
+      })
+      .pipe(
+        tap(response => this.setToken(response.access_token)),
+        map(response => response.access_token),
+      );
   }
 }
 ```
@@ -728,10 +750,18 @@ export class EmailValidator {
     return {
       isValid,
       message: isValid ? '' : 'Email no válido',
-      errors: isValid ? [] : [{ field: 'email', message: 'Formato de email inválido', code: 'INVALID_EMAIL' }]
+      errors: isValid
+        ? []
+        : [
+            {
+              field: 'email',
+              message: 'Formato de email inválido',
+              code: 'INVALID_EMAIL',
+            },
+          ],
     };
   }
-  
+
   static isValidDomain(email: string, allowedDomains: string[]): boolean {
     const domain = email.split('@')[1];
     return allowedDomains.includes(domain);
@@ -740,18 +770,29 @@ export class EmailValidator {
 
 // shared/validators/phone.validator.ts
 export class PhoneValidator {
-  static validate(phone: string, country: 'EC' | 'US' | 'ES' = 'EC'): ValidationResult {
+  static validate(
+    phone: string,
+    country: 'EC' | 'US' | 'ES' = 'EC',
+  ): ValidationResult {
     const patterns = {
       EC: /^(\+593|0)[0-9]{9}$/,
       US: /^(\+1)?[0-9]{10}$/,
-      ES: /^(\+34)?[0-9]{9}$/
+      ES: /^(\+34)?[0-9]{9}$/,
     };
-    
+
     const isValid = patterns[country].test(phone);
     return {
       isValid,
       message: isValid ? '' : `Número de teléfono no válido para ${country}`,
-      errors: isValid ? [] : [{ field: 'phone', message: 'Formato de teléfono inválido', code: 'INVALID_PHONE' }]
+      errors: isValid
+        ? []
+        : [
+            {
+              field: 'phone',
+              message: 'Formato de teléfono inválido',
+              code: 'INVALID_PHONE',
+            },
+          ],
     };
   }
 }
@@ -763,21 +804,29 @@ export class IdValidator {
       return {
         isValid: false,
         message: 'La cédula debe tener 10 dígitos',
-        errors: [{ field: 'id', message: 'Longitud inválida', code: 'INVALID_LENGTH' }]
+        errors: [
+          { field: 'id', message: 'Longitud inválida', code: 'INVALID_LENGTH' },
+        ],
       };
     }
-    
+
     const digits = id.split('').map(Number);
     const province = digits[0] * 10 + digits[1];
-    
+
     if (province < 1 || province > 24) {
       return {
         isValid: false,
         message: 'Código de provincia inválido',
-        errors: [{ field: 'id', message: 'Provincia inválida', code: 'INVALID_PROVINCE' }]
+        errors: [
+          {
+            field: 'id',
+            message: 'Provincia inválida',
+            code: 'INVALID_PROVINCE',
+          },
+        ],
       };
     }
-    
+
     // Algoritmo del módulo 10
     let sum = 0;
     for (let i = 0; i < 9; i++) {
@@ -788,45 +837,67 @@ export class IdValidator {
       }
       sum += digit;
     }
-    
+
     const checkDigit = (10 - (sum % 10)) % 10;
     const isValid = checkDigit === digits[9];
-    
+
     return {
       isValid,
       message: isValid ? '' : 'Número de cédula inválido',
-      errors: isValid ? [] : [{ field: 'id', message: 'Dígito verificador incorrecto', code: 'INVALID_CHECK_DIGIT' }]
+      errors: isValid
+        ? []
+        : [
+            {
+              field: 'id',
+              message: 'Dígito verificador incorrecto',
+              code: 'INVALID_CHECK_DIGIT',
+            },
+          ],
     };
   }
-  
+
   static validateRuc(ruc: string): ValidationResult {
     if (!ruc || (ruc.length !== 13 && ruc.length !== 10)) {
       return {
         isValid: false,
         message: 'RUC debe tener 10 o 13 dígitos',
-        errors: [{ field: 'ruc', message: 'Longitud inválida', code: 'INVALID_LENGTH' }]
+        errors: [
+          {
+            field: 'ruc',
+            message: 'Longitud inválida',
+            code: 'INVALID_LENGTH',
+          },
+        ],
       };
     }
-    
+
     // Para personas naturales (10 dígitos)
     if (ruc.length === 10) {
       return this.validateEcuadorianId(ruc);
     }
-    
+
     // Para empresas (13 dígitos)
     const baseId = ruc.substring(0, 10);
     const suffix = ruc.substring(10);
-    
+
     const baseValidation = this.validateEcuadorianId(baseId);
     if (!baseValidation.isValid) {
       return baseValidation;
     }
-    
+
     const isValid = suffix === '001';
     return {
       isValid,
       message: isValid ? '' : 'RUC empresarial debe terminar en 001',
-      errors: isValid ? [] : [{ field: 'ruc', message: 'Sufijo inválido', code: 'INVALID_SUFFIX' }]
+      errors: isValid
+        ? []
+        : [
+            {
+              field: 'ruc',
+              message: 'Sufijo inválido',
+              code: 'INVALID_SUFFIX',
+            },
+          ],
     };
   }
 }
@@ -837,9 +908,12 @@ export class IdValidator {
 ```typescript
 // shared/utils/date.formatter.ts
 export class DateFormatter {
-  static formatDate(date: Date | string, format: 'short' | 'long' | 'iso' = 'short'): string {
+  static formatDate(
+    date: Date | string,
+    format: 'short' | 'long' | 'iso' = 'short',
+  ): string {
     const d = typeof date === 'string' ? new Date(date) : date;
-    
+
     switch (format) {
       case 'short':
         return d.toLocaleDateString('es-EC');
@@ -847,7 +921,7 @@ export class DateFormatter {
         return d.toLocaleDateString('es-EC', {
           year: 'numeric',
           month: 'long',
-          day: 'numeric'
+          day: 'numeric',
         });
       case 'iso':
         return d.toISOString().split('T')[0];
@@ -855,32 +929,35 @@ export class DateFormatter {
         return d.toLocaleDateString();
     }
   }
-  
+
   static addDays(date: Date, days: number): Date {
     const result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
   }
-  
+
   static diffInDays(date1: Date, date2: Date): number {
     const diffTime = Math.abs(date2.getTime() - date1.getTime());
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
-  
+
   static isWeekend(date: Date): boolean {
     const day = date.getDay();
     return day === 0 || day === 6; // 0 = Sunday, 6 = Saturday
   }
-  
+
   static getAge(birthDate: Date): number {
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
-    
+
     return age;
   }
 }
@@ -890,11 +967,14 @@ export class StringFormatter {
   static capitalize(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
-  
+
   static capitalizeWords(str: string): string {
-    return str.split(' ').map(word => this.capitalize(word)).join(' ');
+    return str
+      .split(' ')
+      .map(word => this.capitalize(word))
+      .join(' ');
   }
-  
+
   static slugify(str: string): string {
     return str
       .toLowerCase()
@@ -903,25 +983,26 @@ export class StringFormatter {
       .replace(/[\s_-]+/g, '-')
       .replace(/^-+|-+$/g, '');
   }
-  
+
   static truncate(str: string, length: number, suffix: string = '...'): string {
     if (str.length <= length) return str;
     return str.substring(0, length - suffix.length) + suffix;
   }
-  
+
   static removeAccents(str: string): string {
     return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   }
-  
+
   static generateRandomString(length: number): string {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
     for (let i = 0; i < length; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return result;
   }
-  
+
   static isNullOrWhitespace(str: string | null | undefined): boolean {
     return !str || str.trim().length === 0;
   }
@@ -929,40 +1010,47 @@ export class StringFormatter {
 
 // shared/utils/number.formatter.ts
 export class NumberFormatter {
-  static formatCurrency(amount: number, currency: 'USD' | 'EUR' = 'USD'): string {
+  static formatCurrency(
+    amount: number,
+    currency: 'USD' | 'EUR' = 'USD',
+  ): string {
     return new Intl.NumberFormat('es-EC', {
       style: 'currency',
-      currency: currency
+      currency: currency,
     }).format(amount);
   }
-  
+
   static formatPercentage(value: number, decimals: number = 2): string {
     return `${(value * 100).toFixed(decimals)}%`;
   }
-  
+
   static roundToDecimals(num: number, decimals: number): number {
     return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
   }
-  
+
   static isInteger(value: any): boolean {
     return Number.isInteger(Number(value));
   }
-  
+
   static isSafeInteger(value: any): boolean {
     return Number.isSafeInteger(Number(value));
   }
-  
-  static toFixed(num: number, decimals: number, fallback: string = 'N/A'): string {
+
+  static toFixed(
+    num: number,
+    decimals: number,
+    fallback: string = 'N/A',
+  ): string {
     const numValue = Number(num);
     return isNaN(numValue) ? fallback : numValue.toFixed(decimals);
   }
-  
+
   static compare(a: number, b: number, tolerance: number = 0.0001): number {
     const diff = a - b;
     if (Math.abs(diff) < tolerance) return 0;
     return diff > 0 ? 1 : -1;
   }
-  
+
   static clamp(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
   }
@@ -970,71 +1058,108 @@ export class NumberFormatter {
 
 // shared/utils/validation.utils.ts
 export class ValidationUtils {
-  static combineValidations(...validations: ValidationResult[]): ValidationResult {
+  static combineValidations(
+    ...validations: ValidationResult[]
+  ): ValidationResult {
     const allErrors = validations.flatMap(v => v.errors || []);
     const isValid = validations.every(v => v.isValid);
-    
+
     return {
       isValid,
       message: isValid ? '' : 'Uno o más campos contienen errores',
-      errors: allErrors
+      errors: allErrors,
     };
   }
-  
+
   static validateRequired(value: any, fieldName: string): ValidationResult {
-    const isValid = value !== null && value !== undefined && 
-                   (typeof value !== 'string' || value.trim() !== '');
-    
+    const isValid =
+      value !== null &&
+      value !== undefined &&
+      (typeof value !== 'string' || value.trim() !== '');
+
     return {
       isValid,
       message: isValid ? '' : `${fieldName} es requerido`,
-      errors: isValid ? [] : [{ 
-        field: fieldName.toLowerCase(), 
-        message: 'Campo requerido', 
-        code: 'REQUIRED' 
-      }]
+      errors: isValid
+        ? []
+        : [
+            {
+              field: fieldName.toLowerCase(),
+              message: 'Campo requerido',
+              code: 'REQUIRED',
+            },
+          ],
     };
   }
-  
-  static validateMinLength(value: string, minLength: number, fieldName: string): ValidationResult {
+
+  static validateMinLength(
+    value: string,
+    minLength: number,
+    fieldName: string,
+  ): ValidationResult {
     const isValid = value && value.length >= minLength;
-    
+
     return {
       isValid,
-      message: isValid ? '' : `${fieldName} debe tener al menos ${minLength} caracteres`,
-      errors: isValid ? [] : [{ 
-        field: fieldName.toLowerCase(), 
-        message: `Mínimo ${minLength} caracteres`, 
-        code: 'MIN_LENGTH' 
-      }]
+      message: isValid
+        ? ''
+        : `${fieldName} debe tener al menos ${minLength} caracteres`,
+      errors: isValid
+        ? []
+        : [
+            {
+              field: fieldName.toLowerCase(),
+              message: `Mínimo ${minLength} caracteres`,
+              code: 'MIN_LENGTH',
+            },
+          ],
     };
   }
-  
-  static validateMaxLength(value: string, maxLength: number, fieldName: string): ValidationResult {
+
+  static validateMaxLength(
+    value: string,
+    maxLength: number,
+    fieldName: string,
+  ): ValidationResult {
     const isValid = !value || value.length <= maxLength;
-    
+
     return {
       isValid,
-      message: isValid ? '' : `${fieldName} no puede tener más de ${maxLength} caracteres`,
-      errors: isValid ? [] : [{ 
-        field: fieldName.toLowerCase(), 
-        message: `Máximo ${maxLength} caracteres`, 
-        code: 'MAX_LENGTH' 
-      }]
+      message: isValid
+        ? ''
+        : `${fieldName} no puede tener más de ${maxLength} caracteres`,
+      errors: isValid
+        ? []
+        : [
+            {
+              field: fieldName.toLowerCase(),
+              message: `Máximo ${maxLength} caracteres`,
+              code: 'MAX_LENGTH',
+            },
+          ],
     };
   }
-  
-  static validatePattern(value: string, pattern: RegExp, fieldName: string, errorMessage: string): ValidationResult {
+
+  static validatePattern(
+    value: string,
+    pattern: RegExp,
+    fieldName: string,
+    errorMessage: string,
+  ): ValidationResult {
     const isValid = !value || pattern.test(value);
-    
+
     return {
       isValid,
       message: isValid ? '' : errorMessage,
-      errors: isValid ? [] : [{ 
-        field: fieldName.toLowerCase(), 
-        message: errorMessage, 
-        code: 'PATTERN' 
-      }]
+      errors: isValid
+        ? []
+        : [
+            {
+              field: fieldName.toLowerCase(),
+              message: errorMessage,
+              code: 'PATTERN',
+            },
+          ],
     };
   }
 }
@@ -1048,12 +1173,12 @@ export class ValidationUtils {
 export class AuthGuard implements CanActivate {
   private tokenService = inject(TokenService);
   private router = inject(Router);
-  
+
   canActivate(): boolean {
     if (this.tokenService.isAuthenticated()) {
       return true;
     }
-    
+
     this.router.navigate(['/login']);
     return false;
   }
@@ -1064,31 +1189,31 @@ export class AuthGuard implements CanActivate {
 export class RoleGuard implements CanActivate {
   private tokenService = inject(TokenService);
   private router = inject(Router);
-  
+
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const requiredRoles = route.data['roles'] as string[];
-    
+
     if (!requiredRoles || requiredRoles.length === 0) {
       return true;
     }
-    
+
     const token = this.tokenService.getToken();
     if (!token) {
       this.router.navigate(['/login']);
       return false;
     }
-    
+
     try {
       const payload = inject(JwtService).decodeToken(token);
       const userRoles = payload.roles || [];
-      
+
       const hasRole = requiredRoles.some(role => userRoles.includes(role));
-      
+
       if (!hasRole) {
         this.router.navigate(['/unauthorized']);
         return false;
       }
-      
+
       return true;
     } catch {
       this.router.navigate(['/login']);
@@ -1100,7 +1225,10 @@ export class RoleGuard implements CanActivate {
 // shared/pipes/date.pipe.ts
 @Pipe({ name: 'acpDate', standalone: true })
 export class AcpDatePipe implements PipeTransform {
-  transform(value: Date | string | null, format: 'short' | 'long' | 'iso' = 'short'): string {
+  transform(
+    value: Date | string | null,
+    format: 'short' | 'long' | 'iso' = 'short',
+  ): string {
     if (!value) return '';
     return DateFormatter.formatDate(value, format);
   }
@@ -1118,7 +1246,11 @@ export class AcpCurrencyPipe implements PipeTransform {
 // shared/pipes/truncate.pipe.ts
 @Pipe({ name: 'acpTruncate', standalone: true })
 export class AcpTruncatePipe implements PipeTransform {
-  transform(value: string | null, length: number = 50, suffix: string = '...'): string {
+  transform(
+    value: string | null,
+    length: number = 50,
+    suffix: string = '...',
+  ): string {
     if (!value) return '';
     return StringFormatter.truncate(value, length, suffix);
   }
@@ -1190,12 +1322,17 @@ export interface ResponseMeta {
 ### Por qué DDD NO es adecuado aquí:
 
 #### 1. DDD está diseñado para:
-- **Lógica de negocio compleja** → Tu librería es principalmente para acceso a datos
-- **Múltiples bounded contexts** → Tienes features simples, no dominios complejos
-- **Reglas de negocio invariantes** → Tu lógica es principalmente CRUD y presentación
+
+- **Lógica de negocio compleja** → Tu librería es principalmente para acceso a
+  datos
+- **Múltiples bounded contexts** → Tienes features simples, no dominios
+  complejos
+- **Reglas de negocio invariantes** → Tu lógica es principalmente CRUD y
+  presentación
 - **Eventos de dominio** → No necesitas rastrear cambios de estado complejos
 
 #### 2. Overhead innecesario:
+
 ```typescript
 // ❌ DDD: Excesivamente complejo para una librería frontend
 class Customer extends AggregateRoot<CustomerId> {
@@ -1203,7 +1340,7 @@ class Customer extends AggregateRoot<CustomerId> {
     super(id);
     // ¿Para qué? Solo necesitas mostrar/enviar datos
   }
-  
+
   public updateContact(newContact: ContactInfo): void {
     // Validaciones complejas
     // Domain events
@@ -1226,21 +1363,25 @@ interface Customer {
 La arquitectura de Flutter es **perfecta** para tu caso porque:
 
 #### 1. Separación de Capas Clara y Práctica
+
 - **Data Layer**: Manejo de APIs y transformación de datos
 - **Domain Layer**: Modelos y casos de uso simples
 - **Presentation Layer**: Estado reactivo para UI
 
 #### 2. Más Simple y Directo
+
 - ✅ **Menos boilerplate** - No necesitas aggregates, value objects complejos
 - ✅ **Más rápido de implementar** - Menos abstracciones innecesarias
 - ✅ **Más fácil de entender** - Flujo de datos claro
 
 #### 3. Mejor para Frontend
+
 - ✅ **Enfocado en presentación** - Perfecto para librerías de UI/data
 - ✅ **Estado reactivo** - Se integra natural con Angular Signals
 - ✅ **Testing más simple** - Menos complejidad = tests más fáciles
 
 #### 4. Escalable sin Overhead
+
 - ✅ **Fácil agregar features** - Cada feature es independiente
 - ✅ **Reutilización real** - Use cases pueden compartirse
 - ✅ **Separación clara** - Data, Domain, Presentation bien definidas
@@ -1284,36 +1425,31 @@ export * from './lib/value-objects';
 ```typescript
 // packages/core/src/lib/core.module.ts
 @NgModule({
-  imports: [
-    CommonModule,
-    HttpClientModule
-  ],
+  imports: [CommonModule, HttpClientModule],
   providers: [
     // Core services
     ApiService,
     ConfigService,
-    
+
     // Customer feature
     CustomerHttpDataSource,
     CustomerMapper,
     {
       provide: CustomerRepository,
-      useClass: CustomerHttpRepository
+      useClass: CustomerHttpRepository,
     },
     GetCustomersUseCase,
     CreateCustomerUseCase,
     UpdateCustomerUseCase,
     DeleteCustomerUseCase,
-    CustomerService
-  ]
+    CustomerService,
+  ],
 })
 export class AcontplusCoreModule {
   static forRoot(config: AppConfig): ModuleWithProviders<AcontplusCoreModule> {
     return {
       ngModule: AcontplusCoreModule,
-      providers: [
-        { provide: 'APP_CONFIG', useValue: config }
-      ]
+      providers: [{ provide: 'APP_CONFIG', useValue: config }],
     };
   }
 }
@@ -1332,13 +1468,13 @@ bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(),
     // Otros providers
-  ]
+  ],
 }).then(() => {
   // Configurar la librería
   const configService = inject(ConfigService);
   configService.initialize({
     apiUrl: 'https://api.miapp.com',
-    theme: 'default'
+    theme: 'default',
   });
 });
 
@@ -1352,58 +1488,68 @@ bootstrapApplication(AppComponent, {
       @if (customerService.loading()) {
         <div>Cargando...</div>
       }
-      
+
       @if (customerService.error()) {
         <div class="error">{{ customerService.error() }}</div>
       }
-      
+
       @if (customerService.hasCustomers()) {
         <table mat-table [dataSource]="customerService.customers()">
           <ng-container matColumnDef="businessName">
             <th mat-header-cell *matHeaderCellDef>Nombre</th>
-            <td mat-cell *matCellDef="let customer">{{ customer.businessName }}</td>
+            <td mat-cell *matCellDef="let customer">
+              {{ customer.businessName }}
+            </td>
           </ng-container>
-          
+
           <ng-container matColumnDef="email">
             <th mat-header-cell *matHeaderCellDef>Email</th>
             <td mat-cell *matCellDef="let customer">{{ customer.email }}</td>
           </ng-container>
-          
+
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Acciones</th>
             <td mat-cell *matCellDef="let customer">
-              <button mat-button (click)="editCustomer(customer)">Editar</button>
-              <button mat-button color="warn" (click)="deleteCustomer(customer)">Eliminar</button>
+              <button mat-button (click)="editCustomer(customer)">
+                Editar
+              </button>
+              <button
+                mat-button
+                color="warn"
+                (click)="deleteCustomer(customer)"
+              >
+                Eliminar
+              </button>
             </td>
           </ng-container>
-          
+
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
       } @else {
         <div>No hay clientes</div>
       }
-      
+
       <button mat-raised-button color="primary" (click)="createCustomer()">
         Nuevo Cliente
       </button>
-      
+
       <div class="summary">
-        Total: {{ customerService.customersCount() }} | 
-        Activos: {{ customerService.activeCustomers().length }}
+        Total: {{ customerService.customersCount() }} | Activos:
+        {{ customerService.activeCustomers().length }}
       </div>
     </div>
-  `
+  `,
 })
 export class CustomerListComponent implements OnInit {
   customerService = inject(CustomerService);
-  
+
   displayedColumns = ['businessName', 'email', 'actions'];
-  
+
   ngOnInit(): void {
     this.customerService.loadCustomers();
   }
-  
+
   async createCustomer(): Promise<void> {
     try {
       await this.customerService.createCustomer({
@@ -1417,19 +1563,19 @@ export class CustomerListComponent implements OnInit {
           city: 'Ciudad',
           state: 'Estado',
           zipCode: '12345',
-          country: 'País'
-        }
+          country: 'País',
+        },
       });
     } catch (error) {
       console.error('Error creating customer:', error);
     }
   }
-  
+
   editCustomer(customer: Customer): void {
     this.customerService.selectCustomer(customer);
     // Navegar a formulario de edición
   }
-  
+
   async deleteCustomer(customer: Customer): Promise<void> {
     if (confirm(`¿Eliminar cliente ${customer.businessName}?`)) {
       try {
@@ -1445,6 +1591,7 @@ export class CustomerListComponent implements OnInit {
 ## 🔄 Relación entre Librerías y Aplicaciones
 
 ### Consumo de Librerías en Aplicaciones
+
 ```typescript
 // app.module.ts
 @NgModule({
@@ -1452,17 +1599,18 @@ export class CustomerListComponent implements OnInit {
     // Librerías base
     AcontplusCoreModule.forRoot(config),
     AcontplusUiComponentsModule,
-    
+
     // Librerías feature
     CustomerDataModule,
     CustomerPresentationModule,
-    InventoryDataModule
-  ]
+    InventoryDataModule,
+  ],
 })
-export class AppModule { }
+export class AppModule {}
 ```
 
 ### Dependencias entre Paquetes
+
 ```json
 {
   "dependencies": {
@@ -1474,6 +1622,7 @@ export class AppModule { }
 ```
 
 ### Estructura del Workspace Completo
+
 ```
 acontplus-libs/
 ├── packages/
@@ -1496,6 +1645,7 @@ acontplus-libs/
 ### Fase 1: Setup Inicial (Semana 1)
 
 #### 1. Configurar Monorepo
+
 ```bash
 npx create-nx-workspace@latest acontplus-libs --preset=angular-monorepo
 cd acontplus-libs
@@ -1505,12 +1655,14 @@ npx nx g @nx/angular:application demo-app --directory=apps
 ```
 
 #### 2. Implementar core
+
 - ✅ Servicio HTTP base
-- ✅ Gestión de configuración  
+- ✅ Gestión de configuración
 - ✅ Servicios de almacenamiento
 - ✅ Autenticación y autorización
 
 #### 3. Crear Componentes UI Base
+
 - ✅ Botones, inputs, tablas
 - ✅ Modals, cards, forms
 - ✅ Layout components
@@ -1518,11 +1670,13 @@ npx nx g @nx/angular:application demo-app --directory=apps
 ### Fase 2: Primera Feature (Semana 2-3)
 
 #### 1. Crear Librería Feature
+
 ```bash
 ng generate library acontplus-customers
 ```
 
 #### 2. Implementar Arquitectura
+
 ```typescript
 // Estructura Flutter Architecture
 packages/ng-customer/
@@ -1533,6 +1687,7 @@ packages/ng-customer/
 ```
 
 #### 3. Crear Demo App
+
 ```bash
 ng generate application demo-app
 ```
@@ -1540,12 +1695,14 @@ ng generate application demo-app
 ### Fase 3: Expansión (Semana 4+)
 
 #### 1. Nuevas Features
+
 ```bash
 ng generate library acontplus-inventory
 ng generate library acontplus-orders
 ```
 
 #### 2. Aplicación Monolítica
+
 - ✅ Implementar DDD + Clean Architecture
 - ✅ Crear bounded contexts
 - ✅ Desarrollar casos de uso complejos
@@ -1553,32 +1710,34 @@ ng generate library acontplus-orders
 ## 🔧 Convenciones y Mejores Prácticas
 
 ### Estructura de Código
+
 - **Prefijos**: Usar `acp-` para componentes (`acp-table`, `acp-button`)
 - **Signals**: Preferir sobre Observables para estado local
 - **Inyección**: Usar `inject()` en componentes standalone
 
 ### Testing
+
 ```typescript
 // Ejemplo de test para servicio
 describe('CustomerService', () => {
   let service: CustomerService;
   let mockRepository: jest.Mocked<CustomerRepository>;
-  
+
   beforeEach(() => {
     mockRepository = {
       findAll: jest.fn(),
-      findById: jest.fn()
+      findById: jest.fn(),
     } as any;
-    
+
     service = new CustomerService(mockRepository);
   });
-  
+
   it('should load customers', async () => {
     const mockCustomers = [{ id: '1', name: 'Test' }];
     mockRepository.findAll.mockResolvedValue(mockCustomers);
-    
+
     await service.loadCustomers();
-    
+
     expect(service.customers()).toEqual(mockCustomers);
     expect(service.loading()).toBe(false);
   });
@@ -1586,15 +1745,17 @@ describe('CustomerService', () => {
 ```
 
 ### Versionamiento Semántico
+
 ```json
 {
   "acontplus-core": "1.2.0",
-  "acontplus-ui-components": "1.1.5", 
+  "acontplus-ui-components": "1.1.5",
   "acontplus-customers": "2.0.1"
 }
 ```
 
 ### Naming Conventions
+
 - **Services**: `CustomerService`, `OrderService`
 - **Components**: `AcpTableComponent`, `AcpButtonComponent`
 - **Models**: `Customer`, `CustomerDto`, `CreateCustomerRequest`
@@ -1602,6 +1763,7 @@ describe('CustomerService', () => {
 - **Use Cases**: `GetCustomersUseCase`, `CreateCustomerUseCase`
 
 ### Code Organization
+
 ```typescript
 // ✅ Correcto - Imports organizados
 import { Injectable, computed, signal } from '@angular/core';
@@ -1614,7 +1776,7 @@ import { CustomerRepository } from '../repositories';
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
   private _state = signal<CustomerState>(initialState);
-  
+
   // Readonly computed properties
   readonly customers = computed(() => this._state().customers);
   readonly loading = computed(() => this._state().loading);
@@ -1623,6 +1785,7 @@ export class CustomerService {
 ```
 
 ### Error Handling
+
 ```typescript
 // shared/utils/error-handler.utils.ts
 export class ErrorHandler {
@@ -1630,33 +1793,34 @@ export class ErrorHandler {
     if (error.status === 400) {
       return 'Datos inválidos. Por favor verifique la información.';
     }
-    
+
     if (error.status === 401) {
       return 'No autorizado. Por favor inicie sesión.';
     }
-    
+
     if (error.status === 403) {
       return 'No tiene permisos para realizar esta acción.';
     }
-    
+
     if (error.status === 404) {
       return 'Recurso no encontrado.';
     }
-    
+
     if (error.status === 409) {
       return 'El recurso ya existe o hay un conflicto.';
     }
-    
+
     if (error.status >= 500) {
       return 'Error del servidor. Por favor intente más tarde.';
     }
-    
+
     return error.message || 'Error desconocido';
   }
 }
 ```
 
 ### Configuration Management
+
 ```typescript
 // Configuración por ambiente
 export interface AcontplusConfig {
@@ -1678,45 +1842,53 @@ AcontplusCoreModule.forRoot({
   features: {
     customers: true,
     inventory: true,
-    orders: false
-  }
-})
+    orders: false,
+  },
+});
 ```
 
 ## Beneficios 💡
 
 ### 1. Escalabilidad
+
 - ✅ **Fácil agregar nuevos features** sin afectar existentes
 - ✅ **Arquitectura modular** cada feature es independiente
 - ✅ **Reutilización de código** entre diferentes aplicaciones
 
 ### 2. Mantenibilidad
+
 - ✅ **Separación clara de responsabilidades** cada capa tiene su propósito
 - ✅ **Código organizado y predecible** estructura consistente
 - ✅ **Testing más fácil** por la separación y dependencias claras
 
 ### 3. Desarrollo
+
 - ✅ **Developer experience mejorada** flujo de desarrollo claro
 - ✅ **Autocompletado y tipos fuertes** TypeScript en toda la librería
 - ✅ **Patrones Angular modernos** Signals, standalone components
 
 ### 4. Performance
+
 - ✅ **Bundle size optimizado** sin código innecesario de DDD
 - ✅ **Reactive updates** automáticos con Signals
 - ✅ **Lazy loading** de features cuando sea necesario
 
 ### 5. Reutilización
+
 - ✅ **Una librería, múltiples aplicaciones** configuración flexible
 - ✅ **API consistente** mismos patrones en todos los features
 - ✅ **Configuración por aplicación** adaptable a diferentes necesidades
 
 ## Conclusión ✨
 
-Esta arquitectura inspirada en Flutter te permitirá crear una librería robusta, escalable y fácil de mantener sin la complejidad innecesaria de DDD. Es perfecta para librerías frontend que necesitan:
+Esta arquitectura inspirada en Flutter te permitirá crear una librería robusta,
+escalable y fácil de mantener sin la complejidad innecesaria de DDD. Es perfecta
+para librerías frontend que necesitan:
 
 - **Gestión de estado reactivo** con Angular Signals
 - **Acceso a datos** mediante APIs REST
 - **Separación clara** entre capas sin over-engineering
 - **Reutilización** en múltiples aplicaciones Angular
 
-La clave está en mantener la simplicidad mientras se respetan los principios de arquitectura limpia adaptados al contexto frontend.
+La clave está en mantener la simplicidad mientras se respetan los principios de
+arquitectura limpia adaptados al contexto frontend.

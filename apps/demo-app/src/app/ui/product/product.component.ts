@@ -5,7 +5,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   inject,
-  viewChild
+  viewChild,
 } from '@angular/core';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

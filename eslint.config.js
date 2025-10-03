@@ -2,6 +2,7 @@ const { FlatCompat } = require('@eslint/eslintrc');
 const js = require('@eslint/js');
 const tseslint = require('typescript-eslint');
 const angular = require('angular-eslint');
+const nx = require('@nx/eslint-plugin');
 
 const compat = new FlatCompat();
 
@@ -23,6 +24,9 @@ module.exports = tseslint.config(
       ...angular.configs.tsRecommended,
     ],
     processor: angular.processInlineTemplates,
+    plugins: {
+      '@nx': nx,
+    },
     rules: {
       // Angular specific rules
       '@angular-eslint/directive-selector': [

@@ -1,5 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, NgZone, PLATFORM_ID } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
 import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
 import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
@@ -21,18 +22,31 @@ export class App implements OnInit {
   private readonly themeService = inject(ThemeService);
   private readonly notificationService = inject(NotificationService);
   private readonly authStore = inject(AuthStore);
+  private readonly ngZone = inject(NgZone);
+  private readonly platformId = inject(PLATFORM_ID);
 
   // expose readonly signal to template
   readonly isAuthenticated = this.authStore.isAuthenticated;
 
   ngOnInit() {
-    this.notificationService.snackbar.info({ message: 'App initialized' });
-    this.notificationService.sweetAlert.info({
-      message: 'App initialized',
-      config: { timer: 3000, showCancelButton: true },
-    });
-
-    this.notificationService.show({ type: 'info', message: 'App initialized via show method' });
+    // Defer notifications to avoid blocking initial render and only show on browser
+    if (isPlatformBrowser(this.platformId)) {
+      this.ngZone.runOutsideAngular(() => {
+        setTimeout(() => {
+          this.ngZone.run(() => {
+            this.notificationService.snackbar.info({ message: 'App initialized' });
+            this.notificationService.sweetAlert.info({
+              message: 'App initialized',
+              config: { timer: 3000, showCancelButton: true },
+            });
+            this.notificationService.show({
+              type: 'info',
+              message: 'App initialized via show method',
+            });
+          });
+        }, 100); // Small delay to allow initial render
+      });
+    }
   }
 
   saveSettings() {

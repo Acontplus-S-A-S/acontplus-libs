@@ -14,7 +14,6 @@ export class CorrelationService {
   getOrCreateCorrelationId(): string {
     if (!this.correlationId()) {
       // Try to get from sessionStorage first (for page refreshes)
-      // @ts-ignore
       const id = sessionStorage.getItem(this.CORRELATION_KEY) || uuidv4();
       this.correlationId.set(id);
       sessionStorage.setItem(this.CORRELATION_KEY, id);

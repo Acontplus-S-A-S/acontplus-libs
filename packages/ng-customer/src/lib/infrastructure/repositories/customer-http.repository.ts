@@ -59,17 +59,15 @@ export class CustomerHttpRepository implements CustomerRepository {
 
   getAll<T>(obj: T): Promise<ApiResponse<PagedResult<any>>> {
     const json = ListCustomerMapper.toJson(obj);
-    return this.http
-      .get<any>(`${this.url}?json=${json}`)
-      .then((response: any) => {
-        const data = ListCustomerMapper.fromJson(response);
-        return {
-          status: 'success',
-          code: response.code ?? 'SUCCESS',
-          data,
-          timestamp: new Date().toISOString(),
-        } as ApiResponse<PagedResult<any>>;
-      });
+    return this.http.get<any>(`${this.url}?json=${json}`).then((response: any) => {
+      const data = ListCustomerMapper.fromJson(response);
+      return {
+        status: 'success',
+        code: response.code ?? 'SUCCESS',
+        data,
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<PagedResult<any>>;
+    });
   }
 
   create(dto: any): Promise<ApiResponse<any>> {
@@ -113,18 +111,16 @@ export class CustomerHttpRepository implements CustomerRepository {
     });
   }
   getById(id: number): Promise<ApiResponse<any>> {
-    return this.http
-      .get<any>(`${this.url}GetId/${id}`)
-      .then(response => {
-        const data = CustomerGetByIdMapper.fromJson(response);
-        return {
-          status: response.code === '1' ? 'success' : 'warning',
-          code: response.code ?? 'OPERATION_FAILED',
-          data,
-          message: response.message ?? 'Operation completed with issues',
-          timestamp: new Date().toISOString(),
-        } as ApiResponse<any>;
-      });
+    return this.http.get<any>(`${this.url}GetId/${id}`).then(response => {
+      const data = CustomerGetByIdMapper.fromJson(response);
+      return {
+        status: response.code === '1' ? 'success' : 'warning',
+        code: response.code ?? 'OPERATION_FAILED',
+        data,
+        message: response.message ?? 'Operation completed with issues',
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<any>;
+    });
   }
 
   search(params: CustomerSearch): Promise<ApiResponse<any>> {
@@ -141,4 +137,3 @@ export class CustomerHttpRepository implements CustomerRepository {
     });
   }
 }
-

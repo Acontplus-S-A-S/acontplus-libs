@@ -11,13 +11,14 @@ export interface IAppConfig {
 @Injectable({ providedIn: 'root' })
 export class AppConfigService implements IAppConfig {
   private environment = inject(ENVIRONMENT);
+  private readonly defaultTimeout = 30000; // Default timeout
 
   get apiUrl(): string {
     return this.environment.apiBaseUrl;
   }
 
   get apiTimeout(): number {
-    return 30000; // Default timeout
+    return this.defaultTimeout;
   }
 
   get enableLogging(): boolean {

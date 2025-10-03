@@ -13,9 +13,9 @@ export const NOTIFICATION_CONFIG = new InjectionToken<NotificationProviderConfig
 
 export interface NotificationProviderConfig {
   defaultProvider: NotificationProvider;
-  toastr?: any;
-  snackbar?: any;
-  sweetalert?: any;
+  toastr?: unknown;
+  snackbar?: unknown;
+  sweetalert?: unknown;
 }
 
 @Injectable()

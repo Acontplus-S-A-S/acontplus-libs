@@ -31,9 +31,7 @@ export class ClientUseCase {
     return this.repo.updateState(id);
   }
 
-
   search(filter: CustomerSearch) {
     return this.repo.search(filter);
   }
 }
-

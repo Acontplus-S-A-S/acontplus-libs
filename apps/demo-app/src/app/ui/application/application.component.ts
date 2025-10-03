@@ -5,7 +5,7 @@ import {
   TemplateRef,
   ChangeDetectorRef,
   inject,
-  viewChild
+  viewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,11 +21,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontplus/ng-components';
+import {
+  ColumnDefinition,
+  MatDynamicTableComponent,
+  Pagination,
+  AdvancedDialogService,
+  TableContext,
+} from '@acontplus/ng-components';
+import { NotificationService } from '@acontplus/ng-notifications';
 import { ApplicationRepository } from '../../data';
 import { Application } from '../../domain/application';
 import { PaginationParams, PagedResult } from '@acontplus/core';
+import { ApplicationAddEditComponent } from './application-add-edit/application-add-edit.component';
 
 @Component({
   selector: 'app-application',
@@ -53,8 +60,9 @@ import { PaginationParams, PagedResult } from '@acontplus/core';
 })
 export class ApplicationComponent implements OnInit, AfterViewInit {
   private applicationRepository = inject(ApplicationRepository);
-  private snackBar = inject(MatSnackBar);
+  private notificationService = inject(NotificationService);
   private cdr = inject(ChangeDetectorRef);
+  private dialogService = inject(AdvancedDialogService);
 
   // Data
   applications: Application[] = [];
@@ -62,8 +70,6 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
 
   // UI state
   isLoading = false;
-  isCreating = false;
-  isUpdating = false;
 
   // Pagination
   pagination = new PaginationParams({
@@ -73,18 +79,16 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
   applicationPaginationConfig: Pagination = new Pagination(0, 10, 5, 0, [5, 10, 25, 50]);
 
   // Filters
-  filters: Record<string, any> = {};
+  filters: Record<string, unknown> = {};
   searchQuery = '';
 
-  // Form data
-  newApplication: Partial<Application> = {};
-  editApplicationId: number | null = null;
-  editApplication: Partial<Application> = {};
-
   // Template references
-  readonly actionsTemplate = viewChild.required<TemplateRef<any>>('actionsTemplate');
-  readonly statusTemplate = viewChild.required<TemplateRef<any>>('statusTemplate');
-  readonly environmentTemplate = viewChild.required<TemplateRef<any>>('environmentTemplate');
+  readonly actionsTemplate =
+    viewChild.required<TemplateRef<TableContext<Application>>>('actionsTemplate');
+  readonly statusTemplate =
+    viewChild.required<TemplateRef<TableContext<Application>>>('statusTemplate');
+  readonly environmentTemplate =
+    viewChild.required<TemplateRef<TableContext<Application>>>('environmentTemplate');
 
   // Column definitions
   applicationColumns: ColumnDefinition<Application>[] = [];
@@ -96,6 +100,11 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.initializeColumns();
     this.loadApplications();
+    this.notificationService.toastr.show({
+      type: 'info',
+      message: 'Bulk operations not yet implemented',
+      title: 'Info',
+    });
   }
 
   ngAfterViewInit() {
@@ -158,7 +167,7 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
       new ColumnDefinition<Application>({
         key: 'op',
         label: 'Actions',
-        columnType: 'template',
+        type: 'template',
         order: 8,
         width: '200px',
       }),
@@ -201,9 +210,8 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
         this.isLoading = false;
         this.cdr.markForCheck();
       },
-      error: (error: any) => {
-        console.error('Error loading applications:', error);
-        this.snackBar.open('Error loading applications', 'Close', { duration: 3000 });
+      error: _error => {
+        this.notificationService.error({ message: 'Error loading applications' });
         this.isLoading = false;
         this.cdr.markForCheck();
       },
@@ -237,66 +245,47 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
   }
 
   createApplication(): void {
-    if (!this.newApplication.name || !this.newApplication.version) {
-      this.snackBar.open('Name and version are required', 'Close', { duration: 3000 });
-      return;
-    }
-
-    this.isCreating = true;
-    this.applicationRepository.create(this.newApplication as Omit<Application, 'id'>).subscribe({
-      next: (application: Application) => {
-        this.snackBar.open('Application created successfully', 'Close', { duration: 3000 });
-        this.newApplication = {};
-        this.loadApplications();
-        this.isCreating = false;
-        this.cdr.markForCheck();
-      },
-      error: (error: any) => {
-        console.error('Error creating application:', error);
-        this.snackBar.open('Error creating application', 'Close', { duration: 3000 });
-        this.isCreating = false;
-        this.cdr.markForCheck();
-      },
-    });
+    this.dialogService
+      .openInWrapper(
+        {
+          component: ApplicationAddEditComponent,
+          title: 'Nueva Aplicación',
+          icon: 'add',
+          data: {},
+        },
+        {
+          size: 'lg',
+        },
+      )
+      .then(dialogRef => {
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.loadApplications();
+          }
+        });
+      });
   }
 
   startEdit(application: Application): void {
-    this.editApplicationId = application.id;
-    this.editApplication = { ...application };
-    this.cdr.markForCheck();
-  }
-
-  cancelEdit(): void {
-    this.editApplicationId = null;
-    this.editApplication = {};
-    this.cdr.markForCheck();
-  }
-
-  updateApplication(): void {
-    if (!this.editApplicationId || !this.editApplication.name || !this.editApplication.version) {
-      this.snackBar.open('Valid application data is required', 'Close', { duration: 3000 });
-      return;
-    }
-
-    this.isUpdating = true;
-    this.applicationRepository.update(this.editApplicationId, this.editApplication).subscribe({
-      next: (application: Application) => {
-        this.snackBar.open('Application updated successfully', 'Close', { duration: 3000 });
-        this.editApplicationId = null;
-        this.editApplication = {};
-        this.loadApplications();
-        this.isUpdating = false;
-        this.cdr.markForCheck();
-      },
-      error: (error: any) => {
-        console.error('Error updating application:', error);
-        this.snackBar.open(error.message || 'Error updating application', 'Close', {
-          duration: 3000,
+    this.dialogService
+      .openInWrapper(
+        {
+          component: ApplicationAddEditComponent,
+          title: 'Editar Aplicación',
+          icon: 'edit',
+          data: { application },
+        },
+        {
+          size: 'lg',
+        },
+      )
+      .then(dialogRef => {
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.loadApplications();
+          }
         });
-        this.isUpdating = false;
-        this.cdr.markForCheck();
-      },
-    });
+      });
   }
 
   deleteApplication(applicationId: number): void {
@@ -304,16 +293,15 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
       this.applicationRepository.delete(applicationId).subscribe({
         next: (success: boolean) => {
           if (success) {
-            this.snackBar.open('Application deleted successfully', 'Close', { duration: 3000 });
+            this.notificationService.success({ message: 'Application deleted successfully' });
             this.loadApplications();
             this.cdr.markForCheck();
           } else {
-            this.snackBar.open('Failed to delete application', 'Close', { duration: 3000 });
+            this.notificationService.error({ message: 'Failed to delete application' });
           }
         },
-        error: (error: any) => {
-          console.error('Error deleting application:', error);
-          this.snackBar.open('Error deleting application', 'Close', { duration: 3000 });
+        error: _error => {
+          this.notificationService.error({ message: 'Error deleting application' });
         },
       });
     }
@@ -326,27 +314,27 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
 
   bulkActivateApplications(): void {
     if (this.selectedApplications.length === 0) {
-      this.snackBar.open('No applications selected', 'Close', { duration: 3000 });
+      this.notificationService.warning({ message: 'No applications selected' });
       return;
     }
 
     // For bulk operations, we'll need to implement bulk update in repository
     // For now, show a message
-    this.snackBar.open('Bulk operations not yet implemented', 'Close', { duration: 3000 });
+    this.notificationService.info({ message: 'Bulk operations not yet implemented' });
   }
 
   bulkDeactivateApplications(): void {
     if (this.selectedApplications.length === 0) {
-      this.snackBar.open('No applications selected', 'Close', { duration: 3000 });
+      this.notificationService.warning({ message: 'No applications selected' });
       return;
     }
 
-    this.snackBar.open('Bulk operations not yet implemented', 'Close', { duration: 3000 });
+    this.notificationService.info({ message: 'Bulk operations not yet implemented' });
   }
 
   bulkDeleteApplications(): void {
     if (this.selectedApplications.length === 0) {
-      this.snackBar.open('No applications selected', 'Close', { duration: 3000 });
+      this.notificationService.warning({ message: 'No applications selected' });
       return;
     }
 
@@ -354,7 +342,7 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
       confirm(`Are you sure you want to delete ${this.selectedApplications.length} applications?`)
     ) {
       // For bulk delete, we'll need to implement it in repository
-      this.snackBar.open('Bulk delete not yet implemented', 'Close', { duration: 3000 });
+      this.notificationService.info({ message: 'Bulk delete not yet implemented' });
     }
   }
 

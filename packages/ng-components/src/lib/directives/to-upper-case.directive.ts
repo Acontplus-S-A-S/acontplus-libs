@@ -22,20 +22,24 @@ export class ToUpperCaseDirective implements ControlValueAccessor {
   }
 
   // Funciones de ControlValueAccessor
-  onChange = (_: any) => {};
-  onTouched = () => {};
+  onChange = (_value: string) => {
+    // ControlValueAccessor callback
+  };
+  onTouched = () => {
+    // ControlValueAccessor callback
+  };
 
-  writeValue(value: any): void {
+  writeValue(value: string): void {
     if (value) {
       this.el.nativeElement.value = value.toUpperCase();
     }
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (value: string) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 }

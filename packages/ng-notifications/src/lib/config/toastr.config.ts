@@ -1,4 +1,4 @@
-import { Injectable, InjectionToken } from '@angular/core';
+import { InjectionToken } from '@angular/core';
 import { IndividualConfig } from 'ngx-toastr';
 
 export type ToastrNotificationConfig = Partial<IndividualConfig>;

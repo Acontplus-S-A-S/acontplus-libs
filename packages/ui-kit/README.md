@@ -1,6 +1,24 @@
-# ui-kit
+# @acontplus/ui-kit
 
-This library was generated with [Nx](https://nx.dev).
+UI Kit library for AcontPlus applications, providing reusable UI components and
+styles.
+
+## Installation
+
+```bash
+npm install @acontplus/ui-kit
+```
+
+## Features
+
+- **UI Components**: Reusable UI components (under development)
+- **Styling**: Consistent styling and theming
+- **TypeScript Support**: Full type safety
+
+## Status
+
+This library is currently under development. More components and features will
+be added in future releases.
 
 ## Building
 

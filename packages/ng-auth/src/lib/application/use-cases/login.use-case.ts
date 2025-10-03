@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { BaseUseCase } from '@acontplus/ng-infrastructure';
 import { AuthRepository } from '../../domain/repositories/auth.repository';
-import { LoginRequest } from '../../domain/models/user';
+import { LoginRequest } from '../../domain/models/auth';
 import { AuthTokens } from '@acontplus/core';
 import { AuthStore } from '../../ui/stores/auth.store';
 import { UrlRedirectService } from '../../services/url-redirect.service';

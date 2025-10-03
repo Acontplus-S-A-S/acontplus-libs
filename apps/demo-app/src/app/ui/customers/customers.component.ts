@@ -1,6 +1,4 @@
-import { Component, inject, Injectable, signal } from '@angular/core';
-// Remove imports that don't exist in core
-import { from } from 'rxjs';
+import { Component, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { AdvancedDialogService, MatThemeButtonComponent } from '@acontplus/ng-components';
 import { CustomerAddEditComponent, CustomerCardComponent } from '@acontplus/ng-customer';
@@ -29,7 +27,7 @@ export class CustomersComponent {
     // Mock customer data for demo
     this.customers.set([
       { id: 1, name: 'John Doe', email: 'john@example.com' },
-      { id: 2, name: 'Jane Smith', email: 'jane@example.com' }
+      { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
     ]);
   }
 
