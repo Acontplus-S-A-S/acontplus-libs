@@ -162,10 +162,8 @@ export class MockProductService {
 
   private nextId = 11;
 
-  getProducts(
-    pagination: PaginationParams,
-  ): Observable<PaginatedResult<Product>> {
-    let filteredProducts = [...this.products];
+  getProducts(pagination: PaginationParams): Observable<PaginatedResult<Product>> {
+    const filteredProducts = [...this.products];
 
     // Apply sorting
     if (pagination.sortBy) {
@@ -246,7 +244,10 @@ export class MockProductService {
     return of(true).pipe(delay(300));
   }
 
-  searchProducts(query: string, pagination: PaginationParams): Observable<PaginatedResult<Product>> {
+  searchProducts(
+    query: string,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Product>> {
     return this.getProducts(pagination);
   }
 
@@ -254,7 +255,10 @@ export class MockProductService {
     return this.getProducts(pagination);
   }
 
-  getProductsByCategory(category: string, pagination: PaginationParams): Observable<PaginatedResult<Product>> {
+  getProductsByCategory(
+    category: string,
+    pagination: PaginationParams,
+  ): Observable<PaginatedResult<Product>> {
     return this.getProducts(pagination);
   }
 
@@ -304,7 +308,7 @@ export class MockProductService {
   getProductStats(): Observable<{ total: number; active: number; totalValue: number }> {
     const total = this.products.length;
     const active = this.products.filter(p => p.isActive).length;
-    const totalValue = this.products.reduce((sum, p) => sum + (p.price * p.stock), 0);
+    const totalValue = this.products.reduce((sum, p) => sum + p.price * p.stock, 0);
 
     return of({ total, active, totalValue }).pipe(delay(200));
   }
@@ -323,6 +327,6 @@ export class MockProductService {
   }
 
   getTotalInventoryValue(): number {
-    return this.products.reduce((sum, p) => sum + (p.price * p.stock), 0);
+    return this.products.reduce((sum, p) => sum + p.price * p.stock, 0);
   }
 }

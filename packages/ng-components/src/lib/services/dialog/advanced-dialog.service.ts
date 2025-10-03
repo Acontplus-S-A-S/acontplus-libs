@@ -1,7 +1,7 @@
-import { inject, Injectable, Type } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Overlay } from '@angular/cdk/overlay';
-import { firstValueFrom, map, Observable } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 import { ComponentType } from '@angular/cdk/portal';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
@@ -28,7 +28,7 @@ export class AdvancedDialogService {
    * @param config The detailed configuration for the dialog.
    * @returns A MatDialogRef instance.
    */
-  async open<T, D = any, R = any>(
+  async open<T, D = unknown, R = unknown>(
     component: ComponentType<T>,
     config: MatCustomDialogConfig<D> = {},
   ): Promise<MatDialogRef<T, R>> {
@@ -43,7 +43,7 @@ export class AdvancedDialogService {
    * @param matDialogConfig Standard MatDialog configuration (size, position, etc.).
    * @returns A MatDialogRef instance pointing to the wrapper.
    */
-  async openInWrapper<T, R = any>(
+  async openInWrapper<T, R = unknown>(
     wrapperConfig: DialogWrapperConfig<T>,
     matDialogConfig: MatCustomDialogConfig<T> = {},
   ): Promise<MatDialogRef<DialogWrapperComponent, R>> {
@@ -51,7 +51,7 @@ export class AdvancedDialogService {
     const configWithWrapperData: MatCustomDialogConfig<DialogWrapperConfig<T>> = {
       ...matDialogConfig,
       data: wrapperConfig,
-    };
+    } as MatCustomDialogConfig<DialogWrapperConfig<T>>;
     const dialogConfig = await this.buildDialogConfig(configWithWrapperData);
     return this.dialog.open<DialogWrapperComponent, DialogWrapperConfig<T>, R>(
       DialogWrapperComponent,
@@ -62,12 +62,12 @@ export class AdvancedDialogService {
   /**
    * Helper to open a dialog and only get an observable of the result.
    */
-  async openAndGetResult<T, D = any, R = any>(
+  async openAndGetResult<T, D = unknown, R = unknown>(
     component: ComponentType<T>,
     config: MatCustomDialogConfig<D> = {},
   ): Promise<R | undefined> {
     const dialogRef = await this.open(component, config);
-    return firstValueFrom(dialogRef.afterClosed());
+    return firstValueFrom(dialogRef.afterClosed()) as Promise<R | undefined>;
   }
 
   /**

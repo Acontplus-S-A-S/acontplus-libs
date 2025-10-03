@@ -5,7 +5,8 @@ import {
   ElementRef,
   ChangeDetectionStrategy,
   inject,
-  viewChild
+  viewChild,
+  OnDestroy,
 } from '@angular/core';
 
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
@@ -37,7 +38,7 @@ import { DialogWrapperConfig } from '../../services';
   styleUrls: ['./dialog-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DialogWrapperComponent implements AfterViewInit {
+export class DialogWrapperComponent implements AfterViewInit, OnDestroy {
   dialogRef = inject<MatDialogRef<DialogWrapperComponent>>(MatDialogRef);
   config = inject<DialogWrapperConfig>(MAT_DIALOG_DATA);
 
@@ -59,8 +60,10 @@ export class DialogWrapperComponent implements AfterViewInit {
    */
   private static lastZIndex = 1000;
 
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
+  /**
+   * Timeout ID for debouncing z-index updates to prevent excessive DOM manipulations.
+   */
+  private bringToFrontTimeoutId: number | null = null;
 
   /**
    * Creates an instance of DialogWrapperComponent.
@@ -87,6 +90,16 @@ export class DialogWrapperComponent implements AfterViewInit {
   }
 
   /**
+   * Cleanup lifecycle hook to cancel any pending animation frame requests.
+   */
+  ngOnDestroy(): void {
+    if (this.bringToFrontTimeoutId !== null) {
+      cancelAnimationFrame(this.bringToFrontTimeoutId);
+      this.bringToFrontTimeoutId = null;
+    }
+  }
+
+  /**
    * Closes the dialog.
    * Called when the close button in the header is clicked.
    */
@@ -96,12 +109,22 @@ export class DialogWrapperComponent implements AfterViewInit {
 
   /**
    * Brings the dialog to the front by adjusting its z-index.
+   * Uses requestAnimationFrame to debounce updates and prevent excessive DOM manipulations.
    * Called when the dialog header is clicked.
    */
   bringToFront(): void {
-    const pane = this.header()?.nativeElement.closest('.cdk-overlay-pane') as HTMLElement;
-    if (pane) {
-      pane.style.zIndex = (++DialogWrapperComponent.lastZIndex).toString();
+    // Clear any pending update
+    if (this.bringToFrontTimeoutId !== null) {
+      cancelAnimationFrame(this.bringToFrontTimeoutId);
     }
+
+    // Schedule the z-index update for the next animation frame
+    this.bringToFrontTimeoutId = requestAnimationFrame(() => {
+      const pane = this.header()?.nativeElement.closest('.cdk-overlay-pane') as HTMLElement;
+      if (pane) {
+        pane.style.zIndex = (++DialogWrapperComponent.lastZIndex).toString();
+      }
+      this.bringToFrontTimeoutId = null;
+    });
   }
 }

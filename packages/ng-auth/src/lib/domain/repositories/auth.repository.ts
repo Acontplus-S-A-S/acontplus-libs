@@ -1,6 +1,6 @@
 // src/lib/domain/repositories/auth.repository.ts
 import { Observable } from 'rxjs';
-import { User, LoginRequest, RegisterRequest, RefreshTokenRequest } from '../models/user';
+import { LoginRequest, RegisterRequest, RefreshTokenRequest } from '../models/auth';
 import { AuthTokens } from '@acontplus/core';
 
 export abstract class AuthRepository {

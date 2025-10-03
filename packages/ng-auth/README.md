@@ -1,6 +1,7 @@
 # @acontplus/ng-auth
 
-Acontplus Angular Authentication Module providing comprehensive authentication and authorization features for Angular applications.
+Acontplus Angular Authentication Module providing comprehensive authentication
+and authorization features for Angular applications.
 
 ## Installation
 
@@ -12,26 +13,36 @@ npm install @acontplus/ng-auth
 
 - **Auth Guard**: Route protection with automatic redirect to login page
 - **Auth Token Service**: JWT token management and authentication state handling
-- **URL Redirection Strategy**: Automatically redirects users back to their intended destination after login
-- **Session Expiry Handling**: Manages session expiry during HTTP requests with automatic redirection
+- **URL Redirection Strategy**: Automatically redirects users back to their
+  intended destination after login
+- **Session Expiry Handling**: Manages session expiry during HTTP requests with
+  automatic redirection
 - **CSRF Protection**: Built-in CSRF token management for secure API requests
-- **Token Repository**: Secure token storage and retrieval with local storage support
-- **Authentication Use Cases**: Login, register, refresh token, and logout functionality
+- **Token Repository**: Secure token storage and retrieval with local storage
+  support
+- **Authentication Use Cases**: Login, register, refresh token, and logout
+  functionality
 - **Domain Models**: User domain models and value objects
-- **Clean Architecture**: Organized in domain, application, data, and presentation layers
-- **Angular Integration**: Seamless integration with Angular Router and HTTP client
+- **Clean Architecture**: Organized in domain, application, data, and
+  presentation layers
+- **Angular Integration**: Seamless integration with Angular Router and HTTP
+  client
 - **Type Safety**: Full TypeScript support with comprehensive type definitions
 
 ## URL Redirection Strategy
 
-The module includes a comprehensive URL redirection strategy that ensures users are returned to their intended destination after authentication, even when sessions expire.
+The module includes a comprehensive URL redirection strategy that ensures users
+are returned to their intended destination after authentication, even when
+sessions expire.
 
 ### Components
 
 1. **UrlRedirectService** - Manages URL storage and redirection logic
 2. **Enhanced Auth Guard** - Captures URLs before redirecting to login
-3. **Enhanced Login Use Case** - Redirects to stored URLs after successful authentication
-4. **Auth Redirect Interceptor** - Handles session expiry during HTTP requests (optional)
+3. **Enhanced Login Use Case** - Redirects to stored URLs after successful
+   authentication
+4. **Auth Redirect Interceptor** - Handles session expiry during HTTP requests
+   (optional)
 
 ### Basic Setup
 
@@ -43,8 +54,8 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [authGuard] // Automatically captures URL if not authenticated
-  }
+    canActivate: [authGuard], // Automatically captures URL if not authenticated
+  },
 ];
 ```
 
@@ -59,7 +70,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([
         authRedirectInterceptor, // Handles session expiry during API calls
-      ])
+      ]),
     ),
   ],
 };
@@ -68,11 +79,13 @@ export const appConfig: ApplicationConfig = {
 ### How It Works
 
 **Scenario 1 - Route Protection:**
+
 ```
 User → /dashboard → Auth Guard → Store URL → Login → Success → Redirect to /dashboard
 ```
 
 **Scenario 2 - Session Expiry (with interceptor):**
+
 ```
 User on /reports → API Call → 401 Error → Store URL → Login → Success → Redirect to /reports
 ```
@@ -137,21 +150,19 @@ export class AuthComponent {
 
 ## Login UI Component
 
-The library includes a comprehensive login UI component with Material Design styling.
+The library includes a comprehensive login UI component with Material Design
+styling.
 
 ### Basic Usage
 
 ```html
-<acp-login
-  title="Welcome Back"
-  [showRegisterButton]="true">
-</acp-login>
+<acp-login title="Welcome Back" [showRegisterButton]="true"> </acp-login>
 ```
 
 ### Component Features
 
 - **Dual Mode Support**: Toggle between login and signup modes
-- **Material Design**: Built with Angular Material components  
+- **Material Design**: Built with Angular Material components
 - **Responsive Layout**: Works on desktop and mobile devices
 - **Theme Integration**: Automatically inherits your app's theme colors
 - **Validation**: Built-in form validation with error messaging
@@ -162,14 +173,15 @@ The library includes a comprehensive login UI component with Material Design sty
 ### Core Services
 
 - **AuthTokenService**: JWT token management and authentication state
-- **UrlRedirectService**: URL storage and redirection management  
+- **UrlRedirectService**: URL storage and redirection management
 - **CsrfService**: CSRF token management for secure API requests
 - **TokenRepository**: Secure token storage and retrieval
 
 ### Guards and Interceptors
 
 - **authGuard**: Route protection with automatic URL capture
-- **authRedirectInterceptor**: Session expiry handling during HTTP requests (optional)
+- **authRedirectInterceptor**: Session expiry handling during HTTP requests
+  (optional)
 
 ### Use Cases
 
@@ -180,7 +192,8 @@ The library includes a comprehensive login UI component with Material Design sty
 
 ## Architecture
 
-This library follows Clean Architecture principles with clear separation of concerns organized in domain, application, data, and presentation layers.
+This library follows Clean Architecture principles with clear separation of
+concerns organized in domain, application, data, and presentation layers.
 
 ### Authentication Service
 
@@ -212,7 +225,7 @@ export class LoginComponent {
 
   async login(credentials: LoginCredentials) {
     const csrfToken = await this.csrfService.getCsrfToken();
-    
+
     // Include CSRF token in your login request
     const response = await this.http.post('/api/login', {
       ...credentials,
@@ -257,11 +270,9 @@ import { NgModule } from '@angular/core';
 import { authProviders } from '@acontplus/ng-auth';
 
 @NgModule({
-  providers: [
-    ...authProviders
-  ]
+  providers: [...authProviders],
 })
-export class AppModule { }
+export class AppModule {}
 ```
 
 ## Running unit tests
@@ -270,7 +281,8 @@ Run `nx test ng-auth` to execute the unit tests.
 
 ## Login Component
 
-The `LoginComponent` provides a flexible, themeable authentication UI component with support for custom fields and dynamic content.
+The `LoginComponent` provides a flexible, themeable authentication UI component
+with support for custom fields and dynamic content.
 
 ### Basic Usage
 
@@ -279,12 +291,9 @@ import { LoginComponent } from '@acontplus/ng-auth/ui/login';
 
 @Component({
   template: `
-    <acp-login 
-      title="Welcome Back"
-      [showRegisterButton]="true">
-    </acp-login>
+    <acp-login title="Welcome Back" [showRegisterButton]="true"> </acp-login>
   `,
-  imports: [LoginComponent]
+  imports: [LoginComponent],
 })
 export class AuthPageComponent {}
 ```
@@ -318,7 +327,8 @@ export class AuthPageComponent {
 ```html
 <acp-login
   [additionalSigninControls]="signinExtras"
-  [additionalSignupControls]="signupExtras">
+  [additionalSignupControls]="signupExtras"
+>
 </acp-login>
 ```
 
@@ -334,9 +344,7 @@ Use content projection slots for custom field templates:
       <mat-label>Company</mat-label>
       <mat-select formControlName="companyId">
         @for (company of companies; track company.id) {
-        <mat-option [value]="company.id">
-          {{ company.name }}
-        </mat-option>
+        <mat-option [value]="company.id"> {{ company.name }} </mat-option>
         }
       </mat-select>
     </mat-form-field>
@@ -348,9 +356,7 @@ Use content projection slots for custom field templates:
       <mat-label>Company</mat-label>
       <mat-select formControlName="companyId" required>
         @for (company of companies; track company.id) {
-        <mat-option [value]="company.id">
-          {{ company.name }}
-        </mat-option>
+        <mat-option [value]="company.id"> {{ company.name }} </mat-option>
         }
       </mat-select>
     </mat-form-field>
@@ -366,7 +372,13 @@ Use content projection slots for custom field templates:
 
     <mat-form-field class="w-100">
       <mat-label>Validation PIN</mat-label>
-      <input matInput type="text" placeholder="Enter PIN" formControlName="validationPin" required />
+      <input
+        matInput
+        type="text"
+        placeholder="Enter PIN"
+        formControlName="validationPin"
+        required
+      />
     </mat-form-field>
   </div>
 </acp-login>
@@ -393,13 +405,17 @@ Customize the footer with dynamic content:
 
 ### Theme Color Inheritance
 
-The component uses CSS custom properties to inherit colors from the parent app's theme:
+The component uses CSS custom properties to inherit colors from the parent app's
+theme:
 
 - Background gradient: Uses `--mdc-theme-primary` and `--mdc-theme-secondary`
 - Title color: Uses `--mdc-theme-on-surface`
-- Error alerts: Uses `--mdc-theme-error`, `--mdc-theme-error-container`, `--mdc-theme-on-error-container`
+- Error alerts: Uses `--mdc-theme-error`, `--mdc-theme-error-container`,
+  `--mdc-theme-on-error-container`
 
-Fallback colors use Angular Material's Material Design 3 (M3) neutral color tokens:
+Fallback colors use Angular Material's Material Design 3 (M3) neutral color
+tokens:
+
 - Primary: #5c5f5c (M3 neutral primary)
 - Secondary: #79747e (M3 neutral secondary)
 - On surface: #1c1b1f (M3 on-surface)
@@ -423,7 +439,10 @@ To customize colors, define these CSS variables in your app's global styles:
 ### Component Inputs
 
 - `title: string` - The title displayed in the card header (default: 'Login')
-- `showRegisterButton: boolean` - Whether to show the register button (default: true)
-- `additionalSigninControls: Record<string, AbstractControl>` - Additional controls for signin form
-- `additionalSignupControls: Record<string, AbstractControl>` - Additional controls for signup form
+- `showRegisterButton: boolean` - Whether to show the register button (default:
+  true)
+- `additionalSigninControls: Record<string, AbstractControl>` - Additional
+  controls for signin form
+- `additionalSignupControls: Record<string, AbstractControl>` - Additional
+  controls for signup form
 - `footerContent: TemplateRef<any> | null` - Custom footer template

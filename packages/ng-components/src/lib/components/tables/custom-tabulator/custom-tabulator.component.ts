@@ -7,7 +7,7 @@ import {
   SimpleChanges,
   ViewEncapsulation,
   input,
-  output
+  output,
 } from '@angular/core';
 
 import { Tabulator, PageModule, ReactiveDataModule } from 'tabulator-tables';
@@ -140,7 +140,7 @@ export class CustomTabulatorComponent implements OnChanges, AfterViewInit, OnDes
         'tabulator-midnight',
         'tabulator-simple',
         'tabulator-site',
-        'tabulator-site-dark'
+        'tabulator-site-dark',
       );
 
       // Add current theme class (skip 'default' as it uses base styles)

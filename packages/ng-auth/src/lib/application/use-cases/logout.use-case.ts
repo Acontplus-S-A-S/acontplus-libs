@@ -20,7 +20,9 @@ export class LogoutUseCase extends BaseUseCase<void, void> {
     const refreshToken = this.tokenRepository.getRefreshToken();
 
     if (userData?.email && refreshToken && refreshToken.length > 0) {
-      return this.authRepository.logout(userData.email, refreshToken).pipe(tap(() => this.cleanup()));
+      return this.authRepository
+        .logout(userData.email, refreshToken)
+        .pipe(tap(() => this.cleanup()));
     }
 
     this.cleanup();

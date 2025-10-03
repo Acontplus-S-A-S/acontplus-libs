@@ -12,7 +12,13 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 })
 export class UrlRedirectService {
   private readonly REDIRECT_URL_KEY = 'acp_redirect_url';
-  private readonly EXCLUDED_ROUTES = ['/login', '/register', '/forgot-password', '/reset-password'];
+  private readonly EXCLUDED_ROUTES = [
+    '/login',
+    '/auth',
+    '/register',
+    '/forgot-password',
+    '/reset-password',
+  ];
 
   private readonly router = inject(Router);
   private readonly platformId = inject(PLATFORM_ID);
@@ -55,7 +61,7 @@ export class UrlRedirectService {
    * Redirects to the stored URL and clears it from storage
    * @param defaultRoute - The default route to navigate to if no URL is stored
    */
-  redirectToIntendedUrl(defaultRoute: string = '/'): void {
+  redirectToIntendedUrl(defaultRoute = '/'): void {
     const intendedUrl = this.getIntendedUrl();
 
     if (intendedUrl && !this.isExcludedRoute(intendedUrl)) {

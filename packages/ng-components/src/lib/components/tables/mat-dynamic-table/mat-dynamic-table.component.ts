@@ -4,7 +4,6 @@ import {
   ChangeDetectorRef,
   Component,
   inject,
-  Injector,
   Input,
   OnChanges,
   OnDestroy,
@@ -17,14 +16,12 @@ import {
   input,
   output,
   contentChildren,
-  contentChild,
-  viewChild
+  viewChild,
 } from '@angular/core';
 import {
   MatColumnDef,
   MatFooterRowDef,
   MatHeaderRowDef,
-  MatNoDataRow,
   MatRowDef,
   MatTable,
   MatTableDataSource,
@@ -32,8 +29,8 @@ import {
 } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { DatePipe, DecimalPipe, NgClass, NgTemplateOutlet } from '@angular/common';
+
+import { DatePipe, DecimalPipe, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -52,27 +49,22 @@ import { ColumnDefinition, Pagination, TableContext, TableRow } from '../../../m
     MatButtonModule,
     MatPaginatorModule,
     NgClass,
+    NgStyle,
     GetTotalPipe,
     DatePipe,
     DecimalPipe,
     NgTemplateOutlet,
   ],
   templateUrl: './mat-dynamic-table.component.html',
-  styleUrl: './mat-dynamic-table.component.css',
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed,void', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
+  styleUrl: './mat-dynamic-table.component.scss',
+
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MatDynamicTableComponent<T extends TableRow>
   implements AfterContentInit, OnChanges, OnInit, OnDestroy
 {
-  private componentRefs: ComponentRef<any>[] = [];
-  private embeddedViews: EmbeddedViewRef<any>[] = [];
+  private componentRefs: ComponentRef<unknown>[] = [];
+  private embeddedViews: EmbeddedViewRef<unknown>[] = [];
   private cdr = inject(ChangeDetectorRef);
 
   readonly showExpand = input(false);
@@ -107,7 +99,6 @@ export class MatDynamicTableComponent<T extends TableRow>
   readonly rowDefs = contentChildren(MatRowDef);
   readonly footerRowDefs = contentChildren(MatFooterRowDef);
   readonly columnDefs = contentChildren(MatColumnDef);
-  readonly noDataRow = contentChild.required(MatNoDataRow);
 
   readonly table = viewChild.required(MatTable);
   readonly rows = contentChildren(ViewContainerRef);
@@ -203,11 +194,6 @@ export class MatDynamicTableComponent<T extends TableRow>
     } else {
       this.footerRowDefs().forEach(footerRowDef => this.table().removeFooterRowDef(footerRowDef));
     }
-
-    const noDataRow = this.noDataRow();
-    if (noDataRow) {
-      this.table().setNoDataRow(noDataRow);
-    }
   }
 
   private initializeTable(): void {
@@ -226,9 +212,11 @@ export class MatDynamicTableComponent<T extends TableRow>
   }
 
   masterToggle(): void {
-    this.isAllSelected()
-      ? this.selection.clear()
-      : this.dataSource.data.forEach(row => this.selection.select(row));
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.dataSource.data.forEach(row => this.selection.select(row));
+    }
     this.rowSelected.emit(this.selection.selected);
     this.cdr.markForCheck();
   }
@@ -249,7 +237,11 @@ export class MatDynamicTableComponent<T extends TableRow>
   onExpand(event: Event, element: T): void {
     event.stopPropagation();
     this.expandedElement = this.expandedElement === element ? null : element;
-    this.expandedElement ? this.showExpanded.emit(element) : this.hideExpanded.emit(element);
+    if (this.expandedElement) {
+      this.showExpanded.emit(element);
+    } else {
+      this.hideExpanded.emit(element);
+    }
     this.cdr.markForCheck();
   }
 

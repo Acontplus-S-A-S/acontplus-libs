@@ -28,7 +28,7 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
   const token = tokenProvider?.getToken();
   if (token) {
     modifiedReq = req.clone({
-      setHeaders: { Authorization: `Bearer ${token}` }
+      setHeaders: { Authorization: `Bearer ${token}` },
     });
   }
 
@@ -150,7 +150,11 @@ function handleToastNotifications(
   if (skipNotification) return;
 
   // Dynamic handling: Use show() for runtime type selection
-  if (response.message && showNotifications && ['success', 'warning', 'error'].includes(response.status)) {
+  if (
+    response.message &&
+    showNotifications &&
+    ['success', 'warning', 'error'].includes(response.status)
+  ) {
     notificationService.show({
       type: response.status as 'success' | 'warning' | 'error',
       message: response.message,

@@ -1,6 +1,6 @@
 {
   "name": "@acontplus/ng-components",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Angular Material UI component library with dynamic tables, theming support, dialog wrappers, and comprehensive styling utilities",
   "peerDependencies": {
     "@angular/cdk": "^20.2.5",

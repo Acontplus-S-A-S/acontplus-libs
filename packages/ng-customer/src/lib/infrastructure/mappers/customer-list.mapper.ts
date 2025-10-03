@@ -23,8 +23,13 @@ export class ListCustomerMapper {
     };
 
     // Parse payload (backend sends JSON string in payload)
-    const parsed = typeof response?.payload === 'string' ? JSON.parse(response.payload) : response?.payload;
-    const dataArray: any[] = Array.isArray(parsed) ? parsed[0] ?? [] : Array.isArray(parsed?.items) ? parsed.items : [];
+    const parsed =
+      typeof response?.payload === 'string' ? JSON.parse(response.payload) : response?.payload;
+    const dataArray: any[] = Array.isArray(parsed)
+      ? (parsed[0] ?? [])
+      : Array.isArray(parsed?.items)
+        ? parsed.items
+        : [];
 
     // Map each item to UI-friendly fields, preserving source values
     result.items = dataArray.map((item: any, index: number) => ({
@@ -51,7 +56,8 @@ export class ListCustomerMapper {
     const pageIndex = response?.PageIndex ?? response?.pageIndex ?? 1;
     const pageSize = response?.PageSize ?? response?.pageSize ?? result.items.length;
     const totalCountFromItem = result.items.length > 0 ? result.items[0].totalRecords : undefined;
-    const totalCount = response?.TotalCount ?? response?.totalCount ?? totalCountFromItem ?? result.items.length;
+    const totalCount =
+      response?.TotalCount ?? response?.totalCount ?? totalCountFromItem ?? result.items.length;
     const metadata = response?.Metadata ?? response?.metadata ?? {};
 
     result.pageIndex = Number.isFinite(pageIndex) ? pageIndex : 1;
@@ -66,4 +72,3 @@ export class ListCustomerMapper {
     return result;
   }
 }
-

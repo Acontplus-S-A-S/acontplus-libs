@@ -34,6 +34,6 @@ export const authRedirectInterceptor: HttpInterceptorFn = (req, next) => {
 
       // Re-throw the error so other error handlers can process it
       return throwError(() => error);
-    })
+    }),
   );
 };

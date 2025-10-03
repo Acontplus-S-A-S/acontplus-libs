@@ -6,10 +6,8 @@ import {
   MatChipInputEvent,
   MatChipRow,
 } from '@angular/material/chips';
-import { MatFormField } from '@angular/material/form-field';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
-import { MatLabel } from '@angular/material/form-field';
-import { MatHint } from '@angular/material/form-field';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 

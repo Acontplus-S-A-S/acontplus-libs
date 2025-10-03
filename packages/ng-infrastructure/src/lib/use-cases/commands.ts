@@ -1,11 +1,13 @@
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { inject } from '@angular/core';
 import { BaseUseCase } from './base.use-case';
+import { LoggingService } from '../services/logging.service';
 
 // Only create commands if you have complex validation logic
 export abstract class Command<TRequest, TResponse = void> extends BaseUseCase<TRequest, TResponse> {
   // Simple validation - override only when needed
-  protected validate(request: TRequest): string[] {
+  protected validate(_request: TRequest): string[] {
     return []; // Return array of error messages
   }
 
@@ -24,7 +26,8 @@ export abstract class Command<TRequest, TResponse = void> extends BaseUseCase<TR
     return this.executeInternal(request).pipe(
       catchError(error => {
         // Log the error for debugging
-        console.error('An error occurred during command execution:', error);
+        const logger = inject(LoggingService);
+        logger.error('An error occurred during command execution:', error);
 
         // Re-throw the error so the caller can handle it
         return throwError(() => error);

@@ -8,25 +8,27 @@ import { HttpRequestLog, HttpErrorLog } from '../interceptors';
 export class LoggingService {
   private environment = inject(ENVIRONMENT);
 
-  log(level: 'info' | 'warn' | 'error', message: string, context?: any): void {
+  log(level: 'info' | 'warn' | 'error', message: string, context?: unknown): void {
     if (this.environment.isProduction) {
       // Production logging (e.g., to external service)
       this.logToExternalService(level, message, context);
     } else {
-      // Development logging
-      console[level](`[${level.toUpperCase()}] ${message}`, context);
+      // Development logging - only log in development mode
+      if (!this.environment.isProduction) {
+        console[level](`[${level.toUpperCase()}] ${message}`, context);
+      }
     }
   }
 
-  info(message: string, context?: any): void {
+  info(message: string, context?: unknown): void {
     this.log('info', message, context);
   }
 
-  warn(message: string, context?: any): void {
+  warn(message: string, context?: unknown): void {
     this.log('warn', message, context);
   }
 
-  error(message: string, context?: any): void {
+  error(message: string, context?: unknown): void {
     this.log('error', message, context);
   }
 
@@ -75,7 +77,7 @@ export class LoggingService {
     });
   }
 
-  private logToExternalService(level: string, message: string, context?: any): void {
+  private logToExternalService(_level: string, _message: string, _context?: unknown): void {
     // Implement external logging service integration
     // e.g., Sentry, LogRocket, etc.
     // This is a placeholder for production logging implementation

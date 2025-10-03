@@ -106,13 +106,13 @@ export class TokenRepository {
     }
   }
 
-  getTokenPayload(): any {
+  getTokenPayload(): unknown {
     const token = this.getAccessToken();
     if (!token) return null;
 
     try {
       return jwtDecode(token);
-    } catch (error) {
+    } catch {
       return null;
     }
   }

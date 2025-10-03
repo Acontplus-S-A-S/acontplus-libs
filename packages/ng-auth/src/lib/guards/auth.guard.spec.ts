@@ -14,13 +14,13 @@ describe('authGuard', () => {
 
   beforeEach(() => {
     const authTokenServiceMock = {
-      isAuthenticated: jest.fn()
+      isAuthenticated: jest.fn(),
     };
     const urlRedirectServiceMock = {
-      storeIntendedUrl: jest.fn()
+      storeIntendedUrl: jest.fn(),
     };
     const routerMock = {
-      navigate: jest.fn()
+      navigate: jest.fn(),
     };
 
     TestBed.configureTestingModule({
@@ -28,8 +28,8 @@ describe('authGuard', () => {
         { provide: AuthTokenService, useValue: authTokenServiceMock },
         { provide: UrlRedirectService, useValue: urlRedirectServiceMock },
         { provide: Router, useValue: routerMock },
-        { provide: ENVIRONMENT, useValue: { loginRoute: '/login' } }
-      ]
+        { provide: ENVIRONMENT, useValue: { loginRoute: '/login' } },
+      ],
     });
 
     authTokenService = TestBed.inject(AuthTokenService);

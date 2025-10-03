@@ -6,8 +6,7 @@ import {
 } from '@angular/common/http';
 
 import { finalize } from 'rxjs/operators';
-import { inject } from '@angular/core';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { OverlayService } from '@acontplus/ng-components';
 /**
  * Token to determine if a request should show spinner
@@ -15,7 +14,7 @@ import { OverlayService } from '@acontplus/ng-components';
  */
 const SHOW_SPINNER = new HttpContextToken<boolean>(() => true);
 
-const requests: HttpRequest<any>[] = [];
+const requests: HttpRequest<unknown>[] = [];
 
 /**
  * Helper function to disable spinner for specific requests
@@ -36,11 +35,11 @@ export class ActiveRequestsTracker {
     return requests.length;
   }
 
-  add(request: HttpRequest<any>): void {
+  add(request: HttpRequest<unknown>): void {
     requests.push(request);
   }
 
-  remove(request: HttpRequest<any>): void {
+  remove(request: HttpRequest<unknown>): void {
     const index = requests.indexOf(request);
     if (index >= 0) {
       requests.splice(index, 1);
@@ -53,7 +52,6 @@ export class ActiveRequestsTracker {
  */
 export const spinnerInterceptor: HttpInterceptorFn = (req, next) => {
   // Track active requests requiring spinner
-  console.log(requests);
   const activeRequests = inject(ActiveRequestsTracker);
   const overlayService = inject(OverlayService);
 

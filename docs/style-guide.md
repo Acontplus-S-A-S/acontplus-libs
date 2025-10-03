@@ -1,8 +1,8 @@
 # Acontplus UI Components Style Guide
 
 This document provides guidelines for consistent design and usage of components
-in the ng-components library. Following these guidelines will ensure a
-cohesive user experience across applications that use these components.
+in the ng-components library. Following these guidelines will ensure a cohesive
+user experience across applications that use these components.
 
 ## Table of Contents
 

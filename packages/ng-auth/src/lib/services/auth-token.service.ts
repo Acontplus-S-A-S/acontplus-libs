@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ITokenProvider } from '@acontplus/ng-infrastructure';
 import { TokenRepository } from '../repositories/token.repository';
 
 @Injectable({ providedIn: 'root' })
 export class AuthTokenService implements ITokenProvider {
-  constructor(private tokenRepository: TokenRepository) {}
+  private readonly tokenRepository = inject(TokenRepository);
 
   getToken(): string | null {
     return this.tokenRepository.getAccessToken();

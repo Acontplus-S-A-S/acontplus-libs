@@ -11,6 +11,7 @@ import {
   MatDynamicCardComponent,
   MatInputChipComponent,
   MatThemeButtonComponent,
+  ToUpperCaseDirective,
 } from '@acontplus/ng-components';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -37,7 +38,6 @@ import {
   SRI_DOCUMENT_TYPE,
   isSuccessResponse,
 } from '@acontplus/core';
-import { ToUpperCaseDirective } from '@acontplus/ng-components';
 import { CustomerUseCase } from '../../../application/use-cases/customer.use-case';
 import { CustomerExternalUseCase } from '../../../application/use-cases/customer-external.use-case';
 import { CustomerHttpRepository } from '../../../infrastructure/repositories/customer-http.repository';
@@ -332,7 +332,7 @@ export class CustomerAddEditComponent implements OnInit {
           this.updateFormControlNumeroIdentificacion(rest.codigoSri);
         }
       });
-    } catch (error) {
+    } catch (_error) {
       // Handle error appropriately
     }
   }

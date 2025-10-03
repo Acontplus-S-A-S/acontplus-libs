@@ -14,7 +14,7 @@ describe('UrlRedirectService', () => {
     const routerMock = {
       navigate: jest.fn(),
       navigateByUrl: jest.fn(),
-      url: '/dashboard'
+      url: '/dashboard',
     };
 
     // Mock sessionStorage
@@ -26,14 +26,14 @@ describe('UrlRedirectService', () => {
       }),
       removeItem: jest.fn((key: string) => {
         delete mockSessionStorage[key];
-      })
+      }),
     };
 
     // Mock document with sessionStorage
     const mockDocument = {
       defaultView: {
-        sessionStorage: mockStorage
-      }
+        sessionStorage: mockStorage,
+      },
     };
 
     TestBed.configureTestingModule({
@@ -41,8 +41,8 @@ describe('UrlRedirectService', () => {
         UrlRedirectService,
         { provide: Router, useValue: routerMock },
         { provide: PLATFORM_ID, useValue: 'browser' },
-        { provide: DOCUMENT, useValue: mockDocument }
-      ]
+        { provide: DOCUMENT, useValue: mockDocument },
+      ],
     });
 
     service = TestBed.inject(UrlRedirectService);
@@ -67,7 +67,7 @@ describe('UrlRedirectService', () => {
       const routerMock = {
         navigate: jest.fn(),
         navigateByUrl: jest.fn(),
-        url: '/dashboard'
+        url: '/dashboard',
       };
 
       TestBed.configureTestingModule({
@@ -75,8 +75,8 @@ describe('UrlRedirectService', () => {
           UrlRedirectService,
           { provide: Router, useValue: routerMock },
           { provide: PLATFORM_ID, useValue: 'server' },
-          { provide: DOCUMENT, useValue: {} }
-        ]
+          { provide: DOCUMENT, useValue: {} },
+        ],
       });
 
       ssrService = TestBed.inject(UrlRedirectService);

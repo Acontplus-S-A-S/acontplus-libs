@@ -35,7 +35,7 @@ export class SweetAlertProvider extends NotificationProviderBase {
       title: config.title,
       text: config.message,
       html: config.html,
-      icon: 'question' as any,
+      icon: 'question' as const,
       showCancelButton: config.showCancelButton !== false,
       confirmButtonText: config.confirmButtonText || 'Confirm',
       cancelButtonText: config.cancelButtonText || 'Cancel',
@@ -56,14 +56,16 @@ export class SweetAlertProvider extends NotificationProviderBase {
   private showAlert(
     props: NotificationCallProps & { type: NotificationType },
   ): Observable<NotificationResult> {
+    const configOptions = props.config as Record<string, unknown> | undefined;
+    const { duration, ...otherConfig } = configOptions || {};
     const swalConfig = {
       title: props.title,
       text: props.message,
-      icon: props.type as any,
-      timer: props.config?.duration || 5000,
+      icon: props.type as 'success' | 'error' | 'warning' | 'info',
+      timer: (duration as number) || 5000,
       showConfirmButton: true,
       timerProgressBar: true,
-      ...props.config,
+      ...otherConfig,
     };
 
     return from(Swal.fire(swalConfig)).pipe(

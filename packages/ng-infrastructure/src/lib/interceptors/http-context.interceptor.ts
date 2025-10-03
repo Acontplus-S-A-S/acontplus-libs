@@ -114,7 +114,8 @@ export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   // Skip auth for login, register, and refresh endpoints
-  const skipAuth = req.url.includes('/login') || req.url.includes('/register') || req.url.includes('/refresh');
+  const skipAuth =
+    req.url.includes('/login') || req.url.includes('/register') || req.url.includes('/refresh');
 
   // Handle URL transformation
   const baseUrl = environment.apiBaseUrl;
@@ -213,7 +214,7 @@ export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
                 // Retry the original request with new token
                 const retryReq = req.clone({
                   url: finalUrl,
-                  setHeaders: { ...headers, 'Authorization': `Bearer ${newTokens.token}` },
+                  setHeaders: { ...headers, Authorization: `Bearer ${newTokens.token}` },
                 });
                 return next(retryReq);
               }),
@@ -289,9 +290,9 @@ export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
         // Handle specific error scenarios
         switch (error.status) {
           case 401:
-            console.error('Unauthorized access - token expired or invalid');
+            loggingService.error('Unauthorized access - token expired or invalid');
             // Note: Token clearing should be handled by the auth service, not infrastructure
-            router.navigate(['/login']);
+            router.navigate([environment.loginRoute]);
             break;
           case 403:
             tenantService.handleForbidden();
@@ -327,7 +328,7 @@ export interface HttpErrorLog extends HttpRequestLog {
   status: number;
   statusText: string;
   message: string;
-  errorDetails: any;
+  errorDetails: unknown;
   environment: string;
 }
 

@@ -24,17 +24,29 @@ export class PricingDemoComponent {
   calculadora = {
     defaultDecimals: 2,
     tax: {
-      getTaxCalculationDetails: (base: number, rate: number) => ({ base, rate, total: base * (1 + rate / 100) })
+      getTaxCalculationDetails: (base: number, rate: number) => ({
+        base,
+        rate,
+        total: base * (1 + rate / 100),
+      }),
     },
     discount: {
-      getDiscountCalculationDetails: (base: number, rate: number) => ({ base, rate, total: base * (1 - rate / 100) })
+      getDiscountCalculationDetails: (base: number, rate: number) => ({
+        base,
+        rate,
+        total: base * (1 - rate / 100),
+      }),
     },
     profit: {
-      getProfitCalculationDetails: (base: number, rate: number) => ({ base, rate, total: base * (1 + rate / 100) })
+      getProfitCalculationDetails: (base: number, rate: number) => ({
+        base,
+        rate,
+        total: base * (1 + rate / 100),
+      }),
     },
     lineItem: {
-      calculateLineItemTotal: (price: number, quantity: number) => price * quantity
-    }
+      calculateLineItemTotal: (price: number, quantity: number) => price * quantity,
+    },
   };
 
   // Escenario 1

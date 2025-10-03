@@ -6,19 +6,21 @@
         @if (showSelectBox()) {
           <ng-container matColumnDef="select">
             <th *matHeaderCellDef mat-header-cell>
-              <mat-checkbox (change)="$event ? masterToggle() : null"
+              <mat-checkbox
+                (change)="$event ? masterToggle() : null"
                 (click)="$event.stopPropagation()"
                 [aria-label]="checkboxLabel()"
                 [checked]="selection.hasValue() && isAllSelected()"
                 [indeterminate]="selection.hasValue() && !isAllSelected()"
-               />
+              />
             </th>
             <td *matCellDef="let row" mat-cell>
-              <mat-checkbox (change)="$event ? selection.toggle(row) : null"
+              <mat-checkbox
+                (change)="$event ? selection.toggle(row) : null"
                 (click)="$event.stopPropagation()"
                 [aria-label]="checkboxLabel(row)"
                 [checked]="selection.isSelected(row)"
-               />
+              />
             </td>
             <td *matFooterCellDef mat-footer-cell></td>
           </ng-container>
@@ -38,8 +40,18 @@
             >
               @if (col.key === 'op') {
                 <div class="d-flex flex-row gap-1">
-                  <ng-container *ngTemplateOutlet="rowTemplate(); context: { $implicit: element, index: i }"
-                   />
+                  @if (col.templateOutlet) {
+                    <ng-container
+                      *ngTemplateOutlet="
+                        col.templateOutlet;
+                        context: { $implicit: element, index: i }
+                      "
+                    />
+                  } @else if (rowTemplate()) {
+                    <ng-container
+                      *ngTemplateOutlet="rowTemplate(); context: { $implicit: element, index: i }"
+                    />
+                  }
                 </div>
               } @else {
                 @switch (col.type) {
@@ -71,11 +83,12 @@
                     </button>
                   }
                   @case ('template') {
-                    <ng-container *ngTemplateOutlet="
+                    <ng-container
+                      *ngTemplateOutlet="
                         col.templateOutlet;
                         context: { $implicit: element, index: i }
                       "
-                     />
+                    />
                   }
                   @case ('custom') {
                     <ng-container #dynamicContent />
@@ -106,39 +119,42 @@
               *matCellDef="let element; let i = index"
               [attr.colspan]="columnsToDisplayWithExpand.length"
             >
-              <div
-                class="m-0 p-0"
-                [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed'"
-              >
-                <ng-container *ngTemplateOutlet="expandedDetail; context: { $implicit: element, index: i }"
-                 />
+              <div class="m-0 p-0 detail-expand" [class.expanded]="element === expandedElement">
+                <ng-container
+                  *ngTemplateOutlet="expandedDetail; context: { $implicit: element, index: i }"
+                />
               </div>
             </td>
           </ng-container>
         }
 
-        <!-- Header -->
-        <tr
-          mat-header-row
-          *matHeaderRowDef="columnsToDisplayWithExpand; sticky: true"
-          class="small-header"
-        ></tr>
+        <!-- Header Row -->
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
 
-        <!-- Normal Rows -->
-        <tr
-          mat-row
-          *matRowDef="let row; columns: columnsToDisplayWithExpand; when: isNormalRow"
-          [class.example-expanded-row]="expandedElement === row"
-          (click)="selectRow(row)"
-          [style]="getRowColor(row)"
-        ></tr>
-
-        <!-- Expanded Row -->
+        <!-- Data Rows -->
         @if (showExpand() && expandedDetail) {
+          <!-- Regular Row -->
+          <tr
+            mat-row
+            *matRowDef="let row; columns: columnsToDisplayWithExpand; when: isNormalRow"
+            class="mat-dynamic-table-row"
+            [class.mat-dynamic-table-expanded-row]="expandedElement === row"
+            [ngStyle]="getRowColor(row)"
+            (click)="expandedElement = expandedElement === row ? null : row"
+          ></tr>
+
+          <!-- Expanded Row -->
           <tr
             mat-row
             *matRowDef="let row; columns: ['expandedDetail']; when: isExpandedRow"
-            class="example-detail-row"
+            class="mat-dynamic-table-detail-row"
+          ></tr>
+        } @else {
+          <!-- Regular Row without expansion -->
+          <tr
+            mat-row
+            *matRowDef="let row; columns: columnsToDisplayWithExpand"
+            [ngStyle]="getRowColor(row)"
           ></tr>
         }
 
@@ -158,7 +174,8 @@
   </div>
 
   @if (enablePagination() && paginationConfig) {
-    <mat-paginator #paginator
+    <mat-paginator
+      #paginator
       [disabled]="isLoadingData()"
       (page)="handlePageEvent($event)"
       [length]="paginationConfig.totalRecords"
@@ -167,6 +184,6 @@
       [showFirstLastButtons]="true"
       [pageIndex]="paginationConfig.pageIndex"
       aria-label="Select page"
-     />
+    />
   }
 </div>
