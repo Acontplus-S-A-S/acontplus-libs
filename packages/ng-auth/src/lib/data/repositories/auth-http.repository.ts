@@ -35,7 +35,7 @@ export class AuthHttpRepository extends AuthRepository {
     );
   }
 
-  register(request: RegisterRequest): Observable<User> {
+  register(request: RegisterRequest): Observable<AuthTokens> {
     return from(this.csrfService.getCsrfToken()).pipe(
       switchMap(csrfToken =>
         this.http
@@ -47,19 +47,7 @@ export class AuthHttpRepository extends AuthRepository {
             withCredentials: true,
           })
           .pipe(
-            map(response => {
-              // Convert string ID to number - if response.id is a string, hash it to get a number
-              const numericId =
-                response.id !== ''
-                  ? Math.abs(
-                      response.id.split('').reduce((a, b) => {
-                        a = (a << 5) - a + b.charCodeAt(0);
-                        return a & a;
-                      }, 0),
-                    )
-                  : Date.now();
-              return new User(numericId, request.email, request.displayName);
-            }),
+            map(response => new AuthTokens(response.token, response.refreshToken)),
           )
       )
     );

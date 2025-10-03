@@ -16,6 +16,15 @@
           <input matInput type="password" placeholder="Ingrese su contraseña" formControlName="password" />
         </mat-form-field>
 
+        <!-- Remember Me checkbox - conditional -->
+        @if (showRememberMe()) {
+        <div class="d-flex align-items-center mt-2">
+          <mat-checkbox formControlName="rememberMe">
+            Recordarme
+          </mat-checkbox>
+        </div>
+        }
+
         <!-- Additional signin fields -->
         <ng-container *ngTemplateOutlet="additionalSigninFields()"></ng-container>
 

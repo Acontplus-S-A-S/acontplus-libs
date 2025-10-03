@@ -26,10 +26,6 @@ export class App implements OnInit {
   readonly isAuthenticated = this.authStore.isAuthenticated;
 
   ngOnInit() {
-    this.notificationService.toastr.info({
-      message: 'App initialized',
-      config: { timeOut: 3000, positionClass: 'toast-top-right' },
-    });
     this.notificationService.snackbar.info({ message: 'App initialized' });
     this.notificationService.sweetAlert.info({
       message: 'App initialized',

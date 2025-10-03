@@ -5,7 +5,7 @@ import { AuthTokens } from '@acontplus/core';
 
 export abstract class AuthRepository {
   abstract login(request: LoginRequest): Observable<AuthTokens>;
-  abstract register(request: RegisterRequest): Observable<User>;
+  abstract register(request: RegisterRequest): Observable<AuthTokens>;
   abstract refreshToken(request: RefreshTokenRequest): Observable<AuthTokens>;
   abstract logout(email: string, refreshToken: string): Observable<void>;
 }

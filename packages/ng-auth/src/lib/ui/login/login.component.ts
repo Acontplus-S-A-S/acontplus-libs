@@ -29,6 +29,7 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
 import { MatAnchor, MatButton } from '@angular/material/button';
+import { MatCheckbox } from '@angular/material/checkbox';
 import { LoginUseCase } from '../../application/use-cases/login.use-case';
 import { RegisterUseCase } from '../../application/use-cases/register.use-case';
 
@@ -48,6 +49,7 @@ import { RegisterUseCase } from '../../application/use-cases/register.use-case';
     MatButton,
     MatCardFooter,
     MatAnchor,
+    MatCheckbox,
   ],
   templateUrl: `./login.component.html`,
   styleUrls: ['./login.component.scss'],
@@ -56,6 +58,7 @@ import { RegisterUseCase } from '../../application/use-cases/register.use-case';
 export class LoginComponent implements OnInit {
   title = input<string>('Login');
   showRegisterButton = input<boolean>(true);
+  showRememberMe = input<boolean>(true);
 
   // Additional form controls that can be passed from parent components
   additionalSigninControls = input<Record<string, AbstractControl>>({});
@@ -87,6 +90,7 @@ export class LoginComponent implements OnInit {
     this.signinForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
+      rememberMe: [false], // Default to false (unchecked)
     });
 
     this.signupForm = this.fb.group({
@@ -97,6 +101,12 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Handle rememberMe control based on showRememberMe input
+    if (!this.showRememberMe()) {
+      // Remove rememberMe control if not needed
+      this.signinForm.removeControl('rememberMe');
+    }
+
     // Add additional controls to signin form
     Object.entries(this.additionalSigninControls()).forEach(([key, control]) => {
       this.signinForm.addControl(key, control);
@@ -118,7 +128,14 @@ export class LoginComponent implements OnInit {
       this.isLoading.set(true);
       this.errorMessage.set(null);
 
-      this.loginUseCase.execute(this.signinForm.value).subscribe({
+      // Prepare login request with rememberMe handling
+      const loginRequest = {
+        ...this.signinForm.value,
+        // If showRememberMe is false, default rememberMe to false
+        rememberMe: this.showRememberMe() ? (this.signinForm.value.rememberMe ?? false) : false
+      };
+
+      this.loginUseCase.execute(loginRequest).subscribe({
         next: () => {
           this.isLoading.set(false);
         },

@@ -58,7 +58,7 @@ app.use(express.json());
 app.get('/csrf-token', (req, res) => {
   const token = `csrf-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   csrfTokens.add(token);
-  res.json({ token });
+  res.json({ csrfToken: token }); // Changed from "token" to "csrfToken"
 });
 
 // Middleware to check CSRF token
@@ -126,10 +126,32 @@ app.post('/account/register', checkCsrf, (req: any, res: any): void => {
 
   users.push(user);
 
+  // Create JWT tokens (same as login)
+  const accessToken = jwt.sign(
+    { sub: user.id, email: user.email, type: 'access' },
+    JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+  const refreshToken = jwt.sign(
+    { sub: user.id, email: user.email, type: 'refresh' },
+    JWT_SECRET,
+    { expiresIn: '7d' }
+  );
+
+  // Create session
+  const session: Session = {
+    token: accessToken,
+    refreshToken,
+    email,
+    expiresAt: Date.now() + 3600000 // 1 hour
+  };
+
+  sessions.push(session);
+
+  // Return tokens (same as login response)
   res.json({
-    id: user.id,
-    email: user.email,
-    displayName: user.displayName
+    token: accessToken,
+    refreshToken
   });
 });
 

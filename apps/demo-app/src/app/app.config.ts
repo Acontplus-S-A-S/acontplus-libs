@@ -11,7 +11,6 @@ import { environment } from '../environments/environment';
 import { initHttpFactory } from './init-http-factory';
 import { provideTransloco } from '@jsverse/transloco';
 import { TranslocoHttpLoader } from './providers';
-import { provideToastr } from 'ngx-toastr';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { ENVIRONMENT } from '@acontplus/ng-config';
 import {
@@ -49,10 +48,10 @@ export const appConfig: ApplicationConfig = {
       },
       loader: TranslocoHttpLoader,
     }),
-
-    provideToastr(),
     provideAnimationsAsync(),
-    provideNotifications(),
+    provideNotifications({
+      defaultProvider: 'sweetalert',
+    }),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     { provide: ENVIRONMENT, useValue: environment },

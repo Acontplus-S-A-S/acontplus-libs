@@ -147,8 +147,8 @@ export class AuthStore implements OnDestroy {
   /**
    * Set authentication state after successful login
    */
-  setAuthenticated(tokens: AuthTokens): void {
-    this.tokenRepository.saveTokens(tokens);
+  setAuthenticated(tokens: AuthTokens, rememberMe: boolean = false): void {
+    this.tokenRepository.saveTokens(tokens, rememberMe);
     this._isAuthenticated.set(true);
     const userData = this.userRepository.getCurrentUser();
     this._user.set(userData);

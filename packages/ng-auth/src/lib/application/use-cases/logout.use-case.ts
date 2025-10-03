@@ -1,15 +1,15 @@
 // src/lib/application/use-cases/logout.use-case.ts
 import { Injectable, inject } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
+import { BaseUseCase, UserRepository } from '@acontplus/ng-infrastructure';
 import { AuthRepository } from '../../domain/repositories/auth.repository';
-import { UserRepository } from '@acontplus/ng-infrastructure';
 import { TokenRepository } from '../../repositories/token.repository';
 import { AuthStore } from '../../ui/stores/auth.store';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LogoutUseCase {
+export class LogoutUseCase extends BaseUseCase<void, void> {
   private readonly authRepository = inject(AuthRepository);
   private readonly userRepository = inject(UserRepository);
   private readonly tokenRepository = inject(TokenRepository);
