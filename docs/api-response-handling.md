@@ -21,7 +21,7 @@ consistent error handling.
 
 ### What the Interceptor Currently Handles
 
-The `api.interceptor.ts` in `@acontplus/ng-core` currently handles:
+The `api.interceptor.ts` in `@acontplus/core` currently handles:
 
 - **Toast notifications** based on response status and request type
 - **Error handling** for critical HTTP-level errors (5xx, network errors)

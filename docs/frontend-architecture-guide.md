@@ -1628,9 +1628,11 @@ acontplus-libs/
 ├── packages/
 │   ├── core/                       # Base library
 │   ├── ng-components/              # UI components
+│   ├── ng-config/                  # Configuration services
+│   ├── ng-auth/                    # Authentication services
+│   ├── ng-infrastructure/          # Infrastructure services
 │   ├── ng-customer/                # Customer feature
 │   ├── ng-notifications/           # Notifications feature
-│   ├── ng-core/                    # Angular core services
 │   ├── ui-kit/                     # Additional UI components
 │   └── utils/                      # Shared utilities
 ├── apps/
