@@ -288,7 +288,7 @@ This workspace was migrated from npm workspaces to Nx monorepo:
 
 #### Component Selectors
 
-- **ng-components, ng-core, ng-customer, ng-notifications**: `acp` prefix
+- **core, ng-components, ng-customer, ng-notifications**: `acp` prefix
 - **demo-app**: `app` prefix
 
 #### Naming Conventions
@@ -341,7 +341,9 @@ acontplus-libs/
 │   │   │   └── styles/         # Component styles and themes
 │   │   ├── project.json
 │   │   └── README.md           # UI components documentation
-│   ├── ng-core/                # Core Angular services
+│   ├── ng-config/                # Core Angular services
+│   ├── ng-auth/                 # Authentication services
+│   ├── ng-infrastructure/       # Infrastructure services
 │   ├── ng-customer/            # Customer management
 │   ├── ng-notifications/       # Notifications system
 │   ├── ui-kit/                 # Additional UI components
@@ -663,7 +665,9 @@ acontplus-libs/
 │   │   │   └── styles/         # Component styles and themes
 │   │   ├── project.json
 │   │   └── README.md           # UI components documentation
-│   ├── ng-core/                # Core Angular services
+│   ├── ng-config/              # Configuration services
+│   ├── ng-auth/                # Authentication services
+│   ├── ng-infrastructure/      # Infrastructure services
 │   ├── ng-customer/            # Customer management
 │   ├── ng-notifications/       # Notifications system
 │   ├── ui-kit/                 # Additional UI components
