@@ -22,7 +22,7 @@ npm install @acontplus/utils
 
 ### Color Converter
 
-Utilities for color manipulation and conversion.
+Functions for generating random colors.
 
 ### Decimal Converter
 
@@ -81,10 +81,10 @@ Custom error for invalid parameters.
 Import the utilities you need:
 
 ```typescript
-import { ColorConverter, DateFormatter, ArrayHelper } from '@acontplus/utils';
+import { getRandomHexColor, DateFormatter, ArrayHelper } from '@acontplus/utils';
 
 // Convert colors
-const hex = ColorConverter.rgbToHex(255, 0, 0);
+const hex = getRandomHexColor();
 
 // Format dates
 const formatted = DateFormatter.format(new Date(), 'YYYY-MM-DD');

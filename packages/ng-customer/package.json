@@ -3,7 +3,7 @@
   "version": "1.0.8",
   "description": "Acontplus Angular Customer Module",
   "dependencies": {
-    "@acontplus/ng-notifications": "^1.0.7"
+    "@acontplus/ng-notifications": "^1.0.9"
   },
   "peerDependencies": {
     "@acontplus/ng-components": "^1.0.13",

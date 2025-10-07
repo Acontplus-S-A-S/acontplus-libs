@@ -61,12 +61,12 @@ Configuration for snackbar notifications.
 Import the providers and services:
 
 ```typescript
-import { NotificationService, notificationProviders } from '@acontplus/ng-notifications';
+import { NotificationService, provideNotifications } from '@acontplus/ng-notifications';
 
 // In app.config.ts
 export const appConfig: ApplicationConfig = {
   providers: [
-    ...notificationProviders,
+    provideNotifications(),
   ],
 };
 

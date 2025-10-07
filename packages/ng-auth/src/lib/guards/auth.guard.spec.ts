@@ -28,7 +28,7 @@ describe('authGuard', () => {
         { provide: TokenRepository, useValue: tokenRepositoryMock },
         { provide: UrlRedirectService, useValue: urlRedirectServiceMock },
         { provide: Router, useValue: routerMock },
-        { provide: ENVIRONMENT, useValue: { loginRoute: '/login' } },
+        { provide: ENVIRONMENT, useValue: { loginRoute: 'login' } },
       ],
     });
 

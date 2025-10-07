@@ -110,22 +110,7 @@ export class MyComponent {
 
 ## Usage
 
-### Authentication Service
-
-```typescript
-import { AuthTokenService } from '@acontplus/ng-auth';
-
-@Component({...})
-export class MyComponent {
-  constructor(private authService: AuthTokenService) {}
-
-  isUserAuthenticated(): boolean {
-    return this.authService.isAuthenticated();
-  }
-}
-```
-
-### Using Authentication Use Cases
+### Authentication Use Cases
 
 ```typescript
 import { LoginUseCase, LogoutUseCase } from '@acontplus/ng-auth';
@@ -172,7 +157,6 @@ styling.
 
 ### Core Services
 
-- **AuthTokenService**: JWT token management and authentication state
 - **UrlRedirectService**: URL storage and redirection management
 - **CsrfService**: CSRF token management for secure API requests
 - **TokenRepository**: Secure token storage and retrieval

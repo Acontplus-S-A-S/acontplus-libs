@@ -28,7 +28,7 @@ export const authRedirectInterceptor: HttpInterceptorFn = (req, next) => {
           urlRedirectService.storeCurrentUrlIfAllowed();
 
           // Navigate to login page
-          router.navigate([environment.loginRoute]);
+          router.navigate([`/${environment.loginRoute}`]);
         }
       }
 

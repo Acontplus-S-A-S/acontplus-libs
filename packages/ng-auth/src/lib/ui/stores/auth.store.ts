@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Observable, of, tap, catchError } from 'rxjs';
 import { AuthRepository } from '../../domain/repositories/auth.repository';
 import { TokenRepository } from '../../repositories/token.repository';
-import { UserRepository } from '@acontplus/ng-infrastructure';
 import { AuthTokens, UserData, DecodedToken } from '@acontplus/core';
 
 @Injectable({
@@ -13,7 +12,6 @@ import { AuthTokens, UserData, DecodedToken } from '@acontplus/core';
 export class AuthStore implements OnDestroy {
   private readonly authRepository = inject(AuthRepository);
   private readonly tokenRepository = inject(TokenRepository);
-  private readonly userRepository = inject(UserRepository);
   private readonly router = inject(Router);
   private readonly ngZone = inject(NgZone);
 
@@ -46,7 +44,7 @@ export class AuthStore implements OnDestroy {
       this._isAuthenticated.set(isAuthenticated);
 
       if (isAuthenticated) {
-        const userData = this.userRepository.getCurrentUser();
+        const userData = this.tokenRepository.getUserData();
         this._user.set(userData);
         this.scheduleTokenRefresh();
       }
@@ -113,7 +111,7 @@ export class AuthStore implements OnDestroy {
       return this.refreshInProgress$;
     }
 
-    const userData = this.userRepository.getCurrentUser();
+    const userData = this.tokenRepository.getUserData();
     const refreshToken = this.tokenRepository.getRefreshToken();
 
     if (!userData?.email || !refreshToken) {
@@ -153,7 +151,7 @@ export class AuthStore implements OnDestroy {
   setAuthenticated(tokens: AuthTokens, rememberMe = false): void {
     this.tokenRepository.saveTokens(tokens, rememberMe);
     this._isAuthenticated.set(true);
-    const userData = this.userRepository.getCurrentUser();
+    const userData = this.tokenRepository.getUserData();
     this._user.set(userData);
     this.scheduleTokenRefresh();
   }

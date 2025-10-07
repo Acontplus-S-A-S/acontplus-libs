@@ -33,7 +33,7 @@ describe('authRedirectInterceptor', () => {
         { provide: Router, useValue: routerMock },
         { provide: UrlRedirectService, useValue: urlRedirectServiceMock },
         { provide: TokenRepository, useValue: tokenRepositoryMock },
-        { provide: ENVIRONMENT, useValue: { loginRoute: '/login' } },
+        { provide: ENVIRONMENT, useValue: { loginRoute: 'login' } },
       ],
     });
 

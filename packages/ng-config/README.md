@@ -26,11 +26,11 @@ npm install @acontplus/ng-config
 ### Environment Configuration
 
 ```typescript
-import { ENVIRONMENT_TOKEN } from '@acontplus/ng-config';
+import { ENVIRONMENT } from '@acontplus/ng-config';
 
 @Component({...})
 export class MyComponent {
-  constructor(@Inject(ENVIRONMENT_TOKEN) private environment: Environment) {
+  constructor(@Inject(ENVIRONMENT) private environment: Environment) {
     console.log(this.environment.apiUrl);
   }
 }
@@ -52,9 +52,9 @@ export class MyComponent {
 ### Authentication Constants
 
 ```typescript
-import { AUTH_CONSTANTS } from '@acontplus/ng-config';
+import { AUTH_API } from '@acontplus/ng-config';
 
-const tokenKey = AUTH_CONSTANTS.tokenKey;
+const authEndpoint = AUTH_API.AUTH;
 ```
 
 ## Running unit tests
