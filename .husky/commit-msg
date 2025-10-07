@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 
 # Conventional commit message format validation
-# Allowed types: build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test
+# Allowed types: build, chore, ci, docs, feat, fix, hotfix, merge, perf, refactor, revert, style, test, wip
 
-commit_regex='^(Merge branch|build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\(.+\))?(!)?: .{1,50}'
+commit_regex='^(build|chore|ci|docs|feat|fix|hotfix|merge|perf|refactor|revert|style|test|wip)(\([^)]*\))?(!)?: .{1,}'
 
 if ! grep -qE "$commit_regex" "$1"; then
     echo "❌ Invalid commit message format!"
