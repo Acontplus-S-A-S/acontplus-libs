@@ -85,6 +85,12 @@ export class MyComponent {
 }
 ```
 
+Install these in your application when using this library:
+
+```bash
+npm install ngx-toastr sweetalert2
+```
+
 ## Running unit tests
 
 Run `nx test ng-notifications` to execute the unit tests.

@@ -114,6 +114,13 @@ Import the components you need:
 import { CardsComponent, ThemeToggleComponent } from '@acontplus/ng-components';
 ```
 
+Note: `tabulator-tables` is a runtime dependency and is installed alongside this package.
+To use table components, install Tabulator in your application:
+
+```bash
+npm install tabulator-tables
+```
+
 ## Running unit tests
 
 Run `nx test ng-components` to execute the unit tests.

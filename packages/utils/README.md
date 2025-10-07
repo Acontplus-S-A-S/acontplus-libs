@@ -2,6 +2,8 @@
 
 Utility library for AcontPlus applications, providing converters, formatters, helpers, validators, and error classes.
 
+Note: `decimal.js` is included as a runtime dependency because the package exports compiled JS that imports `Decimal` directly.
+
 ## Installation
 
 ```bash
