@@ -7,6 +7,7 @@ import {
   inject,
   viewChild,
   OnDestroy,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
@@ -37,6 +38,7 @@ import { DialogWrapperConfig } from '../../services';
   templateUrl: './dialog-wrapper.component.html',
   styleUrls: ['./dialog-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class DialogWrapperComponent implements AfterViewInit, OnDestroy {
   dialogRef = inject<MatDialogRef<DialogWrapperComponent>>(MatDialogRef);
@@ -71,7 +73,9 @@ export class DialogWrapperComponent implements AfterViewInit, OnDestroy {
    * @param dialogRef Reference to the dialog opened via the Material Dialog service
    * @param config Configuration for the dialog wrapper, injected from MAT_DIALOG_DATA
    */
-  constructor() {}
+  constructor() {
+    // Constructor intentionally empty - required by Angular DI
+  }
 
   /**
    * Lifecycle hook that initializes the dynamic content after the view is ready.

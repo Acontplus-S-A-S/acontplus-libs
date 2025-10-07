@@ -4,13 +4,13 @@ import { Router } from '@angular/router';
 import { throwError, of } from 'rxjs';
 import { authRedirectInterceptor } from './auth-redirect.interceptor';
 import { UrlRedirectService } from '../services/url-redirect.service';
-import { AuthTokenService } from '../services/auth-token.service';
+import { TokenRepository } from '../repositories/token.repository';
 import { ENVIRONMENT } from '@acontplus/ng-config';
 
 describe('authRedirectInterceptor', () => {
   let router: Router;
   let urlRedirectService: UrlRedirectService;
-  let authTokenService: AuthTokenService;
+  let tokenRepository: TokenRepository;
   let mockHandler: HttpHandler;
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('authRedirectInterceptor', () => {
     const urlRedirectServiceMock = {
       storeCurrentUrlIfAllowed: jest.fn(),
     };
-    const authTokenServiceMock = {
+    const tokenRepositoryMock = {
       isAuthenticated: jest.fn(),
     };
 
@@ -32,14 +32,14 @@ describe('authRedirectInterceptor', () => {
       providers: [
         { provide: Router, useValue: routerMock },
         { provide: UrlRedirectService, useValue: urlRedirectServiceMock },
-        { provide: AuthTokenService, useValue: authTokenServiceMock },
+        { provide: TokenRepository, useValue: tokenRepositoryMock },
         { provide: ENVIRONMENT, useValue: { loginRoute: '/login' } },
       ],
     });
 
     router = TestBed.inject(Router);
     urlRedirectService = TestBed.inject(UrlRedirectService);
-    authTokenService = TestBed.inject(AuthTokenService);
+    tokenRepository = TestBed.inject(TokenRepository);
   });
 
   it('should pass through successful requests', done => {
@@ -67,7 +67,7 @@ describe('authRedirectInterceptor', () => {
     const mockError = new HttpErrorResponse({ status: 401, statusText: 'Unauthorized' });
 
     (mockHandler.handle as jest.Mock).mockReturnValue(throwError(() => mockError));
-    (authTokenService.isAuthenticated as jest.Mock).mockReturnValue(true);
+    (tokenRepository.isAuthenticated as jest.Mock).mockReturnValue(true);
 
     TestBed.runInInjectionContext(() => {
       const result = authRedirectInterceptor(mockRequest, mockHandler.handle);
@@ -88,7 +88,7 @@ describe('authRedirectInterceptor', () => {
     const mockError = new HttpErrorResponse({ status: 401, statusText: 'Unauthorized' });
 
     (mockHandler.handle as jest.Mock).mockReturnValue(throwError(() => mockError));
-    (authTokenService.isAuthenticated as jest.Mock).mockReturnValue(false);
+    (tokenRepository.isAuthenticated as jest.Mock).mockReturnValue(false);
 
     TestBed.runInInjectionContext(() => {
       const result = authRedirectInterceptor(mockRequest, mockHandler.handle);

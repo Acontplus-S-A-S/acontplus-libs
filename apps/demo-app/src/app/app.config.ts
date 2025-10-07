@@ -17,9 +17,8 @@ import {
   apiInterceptor,
   httpContextInterceptor,
   spinnerInterceptor,
-  TOKEN_PROVIDER,
 } from '@acontplus/ng-infrastructure';
-import { AuthTokenService, authProviders } from '@acontplus/ng-auth';
+import { authProviders } from '@acontplus/ng-auth';
 import { provideNotifications } from '../../../../packages/ng-notifications/src/lib/providers';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
@@ -44,7 +43,6 @@ export const appConfig: ApplicationConfig = {
     ),
 
     // Authentication
-    { provide: TOKEN_PROVIDER, useClass: AuthTokenService },
     ...authProviders,
 
     // Internationalization

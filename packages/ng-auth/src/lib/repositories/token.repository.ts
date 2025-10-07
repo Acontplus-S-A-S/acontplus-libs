@@ -3,11 +3,12 @@ import { isPlatformBrowser } from '@angular/common';
 import { jwtDecode } from 'jwt-decode';
 import { AuthTokens } from '@acontplus/core';
 import { ENVIRONMENT } from '@acontplus/ng-config';
+import { ITokenProvider } from '@acontplus/ng-infrastructure';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TokenRepository {
+export class TokenRepository implements ITokenProvider {
   private environment = inject(ENVIRONMENT);
   private platformId = inject(PLATFORM_ID);
 
@@ -18,7 +19,7 @@ export class TokenRepository {
     }
   }
 
-  getAccessToken(): string | null {
+  getToken(): string | null {
     if (!isPlatformBrowser(this.platformId)) {
       return null;
     }
@@ -71,7 +72,7 @@ export class TokenRepository {
   }
 
   isAuthenticated(): boolean {
-    const accessToken = this.getAccessToken();
+    const accessToken = this.getToken();
 
     if (!accessToken) {
       return false;
@@ -89,7 +90,7 @@ export class TokenRepository {
   }
 
   needsRefresh(): boolean {
-    const accessToken = this.getAccessToken();
+    const accessToken = this.getToken();
     if (!accessToken) {
       return false;
     }
@@ -107,7 +108,7 @@ export class TokenRepository {
   }
 
   getTokenPayload(): unknown {
-    const token = this.getAccessToken();
+    const token = this.getToken();
     if (!token) return null;
 
     try {

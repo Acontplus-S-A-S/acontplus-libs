@@ -1,4 +1,4 @@
-import { Component, input, output, booleanAttribute } from '@angular/core';
+import { Component, input, output, booleanAttribute, ViewEncapsulation } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,6 +24,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [MatCardModule, MatButtonModule, MatIconModule],
   templateUrl: './mat-dynamic-card.component.html',
   styleUrl: './mat-dynamic-card.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class MatDynamicCardComponent {
   // Header inputs

@@ -361,7 +361,7 @@ app.post('/account/refresh', checkCsrf, (req: any, res: any): void => {
       token: newAccessToken,
       refreshToken: newRefreshToken,
     });
-  } catch (error) {
+  } catch {
     res.status(401).json({ error: 'Invalid refresh token' });
   }
 });
