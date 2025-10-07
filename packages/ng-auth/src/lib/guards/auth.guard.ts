@@ -18,6 +18,6 @@ export const authGuard: CanActivateFn = (_route, state) => {
   urlRedirectService.storeIntendedUrl(state.url);
 
   // Redirect to login page (configurable via environment)
-  router.navigate([environment.loginRoute]);
+  router.navigate([`/${environment.loginRoute}`]);
   return false;
 };

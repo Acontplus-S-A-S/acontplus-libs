@@ -21,7 +21,7 @@ export class CsrfService {
     try {
       this.csrfToken = await firstValueFrom(
         this.http
-          .get<{ csrfToken: string }>('/csrf-token')
+          .get<{ csrfToken: string }>('csrf-token')
           .pipe(map(response => response.csrfToken)),
       );
 

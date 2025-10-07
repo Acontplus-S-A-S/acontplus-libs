@@ -18,7 +18,7 @@ import {
   httpContextInterceptor,
   spinnerInterceptor,
 } from '@acontplus/ng-infrastructure';
-import { authProviders } from '@acontplus/ng-auth';
+import { authProviders, csrfInterceptor } from '@acontplus/ng-auth';
 import { provideNotifications } from '../../../../packages/ng-notifications/src/lib/providers';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
@@ -38,7 +38,12 @@ export const appConfig: ApplicationConfig = {
 
     // HTTP configuration
     provideHttpClient(
-      withInterceptors([apiInterceptor, spinnerInterceptor, httpContextInterceptor]),
+      withInterceptors([
+        apiInterceptor,
+        spinnerInterceptor,
+        csrfInterceptor,
+        httpContextInterceptor,
+      ]),
       withFetch(),
     ),
 

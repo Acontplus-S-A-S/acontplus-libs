@@ -1,6 +1,6 @@
 {
   "name": "@acontplus/ng-config",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Acontplus Angular Configuration library for managing application settings and environment configurations.",
   "peerDependencies": {
     "@acontplus/core": "^1.0.15",

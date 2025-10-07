@@ -1,7 +1,7 @@
 // src/lib/application/use-cases/logout.use-case.ts
 import { Injectable, inject } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
-import { BaseUseCase, UserRepository } from '@acontplus/ng-infrastructure';
+import { BaseUseCase } from '@acontplus/ng-infrastructure';
 import { AuthRepository } from '../../domain/repositories/auth.repository';
 import { TokenRepository } from '../../repositories/token.repository';
 import { AuthStore } from '../../ui/stores/auth.store';
@@ -11,12 +11,11 @@ import { AuthStore } from '../../ui/stores/auth.store';
 })
 export class LogoutUseCase extends BaseUseCase<void, void> {
   private readonly authRepository = inject(AuthRepository);
-  private readonly userRepository = inject(UserRepository);
   private readonly tokenRepository = inject(TokenRepository);
   private readonly authStore = inject(AuthStore);
 
   execute(): Observable<void> {
-    const userData = this.userRepository.getCurrentUser();
+    const userData = this.tokenRepository.getUserData();
     const refreshToken = this.tokenRepository.getRefreshToken();
 
     if (userData?.email && refreshToken && refreshToken.length > 0) {

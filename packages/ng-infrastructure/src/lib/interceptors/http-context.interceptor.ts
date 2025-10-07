@@ -289,11 +289,12 @@ export const httpContextInterceptor: HttpInterceptorFn = (req, next) => {
 
         // Handle specific error scenarios
         switch (error.status) {
-          case 401:
+          case 401: {
             loggingService.error('Unauthorized access - token expired or invalid');
             // Note: Token clearing should be handled by the auth service, not infrastructure
-            router.navigate([environment.loginRoute]);
+            router.navigate([`/${environment.loginRoute}`]);
             break;
+          }
           case 403:
             tenantService.handleForbidden();
             break;

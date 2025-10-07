@@ -11,7 +11,7 @@ export class ProductRepository {
   private mockService = inject(MockProductService);
 
   protected entityName = 'products';
-  protected baseUrl = '/api/products';
+  protected baseUrl = 'products';
 
   getAll(pagination: PaginationParams): Observable<PaginatedResult<Product>> {
     return this.mockService.getProducts(pagination);

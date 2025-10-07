@@ -16,7 +16,7 @@ function getDeviceInfo(): string {
 })
 export class AuthHttpRepository extends AuthRepository {
   private readonly http = inject(HttpClient);
-  private readonly URL = `${AUTH_API.ACCOUNT}`;
+  private readonly URL = `${AUTH_API.AUTH}`;
 
   login(request: LoginRequest): Observable<AuthTokens> {
     return this.http.post<AuthTokens>(`${this.URL}login`, request, {

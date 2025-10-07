@@ -224,7 +224,7 @@ let nextApplicationId = 9;
 app.use(express.json());
 
 // CSRF token endpoint
-app.get('/csrf-token', (req, res) => {
+app.get('/api/csrf-token', (req, res) => {
   const token = `csrf-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   csrfTokens.add(token);
   res.json({ csrfToken: token }); // Changed from "token" to "csrfToken"
@@ -240,7 +240,7 @@ const checkCsrf = (req: any, res: any, next: any) => {
 };
 
 // Fake auth API endpoints
-app.post('/account/login', checkCsrf, (req: any, res: any): void => {
+app.post('/api/auth/login', checkCsrf, (req: any, res: any): void => {
   const { email, password } = req.body;
 
   const user = users.find(u => u.email === email && u.password === password);
@@ -273,7 +273,7 @@ app.post('/account/login', checkCsrf, (req: any, res: any): void => {
   });
 });
 
-app.post('/account/register', checkCsrf, (req: any, res: any): void => {
+app.post('/api/auth/register', checkCsrf, (req: any, res: any): void => {
   const { email, displayName, password } = req.body;
 
   const existingUser = users.find(u => u.email === email);
@@ -316,7 +316,7 @@ app.post('/account/register', checkCsrf, (req: any, res: any): void => {
   });
 });
 
-app.post('/account/refresh', checkCsrf, (req: any, res: any): void => {
+app.post('/api/auth/refresh', checkCsrf, (req: any, res: any): void => {
   const { email, refreshToken } = req.body;
 
   try {
@@ -366,7 +366,7 @@ app.post('/account/refresh', checkCsrf, (req: any, res: any): void => {
   }
 });
 
-app.post('/account/logout', checkCsrf, (req: any, res: any): void => {
+app.post('/api/auth/logout', checkCsrf, (req: any, res: any): void => {
   const { email, refreshToken } = req.body;
 
   const index = sessions.findIndex(s => s.email === email && s.refreshToken === refreshToken);
@@ -378,7 +378,7 @@ app.post('/account/logout', checkCsrf, (req: any, res: any): void => {
 });
 
 // Application API endpoints
-app.get('/aplicaciones', (req: any, res: any): void => {
+app.get('/api/aplicaciones', (req: any, res: any): void => {
   const page = parseInt(req.query.page) || 1;
   const size = parseInt(req.query.size) || 10;
   const status = req.query.status;
@@ -441,7 +441,7 @@ app.get('/aplicaciones', (req: any, res: any): void => {
   );
 });
 
-app.get('/aplicaciones/:id', (req: any, res: any): void => {
+app.get('/api/aplicaciones/:id', (req: any, res: any): void => {
   const id = parseInt(req.params.id);
   const app = applications.find(a => a.id === id);
 
@@ -459,7 +459,7 @@ app.get('/aplicaciones/:id', (req: any, res: any): void => {
   );
 });
 
-app.post('/aplicaciones', checkCsrf, (req: any, res: any): void => {
+app.post('/api/aplicaciones', checkCsrf, (req: any, res: any): void => {
   const applicationData = req.body;
 
   const newApp: Application = {
@@ -480,7 +480,7 @@ app.post('/aplicaciones', checkCsrf, (req: any, res: any): void => {
   );
 });
 
-app.put('/aplicaciones/:id', checkCsrf, (req: any, res: any): void => {
+app.put('/api/aplicaciones/:id', checkCsrf, (req: any, res: any): void => {
   const id = parseInt(req.params.id);
   const updates = req.body;
 
@@ -505,7 +505,7 @@ app.put('/aplicaciones/:id', checkCsrf, (req: any, res: any): void => {
   );
 });
 
-app.delete('/aplicaciones/:id', checkCsrf, (req: any, res: any): void => {
+app.delete('/api/aplicaciones/:id', checkCsrf, (req: any, res: any): void => {
   const id = parseInt(req.params.id);
 
   const appIndex = applications.findIndex(a => a.id === id);
@@ -525,7 +525,7 @@ app.delete('/aplicaciones/:id', checkCsrf, (req: any, res: any): void => {
   );
 });
 
-app.get('/aplicaciones/search', (req: any, res: any): void => {
+app.get('/api/aplicaciones/search', (req: any, res: any): void => {
   const query = req.query.q;
   const page = parseInt(req.query.page) || 1;
   const size = parseInt(req.query.size) || 10;
@@ -569,7 +569,7 @@ app.get('/aplicaciones/search', (req: any, res: any): void => {
   );
 });
 
-app.get('/aplicaciones/stats', (req: any, res: any): void => {
+app.get('/api/aplicaciones/stats', (req: any, res: any): void => {
   const stats = {
     total: applications.length,
     byStatus: applications.reduce(
