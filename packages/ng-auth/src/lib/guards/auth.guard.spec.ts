@@ -1,19 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { authGuard } from './auth.guard';
-import { AuthTokenService } from '../services/auth-token.service';
+import { TokenRepository } from '../repositories/token.repository';
 import { UrlRedirectService } from '../services/url-redirect.service';
 import { ENVIRONMENT } from '@acontplus/ng-config';
 
 describe('authGuard', () => {
-  let authTokenService: AuthTokenService;
+  let tokenRepository: TokenRepository;
   let urlRedirectService: UrlRedirectService;
   let router: Router;
   let route: ActivatedRouteSnapshot;
   let state: RouterStateSnapshot;
 
   beforeEach(() => {
-    const authTokenServiceMock = {
+    const tokenRepositoryMock = {
       isAuthenticated: jest.fn(),
     };
     const urlRedirectServiceMock = {
@@ -25,14 +25,14 @@ describe('authGuard', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: AuthTokenService, useValue: authTokenServiceMock },
+        { provide: TokenRepository, useValue: tokenRepositoryMock },
         { provide: UrlRedirectService, useValue: urlRedirectServiceMock },
         { provide: Router, useValue: routerMock },
         { provide: ENVIRONMENT, useValue: { loginRoute: '/login' } },
       ],
     });
 
-    authTokenService = TestBed.inject(AuthTokenService);
+    tokenRepository = TestBed.inject(TokenRepository);
     urlRedirectService = TestBed.inject(UrlRedirectService);
     router = TestBed.inject(Router);
 
@@ -41,7 +41,7 @@ describe('authGuard', () => {
   });
 
   it('should allow access when user is authenticated', () => {
-    (authTokenService.isAuthenticated as jest.Mock).mockReturnValue(true);
+    (tokenRepository.isAuthenticated as jest.Mock).mockReturnValue(true);
 
     const result = TestBed.runInInjectionContext(() => authGuard(route, state));
 
@@ -51,7 +51,7 @@ describe('authGuard', () => {
   });
 
   it('should redirect to login and store intended URL when user is not authenticated', () => {
-    (authTokenService.isAuthenticated as jest.Mock).mockReturnValue(false);
+    (tokenRepository.isAuthenticated as jest.Mock).mockReturnValue(false);
 
     const result = TestBed.runInInjectionContext(() => authGuard(route, state));
 

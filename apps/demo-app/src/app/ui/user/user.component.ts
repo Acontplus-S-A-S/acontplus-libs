@@ -225,7 +225,7 @@ export class UserComponent implements OnInit, AfterViewInit {
 
     this.isCreating = true;
     this.userRepository.create(this.newUser as Omit<User, 'id'>).subscribe({
-      next: (user: User) => {
+      next: (_user: User) => {
         this.snackBar.open('User created successfully', 'Close', { duration: 3000 });
         this.newUser = {};
         this.loadUsers();
@@ -261,7 +261,7 @@ export class UserComponent implements OnInit, AfterViewInit {
 
     this.isUpdating = true;
     this.userRepository.update(this.editUserId, this.editUser).subscribe({
-      next: (user: User) => {
+      next: (_user: User) => {
         this.snackBar.open('User updated successfully', 'Close', { duration: 3000 });
         this.editUserId = null;
         this.editUser = {};

@@ -332,7 +332,7 @@ export class CustomerAddEditComponent implements OnInit {
           this.updateFormControlNumeroIdentificacion(rest.codigoSri);
         }
       });
-    } catch (_error) {
+    } catch {
       // Handle error appropriately
     }
   }

@@ -8,6 +8,7 @@ import {
   computed,
   OnInit,
   TemplateRef,
+  ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -55,6 +56,7 @@ import { LoggingService } from '@acontplus/ng-infrastructure';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent implements OnInit {
   title = input<string>('Login');

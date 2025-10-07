@@ -114,11 +114,6 @@ export class ProductComponent implements OnInit, AfterViewInit {
   readonly productImageTemplate = viewChild.required<TemplateRef<any>>('productImageTemplate');
   readonly expandedProductDetail = viewChild.required<TemplateRef<any>>('expandedProductDetail');
 
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
-
-  constructor() {}
-
   ngOnInit(): void {
     // Initialize form data first
     this.initializeNewProduct();
@@ -294,7 +289,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
 
     this.isCreating = true;
     this.productRepository.create(productData as Omit<Product, 'id'>).subscribe({
-      next: (product: Product) => {
+      next: (_product: Product) => {
         this.snackBar.open('Product created successfully', 'Close', { duration: 3000 });
         this.initializeNewProduct();
         this.loadProducts();
@@ -348,7 +343,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
 
     this.isUpdating = true;
     this.productRepository.update(this.editProductId, productData).subscribe({
-      next: (product: Product) => {
+      next: (_product: Product) => {
         this.snackBar.open('Product updated successfully', 'Close', { duration: 3000 });
         this.editProductId = null;
         this.editProduct = {};

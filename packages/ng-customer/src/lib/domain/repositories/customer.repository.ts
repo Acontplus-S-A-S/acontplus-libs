@@ -1,15 +1,6 @@
 // Define las opciones del repositorio
-import { CustomerFilter, CustomerSearch } from '../../application/models/customer-search';
+import { CustomerSearch } from '../../application/models/customer-search';
 import { ApiResponse, PagedResult } from '@acontplus/core';
-
-interface CustomerRepositoryOptions {
-  entity: any; // Tu entidad interna (Customer)
-  id: number;
-  createDto: any;
-  updateDto: any;
-  getDto: any;
-  getAllRequest: CustomerFilter;
-}
 
 export interface CustomerRepository {
   // Promise-based API returning standardized ApiResponse

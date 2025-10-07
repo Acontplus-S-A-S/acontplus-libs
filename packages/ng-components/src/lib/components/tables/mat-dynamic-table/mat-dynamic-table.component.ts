@@ -17,6 +17,7 @@ import {
   output,
   contentChildren,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import {
   MatColumnDef,
@@ -59,6 +60,7 @@ import { ColumnDefinition, Pagination, TableContext, TableRow } from '../../../m
   styleUrl: './mat-dynamic-table.component.scss',
 
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class MatDynamicTableComponent<T extends TableRow>
   implements AfterContentInit, OnChanges, OnInit, OnDestroy
