@@ -61,7 +61,7 @@ export class AuthStore implements OnDestroy {
    * Schedule token refresh based on actual expiration time
    */
   private scheduleTokenRefresh(): void {
-    const accessToken = this.tokenRepository.getAccessToken();
+    const accessToken = this.tokenRepository.getToken();
     if (!accessToken) {
       return;
     }

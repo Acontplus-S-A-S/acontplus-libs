@@ -1,16 +1,16 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthTokenService } from '../services/auth-token.service';
+import { TokenRepository } from '../repositories/token.repository';
 import { UrlRedirectService } from '../services/url-redirect.service';
 import { ENVIRONMENT } from '@acontplus/ng-config';
 
 export const authGuard: CanActivateFn = (_route, state) => {
-  const authService = inject(AuthTokenService);
+  const tokenRepository = inject(TokenRepository);
   const router = inject(Router);
   const urlRedirectService = inject(UrlRedirectService);
   const environment = inject(ENVIRONMENT);
 
-  if (authService.isAuthenticated()) {
+  if (tokenRepository.isAuthenticated()) {
     return true;
   }
 

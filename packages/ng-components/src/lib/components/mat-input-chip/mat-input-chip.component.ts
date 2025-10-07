@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ViewEncapsulation } from '@angular/core';
 import {
   MatChipEditedEvent,
   MatChipGrid,
@@ -16,6 +16,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
   imports: [MatFormField, MatLabel, MatChipRow, MatIcon, MatHint, MatChipGrid, MatChipInput],
   templateUrl: './mat-input-chip.component.html',
   styleUrl: './mat-input-chip.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class MatInputChipComponent {
   chips = input.required<string[]>();

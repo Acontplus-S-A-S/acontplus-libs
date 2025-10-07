@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { AdvancedDialogService, MatThemeButtonComponent } from '@acontplus/ng-components';
 import { CustomerAddEditComponent, CustomerCardComponent } from '@acontplus/ng-customer';
@@ -18,7 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.scss',
 })
-export class CustomersComponent {
+export class CustomersComponent implements OnInit {
   private dialogSvc = inject(AdvancedDialogService);
 
   customers = signal<any[]>([]);

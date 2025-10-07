@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -32,7 +32,7 @@ import { ThemeToggleComponent } from '@acontplus/ng-components';
   templateUrl: './app-layout.component.html',
   styleUrl: './app-layout.component.scss',
 })
-export class AppLayoutComponent implements OnInit {
+export class AppLayoutComponent {
   private breakpointObserver = inject(BreakpointObserver);
   private logoutUseCase = inject(LogoutUseCase);
   menuItems = signal<MenuItemList[]>(menuItems);
@@ -41,12 +41,6 @@ export class AppLayoutComponent implements OnInit {
     map(result => result.matches),
     shareReplay(),
   );
-
-  constructor() {}
-
-  ngOnInit() {
-    // Component initialized
-  }
 
   logout() {
     this.logoutUseCase.execute().subscribe();

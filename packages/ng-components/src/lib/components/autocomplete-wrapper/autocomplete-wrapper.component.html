@@ -76,7 +76,9 @@
                   <div
                     class="autocomplete-wrapper-item-content"
                     [class.autocomplete-wrapper-selected]="$index === selectedIndex()"
+                    tabindex="0"
                     (click)="selectItem(item)"
+                    (keydown.enter)="selectItem(item)"
                   >
                     <mat-icon class="autocomplete-wrapper-history-icon">history</mat-icon>
                     <div class="autocomplete-wrapper-item-details">
@@ -115,8 +117,11 @@
                   <div class="autocomplete-wrapper-filter-controls">
                     @if (config.searchFields && config.searchFields.length > 1) {
                       <div class="autocomplete-wrapper-filter-group">
-                        <label class="autocomplete-wrapper-filter-label">Buscar por:</label>
+                        <label class="autocomplete-wrapper-filter-label" for="searchBySelect"
+                          >Buscar por:</label
+                        >
                         <select
+                          id="searchBySelect"
                           class="autocomplete-wrapper-filter-select"
                           [(ngModel)]="filters.searchBy"
                           (change)="onFilterChange()"
@@ -130,8 +135,11 @@
 
                     @if (config.enableStockFilter && config.stockOptions) {
                       <div class="autocomplete-wrapper-filter-group">
-                        <label class="autocomplete-wrapper-filter-label">Stock:</label>
+                        <label class="autocomplete-wrapper-filter-label" for="stockSelect"
+                          >Stock:</label
+                        >
                         <select
+                          id="stockSelect"
                           class="autocomplete-wrapper-filter-select"
                           [(ngModel)]="filters.stockFilter"
                           (change)="onFilterChange()"
@@ -209,7 +217,9 @@
                     <div
                       class="autocomplete-wrapper-item-content"
                       [class.autocomplete-wrapper-selected]="$index === selectedIndex()"
+                      tabindex="0"
                       (click)="selectItem(item)"
+                      (keydown.enter)="selectItem(item)"
                     >
                       <div class="autocomplete-wrapper-item-info">
                         <ng-container

@@ -2,15 +2,13 @@ import { Component, inject, OnInit, NgZone, PLATFORM_ID } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 
-import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
-import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
 import { ApplicationService } from './providers';
 import { ThemeService } from '@acontplus/ng-components';
 import { NotificationService } from '@acontplus/ng-notifications';
 import { AuthStore } from '@acontplus/ng-auth';
 
 @Component({
-  imports: [RouterModule, AppLayoutComponent, AuthLayoutComponent],
+  imports: [RouterModule],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -50,12 +48,10 @@ export class App implements OnInit {
   }
 
   saveSettings() {
-    console.log('Settings saved!');
     // Add your save logic here
   }
 
   discardChanges() {
-    console.log('Changes discarded!');
     // Add your discard logic here
   }
 }

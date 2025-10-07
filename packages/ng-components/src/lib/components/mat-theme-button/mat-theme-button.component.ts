@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { MatButton, MatFabButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
 import { NgClass } from '@angular/common';
@@ -30,6 +30,7 @@ export type MaterialButtonStyle =
   imports: [MatButton, NgClass, MatIcon, MatMiniFabButton, MatIconButton, MatFabButton],
   templateUrl: './mat-theme-button.component.html',
   styleUrl: './mat-theme-button.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class MatThemeButtonComponent {
   variant = input<ButtonVariant>('primary');

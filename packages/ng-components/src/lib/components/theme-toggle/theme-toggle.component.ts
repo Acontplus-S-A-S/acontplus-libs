@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ThemeService } from '../../services';
 import { MatIconButton } from '@angular/material/button';
@@ -10,14 +10,12 @@ import { MatIcon } from '@angular/material/icon';
   imports: [MatIconButton, MatIcon, AsyncPipe],
   templateUrl: './theme-toggle.component.html',
   styleUrl: './theme-toggle.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class ThemeToggleComponent {
   private themeService = inject(ThemeService);
 
   darkMode$: Observable<boolean>;
-
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
 
   constructor() {
     this.darkMode$ = this.themeService.isDarkMode$;
