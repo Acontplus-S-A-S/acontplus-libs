@@ -1,10 +1,10 @@
 {
   "name": "@acontplus/ng-infrastructure",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Acontplus Angular Infrastructure library for managing HTTP interceptors and repositories.",
   "peerDependencies": {
-    "@acontplus/core": "^1.0.15",
-    "@acontplus/ng-config": "^1.0.4",
+    "@acontplus/core": "^1.0.16",
+    "@acontplus/ng-config": "^1.0.5",
     "@acontplus/ng-notifications": "^1.0.9",
     "@acontplus/ng-components": "^1.0.13",
     "@angular/common": "^20.3.2",
