@@ -1,9 +1,9 @@
 {
   "name": "@acontplus/ng-config",
-  "version": "1.0.5",
-  "description": "Acontplus Angular Configuration library for managing application settings and environment configurations.",
+  "version": "1.0.6",
+  "description": "Angular configuration management library providing environment tokens, application settings, dependency injection patterns, and runtime configuration services for enterprise applications.",
   "peerDependencies": {
-    "@acontplus/core": "^1.0.16",
+    "@acontplus/core": "^1.0.17",
     "@angular/common": "^20.3.2",
     "@angular/core": "^20.3.2"
   },
@@ -29,6 +29,10 @@
     "angular",
     "configuration",
     "environment",
+    "app-config",
+    "settings",
+    "tokens",
+    "dependency-injection",
     "typescript",
     "frontend",
     "library"

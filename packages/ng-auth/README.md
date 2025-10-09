@@ -259,10 +259,6 @@ import { authProviders } from '@acontplus/ng-auth';
 export class AppModule {}
 ```
 
-## Running unit tests
-
-Run `nx test ng-auth` to execute the unit tests.
-
 ## Login Component
 
 The `LoginComponent` provides a flexible, themeable authentication UI component

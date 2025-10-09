@@ -91,7 +91,3 @@ export const appConfig: ApplicationConfig = {
   ],
 };
 ```
-
-## Running unit tests
-
-Run `nx test ng-infrastructure` to execute the unit tests.

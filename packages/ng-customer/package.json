@@ -1,12 +1,12 @@
 {
   "name": "@acontplus/ng-customer",
-  "version": "1.0.9",
-  "description": "Acontplus Angular Customer Module",
+  "version": "1.0.10",
+  "description": "Angular customer management module following clean architecture principles. Provides customer UI components, business logic, and integrates with notification systems for comprehensive customer relationship management.",
   "dependencies": {
-    "@acontplus/ng-notifications": "^1.0.10"
+    "@acontplus/ng-notifications": "^1.0.11"
   },
   "peerDependencies": {
-    "@acontplus/ng-components": "^1.1.0",
+    "@acontplus/ng-components": "^1.1.1",
     "@angular/common": "^20.3.2",
     "@angular/core": "^20.3.2"
   },
@@ -31,8 +31,12 @@
     "acontplus",
     "angular",
     "angular-material",
+    "customer",
+    "customer-management",
     "customer-ui",
     "components",
+    "ddd",
+    "clean-architecture",
     "typescript",
     "frontend",
     "library"

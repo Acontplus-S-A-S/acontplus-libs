@@ -275,7 +275,3 @@ this.notificationService.quickSave(); // "Data saved successfully"
 this.notificationService.quickDelete(); // "Item deleted"
 this.notificationService.networkError(); // "Network connection error"
 ```
-
-## Running unit tests
-
-Run `nx test ng-notifications` to execute the unit tests.

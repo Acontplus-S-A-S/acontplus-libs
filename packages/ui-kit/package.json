@@ -12,11 +12,36 @@
     },
     "./package.json": "./package.json"
   },
+  "description": "UI kit library for reusable design system components and patterns. Currently under development to provide standardized UI elements and design tokens for consistent user interfaces across applications.",
   "files": [
     "index.js",
     "index.d.ts",
     "lib/**",
     "README.md"
   ],
+  "keywords": [
+    "acontplus",
+    "ui-kit",
+    "components",
+    "reusable",
+    "design-system",
+    "typescript",
+    "library",
+    "development"
+  ],
+  "author": "Ivan Paz <ifer343@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Acontplus-S-A-S/acontplus-libs/issues"
+  },
+  "homepage": "https://github.com/Acontplus-S-A-S/acontplus-libs#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Acontplus-S-A-S/acontplus-libs.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {}
 }

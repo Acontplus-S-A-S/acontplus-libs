@@ -16,7 +16,7 @@ import { TabulatorTheme } from '../../../types';
 Tabulator.registerModule([PageModule, ReactiveDataModule]);
 
 @Component({
-  selector: 'acp-tabulator',
+  selector: 'acp-tabulator-table',
   standalone: true,
   imports: [],
   templateUrl: './tabulator-table.component.html',
@@ -49,6 +49,7 @@ export class TabulatorTableComponent implements OnChanges, AfterViewInit, OnDest
 
   // Custom styling
   readonly customClass = input('');
+  readonly rowFormatter = input<(row: any) => void | null>();
 
   // Custom options
   readonly options = input<Record<string, any>>({});
@@ -62,7 +63,7 @@ export class TabulatorTableComponent implements OnChanges, AfterViewInit, OnDest
   private _tabulator!: Tabulator;
 
   // Made public for template access
-  public containerId = `acp-tabulator-${Math.random().toString(36).substr(2, 9)}`;
+  public containerId = `acp-tabulator-table-${Math.random().toString(36).substr(2, 9)}`;
 
   ngAfterViewInit(): void {
     this.initializeTable();
@@ -83,6 +84,10 @@ export class TabulatorTableComponent implements OnChanges, AfterViewInit, OnDest
 
     if (changes['customClass'] && !changes['customClass'].isFirstChange()) {
       this.applyCustomClass(changes['customClass'].previousValue, this.customClass());
+    }
+
+    if (changes['rowFormatter'] && !changes['rowFormatter'].isFirstChange()) {
+      this.updateRowFormatter();
     }
   }
 
@@ -116,6 +121,7 @@ export class TabulatorTableComponent implements OnChanges, AfterViewInit, OnDest
       selectable: this.selectable(),
       renderVertical: 'virtual',
       renderVerticalBuffer: 300,
+      rowFormatter: this.getRowFormatter(),
       ...this.options(),
     };
 
@@ -204,6 +210,12 @@ export class TabulatorTableComponent implements OnChanges, AfterViewInit, OnDest
     }
   }
 
+  private updateRowFormatter(): void {
+    if (this._tabulator) {
+      this._tabulator.redraw(true);
+    }
+  }
+
   // Public API methods
   public getInstance(): Tabulator {
     return this._tabulator;
@@ -213,5 +225,24 @@ export class TabulatorTableComponent implements OnChanges, AfterViewInit, OnDest
     if (this._tabulator) {
       this._tabulator.redraw();
     }
+  }
+
+  private getRowFormatter(): (row: any) => void {
+    return (row: any) => {
+      const data = row.getData();
+      const element = row.getElement();
+
+      // Apply custom row formatter if provided
+      const customFormatter = this.rowFormatter();
+      if (customFormatter) {
+        customFormatter(row);
+        return;
+      }
+
+      // Apply rowStyle if present in data
+      if (data.rowStyle) {
+        Object.assign(element.style, data.rowStyle);
+      }
+    };
   }
 }

@@ -69,6 +69,7 @@ interface Application {
   documentationUrl: string;
   createdAt: string;
   updatedAt: string;
+  disableSelection?: boolean;
 }
 
 let applications: Application[] = [
@@ -89,13 +90,14 @@ let applications: Application[] = [
     documentationUrl: 'https://docs.company.com/customer-portal',
     createdAt: '2023-06-01T09:00:00Z',
     updatedAt: '2024-01-15T10:00:00Z',
+    disableSelection: true,
   },
   {
     id: 2,
     name: 'Order Management API',
     description: 'RESTful API for managing customer orders and inventory',
     version: '1.5.2',
-    status: 'active',
+    status: 'inactive',
     category: 'API',
     owner: 'Backend Team',
     environment: 'production',
