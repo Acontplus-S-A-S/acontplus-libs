@@ -6,7 +6,7 @@ import {
   MatDialogContent,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { MatInputChipComponent, MatThemeButtonComponent } from '@acontplus/ng-components';
+import { InputChipComponent, ButtonComponent } from '@acontplus/ng-components';
 import { MatButtonModule } from '@angular/material/button';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -31,9 +31,9 @@ import { Application } from '../../../domain/application';
     MatInputModule,
     MatSelectModule,
     MatSlideToggleModule,
-    MatInputChipComponent,
+    InputChipComponent,
     MatIcon,
-    MatThemeButtonComponent,
+    ButtonComponent,
   ],
   templateUrl: './application-add-edit.component.html',
   styleUrl: './application-add-edit.component.scss',

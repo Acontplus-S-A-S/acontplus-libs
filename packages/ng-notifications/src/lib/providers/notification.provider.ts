@@ -15,7 +15,10 @@ export interface NotificationProviderConfig {
   defaultProvider: NotificationProvider;
   toastr?: unknown;
   snackbar?: unknown;
-  sweetalert?: unknown;
+  sweetalert?: {
+    defaultTheme?: 'auto' | 'material-ui' | 'material-ui-light' | 'material-ui-dark' | string;
+    [key: string]: unknown;
+  };
 }
 
 @Injectable()

@@ -12,7 +12,7 @@ import { map, shareReplay } from 'rxjs/operators';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MenuItemList, menuItems } from './menu-items';
 import { LogoutUseCase } from '@acontplus/ng-auth';
-import { ThemeToggleComponent } from '@acontplus/ng-components';
+import { ButtonComponent, ThemeToggleComponent } from '@acontplus/ng-components';
 
 @Component({
   selector: 'app-app-layout',
@@ -28,6 +28,7 @@ import { ThemeToggleComponent } from '@acontplus/ng-components';
     RouterLinkActive,
     RouterOutlet,
     ThemeToggleComponent,
+    ButtonComponent,
   ],
   templateUrl: './app-layout.component.html',
   styleUrl: './app-layout.component.scss',

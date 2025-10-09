@@ -1,9 +1,9 @@
 {
   "name": "@acontplus/ng-auth",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Acontplus Angular Authentication Module",
   "dependencies": {
-    "@acontplus/ng-infrastructure": "^1.0.6",
+    "@acontplus/ng-infrastructure": "^1.0.7",
     "@acontplus/ng-config": "^1.0.5",
     "jwt-decode": "^4.0.0",
     "rxjs": "^7.8.1"

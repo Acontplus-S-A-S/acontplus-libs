@@ -11,4 +11,8 @@ export const appRoutes: Routes = [
     canActivate: [authGuard],
     loadChildren: () => import('./layout/app-layout/app-layout.routes').then(m => m.routes),
   },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];

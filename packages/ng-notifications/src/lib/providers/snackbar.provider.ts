@@ -3,7 +3,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of } from 'rxjs';
 import { NotificationProviderBase } from './notification.provider';
 import { SNACKBAR_CONFIG, SnackbarConfig } from '../config/snackbar.config';
-import { NOTIFICATION_DURATIONS } from '../constants/notification.constants';
 import {
   NotificationCallProps,
   NotificationResult,
@@ -48,10 +47,7 @@ export class SnackbarProvider extends NotificationProviderBase {
       type: 'success',
       message: props.message,
       title: props.title,
-      config: {
-        duration: NOTIFICATION_DURATIONS.MEDIUM,
-        ...(props.config as Partial<SnackbarConfig>),
-      },
+      config: props.config as Partial<SnackbarConfig>,
     });
   }
 
@@ -60,10 +56,7 @@ export class SnackbarProvider extends NotificationProviderBase {
       type: 'error',
       message: props.message,
       title: props.title,
-      config: {
-        duration: NOTIFICATION_DURATIONS.LONG,
-        ...(props.config as Partial<SnackbarConfig>),
-      },
+      config: props.config as Partial<SnackbarConfig>,
     });
   }
 
@@ -72,10 +65,7 @@ export class SnackbarProvider extends NotificationProviderBase {
       type: 'warning',
       message: props.message,
       title: props.title,
-      config: {
-        duration: NOTIFICATION_DURATIONS.MEDIUM,
-        ...(props.config as Partial<SnackbarConfig>),
-      },
+      config: props.config as Partial<SnackbarConfig>,
     });
   }
 
@@ -84,10 +74,7 @@ export class SnackbarProvider extends NotificationProviderBase {
       type: 'info',
       message: props.message,
       title: props.title,
-      config: {
-        duration: NOTIFICATION_DURATIONS.MEDIUM,
-        ...(props.config as Partial<SnackbarConfig>),
-      },
+      config: props.config as Partial<SnackbarConfig>,
     });
   }
 

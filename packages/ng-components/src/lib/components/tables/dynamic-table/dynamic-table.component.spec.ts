@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { IconUserComponent } from './icon-user.component';
+import { DynamicTableComponent } from './dynamic-table.component';
 
-describe('IconUserComponent', () => {
-  let component: IconUserComponent;
-  let fixture: ComponentFixture<IconUserComponent>;
+describe('DynamicTableComponent', () => {
+  let component: DynamicTableComponent;
+  let fixture: ComponentFixture<DynamicTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IconUserComponent],
+      imports: [DynamicTableComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(IconUserComponent);
+    fixture = TestBed.createComponent(DynamicTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -8,9 +8,9 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import {
-  MatDynamicCardComponent,
-  MatInputChipComponent,
-  MatThemeButtonComponent,
+  DynamicCardComponent,
+  InputChipComponent,
+  ButtonComponent,
   ToUpperCaseDirective,
 } from '@acontplus/ng-components';
 import { MatButtonModule } from '@angular/material/button';
@@ -55,14 +55,14 @@ import { CustomerExternalHttpRepository } from '../../../infrastructure/reposito
     MatInputModule,
     MatSelectModule,
     MatSlideToggleModule,
-    MatInputChipComponent,
+    InputChipComponent,
     ToUpperCaseDirective,
     MatCheckbox,
     MatIcon,
     MatTooltip,
     MatDatepickerModule,
-    MatThemeButtonComponent,
-    MatDynamicCardComponent,
+    ButtonComponent,
+    DynamicCardComponent,
   ],
   templateUrl: './customer-add-edit.component.html',
   styleUrl: './customer-add-edit.component.scss',
@@ -393,7 +393,7 @@ export class CustomerAddEditComponent implements OnInit {
     return this.customerForm.get('birthDate');
   }
 
-  onKeyDownGovernmentId($event?: Event) {
+  onKeyDownGovernmentId($event?: any) {
     if ($event) {
       $event.preventDefault();
     }

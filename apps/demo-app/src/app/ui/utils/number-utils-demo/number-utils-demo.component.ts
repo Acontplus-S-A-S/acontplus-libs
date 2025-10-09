@@ -5,10 +5,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { NumberFormatter } from '@acontplus/utils';
+import { ButtonComponent } from '@acontplus/ng-components';
 
 @Component({
   selector: 'app-number-utils-demo',
-  imports: [MatCardModule, MatInputModule, MatFormFieldModule, FormsModule, MatButtonModule],
+  imports: [
+    MatCardModule,
+    MatInputModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatButtonModule,
+    ButtonComponent,
+  ],
   templateUrl: './number-utils-demo.component.html',
   styleUrl: './number-utils-demo.component.scss',
 })

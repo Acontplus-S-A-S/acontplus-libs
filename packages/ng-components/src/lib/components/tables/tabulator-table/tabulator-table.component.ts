@@ -1,4 +1,4 @@
-// custom-tabulator.component.ts
+// tabulator-table.component.ts
 import {
   AfterViewInit,
   Component,
@@ -19,11 +19,11 @@ Tabulator.registerModule([PageModule, ReactiveDataModule]);
   selector: 'acp-tabulator',
   standalone: true,
   imports: [],
-  templateUrl: './custom-tabulator.component.html',
-  styleUrls: ['./custom-tabulator.component.scss'],
+  templateUrl: './tabulator-table.component.html',
+  styleUrls: ['./tabulator-table.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class CustomTabulatorComponent implements OnChanges, AfterViewInit, OnDestroy {
+export class TabulatorTableComponent implements OnChanges, AfterViewInit, OnDestroy {
   // Data inputs
   readonly data = input<any[]>([]);
   readonly columns = input<any[]>([]);

@@ -1,0 +1,49 @@
+.acp-dynamic-table {
+  display: block;
+
+  .acp-table-container {
+    position: relative;
+    min-height: 200px;
+    max-height: 400px;
+    overflow: auto;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  tr.acp-dynamic-table-detail-row {
+    height: 0;
+  }
+
+  tr.acp-dynamic-table-row:not(.acp-dynamic-table-expanded-row):hover {
+    background: var(--mat-sys-surface-variant, whitesmoke);
+  }
+
+  tr.acp-dynamic-table-row:not(.acp-dynamic-table-expanded-row):active {
+    background: var(--mat-sys-surface-container, #efefef);
+  }
+
+  .acp-dynamic-table-row td {
+    border-bottom-width: 0;
+  }
+
+  /* New CSS-based animations for detail expansion */
+  .acp-detail-expand {
+    height: 0;
+    overflow: hidden;
+    transition: height 150ms ease-in-out;
+  }
+
+  .acp-detail-expand.acp-expanded {
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Smooth expand/collapse animation using CSS transitions */
+  @starting-style {
+    .acp-detail-expand.acp-expanded {
+      height: 0;
+    }
+  }
+}

@@ -1,1 +1,1 @@
-export * from './mat-dynamic-card';
+export * from './dynamic-card';

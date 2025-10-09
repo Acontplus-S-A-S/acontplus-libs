@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MatDynamicCardComponent } from './mat-dynamic-card.component';
+import { ButtonComponent } from './button.component';
 
-describe('MatDynamicCardComponent', () => {
-  let component: MatDynamicCardComponent;
-  let fixture: ComponentFixture<MatDynamicCardComponent>;
+describe('ButtonComponent', () => {
+  let component: ButtonComponent;
+  let fixture: ComponentFixture<ButtonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDynamicCardComponent],
+      imports: [ButtonComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MatDynamicCardComponent);
+    fixture = TestBed.createComponent(ButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,297 @@
+:root {
+  --acp-secondary: #e0e0e0;
+  --acp-secondary-on: #000000;
+  --acp-success: #4caf50;
+  --acp-success-on: #ffffff;
+  --acp-danger: #ba1a1a;
+  --acp-danger-on: #ffffff;
+  --acp-warning: #ff9800;
+  --acp-warning-on: #000000;
+  --acp-info: #2196f3;
+  --acp-info-on: #ffffff;
+  --acp-dark: #212121;
+  --acp-dark-on: #ffffff;
+}
+
+.dark-theme {
+  --acp-secondary: #424242;
+  --acp-secondary-on: #ffffff;
+  --acp-success: #81c784;
+  --acp-success-on: #1b5e20;
+  --acp-danger: #ef5350;
+  --acp-danger-on: #b71c1c;
+  --acp-warning: #ffb74d;
+  --acp-warning-on: #e65100;
+  --acp-info: #64b5f6;
+  --acp-info-on: #0d47a1;
+  --acp-dark: #616161;
+  --acp-dark-on: #ffffff;
+}
+
+acp-button {
+  display: inline-block;
+  margin: 4px;
+}
+
+// Button content alignment - center icon and text vertically
+.mat-mdc-button,
+.mat-mdc-unelevated-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+button[matbutton='tonal'],
+.mat-mdc-fab.mdc-fab--extended {
+  .mdc-button__label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+// Filled buttons - target Material's generated classes
+.mat-mdc-button.mat-btn-secondary,
+.mat-mdc-unelevated-button.mat-btn-secondary {
+  background-color: var(--acp-secondary) !important;
+  color: var(--acp-secondary-on) !important;
+}
+
+.mat-mdc-button.mat-btn-secondary:hover,
+.mat-mdc-unelevated-button.mat-btn-secondary:hover {
+  background-color: color-mix(in srgb, var(--acp-secondary) 80%, black) !important;
+}
+
+.mat-mdc-button.mat-btn-success,
+.mat-mdc-unelevated-button.mat-btn-success {
+  background-color: var(--acp-success) !important;
+  color: var(--acp-success-on) !important;
+}
+
+.mat-mdc-button.mat-btn-danger,
+.mat-mdc-unelevated-button.mat-btn-danger {
+  background-color: var(--acp-danger) !important;
+  color: var(--acp-danger-on) !important;
+}
+
+.mat-mdc-button.mat-btn-warning,
+.mat-mdc-unelevated-button.mat-btn-warning {
+  background-color: var(--acp-warning) !important;
+  color: var(--acp-warning-on) !important;
+}
+
+.mat-mdc-button.mat-btn-info,
+.mat-mdc-unelevated-button.mat-btn-info {
+  background-color: var(--acp-info) !important;
+  color: var(--acp-info-on) !important;
+}
+
+.mat-mdc-button.mat-btn-dark,
+.mat-mdc-unelevated-button.mat-btn-dark {
+  background-color: var(--acp-dark) !important;
+  color: var(--acp-dark-on) !important;
+}
+
+// Tonal buttons - lighter background
+button[matbutton='tonal'].mat-btn-success {
+  background-color: color-mix(in srgb, var(--acp-success) 12%, transparent) !important;
+  color: var(--acp-success) !important;
+}
+
+button[matbutton='tonal'].mat-btn-danger {
+  background-color: color-mix(in srgb, var(--acp-danger) 12%, transparent) !important;
+  color: var(--acp-danger) !important;
+}
+
+button[matbutton='tonal'].mat-btn-warning {
+  background-color: color-mix(in srgb, var(--acp-warning) 12%, transparent) !important;
+  color: var(--acp-warning) !important;
+}
+
+button[matbutton='tonal'].mat-btn-info {
+  background-color: color-mix(in srgb, var(--acp-info) 12%, transparent) !important;
+  color: var(--acp-info) !important;
+}
+
+button[matbutton='tonal'].mat-btn-dark {
+  background-color: color-mix(in srgb, var(--acp-dark) 12%, transparent) !important;
+  color: var(--acp-dark) !important;
+}
+
+// Text buttons - only text color
+.mat-mdc-button:not(.mat-mdc-unelevated-button):not(.mat-mdc-raised-button):not(
+    .mat-mdc-outlined-button
+  ).mat-btn-secondary {
+  color: var(--mat-sys-on-surface) !important;
+}
+
+.mat-mdc-button:not(.mat-mdc-unelevated-button):not(.mat-mdc-raised-button):not(
+    .mat-mdc-outlined-button
+  ).mat-btn-success {
+  color: var(--acp-success) !important;
+}
+
+.mat-mdc-button:not(.mat-mdc-unelevated-button):not(.mat-mdc-raised-button):not(
+    .mat-mdc-outlined-button
+  ).mat-btn-danger {
+  color: var(--acp-danger) !important;
+}
+
+.mat-mdc-button:not(.mat-mdc-unelevated-button):not(.mat-mdc-raised-button):not(
+    .mat-mdc-outlined-button
+  ).mat-btn-warning {
+  color: var(--acp-warning) !important;
+}
+
+.mat-mdc-button:not(.mat-mdc-unelevated-button):not(.mat-mdc-raised-button):not(
+    .mat-mdc-outlined-button
+  ).mat-btn-info {
+  color: var(--acp-info) !important;
+}
+
+.mat-mdc-button:not(.mat-mdc-unelevated-button):not(.mat-mdc-raised-button):not(
+    .mat-mdc-outlined-button
+  ).mat-btn-dark {
+  color: var(--acp-dark) !important;
+}
+
+// Elevated buttons - surface background with colored text, container background on hover
+.mat-mdc-raised-button.mat-btn-secondary {
+  background-color: var(--mat-sys-surface-container-low) !important;
+  color: var(--mat-sys-on-surface) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-success {
+  background-color: var(--mat-sys-surface-container-low) !important;
+  color: var(--acp-success) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-success:hover {
+  background-color: color-mix(in srgb, var(--acp-success) 12%, transparent) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-danger {
+  background-color: var(--mat-sys-surface-container-low) !important;
+  color: var(--acp-danger) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-danger:hover {
+  background-color: color-mix(in srgb, var(--acp-danger) 12%, transparent) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-warning {
+  background-color: var(--mat-sys-surface-container-low) !important;
+  color: var(--acp-warning) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-warning:hover {
+  background-color: color-mix(in srgb, var(--acp-warning) 12%, transparent) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-info {
+  background-color: var(--mat-sys-surface-container-low) !important;
+  color: var(--acp-info) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-info:hover {
+  background-color: color-mix(in srgb, var(--acp-info) 12%, transparent) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-dark {
+  background-color: var(--mat-sys-surface-container-low) !important;
+  color: var(--acp-dark) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-dark:hover {
+  background-color: color-mix(in srgb, var(--acp-dark) 12%, transparent) !important;
+}
+
+// Outlined buttons
+.mat-mdc-outlined-button.mat-btn-secondary {
+  border-color: var(--mat-sys-outline) !important;
+  color: var(--mat-sys-on-surface) !important;
+}
+
+.mat-mdc-outlined-button.mat-btn-success {
+  border-color: var(--acp-success) !important;
+  color: var(--acp-success) !important;
+}
+
+.mat-mdc-outlined-button.mat-btn-danger {
+  border-color: var(--acp-danger) !important;
+  color: var(--acp-danger) !important;
+}
+
+.mat-mdc-outlined-button.mat-btn-warning {
+  border-color: var(--acp-warning) !important;
+  color: var(--acp-warning) !important;
+}
+
+.mat-mdc-outlined-button.mat-btn-info {
+  border-color: var(--acp-info) !important;
+  color: var(--acp-info) !important;
+}
+
+.mat-mdc-outlined-button.mat-btn-dark {
+  border-color: var(--acp-dark) !important;
+  color: var(--acp-dark) !important;
+}
+
+// FAB buttons (regular, mini, and extended)
+.mat-mdc-fab.mat-btn-secondary,
+.mat-mdc-mini-fab.mat-btn-secondary {
+  background-color: var(--acp-secondary) !important;
+  color: var(--acp-secondary-on) !important;
+}
+
+.mat-mdc-fab.mat-btn-success,
+.mat-mdc-mini-fab.mat-btn-success {
+  background-color: var(--acp-success) !important;
+  color: var(--acp-success-on) !important;
+}
+
+.mat-mdc-fab.mat-btn-danger,
+.mat-mdc-mini-fab.mat-btn-danger {
+  background-color: var(--acp-danger) !important;
+  color: var(--acp-danger-on) !important;
+}
+
+.mat-mdc-fab.mat-btn-warning,
+.mat-mdc-mini-fab.mat-btn-warning {
+  background-color: var(--acp-warning) !important;
+  color: var(--acp-warning-on) !important;
+}
+
+.mat-mdc-fab.mat-btn-info,
+.mat-mdc-mini-fab.mat-btn-info {
+  background-color: var(--acp-info) !important;
+  color: var(--acp-info-on) !important;
+}
+
+.mat-mdc-fab.mat-btn-dark,
+.mat-mdc-mini-fab.mat-btn-dark {
+  background-color: var(--acp-dark) !important;
+  color: var(--acp-dark-on) !important;
+}
+
+// Icon buttons
+.mat-mdc-icon-button.mat-btn-secondary {
+  color: var(--mat-sys-on-surface) !important;
+}
+
+.mat-mdc-icon-button.mat-btn-success {
+  color: var(--acp-success) !important;
+}
+
+.mat-mdc-icon-button.mat-btn-danger {
+  color: var(--acp-danger) !important;
+}
+
+.mat-mdc-icon-button.mat-btn-warning {
+  color: var(--acp-warning) !important;
+}
+
+.mat-mdc-icon-button.mat-btn-info {
+  color: var(--acp-info) !important;
+}
+
+.mat-mdc-icon-button.mat-btn-dark {
+  color: var(--acp-dark) !important;
+}

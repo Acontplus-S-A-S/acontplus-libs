@@ -12,13 +12,13 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 @Component({
-  selector: 'acp-mat-input-chip',
+  selector: 'acp-input-chip',
   imports: [MatFormField, MatLabel, MatChipRow, MatIcon, MatHint, MatChipGrid, MatChipInput],
-  templateUrl: './mat-input-chip.component.html',
-  styleUrl: './mat-input-chip.component.scss',
+  templateUrl: './input-chip.component.html',
+  styleUrl: './input-chip.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class MatInputChipComponent {
+export class InputChipComponent {
   chips = input.required<string[]>();
   labelText = input.required<string>();
   placelholder = input<string>('');

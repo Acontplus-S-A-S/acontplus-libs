@@ -1,12 +1,12 @@
 import { Component, input, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'acp-icon-user',
+  selector: 'acp-user-icon',
   imports: [],
-  templateUrl: './icon-user.component.html',
-  styleUrl: './icon-user.component.scss',
+  templateUrl: './user-icon.component.html',
+  styleUrl: './user-icon.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class IconUserComponent {
+export class UserIconComponent {
   size = input('35');
 }
