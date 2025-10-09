@@ -1,0 +1,144 @@
+<div class="application-dialog">
+  <mat-dialog-content>
+    <form [formGroup]="applicationForm" class="application-form">
+      <!-- Basic Information -->
+      <div class="form-section">
+        <h3>Información Básica</h3>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre *</mat-label>
+            <input matInput formControlName="name" placeholder="Ej: Customer Portal" />
+            <mat-error>{{ getFieldError('name') }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descripción *</mat-label>
+            <textarea
+              matInput
+              formControlName="description"
+              rows="3"
+              placeholder="Descripción detallada de la aplicación"
+            >
+            </textarea>
+            <mat-error>{{ getFieldError('description') }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row two-columns">
+          <mat-form-field appearance="outline">
+            <mat-label>Versión *</mat-label>
+            <input matInput formControlName="version" placeholder="1.0.0" />
+            <mat-error>{{ getFieldError('version') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Categoría *</mat-label>
+            <mat-select formControlName="category">
+              <mat-option *ngFor="let category of categoryOptions" [value]="category">
+                {{ category }}
+              </mat-option>
+            </mat-select>
+            <mat-error>{{ getFieldError('category') }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Propietario *</mat-label>
+            <input matInput formControlName="owner" placeholder="Ej: Frontend Team" />
+            <mat-error>{{ getFieldError('owner') }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Status and Environment -->
+      <div class="form-section">
+        <h3>Estado y Entorno</h3>
+
+        <div class="form-row two-columns">
+          <mat-form-field appearance="outline">
+            <mat-label>Estado *</mat-label>
+            <mat-select formControlName="status">
+              <mat-option *ngFor="let status of statusOptions" [value]="status">
+                {{ status | titlecase }}
+              </mat-option>
+            </mat-select>
+            <mat-error>{{ getFieldError('status') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Entorno *</mat-label>
+            <mat-select formControlName="environment">
+              <mat-option *ngFor="let env of environmentOptions" [value]="env">
+                {{ env | titlecase }}
+              </mat-option>
+            </mat-select>
+            <mat-error>{{ getFieldError('environment') }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-slide-toggle formControlName="isPublic"> Aplicación Pública </mat-slide-toggle>
+        </div>
+      </div>
+
+      <!-- Dependencies and Tags -->
+      <div class="form-section">
+        <h3>Dependencias y Etiquetas</h3>
+
+        <div class="form-row">
+          <acp-input-chip
+            [chips]="dependencies"
+            labelText="Dependencias"
+            placeholder="Agregar dependencia..."
+          >
+          </acp-input-chip>
+        </div>
+
+        <div class="form-row">
+          <acp-input-chip [chips]="tags" labelText="Etiquetas" placeholder="Agregar etiqueta...">
+          </acp-input-chip>
+        </div>
+      </div>
+
+      <!-- URLs -->
+      <div class="form-section">
+        <h3>Enlaces</h3>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>URL del Repositorio</mat-label>
+            <input matInput formControlName="repositoryUrl" placeholder="https://github.com/..." />
+            <mat-icon matSuffix>link</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>URL de Documentación</mat-label>
+            <input
+              matInput
+              formControlName="documentationUrl"
+              placeholder="https://docs.example.com/..."
+            />
+            <mat-icon matSuffix>description</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <acp-button text="Cancelar" variant="dark" (handleClick)="cancel()" [disabled]="loading" />
+    <acp-button
+      type="submit"
+      text="Guardar"
+      variant="success"
+      [disabled]="!applicationForm.valid || loading"
+    >
+    </acp-button>
+  </mat-dialog-actions>
+</div>

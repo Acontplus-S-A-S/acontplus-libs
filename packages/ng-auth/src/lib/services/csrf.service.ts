@@ -1,14 +1,13 @@
 // src/lib/services/csrf.service.ts
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ENVIRONMENT } from '@acontplus/ng-config';
+import { firstValueFrom, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CsrfService {
   private http = inject(HttpClient);
-  private environment = inject(ENVIRONMENT);
   private csrfToken: string | null = null;
 
   /**
@@ -20,11 +19,12 @@ export class CsrfService {
     }
 
     try {
-      const response = await this.http
-        .get<{ csrfToken: string }>(`${this.environment.apiBaseUrl}/csrf-token`)
-        .toPromise();
+      this.csrfToken = await firstValueFrom(
+        this.http
+          .get<{ csrfToken: string }>('csrf-token')
+          .pipe(map(response => response.csrfToken)),
+      );
 
-      this.csrfToken = response?.csrfToken || null;
       return this.csrfToken || '';
     } catch {
       // If CSRF endpoint fails, return empty token

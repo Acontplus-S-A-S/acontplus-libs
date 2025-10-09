@@ -2,6 +2,7 @@ const { FlatCompat } = require('@eslint/eslintrc');
 const js = require('@eslint/js');
 const tseslint = require('typescript-eslint');
 const angular = require('angular-eslint');
+const nx = require('@nx/eslint-plugin');
 
 const compat = new FlatCompat();
 
@@ -23,6 +24,9 @@ module.exports = tseslint.config(
       ...angular.configs.tsRecommended,
     ],
     processor: angular.processInlineTemplates,
+    plugins: {
+      '@nx': nx,
+    },
     rules: {
       // Angular specific rules
       '@angular-eslint/directive-selector': [
@@ -48,33 +52,33 @@ module.exports = tseslint.config(
       // TypeScript rules
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/explicit-function-return-type': 'off',
-      'linebreak-style': ['error', 'unix'],
+      'linebreak-style': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-var-requires': 'error',
 
       // General code quality rules
-      'no-console': 'warn',
+      'no-console': 'off',
       'no-debugger': 'error',
       'no-duplicate-imports': 'error',
       'no-unused-expressions': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
 
-      // Formatting rules
-      indent: ['error', 2, { SwitchCase: 1 }],
-      quotes: ['error', 'single', { avoidEscape: true }],
-      semi: ['error', 'always'],
-      'comma-dangle': ['error', 'always-multiline'],
-      'object-curly-spacing': ['error', 'always'],
-      'array-bracket-spacing': ['error', 'never'],
-      'space-before-function-paren': ['error', 'never'],
-      'space-before-blocks': ['error', 'always'],
-      'keyword-spacing': ['error', { before: true, after: true }],
-      'space-infix-ops': 'error',
-      'eol-last': ['error', 'always'],
-      'no-trailing-spaces': 'error',
-      'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0 }],
+      // Formatting rules - disabled in favor of Prettier
+      indent: 'off',
+      quotes: 'off',
+      semi: 'off',
+      'comma-dangle': 'off',
+      'object-curly-spacing': 'off',
+      'array-bracket-spacing': 'off',
+      'space-before-function-paren': 'off',
+      'space-before-blocks': 'off',
+      'keyword-spacing': 'off',
+      'space-infix-ops': 'off',
+      'eol-last': 'off',
+      'no-trailing-spaces': 'off',
+      'no-multiple-empty-lines': 'off',
     },
   },
 

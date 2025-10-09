@@ -1,13 +1,14 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { jwtDecode } from 'jwt-decode';
-import { AuthTokens } from '@acontplus/core';
+import { AuthTokens, UserData } from '@acontplus/core';
 import { ENVIRONMENT } from '@acontplus/ng-config';
+import { ITokenProvider } from '@acontplus/ng-infrastructure';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TokenRepository {
+export class TokenRepository implements ITokenProvider {
   private environment = inject(ENVIRONMENT);
   private platformId = inject(PLATFORM_ID);
 
@@ -18,7 +19,7 @@ export class TokenRepository {
     }
   }
 
-  getAccessToken(): string | null {
+  getToken(): string | null {
     if (!isPlatformBrowser(this.platformId)) {
       return null;
     }
@@ -29,10 +30,13 @@ export class TokenRepository {
   }
 
   getRefreshToken(): string | null {
-    // Refresh tokens are now stored in HttpOnly cookies by the server
-    // We can't read them directly from client-side code for security
-    // They are automatically sent with requests when withCredentials: true is used
-    return null;
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+    return (
+      localStorage.getItem(this.environment.refreshTokenKey) ||
+      sessionStorage.getItem(this.environment.refreshTokenKey)
+    );
   }
 
   setToken(token: string, rememberMe = false): void {
@@ -46,10 +50,15 @@ export class TokenRepository {
     }
   }
 
-  setRefreshToken(_refreshToken: string, _rememberMe = false): void {
-    // Refresh tokens are now set by the server as HttpOnly cookies
-    // Client-side code cannot set HttpOnly cookies for security reasons
-    // They are set in response to successful login/register requests
+  setRefreshToken(refreshToken: string, rememberMe = false): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    if (rememberMe) {
+      localStorage.setItem(this.environment.refreshTokenKey, refreshToken);
+    } else {
+      sessionStorage.setItem(this.environment.refreshTokenKey, refreshToken);
+    }
   }
 
   clearTokens(): void {
@@ -63,7 +72,7 @@ export class TokenRepository {
   }
 
   isAuthenticated(): boolean {
-    const accessToken = this.getAccessToken();
+    const accessToken = this.getToken();
 
     if (!accessToken) {
       return false;
@@ -81,7 +90,7 @@ export class TokenRepository {
   }
 
   needsRefresh(): boolean {
-    const accessToken = this.getAccessToken();
+    const accessToken = this.getToken();
     if (!accessToken) {
       return false;
     }
@@ -98,14 +107,105 @@ export class TokenRepository {
     }
   }
 
-  getTokenPayload(): any {
-    const token = this.getAccessToken();
+  getTokenPayload(): unknown {
+    const token = this.getToken();
     if (!token) return null;
 
     try {
       return jwtDecode(token);
-    } catch (error) {
+    } catch {
       return null;
     }
+  }
+
+  /**
+   * Determines if tokens are stored persistently (localStorage) vs session (sessionStorage)
+   */
+  isRememberMeEnabled(): boolean {
+    if (!isPlatformBrowser(this.platformId)) {
+      return false;
+    }
+
+    // Check if tokens exist in localStorage (persistent storage)
+    const tokenInLocalStorage = localStorage.getItem(this.environment.tokenKey);
+    const refreshTokenInLocalStorage = localStorage.getItem(this.environment.refreshTokenKey);
+
+    return !!(tokenInLocalStorage || refreshTokenInLocalStorage);
+  }
+
+  getUserData(): UserData | null {
+    const token = this.getToken();
+    if (!token) {
+      return null;
+    }
+
+    try {
+      const decodedToken = jwtDecode<Record<string, unknown>>(token);
+
+      const email =
+        decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] ??
+        decodedToken['email'] ??
+        decodedToken['sub'] ??
+        decodedToken['user_id'];
+
+      const displayName =
+        decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'] ??
+        decodedToken['displayName'] ??
+        decodedToken['display_name'] ??
+        decodedToken['name'] ??
+        decodedToken['given_name'];
+
+      const name = decodedToken['name'] ?? displayName;
+
+      if (!email) {
+        return null;
+      }
+
+      const userData: UserData = {
+        email: email.toString(),
+        displayName: displayName?.toString() ?? 'Unknown User',
+        name: name?.toString(),
+        roles: this.extractArrayField(decodedToken, ['roles', 'role']),
+        permissions: this.extractArrayField(decodedToken, ['permissions', 'perms']),
+        tenantId:
+          decodedToken['tenantId']?.toString() ??
+          decodedToken['tenant_id']?.toString() ??
+          decodedToken['tenant']?.toString(),
+        companyId:
+          decodedToken['companyId']?.toString() ??
+          decodedToken['company_id']?.toString() ??
+          decodedToken['organizationId']?.toString() ??
+          decodedToken['org_id']?.toString(),
+        locale: decodedToken['locale']?.toString(),
+        timezone: decodedToken['timezone']?.toString() ?? decodedToken['tz']?.toString(),
+      };
+
+      return userData;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Extract array field from decoded token, trying multiple possible field names
+   */
+  private extractArrayField(
+    decodedToken: Record<string, unknown>,
+    fieldNames: string[],
+  ): string[] | undefined {
+    for (const fieldName of fieldNames) {
+      const value = decodedToken[fieldName];
+      if (Array.isArray(value)) {
+        return value.map(v => v.toString());
+      }
+      if (typeof value === 'string') {
+        // Handle comma-separated string values
+        return value
+          .split(',')
+          .map(v => v.trim())
+          .filter(v => v.length > 0);
+      }
+    }
+    return undefined;
   }
 }

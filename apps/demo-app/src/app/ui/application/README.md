@@ -49,9 +49,7 @@ export class ApplicationRepository extends BaseHttpRepository<Application> {
   protected baseUrl = 'https://api.example.com/v1';
 
   // Override base methods for custom implementations
-  override getAll(
-    pagination: PaginationParams,
-  ): Observable<PaginatedResult<Application>>;
+  override getAll(pagination: PaginationParams): Observable<PaginatedResult<Application>>;
   override getById(id: number): Observable<Application>;
   override create(application: Omit<Application, 'id'>): Observable<Application>;
   // ... more methods
@@ -100,9 +98,7 @@ export class MockApplicationService {
   ];
 
   // Implements all repository methods with mock data
-  getAll(
-    pagination: PaginationParams,
-  ): Observable<PaginatedResult<Application>>;
+  getAll(pagination: PaginationParams): Observable<PaginatedResult<Application>>;
   // ... more methods
 }
 ```

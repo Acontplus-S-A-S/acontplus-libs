@@ -1,10 +1,9 @@
-<section id="wrapper" class="d-flex justify-content-center align-items-center">
-  <mat-card class="mat-elevation-z8 p-4 rounded">
-    <mat-card-header>
-      <mat-card-title class="text-center">{{ title() }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      @if (isLoginMode()) {
+<mat-card class="mat-elevation-z8 p-4 rounded">
+  <mat-card-header>
+    <mat-card-title class="text-center">{{ title() }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    @if (isLoginMode()) {
       <form [formGroup]="signinForm" (ngSubmit)="signIn()" class="d-flex flex-column gap-3">
         <mat-form-field class="w-100">
           <mat-label>Usuario</mat-label>
@@ -13,36 +12,59 @@
 
         <mat-form-field class="w-100">
           <mat-label>Contraseña</mat-label>
-          <input matInput type="password" placeholder="Ingrese su contraseña" formControlName="password" />
+          <input
+            matInput
+            type="password"
+            placeholder="Ingrese su contraseña"
+            formControlName="password"
+            autocomplete="current-password"
+          />
         </mat-form-field>
+
+        <!-- Remember Me checkbox - conditional -->
+        @if (showRememberMe()) {
+          <div class="d-flex align-items-center mt-2">
+            <mat-checkbox formControlName="rememberMe"> Recordarme </mat-checkbox>
+          </div>
+        }
 
         <!-- Additional signin fields -->
         <ng-container *ngTemplateOutlet="additionalSigninFields()"></ng-container>
 
         <div class="d-flex justify-content-center mt-3">
-          <button mat-raised-button color="primary" [disabled]="!signinForm.valid || isLoading()" type="submit"
-            class="w-100">
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="!signinForm.valid || isLoading()"
+            type="submit"
+            class="w-100"
+          >
             @if (isLoading()) {
-            Ingresando...
+              Ingresando...
             } @else {
-            <ng-container>Ingresar <mat-icon>login</mat-icon></ng-container>
+              <ng-container>Ingresar <mat-icon>login</mat-icon></ng-container>
             }
           </button>
         </div>
 
         <div class="text-center mt-2">
           @if (showRegisterButton()) {
-          <button mat-button type="button" (click)="switchMode()">
-            ¿No tienes cuenta? Regístrate
-          </button>
+            <button mat-button type="button" (click)="switchMode()">
+              ¿No tienes cuenta? Regístrate
+            </button>
           }
         </div>
       </form>
-      } @else {
+    } @else {
       <form [formGroup]="signupForm" (ngSubmit)="registerUser()" class="d-flex flex-column gap-3">
         <mat-form-field class="w-100">
           <mat-label>Nombre</mat-label>
-          <input matInput type="text" placeholder="Ingrese su nombre" formControlName="displayName" />
+          <input
+            matInput
+            type="text"
+            placeholder="Ingrese su nombre"
+            formControlName="displayName"
+          />
         </mat-form-field>
 
         <mat-form-field class="w-100">
@@ -52,38 +74,50 @@
 
         <mat-form-field class="w-100">
           <mat-label>Contraseña</mat-label>
-          <input matInput type="password" placeholder="Ingrese su contraseña" formControlName="password" />
+          <input
+            matInput
+            type="password"
+            placeholder="Ingrese su contraseña"
+            formControlName="password"
+            autocomplete="new-password"
+          />
         </mat-form-field>
 
         <!-- Additional signup fields -->
         <ng-container *ngTemplateOutlet="additionalSignupFields()"></ng-container>
 
         <div class="d-flex justify-content-center mt-3">
-          <button mat-raised-button color="primary" [disabled]="!signupForm.valid || isLoading()" type="submit"
-            class="w-100">
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="!signupForm.valid || isLoading()"
+            type="submit"
+            class="w-100"
+          >
             @if (isLoading()) {
-            Registrando...
+              Registrando...
             } @else {
-            <ng-container>Registrarse <mat-icon>person_add</mat-icon></ng-container>
+              <ng-container>Registrarse <mat-icon>person_add</mat-icon></ng-container>
             }
           </button>
         </div>
 
         <div class="text-center mt-2">
-          <button mat-button type="button" (click)="switchMode()">¿Ya tienes cuenta? Inicia sesión</button>
+          <button mat-button type="button" (click)="switchMode()">
+            ¿Ya tienes cuenta? Inicia sesión
+          </button>
         </div>
       </form>
-      }
-      @if (errorMessage()) {
+    }
+    @if (errorMessage()) {
       <div class="alert alert-danger mt-3" role="alert">
         {{ errorMessage() }}
       </div>
-      }
-    </mat-card-content>
-    @if (hasFooterContent()) {
+    }
+  </mat-card-content>
+  @if (hasFooterContent()) {
     <mat-card-footer>
       <ng-container *ngTemplateOutlet="footerContent()"></ng-container>
     </mat-card-footer>
-    }
-  </mat-card>
-</section>
+  }
+</mat-card>

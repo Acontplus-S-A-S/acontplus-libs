@@ -1,4 +1,4 @@
-import { Provider, EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
+import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
 import { provideToastr, GlobalConfig } from 'ngx-toastr';
 import { NotificationService } from './services/notification.service';
 import { NOTIFICATION_CONFIG, NotificationProviderConfig } from './providers/notification.provider';

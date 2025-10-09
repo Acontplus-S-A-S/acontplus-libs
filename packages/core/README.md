@@ -60,7 +60,7 @@ const environment: Environment = {
   tokenKey: 'auth_token',
   refreshTokenKey: 'refresh_token',
   clientId: 'your-client-id',
-  loginRoute: '/login'
+  loginRoute: 'login',
 };
 ```
 

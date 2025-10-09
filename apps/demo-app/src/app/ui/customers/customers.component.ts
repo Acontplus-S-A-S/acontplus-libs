@@ -1,8 +1,6 @@
-import { Component, inject, Injectable, signal } from '@angular/core';
-// Remove imports that don't exist in core
-import { from } from 'rxjs';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { AdvancedDialogService, MatThemeButtonComponent } from '@acontplus/ng-components';
+import { AdvancedDialogService, ButtonComponent } from '@acontplus/ng-components';
 import { CustomerAddEditComponent, CustomerCardComponent } from '@acontplus/ng-customer';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -11,16 +9,16 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-customers',
   imports: [
     MatCardModule,
-    MatThemeButtonComponent,
+    ButtonComponent,
     CustomerCardComponent,
     MatButtonModule,
-    MatThemeButtonComponent,
+    ButtonComponent,
     CustomerCardComponent,
   ],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.scss',
 })
-export class CustomersComponent {
+export class CustomersComponent implements OnInit {
   private dialogSvc = inject(AdvancedDialogService);
 
   customers = signal<any[]>([]);
@@ -29,7 +27,7 @@ export class CustomersComponent {
     // Mock customer data for demo
     this.customers.set([
       { id: 1, name: 'John Doe', email: 'john@example.com' },
-      { id: 2, name: 'Jane Smith', email: 'jane@example.com' }
+      { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
     ]);
   }
 

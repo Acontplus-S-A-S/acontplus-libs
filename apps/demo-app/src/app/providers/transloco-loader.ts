@@ -7,11 +7,6 @@ import { TranslocoLoader } from '@jsverse/transloco';
 export class TranslocoHttpLoader implements TranslocoLoader {
   private http = inject(HttpClient);
 
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
-
-  constructor() {}
-
   getTranslation(lang: string) {
     return this.http.get(`/assets/i18n/${lang}.json`);
   }

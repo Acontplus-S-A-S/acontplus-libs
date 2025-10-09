@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { ButtonComponent } from '@acontplus/ng-components';
 
 @Component({
   selector: 'app-pricing-demo',
@@ -16,6 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
     FormsModule,
     DecimalPipe,
     MatButtonModule,
+    ButtonComponent,
   ],
   templateUrl: './pricing-demo.component.html',
   styleUrl: './pricing-demo.component.scss',
@@ -24,17 +26,29 @@ export class PricingDemoComponent {
   calculadora = {
     defaultDecimals: 2,
     tax: {
-      getTaxCalculationDetails: (base: number, rate: number) => ({ base, rate, total: base * (1 + rate / 100) })
+      getTaxCalculationDetails: (base: number, rate: number) => ({
+        base,
+        rate,
+        total: base * (1 + rate / 100),
+      }),
     },
     discount: {
-      getDiscountCalculationDetails: (base: number, rate: number) => ({ base, rate, total: base * (1 - rate / 100) })
+      getDiscountCalculationDetails: (base: number, rate: number) => ({
+        base,
+        rate,
+        total: base * (1 - rate / 100),
+      }),
     },
     profit: {
-      getProfitCalculationDetails: (base: number, rate: number) => ({ base, rate, total: base * (1 + rate / 100) })
+      getProfitCalculationDetails: (base: number, rate: number) => ({
+        base,
+        rate,
+        total: base * (1 + rate / 100),
+      }),
     },
     lineItem: {
-      calculateLineItemTotal: (price: number, quantity: number) => price * quantity
-    }
+      calculateLineItemTotal: (price: number, quantity: number) => price * quantity,
+    },
   };
 
   // Escenario 1

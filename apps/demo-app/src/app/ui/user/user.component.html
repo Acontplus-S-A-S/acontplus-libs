@@ -12,15 +12,10 @@
             [(ngModel)]="searchQuery"
             placeholder="Search by name, email, or role..."
           />
-          <button mat-icon-button matSuffix (click)="onSearch()">
-            <mat-icon>search</mat-icon>
-          </button>
+          <acp-button matStyle="icon" icon="search" (handleClick)="onSearch()" />
         </mat-form-field>
 
-        <button mat-button (click)="clearFilters()" class="clear-btn">
-          <mat-icon>clear</mat-icon>
-          Clear Filters
-        </button>
+        <acp-button text="Clear Filters" icon="clear" (handleClick)="clearFilters()" />
       </div>
     </mat-card-content>
   </mat-card>
@@ -49,10 +44,14 @@
           </mat-select>
         </mat-form-field>
 
-        <button mat-raised-button color="primary" (click)="createUser()" [disabled]="isCreating">
-          <mat-icon>add</mat-icon>
-          {{ isCreating ? 'Creating...' : 'Create User' }}
-        </button>
+        <acp-button
+          matStyle="elevated"
+          variant="primary"
+          [text]="isCreating ? 'Creating...' : 'Create User'"
+          icon="add"
+          [disabled]="isCreating"
+          (handleClick)="createUser()"
+        />
       </div>
     </mat-card-content>
   </mat-card>
@@ -62,18 +61,24 @@
         <div class="bulk-header">
           <span class="selected-count">{{ getSelectedCount() }} users selected</span>
           <div class="bulk-actions">
-            <button mat-button color="primary" (click)="bulkActivateUsers()">
-              <mat-icon>check_circle</mat-icon>
-              Activate
-            </button>
-            <button mat-button color="warn" (click)="bulkDeactivateUsers()">
-              <mat-icon>cancel</mat-icon>
-              Deactivate
-            </button>
-            <button mat-button color="warn" (click)="bulkDeleteUsers()">
-              <mat-icon>delete</mat-icon>
-              Delete
-            </button>
+            <acp-button
+              variant="primary"
+              text="Activate"
+              icon="check_circle"
+              (handleClick)="bulkActivateUsers()"
+            />
+            <acp-button
+              variant="danger"
+              text="Deactivate"
+              icon="cancel"
+              (handleClick)="bulkDeactivateUsers()"
+            />
+            <acp-button
+              variant="danger"
+              text="Delete"
+              icon="delete"
+              (handleClick)="bulkDeleteUsers()"
+            />
           </div>
         </div>
       </mat-card-content>
@@ -82,7 +87,8 @@
   <mat-card class="table-card">
     <mat-card-content>
       <div class="table-container">
-        <acp-mat-dynamic-table [tableData]="users"
+        <acp-dynamic-table
+          [tableData]="users"
           [columnDefinitions]="userColumns"
           [showSelectBox]="true"
           [showFooter]="true"
@@ -91,7 +97,7 @@
           [isLoadingData]="isLoading"
           (rowSelected)="onRowSelected($event)"
           (pageEvent)="onPageChange($event)"
-         />
+        />
 
         @if (!isLoading && users.length === 0) {
           <div class="no-data">
@@ -133,24 +139,29 @@
             <mat-option value="admin">Admin</mat-option>
           </mat-select>
         </mat-form-field>
-        <button mat-icon-button color="primary" (click)="updateUser()" [disabled]="isUpdating">
-          <mat-icon>{{ isUpdating ? 'hourglass_empty' : 'check' }}</mat-icon>
-        </button>
-        <button mat-icon-button (click)="cancelEdit()">
-          <mat-icon>close</mat-icon>
-        </button>
+        <acp-button
+          matStyle="icon"
+          variant="primary"
+          [icon]="isUpdating ? 'hourglass_empty' : 'check'"
+          [disabled]="isUpdating"
+          (handleClick)="updateUser()"
+        />
+        <acp-button matStyle="icon" icon="close" (handleClick)="cancelEdit()" />
       } @else {
-        <button mat-icon-button color="primary" (click)="startEdit(element)" matTooltip="Edit User">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          color="warn"
-          (click)="deleteUser(element.id)"
-          matTooltip="Delete User"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
+        <acp-button
+          matStyle="icon"
+          variant="primary"
+          icon="edit"
+          title="Edit User"
+          (handleClick)="startEdit(element)"
+        />
+        <acp-button
+          matStyle="icon"
+          variant="danger"
+          icon="delete"
+          title="Delete User"
+          (handleClick)="deleteUser(element.id)"
+        />
       }
     </div>
   </ng-template>

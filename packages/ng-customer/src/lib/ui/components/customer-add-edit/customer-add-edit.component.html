@@ -67,9 +67,12 @@
 
                 @if (showRefresh()) {
                   <ng-container matSuffix>
-                    <button type="button" mat-icon-button (click)="onKeyDownGovernmentId($event)">
-                      <mat-icon>refresh</mat-icon>
-                    </button>
+                    <acp-button
+                      type="button"
+                      matStyle="icon"
+                      icon="refresh"
+                      (handleClick)="onKeyDownGovernmentId($event)"
+                    />
                   </ng-container>
                 }
               </mat-form-field>
@@ -123,10 +126,10 @@
             class="row row-cols-xxl-2 row-cols-xl-2 row-cols-lg-2 row-cols-md-2 row-cols-sm-2 row-cols-1 g-1"
           >
             <div class="col">
-              <acp-mat-input-chip [chips]="emails" [labelText]="'Correo'" />
+              <acp-input-chip [chips]="emails" [labelText]="'Correo'" />
             </div>
             <div class="col">
-              <acp-mat-input-chip [chips]="telephones" [labelText]="'Teléfono'" />
+              <acp-input-chip [chips]="telephones" [labelText]="'Teléfono'" />
             </div>
           </div>
 
@@ -146,7 +149,7 @@
             class="row row-cols-xxl-2 row-cols-xl-2 row-cols-lg-2 row-cols-md-2 row-cols-sm-2 row-cols-1 g-1"
           >
             <div class="col">
-              <acp-mat-dynamic-card title="Información Básica" [isHeaderVisible]="true">
+              <acp-dynamic-card title="Información Básica" [isHeaderVisible]="true">
                 <div
                   class="row row-cols-xxl-2 row-cols-xl-2 row-cols-lg-2 row-cols-md-2 row-cols-sm-2 row-cols-1 g-2"
                 >
@@ -224,9 +227,7 @@
                       <mat-label>Fecha Nacimiento</mat-label>
                       <input matInput [matDatepicker]="birthDate" formControlName="birthDate" />
                       <mat-hint>MM/DD/YYYY</mat-hint>
-                      <mat-datepicker-toggle matIconSuffix
-                        [for]="birthDate"
-                       />
+                      <mat-datepicker-toggle matIconSuffix [for]="birthDate" />
                       <mat-datepicker #birthDate />
                       @if (birthDateCtrl?.invalid && birthDateCtrl?.touched) {
                         <mat-error> Fecha inválida </mat-error>
@@ -234,10 +235,10 @@
                     </mat-form-field>
                   </div>
                 </div>
-              </acp-mat-dynamic-card>
+              </acp-dynamic-card>
             </div>
             <div class="col">
-              <acp-mat-dynamic-card title="Información Laboral" [isHeaderVisible]="true">
+              <acp-dynamic-card title="Información Laboral" [isHeaderVisible]="true">
                 <div
                   class="row row-cols-xxl-2 row-cols-xl-2 row-cols-lg-2 row-cols-md-2 row-cols-sm-2 row-cols-1 g-1"
                 >
@@ -278,14 +279,14 @@
                     </mat-form-field>
                   </div>
                 </div>
-              </acp-mat-dynamic-card>
+              </acp-dynamic-card>
             </div>
           </div>
           <div
             class="row row-cols-xxl-2 row-cols-xl-2 row-cols-lg-2 row-cols-md-2 row-cols-sm-2 row-cols-1 g-1"
           >
             <div class="col">
-              <acp-mat-dynamic-card title="Configuración Financiera" [isHeaderVisible]="true">
+              <acp-dynamic-card title="Configuración Financiera" [isHeaderVisible]="true">
                 <div
                   class="row row-cols-xxl-1 row-cols-xl-1 row-cols-lg-1 row-cols-md-1 row-cols-sm-1 row-cols-1 g-2 mt-2"
                 >
@@ -305,7 +306,7 @@
                   </div>
 
                   <div class="col">
-                    <acp-mat-input-chip labelText="Placa" [chips]="placas()" />
+                    <acp-input-chip labelText="Placa" [chips]="placas()" />
                   </div>
 
                   <div class="col w-100">
@@ -318,7 +319,7 @@
                     >
                   </div>
                 </div>
-              </acp-mat-dynamic-card>
+              </acp-dynamic-card>
             </div>
             <div class="col"></div>
           </div>
@@ -330,7 +331,7 @@
             class="row row-cols-xxl-2 row-cols-xl-2 row-cols-lg-2 row-cols-md-2 row-cols-sm-2 row-cols-1 g-1"
           >
             <div class="col">
-              <acp-mat-dynamic-card title="Información Personal" [isHeaderVisible]="true">
+              <acp-dynamic-card title="Información Personal" [isHeaderVisible]="true">
                 <div
                   formGroupName="dataInfoCred"
                   class="row row-cols-xxl-2 row-cols-xl-2 row-cols-lg-2 row-cols-md-2 row-cols-sm-1 row-cols-1 g-2 mt-2"
@@ -383,10 +384,10 @@
                     </mat-form-field>
                   </div>
                 </div>
-              </acp-mat-dynamic-card>
+              </acp-dynamic-card>
             </div>
             <div class="col">
-              <acp-mat-dynamic-card title="Información de Vivienda" [isHeaderVisible]="true">
+              <acp-dynamic-card title="Información de Vivienda" [isHeaderVisible]="true">
                 <div
                   formGroupName="dataInfoCred"
                   class="row row-cols-xxl-2 row-cols-xl-2 row-cols-lg-2 row-cols-md-2 row-cols-sm-1 row-cols-1 g-2 mt-2"
@@ -445,7 +446,7 @@
                     </mat-form-field>
                   </div>
                 </div>
-              </acp-mat-dynamic-card>
+              </acp-dynamic-card>
             </div>
           </div>
         </div>
@@ -455,8 +456,7 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <div class="hstack gap-2">
-  <acp-mat-theme-button type="submit" form="formCompanyCustomer" [text]="btnText()" />
-  <acp-mat-theme-button type="button" variant="dark" text="Cerrar" (handleClick)="close()" />
-
+    <acp-button type="submit" variant="success" form="formCompanyCustomer" [text]="btnText()" />
+    <acp-button type="button" variant="dark" text="Cerrar" (handleClick)="close()" />
   </div>
 </mat-dialog-actions>

@@ -1,11 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -18,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { JsonPipe } from '@angular/common';
 import { DecimalConverter, DecimalError } from '@acontplus/utils';
+import { ButtonComponent } from '@acontplus/ng-components';
 
 @Component({
   selector: 'app-decimal-demo',
@@ -35,6 +30,7 @@ import { DecimalConverter, DecimalError } from '@acontplus/utils';
     MatTabGroup,
     MatTab,
     JsonPipe,
+    ButtonComponent,
   ],
   templateUrl: './decimal-demo.component.html',
 })

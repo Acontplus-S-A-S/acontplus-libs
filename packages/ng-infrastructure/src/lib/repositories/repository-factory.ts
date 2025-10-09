@@ -10,7 +10,7 @@ export class RepositoryFactory {
   create<TEntity, TId extends string | number = number>(
     config: RepositoryConfig,
   ): Repository<TEntity, TId> {
-    const buildUrl = (path: string = '') => {
+    const buildUrl = (path = '') => {
       const baseUrl = config.baseUrl || '/api';
       const version = config.version ? `/v${config.version}` : '';
       const endpoint = path ? `${config.endpoint}/${path}` : config.endpoint;

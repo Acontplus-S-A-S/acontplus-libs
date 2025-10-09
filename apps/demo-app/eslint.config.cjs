@@ -1,13 +1,21 @@
 const nx = require('@nx/eslint-plugin');
 const angular = require('angular-eslint');
-const baseConfig = require('../../eslint.config.js');
+const tseslint = require('typescript-eslint');
 
 module.exports = [
-  ...baseConfig,
   ...nx.configs['flat/angular'],
   ...nx.configs['flat/angular-template'],
   {
     files: ['**/*.ts'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+    },
     rules: {
       '@angular-eslint/directive-selector': [
         'error',
@@ -25,16 +33,17 @@ module.exports = [
           style: 'kebab-case',
         },
       ],
+      // Override base config rules for demo app
+      '@typescript-eslint/no-explicit-any': 'warn',
+      'no-console': 'warn',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
   {
     files: ['**/*.html'],
-    // Override or add rules here
-    ignores: ['**/node_modules/*', 'dist/**/*'],
-    extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {
-      '@angular-eslint/template/no-positive-tabindex': 'error',
       '@angular-eslint/template/click-events-have-key-events': 'error',
+      '@angular-eslint/template/interactive-supports-focus': 'error',
     },
   },
 ];

@@ -1,13 +1,10 @@
 // src/lib/presentation/stores/auth.store.ts
-import { Injectable, inject, signal, OnDestroy } from '@angular/core';
+import { Injectable, inject, signal, OnDestroy, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of, tap, catchError } from 'rxjs';
-import { jwtDecode } from 'jwt-decode';
 import { AuthRepository } from '../../domain/repositories/auth.repository';
 import { TokenRepository } from '../../repositories/token.repository';
-import { UserRepository } from '@acontplus/ng-infrastructure';
-import { AuthTokens } from '@acontplus/core';
-import { UserData, DecodedToken } from '@acontplus/core';
+import { AuthTokens, UserData, DecodedToken } from '@acontplus/core';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +12,8 @@ import { UserData, DecodedToken } from '@acontplus/core';
 export class AuthStore implements OnDestroy {
   private readonly authRepository = inject(AuthRepository);
   private readonly tokenRepository = inject(TokenRepository);
-  private readonly userRepository = inject(UserRepository);
   private readonly router = inject(Router);
+  private readonly ngZone = inject(NgZone);
 
   // Authentication state signals
   private readonly _isAuthenticated = signal<boolean>(false);
@@ -47,7 +44,7 @@ export class AuthStore implements OnDestroy {
       this._isAuthenticated.set(isAuthenticated);
 
       if (isAuthenticated) {
-        const userData = this.userRepository.getCurrentUser();
+        const userData = this.tokenRepository.getUserData();
         this._user.set(userData);
         this.scheduleTokenRefresh();
       }
@@ -62,7 +59,7 @@ export class AuthStore implements OnDestroy {
    * Schedule token refresh based on actual expiration time
    */
   private scheduleTokenRefresh(): void {
-    const accessToken = this.tokenRepository.getAccessToken();
+    const accessToken = this.tokenRepository.getToken();
     if (!accessToken) {
       return;
     }
@@ -80,12 +77,16 @@ export class AuthStore implements OnDestroy {
         clearTimeout(this.refreshTokenTimeout);
       }
 
-      this.refreshTokenTimeout = window.setTimeout(() => {
-        // Check if refresh is still needed before executing
-        if (this.tokenRepository.needsRefresh()) {
-          this.refreshToken().subscribe();
-        }
-      }, refreshTime);
+      this.ngZone.runOutsideAngular(() => {
+        this.refreshTokenTimeout = window.setTimeout(() => {
+          this.ngZone.run(() => {
+            // Check if refresh is still needed before executing
+            if (this.tokenRepository.needsRefresh()) {
+              this.refreshToken().subscribe();
+            }
+          });
+        }, refreshTime);
+      });
     } catch {
       // Silent fail - token might be invalid
     }
@@ -110,7 +111,7 @@ export class AuthStore implements OnDestroy {
       return this.refreshInProgress$;
     }
 
-    const userData = this.userRepository.getCurrentUser();
+    const userData = this.tokenRepository.getUserData();
     const refreshToken = this.tokenRepository.getRefreshToken();
 
     if (!userData?.email || !refreshToken) {
@@ -137,8 +138,8 @@ export class AuthStore implements OnDestroy {
           },
           error: () => {
             this.refreshInProgress$ = undefined;
-          }
-        })
+          },
+        }),
       );
 
     return this.refreshInProgress$;
@@ -147,10 +148,10 @@ export class AuthStore implements OnDestroy {
   /**
    * Set authentication state after successful login
    */
-  setAuthenticated(tokens: AuthTokens): void {
-    this.tokenRepository.saveTokens(tokens);
+  setAuthenticated(tokens: AuthTokens, rememberMe = false): void {
+    this.tokenRepository.saveTokens(tokens, rememberMe);
     this._isAuthenticated.set(true);
-    const userData = this.userRepository.getCurrentUser();
+    const userData = this.tokenRepository.getUserData();
     this._user.set(userData);
     this.scheduleTokenRefresh();
   }
@@ -170,7 +171,7 @@ export class AuthStore implements OnDestroy {
         error: () => {
           // Server logout failed, still clear client-side data for security
           this.performClientLogout();
-        }
+        },
       });
     } else {
       // No user data, just clear client-side data

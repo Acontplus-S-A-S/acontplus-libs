@@ -27,15 +27,22 @@
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       @if (isHandset$ | async) {
-        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
-          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-        </button>
+        <acp-button
+          type="button"
+          ariaLabel="Toggle sidenav"
+          matStyle="icon"
+          icon="menu"
+          (handleClick)="drawer.toggle()"
+        />
       }
       <span class="spacer"></span>
       <acp-theme-toggle></acp-theme-toggle>
-      <button mat-icon-button [matMenuTriggerFor]="userMenu" aria-label="User menu">
-        <mat-icon>person</mat-icon>
-      </button>
+      <acp-button
+        matStyle="icon"
+        icon="person"
+        [matMenuTriggerFor]="userMenu"
+        ariaLabel="User menu"
+      />
       <mat-menu #userMenu="matMenu">
         <button mat-menu-item (click)="logout()">
           <mat-icon>logout</mat-icon>

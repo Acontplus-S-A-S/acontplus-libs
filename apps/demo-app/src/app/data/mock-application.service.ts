@@ -162,10 +162,8 @@ export class MockApplicationService {
   }
 
   // CRUD operations
-  getAll(
-    pagination: PaginationParams,
-  ): Observable<PagedResult<Application>> {
-    let filteredApps = [...this.applications];
+  getAll(pagination: PaginationParams): Observable<PagedResult<Application>> {
+    const filteredApps = [...this.applications];
 
     // Apply sorting
     if (pagination.sortBy) {
@@ -273,7 +271,7 @@ export class MockApplicationService {
     return this.getAll(pagination);
   }
 
-  getByOwner(owner: string, pagination: PaginationParams): Observable<PagedResult<Application>> {
+  getByOwner(owner: string, _pagination: PaginationParams): Observable<PagedResult<Application>> {
     const filteredApps = this.applications.filter(app => app.owner === owner);
     const result: PagedResult<Application> = {
       pageIndex: 0,
@@ -364,7 +362,7 @@ export class MockApplicationService {
     return this.simulateDelay(app);
   }
 
-  getDeploymentHistory(id: number): Observable<any[]> {
+  getDeploymentHistory(_id: number): Observable<any[]> {
     // Mock deployment history
     const history = [
       {

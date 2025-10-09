@@ -5,17 +5,12 @@ module.exports = [
   ...baseConfig,
   {
     files: ['**/*.json'],
-    rules: {
-      '@nx/dependency-checks': [
-        'error',
-        {
-          ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}'],
-        },
-      ],
-    },
     languageOptions: {
       parser: require('jsonc-eslint-parser'),
     },
+  },
+  {
+    ignores: ['**/*.spec.ts', '**/*.test.ts'],
   },
   ...nx.configs['flat/angular'],
   ...nx.configs['flat/angular-template'],
@@ -44,5 +39,14 @@ module.exports = [
     files: ['**/*.html'],
     // Override or add rules here
     rules: {},
+  },
+  // Configuration for test files
+  {
+    files: ['**/*.spec.ts', '**/*.test.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-console': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+    },
   },
 ];

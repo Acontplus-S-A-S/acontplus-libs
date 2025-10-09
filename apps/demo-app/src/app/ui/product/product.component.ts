@@ -5,7 +5,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   inject,
-  viewChild
+  viewChild,
 } from '@angular/core';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,7 +22,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontplus/ng-components';
+import {
+  ColumnDefinition,
+  DynamicTableComponent,
+  Pagination,
+  ButtonComponent,
+} from '@acontplus/ng-components';
 import { ProductRepository } from '../../data';
 import { Product } from '../../domain';
 import { PaginationParams, PagedResult } from '@acontplus/core';
@@ -58,9 +63,10 @@ interface ProductFilters {
     MatChipsModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
-    MatDynamicTableComponent,
+    DynamicTableComponent,
     CurrencyPipe,
     DatePipe,
+    ButtonComponent,
   ],
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss',
@@ -113,11 +119,6 @@ export class ProductComponent implements OnInit, AfterViewInit {
   readonly actionsTemplate = viewChild.required<TemplateRef<any>>('actionsTemplate');
   readonly productImageTemplate = viewChild.required<TemplateRef<any>>('productImageTemplate');
   readonly expandedProductDetail = viewChild.required<TemplateRef<any>>('expandedProductDetail');
-
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
-
-  constructor() {}
 
   ngOnInit(): void {
     // Initialize form data first
@@ -294,7 +295,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
 
     this.isCreating = true;
     this.productRepository.create(productData as Omit<Product, 'id'>).subscribe({
-      next: (product: Product) => {
+      next: (_product: Product) => {
         this.snackBar.open('Product created successfully', 'Close', { duration: 3000 });
         this.initializeNewProduct();
         this.loadProducts();
@@ -348,7 +349,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
 
     this.isUpdating = true;
     this.productRepository.update(this.editProductId, productData).subscribe({
-      next: (product: Product) => {
+      next: (_product: Product) => {
         this.snackBar.open('Product updated successfully', 'Close', { duration: 3000 });
         this.editProductId = null;
         this.editProduct = {};

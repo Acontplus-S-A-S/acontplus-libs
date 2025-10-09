@@ -40,7 +40,7 @@ export class ToastrProvider extends NotificationProviderBase {
       type: 'success',
       message: props.message,
       title: props.title,
-      options: props.config,
+      options: props.config as Partial<IndividualConfig>,
     });
   }
 
@@ -49,7 +49,7 @@ export class ToastrProvider extends NotificationProviderBase {
       type: 'error',
       message: props.message,
       title: props.title,
-      options: props.config,
+      options: props.config as Partial<IndividualConfig>,
     });
   }
 
@@ -58,7 +58,7 @@ export class ToastrProvider extends NotificationProviderBase {
       type: 'warning',
       message: props.message,
       title: props.title,
-      options: props.config,
+      options: props.config as Partial<IndividualConfig>,
     });
   }
 
@@ -67,7 +67,7 @@ export class ToastrProvider extends NotificationProviderBase {
       type: 'info',
       message: props.message,
       title: props.title,
-      options: props.config,
+      options: props.config as Partial<IndividualConfig>,
     });
   }
 

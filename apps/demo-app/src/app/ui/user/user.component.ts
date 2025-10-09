@@ -5,7 +5,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   inject,
-  viewChild
+  viewChild,
 } from '@angular/core';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,7 +22,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ColumnDefinition, MatDynamicTableComponent, Pagination } from '@acontplus/ng-components';
+import {
+  ColumnDefinition,
+  DynamicTableComponent,
+  Pagination,
+  ButtonComponent,
+} from '@acontplus/ng-components';
 import { UserRepository } from '../../data';
 import { User } from '../../domain';
 import { PaginationParams, PagedResult } from '@acontplus/core';
@@ -45,7 +50,8 @@ import { PaginationParams, PagedResult } from '@acontplus/core';
     MatChipsModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
-    MatDynamicTableComponent,
+    DynamicTableComponent,
+    ButtonComponent,
   ],
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],
@@ -225,7 +231,7 @@ export class UserComponent implements OnInit, AfterViewInit {
 
     this.isCreating = true;
     this.userRepository.create(this.newUser as Omit<User, 'id'>).subscribe({
-      next: (user: User) => {
+      next: (_user: User) => {
         this.snackBar.open('User created successfully', 'Close', { duration: 3000 });
         this.newUser = {};
         this.loadUsers();
@@ -261,7 +267,7 @@ export class UserComponent implements OnInit, AfterViewInit {
 
     this.isUpdating = true;
     this.userRepository.update(this.editUserId, this.editUser).subscribe({
-      next: (user: User) => {
+      next: (_user: User) => {
         this.snackBar.open('User updated successfully', 'Close', { duration: 3000 });
         this.editUserId = null;
         this.editUser = {};

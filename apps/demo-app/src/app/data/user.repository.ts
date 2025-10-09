@@ -11,7 +11,7 @@ export class UserRepository {
   private mockService = inject(MockUserService);
 
   protected entityName = 'users';
-  protected baseUrl = '/api/users';
+  protected baseUrl = 'users';
 
   getAll(pagination: PaginationParams): Observable<PaginatedResult<User>> {
     return this.mockService.getUsers(pagination);

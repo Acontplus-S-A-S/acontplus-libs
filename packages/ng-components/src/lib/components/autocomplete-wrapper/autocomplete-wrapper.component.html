@@ -1,16 +1,16 @@
-<div class="autocomplete-wrapper-wrapper" [class.autocomplete-wrapper-active]="overlayOpen()">
+<div class="acp-autocomplete-wrapper" [class.acp-autocomplete-wrapper-active]="overlayOpen()">
   <!-- Input Container -->
   <div
-    class="autocomplete-wrapper-input-container"
+    class="acp-autocomplete-wrapper-input-container"
     cdkOverlayOrigin
     #overlayPosition="cdkOverlayOrigin"
   >
-    <div class="autocomplete-wrapper-input-wrapper">
-      <mat-icon class="autocomplete-wrapper-search-icon">search</mat-icon>
+    <div class="acp-autocomplete-wrapper-input-wrapper">
+      <mat-icon class="acp-autocomplete-wrapper-search-icon">search</mat-icon>
       <input
         #searchInput
         type="text"
-        class="autocomplete-wrapper-input-field"
+        class="acp-autocomplete-wrapper-input-field"
         [placeholder]="config.placeholder"
         [(ngModel)]="query"
         (input)="onInput($event)"
@@ -24,7 +24,7 @@
           mat-icon-button
           (click)="clearSearch()"
           type="button"
-          class="autocomplete-wrapper-clear-button"
+          class="acp-autocomplete-wrapper-clear-button"
         >
           <mat-icon>clear</mat-icon>
         </button>
@@ -35,7 +35,7 @@
     </div>
 
     @if (isLoading()) {
-      <div class="autocomplete-wrapper-loading-spinner">
+      <div class="acp-autocomplete-wrapper-loading-spinner">
         <mat-spinner diameter="20" />
       </div>
     }
@@ -76,15 +76,18 @@
                   <div
                     class="autocomplete-wrapper-item-content"
                     [class.autocomplete-wrapper-selected]="$index === selectedIndex()"
+                    tabindex="0"
                     (click)="selectItem(item)"
+                    (keydown.enter)="selectItem(item)"
                   >
                     <mat-icon class="autocomplete-wrapper-history-icon">history</mat-icon>
                     <div class="autocomplete-wrapper-item-details">
-                      <ng-container *ngTemplateOutlet="
+                      <ng-container
+                        *ngTemplateOutlet="
                           itemTemplate() || defaultItemTemplate;
                           context: { $implicit: item }
                         "
-                       />
+                      />
                     </div>
                   </div>
                   <button
@@ -114,8 +117,11 @@
                   <div class="autocomplete-wrapper-filter-controls">
                     @if (config.searchFields && config.searchFields.length > 1) {
                       <div class="autocomplete-wrapper-filter-group">
-                        <label class="autocomplete-wrapper-filter-label">Buscar por:</label>
+                        <label class="autocomplete-wrapper-filter-label" for="searchBySelect"
+                          >Buscar por:</label
+                        >
                         <select
+                          id="searchBySelect"
                           class="autocomplete-wrapper-filter-select"
                           [(ngModel)]="filters.searchBy"
                           (change)="onFilterChange()"
@@ -129,8 +135,11 @@
 
                     @if (config.enableStockFilter && config.stockOptions) {
                       <div class="autocomplete-wrapper-filter-group">
-                        <label class="autocomplete-wrapper-filter-label">Stock:</label>
+                        <label class="autocomplete-wrapper-filter-label" for="stockSelect"
+                          >Stock:</label
+                        >
                         <select
+                          id="stockSelect"
                           class="autocomplete-wrapper-filter-select"
                           [(ngModel)]="filters.stockFilter"
                           (change)="onFilterChange()"
@@ -208,14 +217,17 @@
                     <div
                       class="autocomplete-wrapper-item-content"
                       [class.autocomplete-wrapper-selected]="$index === selectedIndex()"
+                      tabindex="0"
                       (click)="selectItem(item)"
+                      (keydown.enter)="selectItem(item)"
                     >
                       <div class="autocomplete-wrapper-item-info">
-                        <ng-container *ngTemplateOutlet="
+                        <ng-container
+                          *ngTemplateOutlet="
                             itemTemplate() || defaultItemTemplate;
                             context: { $implicit: item }
                           "
-                         />
+                        />
                       </div>
                     </div>
                   </li>
@@ -230,11 +242,12 @@
           <div class="autocomplete-wrapper-no-results">
             <mat-icon class="autocomplete-wrapper-no-results-icon">search_off</mat-icon>
             <div class="autocomplete-wrapper-no-results-content">
-              <ng-container *ngTemplateOutlet="
+              <ng-container
+                *ngTemplateOutlet="
                   notFoundTemplate() || defaultNotFoundTemplate;
                   context: { $implicit: noResultsText() }
                 "
-               />
+              />
             </div>
           </div>
         }

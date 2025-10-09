@@ -8,7 +8,7 @@ export type DialogSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'full';
  * This is the main configuration object for any dialog opened through the service.
  * It extends the standard MatDialogConfig with custom properties for convenience.
  */
-export interface MatCustomDialogConfig<T = any> {
+export interface MatCustomDialogConfig<T = unknown> {
   // --- Data ---
   data?: T;
 
@@ -64,12 +64,12 @@ export interface MatCustomDialogConfig<T = any> {
  *   hideHeader: false
  * };
  */
-export interface DialogWrapperConfig<T = any> {
+export interface DialogWrapperConfig<T = unknown> {
   /**
    * The component type to render inside the dialog wrapper.
    * This component will be dynamically created and inserted into the dialog.
    */
-  component: Type<any>;
+  component: Type<unknown>;
 
   /**
    * The title text to display in the dialog header.
@@ -93,4 +93,11 @@ export interface DialogWrapperConfig<T = any> {
    * @default false
    */
   hideHeader?: boolean;
+
+  /**
+   * Whether to show the close button in the dialog header.
+   * If false, follows Angular Material's default behavior (no close button).
+   * @default true
+   */
+  showCloseButton?: boolean;
 }

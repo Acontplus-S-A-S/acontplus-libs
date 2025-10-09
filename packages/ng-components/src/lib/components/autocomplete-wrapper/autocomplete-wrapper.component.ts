@@ -10,7 +10,8 @@ import {
   input,
   OnInit,
   OnDestroy,
-  viewChild
+  viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { Subject, takeUntil, debounceTime, Observable, of } from 'rxjs';
 
@@ -45,6 +46,7 @@ import { AutocompleteWrapperService } from '../../services';
   ],
   templateUrl: './autocomplete-wrapper.component.html',
   styleUrl: './autocomplete-wrapper.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class ReusableAutocompleteComponent implements OnInit, OnDestroy {
   readonly dataSource = input<AutocompleteWrapperItem[]>([]); // Para búsqueda local
@@ -208,7 +210,12 @@ export class ReusableAutocompleteComponent implements OnInit, OnDestroy {
     }
 
     // ESTRATEGIA C: Búsqueda local (fallback)
-    return this.autocompleteService.searchLocal(this.dataSource(), query, this.filters, this.config);
+    return this.autocompleteService.searchLocal(
+      this.dataSource(),
+      query,
+      this.filters,
+      this.config,
+    );
   }
 
   private loadHistory() {
@@ -415,7 +422,7 @@ export class ReusableAutocompleteComponent implements OnInit, OnDestroy {
   }
 
   // Footer Actions
-  onCreateNew($event: MouseEvent) {
+  onCreateNew(_$event: MouseEvent) {
     //$event.stopPropagation();
     // this.hideOverlay();
     this.createClicked.emit(this.query);

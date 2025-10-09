@@ -6,14 +6,8 @@ import { SpinnerComponent } from '../components/spinner/spinner.component';
   providedIn: 'root',
 })
 export class OverlayService {
-  private overlay = inject(Overlay);
-
+  private readonly overlay = inject(Overlay);
   private overlayRef!: OverlayRef;
-
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
-
-  constructor() {}
 
   showSpinner() {
     if (!this.overlayRef) {

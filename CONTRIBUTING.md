@@ -53,7 +53,8 @@ participating in this project.
 
 2. **Make your changes** following the [coding standards](#coding-standards).
 
-3. **Run affected tests** to ensure your changes don't break existing functionality:
+3. **Run affected tests** to ensure your changes don't break existing
+   functionality:
 
    ```bash
    npx nx affected:test
@@ -98,8 +99,10 @@ participating in this project.
 
 ### Nx-Specific Workflow Tips
 
-- **Use affected commands** to only run operations on projects affected by your changes
-- **Check the dependency graph** with `npx nx graph` to understand project relationships
+- **Use affected commands** to only run operations on projects affected by your
+  changes
+- **Check the dependency graph** with `npx nx graph` to understand project
+  relationships
 - **Use Nx Console** in VS Code for visual command execution
 - **Run full test suite** before submitting PR: `npm run test`
 - **Build all libraries** before submitting: `npm run build:libs`

@@ -1,4 +1,4 @@
-import { FetchAdapter, HttpClientFactory } from '@acontplus/core';
+import { HttpClientFactory } from '@acontplus/core';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AngularHttpAdapter } from '@acontplus/ng-infrastructure';

@@ -24,7 +24,8 @@ export class ApplicationRepository {
       if (filters.status) params = params.set('status', filters.status);
       if (filters.environment) params = params.set('environment', filters.environment);
       if (filters.category) params = params.set('category', filters.category);
-      if (filters.isPublic !== undefined) params = params.set('isPublic', filters.isPublic.toString());
+      if (filters.isPublic !== undefined)
+        params = params.set('isPublic', filters.isPublic.toString());
     }
     return this.http.get<PaginatedResult<Application>>(`${this.entityName}`, { params });
   }
@@ -49,10 +50,7 @@ export class ApplicationRepository {
     return this.http.delete<boolean>(`${this.entityName}/${id}`);
   }
 
-  search(
-    query: string,
-    pagination: PaginationParams,
-  ): Observable<PaginatedResult<Application>> {
+  search(query: string, pagination: PaginationParams): Observable<PaginatedResult<Application>> {
     const params = new HttpParams()
       .set('q', query)
       .set('page', pagination.pageIndex.toString())

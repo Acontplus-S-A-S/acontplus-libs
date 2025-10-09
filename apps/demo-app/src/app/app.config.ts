@@ -11,33 +11,46 @@ import { environment } from '../environments/environment';
 import { initHttpFactory } from './init-http-factory';
 import { provideTransloco } from '@jsverse/transloco';
 import { TranslocoHttpLoader } from './providers';
-import { provideToastr } from 'ngx-toastr';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+
 import { ENVIRONMENT } from '@acontplus/ng-config';
 import {
   apiInterceptor,
   httpContextInterceptor,
   spinnerInterceptor,
-  TOKEN_PROVIDER,
 } from '@acontplus/ng-infrastructure';
-import { AuthTokenService, authProviders } from '@acontplus/ng-auth';
+import { authProviders, csrfInterceptor } from '@acontplus/ng-auth';
 import { provideNotifications } from '../../../../packages/ng-notifications/src/lib/providers';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideClientHydration(withEventReplay()),
+    // Core Angular providers
     provideBrowserGlobalErrorListeners(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideZoneChangeDetection({
+      eventCoalescing: true,
+      runCoalescing: true,
+    }),
     provideRouter(appRoutes),
+
+    // Enable hydration with timeout handling
+    provideClientHydration(withEventReplay()), // App initialization
     provideAppInitializer(initHttpFactory()),
 
+    // HTTP configuration
     provideHttpClient(
-      withInterceptors([apiInterceptor, spinnerInterceptor, httpContextInterceptor]),
+      withInterceptors([
+        apiInterceptor,
+        spinnerInterceptor,
+        csrfInterceptor,
+        httpContextInterceptor,
+      ]),
       withFetch(),
     ),
-    { provide: TOKEN_PROVIDER, useClass: AuthTokenService },
+
+    // Authentication
     ...authProviders,
+
+    // Internationalization
     provideTransloco({
       config: {
         availableLangs: ['en', 'es'],
@@ -50,11 +63,12 @@ export const appConfig: ApplicationConfig = {
       loader: TranslocoHttpLoader,
     }),
 
-    provideToastr(),
-    provideAnimationsAsync(),
-    provideNotifications(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(appRoutes),
+    // Notifications
+    provideNotifications({
+      defaultProvider: 'sweetalert',
+    }),
+
+    // Environment
     { provide: ENVIRONMENT, useValue: environment },
   ],
 };

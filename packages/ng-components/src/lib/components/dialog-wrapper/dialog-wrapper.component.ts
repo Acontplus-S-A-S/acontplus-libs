@@ -5,14 +5,16 @@ import {
   ElementRef,
   ChangeDetectionStrategy,
   inject,
-  viewChild
+  viewChild,
+  OnDestroy,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 import { DialogWrapperConfig } from '../../services';
+import { ButtonComponent } from '../button';
 
 /**
  * A wrapper component for Angular Material dialogs that provides a consistent look and feel,
@@ -32,12 +34,13 @@ import { DialogWrapperConfig } from '../../services';
 @Component({
   selector: 'acp-dialog-wrapper',
   standalone: true,
-  imports: [CdkDrag, CdkDragHandle, MatDialogModule, MatIconModule, MatButtonModule],
+  imports: [CdkDrag, CdkDragHandle, MatDialogModule, MatIconModule, ButtonComponent],
   templateUrl: './dialog-wrapper.component.html',
   styleUrls: ['./dialog-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
-export class DialogWrapperComponent implements AfterViewInit {
+export class DialogWrapperComponent implements AfterViewInit, OnDestroy {
   dialogRef = inject<MatDialogRef<DialogWrapperComponent>>(MatDialogRef);
   config = inject<DialogWrapperConfig>(MAT_DIALOG_DATA);
 
@@ -59,8 +62,10 @@ export class DialogWrapperComponent implements AfterViewInit {
    */
   private static lastZIndex = 1000;
 
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
+  /**
+   * Timeout ID for debouncing z-index updates to prevent excessive DOM manipulations.
+   */
+  private bringToFrontTimeoutId: number | null = null;
 
   /**
    * Creates an instance of DialogWrapperComponent.
@@ -68,7 +73,9 @@ export class DialogWrapperComponent implements AfterViewInit {
    * @param dialogRef Reference to the dialog opened via the Material Dialog service
    * @param config Configuration for the dialog wrapper, injected from MAT_DIALOG_DATA
    */
-  constructor() {}
+  constructor() {
+    // Constructor intentionally empty - required by Angular DI
+  }
 
   /**
    * Lifecycle hook that initializes the dynamic content after the view is ready.
@@ -87,6 +94,16 @@ export class DialogWrapperComponent implements AfterViewInit {
   }
 
   /**
+   * Cleanup lifecycle hook to cancel any pending animation frame requests.
+   */
+  ngOnDestroy(): void {
+    if (this.bringToFrontTimeoutId !== null) {
+      cancelAnimationFrame(this.bringToFrontTimeoutId);
+      this.bringToFrontTimeoutId = null;
+    }
+  }
+
+  /**
    * Closes the dialog.
    * Called when the close button in the header is clicked.
    */
@@ -96,12 +113,22 @@ export class DialogWrapperComponent implements AfterViewInit {
 
   /**
    * Brings the dialog to the front by adjusting its z-index.
+   * Uses requestAnimationFrame to debounce updates and prevent excessive DOM manipulations.
    * Called when the dialog header is clicked.
    */
   bringToFront(): void {
-    const pane = this.header()?.nativeElement.closest('.cdk-overlay-pane') as HTMLElement;
-    if (pane) {
-      pane.style.zIndex = (++DialogWrapperComponent.lastZIndex).toString();
+    // Clear any pending update
+    if (this.bringToFrontTimeoutId !== null) {
+      cancelAnimationFrame(this.bringToFrontTimeoutId);
     }
+
+    // Schedule the z-index update for the next animation frame
+    this.bringToFrontTimeoutId = requestAnimationFrame(() => {
+      const pane = this.header()?.nativeElement.closest('.cdk-overlay-pane') as HTMLElement;
+      if (pane) {
+        pane.style.zIndex = (++DialogWrapperComponent.lastZIndex).toString();
+      }
+      this.bringToFrontTimeoutId = null;
+    });
   }
 }

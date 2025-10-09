@@ -11,84 +11,71 @@ and this project adheres to
 
 ### Added
 
-- **Comprehensive Core Services Documentation** - Complete documentation for all
-  core library services
-- **AutocompleteWrapperComponent Documentation** - Full API reference and usage
-  examples
-- **Enhanced Component Examples** - More realistic and practical usage scenarios
-- **Improved API Documentation** - Added missing component documentation and
-  interfaces
-- **Core Services Guide** - New documentation file covering all core library
+- **Comprehensive Library Documentation** - Updated README files for all
+  libraries to accurately reflect current codebase
+- **New Libraries**: ng-auth, ng-config, ng-customer, ng-infrastructure,
+  ng-notifications, ui-kit, utils
+- **Nx Migration** - Migrated from npm workspaces to Nx monorepo for better
+  build caching and dependency management
+- **Clean Architecture Implementation** - Applied clean architecture patterns
+  across multiple libraries
+- **Authentication Module** - Complete JWT authentication with guards,
+  interceptors, and URL redirection
+- **Customer Management** - Full customer CRUD operations with clean
+  architecture
+- **Infrastructure Services** - HTTP interceptors, repositories, and core
   services
-- **Updated Documentation Structure** - Better organization and navigation
+- **Notification System** - Toast notifications, alerts, and snackbars using
+  ngx-toastr and SweetAlert2
 
 ### Changed
 
-- **Enhanced Component Examples** - Added comprehensive
-  AutocompleteWrapperComponent examples
-- **Improved API Reference** - Added missing component APIs and service
-  documentation
-- **Updated Main README** - Better project overview and enterprise features
-  highlighting
-- **Enhanced Documentation README** - Added "What's New" section and better
-  navigation
+- **Library Structure** - Reorganized and renamed libraries to follow Nx
+  conventions
+- **Documentation Updates** - Aligned all README files with actual library
+  implementations
+- **Build System** - Migrated to Nx for improved performance and scalability
 
-### Fixed
+### Removed
 
-- **Missing Component Documentation** - Added documentation for
-  AutocompleteWrapperComponent
-- **Missing Service Documentation** - Added documentation for all core services
-- **Incomplete API Coverage** - Added missing interfaces and type definitions
-- **Documentation Gaps** - Filled in missing examples and usage patterns
+- **Outdated Components** - Removed references to non-existent components from
+  previous versions
+- **Legacy Documentation** - Updated documentation to match current library
+  structure
 
 ## [1.1.0] - 2025-08-12
 
 ### Added
 
-- **Core Services Documentation** - Comprehensive coverage of all core library
-  services
-- **AutocompleteWrapperComponent** - Advanced autocomplete component with search
-  and filtering
-- **Enhanced Repository Pattern** - Factory pattern for dynamic repository
-  management
-- **Improved Error Handling** - Domain-specific error types and categorization
-- **Advanced Configuration** - Runtime configuration updates and environment
-  management
+- **Enhanced Component Library** - Updated ng-components with comprehensive UI
+  components
+- **Configuration Management** - New ng-config library for environment and app
+  configuration
+- **Infrastructure Patterns** - ng-infrastructure library with interceptors and
+  repositories
 
 ### Changed
 
-- **Repository Pattern** - Enhanced with factory pattern and better registration
-- **Use Case Pattern** - Improved validation and authorization handling
-- **API Response Handling** - Standardized response format across all endpoints
-- **Configuration Management** - Centralized configuration with runtime updates
+- **Component Organization** - Better structured components in ng-components
+  library
+- **Service Architecture** - Improved service patterns across libraries
 
 ## [1.0.0] - 2025-06-18
 
 ### Added
 
-- Initial release of acontplus-core library
-- Initial release of acontplus-ui-components library
-- Basic documentation for core library
-- Test application for demonstrating and testing the libraries
+- Initial Nx monorepo setup
+- Core library with pricing calculations and utilities
+- Angular components library with Material Design components
+- Demo application for showcasing library usage
+- Basic testing infrastructure with Jest
 
-### Components
+### Libraries
 
-- Cards
-  - MatDynamicCardComponent
-- Dialog Wrapper
-  - DialogWrapperComponent
-- Icons
-- Mat Input Chip
-- Mat Theme Button
-- Snackbar
-- Spinner
-- Tables
-- Theme Toggle
-
-### Services
-
-- AdvancedDialogService
-- Various utility services
+- **core**: Pricing calculations, constants, environment configuration
+- **ng-components**: UI components including cards, tables, dialogs, theme
+  toggle
+- **utils**: Utility functions for converters, formatters, and helpers
 
 ## Types of changes
 

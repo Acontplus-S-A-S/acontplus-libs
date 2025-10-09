@@ -3,18 +3,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
-import { MatThemeButtonComponent } from '@acontplus/ng-components';
+import { ButtonComponent } from '@acontplus/ng-components';
 import { CustomerListItemDto } from '../../../infrastructure/dtos/customer.dto';
 
 @Component({
   selector: 'acp-customer-card',
-  imports: [
-    MatCardModule,
-    MatDividerModule,
-    MatChipsModule,
-    MatButtonModule,
-    MatThemeButtonComponent,
-  ],
+  imports: [MatCardModule, MatDividerModule, MatChipsModule, MatButtonModule, ButtonComponent],
   templateUrl: './customer-card.component.html',
   styleUrl: './customer-card.component.scss',
 })

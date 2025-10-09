@@ -21,21 +21,91 @@
     </mat-form-field>
 
     <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px">
-      <button mat-raised-button color="primary" (click)="addYears()">Añadir años</button>
-      <button mat-raised-button color="primary" (click)="addMonths()">Añadir meses</button>
-      <button mat-raised-button color="primary" (click)="addDays()">Añadir días</button>
-      <button mat-raised-button color="primary" (click)="addHours()">Añadir horas</button>
-      <button mat-raised-button color="primary" (click)="addMinutes()">Añadir minutos</button>
-      <button mat-raised-button color="primary" (click)="addSeconds()">Añadir segundos</button>
-      <button mat-raised-button color="accent" (click)="compareDates()">Comparar fechas</button>
-      <button mat-raised-button color="accent" (click)="formatDate()">Formatear</button>
-      <button mat-raised-button color="accent" (click)="formatUTCDate()">Formatear UTC</button>
-      <button mat-raised-button color="warn" (click)="getToday()">Hoy</button>
-      <button mat-raised-button color="warn" (click)="isValidDate()">Validar</button>
-      <button mat-raised-button color="primary" (click)="isSame('day')">¿Mismo día?</button>
-      <button mat-raised-button color="primary" (click)="getDayOfWeek()">Día de la semana</button>
-      <button mat-raised-button color="primary" (click)="getDaysInMonth()">Días en el mes</button>
-      <button mat-raised-button color="accent" (click)="dateToTimestamp()">A timestamp</button>
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="Añadir años"
+        (handleClick)="addYears()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="Añadir meses"
+        (handleClick)="addMonths()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="Añadir días"
+        (handleClick)="addDays()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="Añadir horas"
+        (handleClick)="addHours()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="Añadir minutos"
+        (handleClick)="addMinutes()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="Añadir segundos"
+        (handleClick)="addSeconds()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="info"
+        text="Comparar fechas"
+        (handleClick)="compareDates()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="info"
+        text="Formatear"
+        (handleClick)="formatDate()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="info"
+        text="Formatear UTC"
+        (handleClick)="formatUTCDate()"
+      />
+      <acp-button matStyle="elevated" variant="danger" text="Hoy" (handleClick)="getToday()" />
+      <acp-button
+        matStyle="elevated"
+        variant="danger"
+        text="Validar"
+        (handleClick)="isValidDate()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="¿Mismo día?"
+        (handleClick)="isSame('day')"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="Día de la semana"
+        (handleClick)="getDayOfWeek()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="Días en el mes"
+        (handleClick)="getDaysInMonth()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="info"
+        text="A timestamp"
+        (handleClick)="dateToTimestamp()"
+      />
     </div>
 
     <p style="margin-top: 15px; font-weight: bold">Resultado: {{ result }}</p>

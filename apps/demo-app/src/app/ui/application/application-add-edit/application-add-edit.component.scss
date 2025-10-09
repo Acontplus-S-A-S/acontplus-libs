@@ -1,0 +1,63 @@
+.application-dialog {
+  .application-form {
+    max-width: 600px;
+
+    .form-section {
+      margin-bottom: 2rem;
+
+      h3 {
+        margin: 0 0 1rem 0;
+        color: #333;
+        font-size: 1.1rem;
+        font-weight: 500;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 0.5rem;
+      }
+    }
+
+    .form-row {
+      margin-bottom: 1rem;
+
+      &.two-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+    }
+
+    .full-width {
+      width: 100%;
+    }
+
+    .chip-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      color: #666;
+      font-weight: 500;
+    }
+
+    mat-form-field {
+      width: 100%;
+    }
+
+    mat-slide-toggle {
+      margin: 0.5rem 0;
+    }
+  }
+}
+
+mat-dialog-actions {
+  padding: 1rem 1.5rem;
+  gap: 0.5rem;
+}
+
+// Responsive adjustments
+@media (max-width: 600px) {
+  .application-form {
+    .form-row.two-columns {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+}

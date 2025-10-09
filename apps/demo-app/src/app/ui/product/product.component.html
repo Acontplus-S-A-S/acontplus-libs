@@ -34,9 +34,7 @@
             placeholder="Search by name, category, or description"
             (keyup.enter)="onSearch()"
           />
-          <button mat-icon-button matSuffix (click)="onSearch()">
-            <mat-icon>search</mat-icon>
-          </button>
+          <acp-button matStyle="icon" icon="search" (handleClick)="onSearch()" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="category-filter">
@@ -73,14 +71,14 @@
           />
         </mat-form-field>
 
-        <button mat-raised-button color="primary" (click)="onSearch()">
-          <mat-icon>search</mat-icon>
-          Search
-        </button>
-        <button mat-button (click)="clearFilters()">
-          <mat-icon>clear</mat-icon>
-          Clear
-        </button>
+        <acp-button
+          matStyle="elevated"
+          variant="primary"
+          text="Search"
+          icon="search"
+          (handleClick)="onSearch()"
+        />
+        <acp-button text="Clear" icon="clear" (handleClick)="clearFilters()" />
       </div>
 
       <!-- Create Product Form -->
@@ -158,10 +156,14 @@
           </mat-form-field>
         </div>
 
-        <button mat-raised-button color="primary" (click)="createProduct()" [disabled]="isCreating">
-          <mat-icon>add</mat-icon>
-          {{ isCreating ? 'Creating...' : 'Create Product' }}
-        </button>
+        <acp-button
+          matStyle="elevated"
+          variant="primary"
+          [text]="isCreating ? 'Creating...' : 'Create Product'"
+          icon="add"
+          [disabled]="isCreating"
+          (handleClick)="createProduct()"
+        />
       </div>
 
       <!-- Bulk Operations -->
@@ -169,25 +171,35 @@
         <div class="bulk-operations">
           <h3>Bulk Operations ({{ selectedProducts.length }} selected)</h3>
           <div class="bulk-buttons">
-            <button mat-raised-button color="accent" (click)="bulkActivateProducts()">
-              <mat-icon>check_circle</mat-icon>
-              Activate
-            </button>
-            <button mat-raised-button color="warn" (click)="bulkDeactivateProducts()">
-              <mat-icon>cancel</mat-icon>
-              Deactivate
-            </button>
-            <button mat-raised-button color="warn" (click)="bulkDeleteProducts()">
-              <mat-icon>delete_forever</mat-icon>
-              Delete
-            </button>
+            <acp-button
+              matStyle="elevated"
+              variant="info"
+              text="Activate"
+              icon="check_circle"
+              (handleClick)="bulkActivateProducts()"
+            />
+            <acp-button
+              matStyle="elevated"
+              variant="danger"
+              text="Deactivate"
+              icon="cancel"
+              (handleClick)="bulkDeactivateProducts()"
+            />
+            <acp-button
+              matStyle="elevated"
+              variant="danger"
+              text="Delete"
+              icon="delete_forever"
+              (handleClick)="bulkDeleteProducts()"
+            />
           </div>
         </div>
       }
 
       <!-- Products Table -->
       <div class="table-section">
-        <acp-mat-dynamic-table [tableData]="products"
+        <acp-dynamic-table
+          [tableData]="products"
           [columnDefinitions]="productColumns"
           [showSelectBox]="true"
           [showFooter]="true"
@@ -198,7 +210,7 @@
           [rowTemplate]="actionsTemplate"
           (rowSelected)="onRowSelected($event)"
           (pageEvent)="onPageChange($event)"
-         />
+        />
       </div>
 
       <!-- Edit Product Dialog -->
@@ -277,19 +289,15 @@
             </mat-form-field>
           </div>
           <div class="edit-buttons">
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="updateProduct()"
+            <acp-button
+              matStyle="elevated"
+              variant="primary"
+              [text]="isUpdating ? 'Updating...' : 'Update Product'"
+              icon="save"
               [disabled]="isUpdating"
-            >
-              <mat-icon>save</mat-icon>
-              {{ isUpdating ? 'Updating...' : 'Update Product' }}
-            </button>
-            <button mat-button (click)="cancelEdit()">
-              <mat-icon>cancel</mat-icon>
-              Cancel
-            </button>
+              (handleClick)="updateProduct()"
+            />
+            <acp-button text="Cancel" icon="cancel" (handleClick)="cancelEdit()" />
           </div>
         </div>
       }
@@ -298,12 +306,20 @@
 </div>
 
 <ng-template #actionsTemplate let-element="element" let-i="index">
-  <button mat-icon-button color="primary" (click)="startEdit(element)" matTooltip="Edit Product">
-    <mat-icon>edit</mat-icon>
-  </button>
-  <button mat-icon-button color="warn" (click)="deleteProduct(element)" matTooltip="Delete Product">
-    <mat-icon>delete</mat-icon>
-  </button>
+  <acp-button
+    matStyle="icon"
+    variant="primary"
+    icon="edit"
+    title="Edit Product"
+    (handleClick)="startEdit(element)"
+  />
+  <acp-button
+    matStyle="icon"
+    variant="danger"
+    icon="delete"
+    title="Delete Product"
+    (handleClick)="deleteProduct(element)"
+  />
 </ng-template>
 
 <ng-template #productImageTemplate let-element="$implicit">

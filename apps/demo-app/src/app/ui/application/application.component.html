@@ -13,70 +13,28 @@
             [(ngModel)]="searchQuery"
             placeholder="Search by name, version, or category..."
           />
-          <button mat-icon-button matSuffix (click)="onSearch()">
-            <mat-icon>search</mat-icon>
-          </button>
+          <acp-button matStyle="icon" icon="search" (handleClick)="onSearch()" />
         </mat-form-field>
 
-        <button mat-button (click)="clearFilters()" class="clear-btn">
-          <mat-icon>clear</mat-icon>
-          Clear Filters
-        </button>
+        <acp-button matStyle="icon" icon="clear" (handleClick)="clearFilters()" />
       </div>
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="create-card">
+  <mat-card class="action-card">
     <mat-card-header>
-      <mat-card-title>Create New Application</mat-card-title>
+      <mat-card-title>Application Management</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <div class="form-row">
-        <mat-form-field appearance="outline">
-          <mat-label>Name</mat-label>
-          <input matInput [(ngModel)]="newApplication.name" placeholder="Enter application name" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Version</mat-label>
-          <input matInput [(ngModel)]="newApplication.version" placeholder="e.g., 1.0.0" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Status</mat-label>
-          <mat-select [(ngModel)]="newApplication.status">
-            @for (status of statusOptions; track status) {
-              <mat-option [value]="status">{{ status | titlecase }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Environment</mat-label>
-          <mat-select [(ngModel)]="newApplication.environment">
-            @for (env of environmentOptions; track env) {
-              <mat-option [value]="env">{{ env | titlecase }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+      <div class="action-buttons">
+        <acp-button
+          matStyle="elevated"
+          variant="primary"
+          text="Create New Application"
+          icon="add"
+          (handleClick)="createApplication()"
+        />
       </div>
-
-      <div class="form-row">
-        <mat-form-field appearance="outline">
-          <mat-label>Category</mat-label>
-          <input matInput [(ngModel)]="newApplication.category" placeholder="e.g., Web App, API" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Owner</mat-label>
-          <input matInput [(ngModel)]="newApplication.owner" placeholder="Enter owner name" />
-        </mat-form-field>
-      </div>
-
-      <button mat-raised-button color="primary" (click)="createApplication()" [disabled]="isCreating">
-        <mat-icon>add</mat-icon>
-        {{ isCreating ? 'Creating...' : 'Create Application' }}
-      </button>
     </mat-card-content>
   </mat-card>
 
@@ -86,18 +44,24 @@
         <div class="bulk-header">
           <span class="selected-count">{{ getSelectedCount() }} applications selected</span>
           <div class="bulk-actions">
-            <button mat-button color="primary" (click)="bulkActivateApplications()">
-              <mat-icon>check_circle</mat-icon>
-              Activate
-            </button>
-            <button mat-button color="warn" (click)="bulkDeactivateApplications()">
-              <mat-icon>cancel</mat-icon>
-              Deactivate
-            </button>
-            <button mat-button color="warn" (click)="bulkDeleteApplications()">
-              <mat-icon>delete</mat-icon>
-              Delete
-            </button>
+            <acp-button
+              variant="primary"
+              text="Activate"
+              icon="check_circle"
+              (handleClick)="bulkActivateApplications()"
+            />
+            <acp-button
+              variant="danger"
+              text="Deactivate"
+              icon="cancel"
+              (handleClick)="bulkDeactivateApplications()"
+            />
+            <acp-button
+              variant="danger"
+              text="Delete"
+              icon="delete"
+              (handleClick)="bulkDeleteApplications()"
+            />
           </div>
         </div>
       </mat-card-content>
@@ -107,7 +71,8 @@
   <mat-card class="table-card">
     <mat-card-content>
       <div class="table-container">
-        <acp-mat-dynamic-table [tableData]="applications"
+        <acp-dynamic-table
+          [tableData]="applications"
           [columnDefinitions]="applicationColumns"
           [showSelectBox]="true"
           [showFooter]="true"
@@ -116,7 +81,7 @@
           [isLoadingData]="isLoading"
           (rowSelected)="onRowSelected($event)"
           (pageEvent)="onPageChange($event)"
-         />
+        />
 
         @if (!isLoading && applications.length === 0) {
           <div class="no-data">
@@ -145,42 +110,20 @@
   <!-- Template for Actions Column -->
   <ng-template #actionsTemplate let-element="$implicit">
     <div class="action-buttons">
-      @if (editApplicationId === element.id) {
-        <mat-form-field appearance="outline" class="inline-edit">
-          <mat-label>Name</mat-label>
-          <input matInput [(ngModel)]="editApplication.name" />
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="inline-edit">
-          <mat-label>Version</mat-label>
-          <input matInput [(ngModel)]="editApplication.version" />
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="inline-edit">
-          <mat-label>Status</mat-label>
-          <mat-select [(ngModel)]="editApplication.status">
-            @for (status of statusOptions; track status) {
-              <mat-option [value]="status">{{ status | titlecase }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-        <button mat-icon-button color="primary" (click)="updateApplication()" [disabled]="isUpdating">
-          <mat-icon>{{ isUpdating ? 'hourglass_empty' : 'check' }}</mat-icon>
-        </button>
-        <button mat-icon-button (click)="cancelEdit()">
-          <mat-icon>close</mat-icon>
-        </button>
-      } @else {
-        <button mat-icon-button color="primary" (click)="startEdit(element)" matTooltip="Edit Application">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          color="warn"
-          (click)="deleteApplication(element.id)"
-          matTooltip="Delete Application"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
-      }
+      <acp-button
+        matStyle="icon"
+        variant="primary"
+        icon="edit"
+        title="Edit Application"
+        (handleClick)="startEdit(element)"
+      />
+      <acp-button
+        matStyle="icon"
+        variant="danger"
+        icon="delete"
+        title="Delete Application"
+        (handleClick)="deleteApplication(element.id)"
+      />
     </div>
   </ng-template>
 </div>
