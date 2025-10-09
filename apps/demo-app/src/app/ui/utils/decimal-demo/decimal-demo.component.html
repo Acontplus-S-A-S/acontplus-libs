@@ -14,7 +14,12 @@
           <mat-label>Valor B</mat-label>
           <input matInput type="number" [(ngModel)]="basicB" />
         </mat-form-field>
-        <button mat-raised-button color="primary" (click)="calculateBasic()">Calcular</button>
+        <acp-button
+          matStyle="elevated"
+          variant="primary"
+          text="Calcular"
+          (handleClick)="calculateBasic()"
+        />
         <pre>{{ basicResult | json }}</pre>
       </mat-tab>
 
@@ -43,7 +48,12 @@
           ><mat-label>Composición</mat-label
           ><input matInput type="number" [(ngModel)]="interesCompuesto"
         /></mat-form-field>
-        <button mat-raised-button color="accent" (click)="calculateFinancial()">Calcular</button>
+        <acp-button
+          matStyle="elevated"
+          variant="info"
+          text="Calcular"
+          (handleClick)="calculateFinancial()"
+        />
         <pre>{{ financialResult | json }}</pre>
       </mat-tab>
 
@@ -53,7 +63,12 @@
           <mat-label>Valores (separados por coma)</mat-label>
           <input matInput type="text" [(ngModel)]="arrayValores" />
         </mat-form-field>
-        <button mat-raised-button color="warn" (click)="calculateArray()">Calcular</button>
+        <acp-button
+          matStyle="elevated"
+          variant="danger"
+          text="Calcular"
+          (handleClick)="calculateArray()"
+        />
         <pre>{{ arrayResult | json }}</pre>
       </mat-tab>
 
@@ -71,7 +86,12 @@
           ><mat-label>Impuesto %</mat-label
           ><input matInput type="number" [(ngModel)]="chainImpuesto"
         /></mat-form-field>
-        <button mat-raised-button color="primary" (click)="calculateChain()">Calcular</button>
+        <acp-button
+          matStyle="elevated"
+          variant="primary"
+          text="Calcular"
+          (handleClick)="calculateChain()"
+        />
         <pre>{{ chainResult }}</pre>
       </mat-tab>
 
@@ -84,7 +104,12 @@
           ><mat-label>Decimales</mat-label
           ><input matInput type="number" [(ngModel)]="formatPrecision"
         /></mat-form-field>
-        <button mat-raised-button color="accent" (click)="calculateFormat()">Formatear</button>
+        <acp-button
+          matStyle="elevated"
+          variant="info"
+          text="Formatear"
+          (handleClick)="calculateFormat()"
+        />
         <pre>{{ formatResult }}</pre>
       </mat-tab>
 
@@ -94,13 +119,23 @@
           ><mat-label>Input a Validar</mat-label
           ><input matInput type="text" [(ngModel)]="validationInput"
         /></mat-form-field>
-        <button mat-raised-button color="warn" (click)="calculateValidation()">Validar</button>
+        <acp-button
+          matStyle="elevated"
+          variant="danger"
+          text="Validar"
+          (handleClick)="calculateValidation()"
+        />
         <pre>{{ validationResult | json }}</pre>
       </mat-tab>
 
       <!-- ERRORES -->
       <mat-tab label="Errores">
-        <button mat-raised-button color="primary" (click)="calculateError()">Probar Error</button>
+        <acp-button
+          matStyle="elevated"
+          variant="primary"
+          text="Probar Error"
+          (handleClick)="calculateError()"
+        />
         <pre>{{ errorResult }}</pre>
       </mat-tab>
 
@@ -117,7 +152,12 @@
         <mat-form-field appearance="fill"
           ><mat-label>Restar</mat-label><input matInput type="number" [(ngModel)]="historySubtract"
         /></mat-form-field>
-        <button mat-raised-button color="accent" (click)="calculateHistory()">Ver Historial</button>
+        <acp-button
+          matStyle="elevated"
+          variant="info"
+          text="Ver Historial"
+          (handleClick)="calculateHistory()"
+        />
         <pre>{{ historyResult | json }}</pre>
       </mat-tab>
     </mat-tab-group>

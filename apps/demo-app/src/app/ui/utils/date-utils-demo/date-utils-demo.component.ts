@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { DateFormatter, TIME_OF_DAY } from '@acontplus/utils';
+import { ButtonComponent } from '@acontplus/ng-components';
 
 @Component({
   selector: 'app-date-utils-demo',
@@ -15,6 +16,7 @@ import { DateFormatter, TIME_OF_DAY } from '@acontplus/utils';
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
+    ButtonComponent,
   ],
   templateUrl: './date-utils-demo.component.html',
   styleUrl: './date-utils-demo.component.scss',

@@ -293,7 +293,7 @@ This workspace was migrated from npm workspaces to Nx monorepo:
 
 #### Naming Conventions
 
-- **Components**: kebab-case (e.g., `mat-dynamic-card`)
+- **Components**: kebab-case (e.g., `dynamic-card`)
 - **Directives**: camelCase (e.g., `toUpperCase`)
 - **Services**: camelCase (e.g., `correlationService`)
 - **Models**: camelCase (e.g., `apiResponseModel`)
@@ -617,7 +617,7 @@ Each project has its own format scripts:
 
 #### Naming Conventions
 
-- **Components**: kebab-case (e.g., `mat-dynamic-card`)
+- **Components**: kebab-case (e.g., `dynamic-card`)
 - **Directives**: camelCase (e.g., `toUpperCase`)
 - **Services**: camelCase (e.g., `correlationService`)
 - **Models**: camelCase (e.g., `apiResponseModel`)

@@ -9,24 +9,24 @@ import { MatIconModule } from '@angular/material/icon';
  * header, content, and action areas.
  *
  * @example
- * <acp-mat-dynamic-card
+ * <acp-dynamic-card
  *   [cardTitle]="'Card Title'"
  *   [cardSubtitle]="'Card Subtitle'"
  *   [isHeaderVisible]="true"
  *   [areActionsVisible]="true"
  *   (primaryButtonClicked)="onPrimaryAction()">
  *   Card content goes here
- * </acp-mat-dynamic-card>
+ * </acp-dynamic-card>
  */
 @Component({
-  selector: 'acp-mat-dynamic-card',
+  selector: 'acp-dynamic-card',
   standalone: true,
   imports: [MatCardModule, MatButtonModule, MatIconModule],
-  templateUrl: './mat-dynamic-card.component.html',
-  styleUrl: './mat-dynamic-card.component.scss',
+  templateUrl: './dynamic-card.component.html',
+  styleUrl: './dynamic-card.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class MatDynamicCardComponent {
+export class DynamicCardComponent {
   // Header inputs
   /**
    * The title text to display in the card header.

@@ -27,7 +27,7 @@ export type MaterialButtonStyle =
   | 'extended-fab';
 
 @Component({
-  selector: 'acp-mat-theme-button',
+  selector: 'acp-button',
   imports: [
     MatButton,
     NgClass,
@@ -37,17 +37,18 @@ export type MaterialButtonStyle =
     MatFabButton,
     NgTemplateOutlet,
   ],
-  templateUrl: './mat-theme-button.component.html',
-  styleUrl: './mat-theme-button.component.scss',
+  templateUrl: './button.component.html',
+  styleUrl: './button.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class MatThemeButtonComponent {
+export class ButtonComponent {
   variant = input<ButtonVariant>('primary');
   text = input<string>('');
   icon = input<string>('');
   disabled = input<boolean>(false);
   type = input<ButtonType>('button');
   matStyle = input<MaterialButtonStyle>('elevated');
+  customClass = input<string | undefined>();
 
   extended = input<boolean>(false); // For extended FAB
   title = input<string>('');
@@ -61,9 +62,14 @@ export class MatThemeButtonComponent {
   handleClick = output<unknown>();
 
   getButtonClasses(): Record<string, boolean> {
-    return {
+    const classes: Record<string, boolean> = {
       [`mat-btn-${this.variant()}`]: true,
     };
+    const customClass = this.customClass();
+    if (customClass) {
+      classes[customClass] = true;
+    }
+    return classes;
   }
 
   getDisplayText(): string {

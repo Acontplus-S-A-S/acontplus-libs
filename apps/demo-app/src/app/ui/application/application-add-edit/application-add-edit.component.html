@@ -90,21 +90,17 @@
         <h3>Dependencias y Etiquetas</h3>
 
         <div class="form-row">
-          <acp-mat-input-chip
+          <acp-input-chip
             [chips]="dependencies"
             labelText="Dependencias"
             placeholder="Agregar dependencia..."
           >
-          </acp-mat-input-chip>
+          </acp-input-chip>
         </div>
 
         <div class="form-row">
-          <acp-mat-input-chip
-            [chips]="tags"
-            labelText="Etiquetas"
-            placeholder="Agregar etiqueta..."
-          >
-          </acp-mat-input-chip>
+          <acp-input-chip [chips]="tags" labelText="Etiquetas" placeholder="Agregar etiqueta...">
+          </acp-input-chip>
         </div>
       </div>
 
@@ -136,13 +132,13 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-button (click)="cancel()" [disabled]="loading">Cancelar</button>
-    <acp-mat-theme-button
+    <acp-button text="Cancelar" variant="dark" (handleClick)="cancel()" [disabled]="loading" />
+    <acp-button
       type="submit"
       text="Guardar"
-      variant="primary"
+      variant="success"
       [disabled]="!applicationForm.valid || loading"
     >
-    </acp-mat-theme-button>
+    </acp-button>
   </mat-dialog-actions>
 </div>

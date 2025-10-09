@@ -13,15 +13,10 @@
             [(ngModel)]="searchQuery"
             placeholder="Search by name, version, or category..."
           />
-          <button mat-icon-button matSuffix (click)="onSearch()">
-            <mat-icon>search</mat-icon>
-          </button>
+          <acp-button matStyle="icon" icon="search" (handleClick)="onSearch()" />
         </mat-form-field>
 
-        <button mat-button (click)="clearFilters()" class="clear-btn">
-          <mat-icon>clear</mat-icon>
-          Clear Filters
-        </button>
+        <acp-button matStyle="icon" icon="clear" (handleClick)="clearFilters()" />
       </div>
     </mat-card-content>
   </mat-card>
@@ -32,10 +27,13 @@
     </mat-card-header>
     <mat-card-content>
       <div class="action-buttons">
-        <button mat-raised-button color="primary" (click)="createApplication()">
-          <mat-icon>add</mat-icon>
-          Create New Application
-        </button>
+        <acp-button
+          matStyle="elevated"
+          variant="primary"
+          text="Create New Application"
+          icon="add"
+          (handleClick)="createApplication()"
+        />
       </div>
     </mat-card-content>
   </mat-card>
@@ -46,18 +44,24 @@
         <div class="bulk-header">
           <span class="selected-count">{{ getSelectedCount() }} applications selected</span>
           <div class="bulk-actions">
-            <button mat-button color="primary" (click)="bulkActivateApplications()">
-              <mat-icon>check_circle</mat-icon>
-              Activate
-            </button>
-            <button mat-button color="warn" (click)="bulkDeactivateApplications()">
-              <mat-icon>cancel</mat-icon>
-              Deactivate
-            </button>
-            <button mat-button color="warn" (click)="bulkDeleteApplications()">
-              <mat-icon>delete</mat-icon>
-              Delete
-            </button>
+            <acp-button
+              variant="primary"
+              text="Activate"
+              icon="check_circle"
+              (handleClick)="bulkActivateApplications()"
+            />
+            <acp-button
+              variant="danger"
+              text="Deactivate"
+              icon="cancel"
+              (handleClick)="bulkDeactivateApplications()"
+            />
+            <acp-button
+              variant="danger"
+              text="Delete"
+              icon="delete"
+              (handleClick)="bulkDeleteApplications()"
+            />
           </div>
         </div>
       </mat-card-content>
@@ -67,7 +71,7 @@
   <mat-card class="table-card">
     <mat-card-content>
       <div class="table-container">
-        <acp-mat-dynamic-table
+        <acp-dynamic-table
           [tableData]="applications"
           [columnDefinitions]="applicationColumns"
           [showSelectBox]="true"
@@ -106,22 +110,20 @@
   <!-- Template for Actions Column -->
   <ng-template #actionsTemplate let-element="$implicit">
     <div class="action-buttons">
-      <button
-        mat-icon-button
-        color="primary"
-        (click)="startEdit(element)"
-        matTooltip="Edit Application"
-      >
-        <mat-icon>edit</mat-icon>
-      </button>
-      <button
-        mat-icon-button
-        color="warn"
-        (click)="deleteApplication(element.id)"
-        matTooltip="Delete Application"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
+      <acp-button
+        matStyle="icon"
+        variant="primary"
+        icon="edit"
+        title="Edit Application"
+        (handleClick)="startEdit(element)"
+      />
+      <acp-button
+        matStyle="icon"
+        variant="danger"
+        icon="delete"
+        title="Delete Application"
+        (handleClick)="deleteApplication(element.id)"
+      />
     </div>
   </ng-template>
 </div>

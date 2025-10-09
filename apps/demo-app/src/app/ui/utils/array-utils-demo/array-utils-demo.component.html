@@ -19,17 +19,57 @@
     </mat-form-field>
 
     <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px">
-      <button mat-raised-button color="primary" (click)="checkIsEmpty()">isEmpty</button>
-      <button mat-raised-button color="primary" (click)="checkIsNotEmpty()">isNotEmpty</button>
-      <button mat-raised-button color="accent" (click)="checkContains()">contains</button>
-      <button mat-raised-button color="accent" (click)="checkContainsAny()">containsAny</button>
-      <button mat-raised-button color="accent" (click)="checkContainsAll()">containsAll</button>
-      <button mat-raised-button color="primary" (click)="insertItem()">Insertar</button>
-      <button mat-raised-button color="warn" (click)="removeItem()">Eliminar</button>
-      <button mat-raised-button color="accent" (click)="maxItem()">max</button>
-      <button mat-raised-button color="accent" (click)="minItem()">min</button>
-      <button mat-raised-button color="primary" (click)="takeItems()">take</button>
-      <button mat-raised-button color="primary" (click)="takeRightItems()">takeRight</button>
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="isEmpty"
+        (handleClick)="checkIsEmpty()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="isNotEmpty"
+        (handleClick)="checkIsNotEmpty()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="info"
+        text="contains"
+        (handleClick)="checkContains()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="info"
+        text="containsAny"
+        (handleClick)="checkContainsAny()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="info"
+        text="containsAll"
+        (handleClick)="checkContainsAll()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="Insertar"
+        (handleClick)="insertItem()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="danger"
+        text="Eliminar"
+        (handleClick)="removeItem()"
+      />
+      <acp-button matStyle="elevated" variant="info" text="max" (handleClick)="maxItem()" />
+      <acp-button matStyle="elevated" variant="info" text="min" (handleClick)="minItem()" />
+      <acp-button matStyle="elevated" variant="primary" text="take" (handleClick)="takeItems()" />
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="takeRight"
+        (handleClick)="takeRightItems()"
+      />
     </div>
 
     <p style="margin-top: 15px; font-weight: bold">Resultado: {{ result }}</p>

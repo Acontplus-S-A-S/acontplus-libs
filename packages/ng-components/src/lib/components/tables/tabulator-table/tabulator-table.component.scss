@@ -1,9 +1,9 @@
-/* custom-tabulator.component.scss */
+/* tabulator-table.component.scss */
 
 // Note: Tabulator themes are imported globally in styles/index.scss
 // This component only contains custom styling enhancements
 
-:host {
+.acp-tabulator-table {
   display: block;
 }
 

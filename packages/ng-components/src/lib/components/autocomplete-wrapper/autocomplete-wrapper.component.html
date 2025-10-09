@@ -1,16 +1,16 @@
-<div class="autocomplete-wrapper-wrapper" [class.autocomplete-wrapper-active]="overlayOpen()">
+<div class="acp-autocomplete-wrapper" [class.acp-autocomplete-wrapper-active]="overlayOpen()">
   <!-- Input Container -->
   <div
-    class="autocomplete-wrapper-input-container"
+    class="acp-autocomplete-wrapper-input-container"
     cdkOverlayOrigin
     #overlayPosition="cdkOverlayOrigin"
   >
-    <div class="autocomplete-wrapper-input-wrapper">
-      <mat-icon class="autocomplete-wrapper-search-icon">search</mat-icon>
+    <div class="acp-autocomplete-wrapper-input-wrapper">
+      <mat-icon class="acp-autocomplete-wrapper-search-icon">search</mat-icon>
       <input
         #searchInput
         type="text"
-        class="autocomplete-wrapper-input-field"
+        class="acp-autocomplete-wrapper-input-field"
         [placeholder]="config.placeholder"
         [(ngModel)]="query"
         (input)="onInput($event)"
@@ -24,7 +24,7 @@
           mat-icon-button
           (click)="clearSearch()"
           type="button"
-          class="autocomplete-wrapper-clear-button"
+          class="acp-autocomplete-wrapper-clear-button"
         >
           <mat-icon>clear</mat-icon>
         </button>
@@ -35,7 +35,7 @@
     </div>
 
     @if (isLoading()) {
-      <div class="autocomplete-wrapper-loading-spinner">
+      <div class="acp-autocomplete-wrapper-loading-spinner">
         <mat-spinner diameter="20" />
       </div>
     }

@@ -23,10 +23,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {
   ColumnDefinition,
-  MatDynamicTableComponent,
+  DynamicTableComponent,
   Pagination,
   AdvancedDialogService,
   TableContext,
+  ButtonComponent,
 } from '@acontplus/ng-components';
 import { NotificationService } from '@acontplus/ng-notifications';
 import { ApplicationRepository } from '../../data';
@@ -53,7 +54,8 @@ import { ApplicationAddEditComponent } from './application-add-edit/application-
     MatChipsModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
-    MatDynamicTableComponent,
+    DynamicTableComponent,
+    ButtonComponent,
   ],
   templateUrl: './application.component.html',
   styleUrls: ['./application.component.scss'],

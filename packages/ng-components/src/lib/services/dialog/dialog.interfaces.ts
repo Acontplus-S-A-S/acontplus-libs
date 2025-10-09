@@ -93,4 +93,11 @@ export interface DialogWrapperConfig<T = unknown> {
    * @default false
    */
   hideHeader?: boolean;
+
+  /**
+   * Whether to show the close button in the dialog header.
+   * If false, follows Angular Material's default behavior (no close button).
+   * @default true
+   */
+  showCloseButton?: boolean;
 }

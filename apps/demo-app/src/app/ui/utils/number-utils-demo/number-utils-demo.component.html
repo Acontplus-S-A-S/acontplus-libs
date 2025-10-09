@@ -13,13 +13,24 @@
     </mat-form-field>
 
     <div style="display: flex; flex-direction: column; gap: 8px">
-      <button mat-raised-button color="primary" (click)="checkIsInteger()">¿Es entero?</button>
-      <button mat-raised-button color="accent" (click)="checkIsSafeInteger()">
-        ¿Es entero seguro?
-      </button>
-      <button mat-raised-button color="primary" (click)="formatToFixed()">
-        Formatear con toFixed
-      </button>
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="¿Es entero?"
+        (handleClick)="checkIsInteger()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="info"
+        text="¿Es entero seguro?"
+        (handleClick)="checkIsSafeInteger()"
+      />
+      <acp-button
+        matStyle="elevated"
+        variant="primary"
+        text="Formatear con toFixed"
+        (handleClick)="formatToFixed()"
+      />
     </div>
 
     <hr style="margin: 20px 0" />
@@ -35,7 +46,12 @@
       <input matInput type="number" [(ngModel)]="num2" />
     </mat-form-field>
 
-    <button mat-raised-button color="warn" (click)="compareNumbers()">Comparar números</button>
+    <acp-button
+      matStyle="elevated"
+      variant="danger"
+      text="Comparar números"
+      (handleClick)="compareNumbers()"
+    />
 
     <p style="margin-top: 15px; font-weight: bold">Resultado: {{ result }}</p>
   </mat-card-content>

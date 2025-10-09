@@ -1,12 +1,12 @@
-:host {
+.acp-customer-card {
   display: block;
 
-  .customer-card {
+  .acp-customer-card-content {
     width: 345px;
     border-radius: 16px;
   }
 
-  .card-header {
+  .acp-card-header {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -15,19 +15,19 @@
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
 
-    .businessName {
+    .acp-business-name {
       text-align: center;
       font-size: 14px;
       font-weight: 500;
     }
-    .tradeName {
+    .acp-trade-name {
       text-align: center;
       font-size: 12px;
       color: var(--mat-sys-on-surface-variant, #6c757d);
     }
   }
 
-  .avatar {
+  .acp-avatar {
     width: 80px;
     height: 80px;
     border-radius: 50%;
@@ -40,17 +40,17 @@
     margin-bottom: 12px;
   }
 
-  .info p {
+  .acp-info p {
     margin: 4px 0;
   }
 
-  .chips {
+  .acp-chips {
     margin-top: 12px;
     display: flex;
     gap: 8px;
   }
 
-  .actions {
+  .acp-actions {
     justify-content: flex-end;
     padding: 16px;
   }

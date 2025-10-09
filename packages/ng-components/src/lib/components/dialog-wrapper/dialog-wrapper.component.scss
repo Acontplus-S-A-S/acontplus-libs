@@ -1,34 +1,36 @@
-:host {
-  .dialog-header {
-    cursor: move;
-    padding: 12px 24px;
-    border-bottom: 1px solid var(--mat-sys-outline-variant, #dee2e6);
-    color: var(--mat-sys-on-surface, #212529);
-  }
+.acp-dialog-header {
+  cursor: move;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant, #dee2e6);
+  color: var(--mat-sys-on-surface, #212529);
+  position: relative;
+}
 
-  h6[mat-dialog-title] {
-    display: flex;
-    align-items: center;
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin: 0;
-    width: 100%;
-  }
+h6[mat-dialog-title].acp-dialog-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 0;
+  width: 100%;
+  padding-right: 48px;
+}
 
-  .title-icon {
-    margin-right: 12px;
-    vertical-align: middle;
-  }
+.acp-dialog-title-icon {
+  margin-right: 12px;
+  vertical-align: middle;
+}
 
-  h6[mat-dialog-title] span {
-    flex-grow: 1;
-  }
+h6[mat-dialog-title].acp-dialog-title span {
+  flex-grow: 1;
+}
 
-  .close-button {
-    margin-left: auto;
-  }
+mat-dialog-content {
+  padding: 24px;
+}
 
-  mat-dialog-content {
-    padding: 24px;
-  }
+.acp-dialog-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 16px;
 }

@@ -1,5 +1,5 @@
-<div class="mat-table-container">
-  <div class="table-container small-table">
+<div class="acp-dynamic-table">
+  <div class="acp-table-container small-table">
     <table #sort="matSort" [dataSource]="dataSource.data" mat-table matSort>
       @if (columnDefinitions) {
         <!-- Checkbox Column -->
@@ -119,7 +119,10 @@
               *matCellDef="let element; let i = index"
               [attr.colspan]="columnsToDisplayWithExpand.length"
             >
-              <div class="m-0 p-0 detail-expand" [class.expanded]="element === expandedElement">
+              <div
+                class="m-0 p-0 acp-detail-expand"
+                [class.acp-expanded]="element === expandedElement"
+              >
                 <ng-container
                   *ngTemplateOutlet="expandedDetail; context: { $implicit: element, index: i }"
                 />
@@ -137,8 +140,8 @@
           <tr
             mat-row
             *matRowDef="let row; columns: columnsToDisplayWithExpand; when: isNormalRow"
-            class="mat-dynamic-table-row"
-            [class.mat-dynamic-table-expanded-row]="expandedElement === row"
+            class="acp-dynamic-table-row"
+            [class.acp-dynamic-table-expanded-row]="expandedElement === row"
             [ngStyle]="getRowColor(row)"
             (click)="expandedElement = expandedElement === row ? null : row"
           ></tr>
@@ -147,7 +150,7 @@
           <tr
             mat-row
             *matRowDef="let row; columns: ['expandedDetail']; when: isExpandedRow"
-            class="mat-dynamic-table-detail-row"
+            class="acp-dynamic-table-detail-row"
           ></tr>
         } @else {
           <!-- Regular Row without expansion -->

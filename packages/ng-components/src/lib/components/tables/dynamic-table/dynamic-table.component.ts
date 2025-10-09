@@ -40,7 +40,7 @@ import { GetTotalPipe } from '../../../pipes';
 import { ColumnDefinition, Pagination, TableContext, TableRow } from '../../../models';
 
 @Component({
-  selector: 'acp-mat-dynamic-table',
+  selector: 'acp-dynamic-table',
   standalone: true,
   imports: [
     MatTableModule,
@@ -56,13 +56,13 @@ import { ColumnDefinition, Pagination, TableContext, TableRow } from '../../../m
     DecimalPipe,
     NgTemplateOutlet,
   ],
-  templateUrl: './mat-dynamic-table.component.html',
-  styleUrl: './mat-dynamic-table.component.scss',
+  templateUrl: './dynamic-table.component.html',
+  styleUrl: './dynamic-table.component.scss',
 
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
-export class MatDynamicTableComponent<T extends TableRow>
+export class DynamicTableComponent<T extends TableRow>
   implements AfterContentInit, OnChanges, OnInit, OnDestroy
 {
   private componentRefs: ComponentRef<unknown>[] = [];

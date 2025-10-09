@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MatInputChipComponent } from './mat-input-chip.component';
+import { TabulatorTableComponent } from './tabulator-table.component';
 
-describe('MatInputChipComponent', () => {
-  let component: MatInputChipComponent;
-  let fixture: ComponentFixture<MatInputChipComponent>;
+describe('TabulatorTableComponent', () => {
+  let component: TabulatorTableComponent;
+  let fixture: ComponentFixture<TabulatorTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatInputChipComponent],
+      imports: [TabulatorTableComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MatInputChipComponent);
+    fixture = TestBed.createComponent(TabulatorTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

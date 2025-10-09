@@ -12,7 +12,12 @@
           <mat-label>IVA (%)</mat-label>
           <input matInput [(ngModel)]="ivaRate" type="number" />
         </mat-form-field>
-        <button mat-raised-button color="primary" (click)="calcularEscenario1()">Calcular</button>
+        <acp-button
+          matStyle="elevated"
+          variant="primary"
+          text="Calcular"
+          (handleClick)="calcularEscenario1()"
+        />
       </div>
       @if (detallesIva) {
         <div>
@@ -33,9 +38,12 @@
           <mat-label>Descuento (%)</mat-label>
           <input matInput [(ngModel)]="descuentoPromo" type="number" />
         </mat-form-field>
-        <button mat-raised-button color="accent" (click)="calcularEscenario2()">
-          Aplicar Descuento
-        </button>
+        <acp-button
+          matStyle="elevated"
+          variant="info"
+          text="Aplicar Descuento"
+          (handleClick)="calcularEscenario2()"
+        />
       </section>
       @if (detallesDescuento) {
         <div>
@@ -53,7 +61,12 @@
   <!-- Escenario 3 -->
   <mat-card>
     <h3>Escenario 3: Análisis de rentabilidad</h3>
-    <button mat-raised-button color="warn" (click)="calcularEscenario3()">Calcular Margen</button>
+    <acp-button
+      matStyle="elevated"
+      variant="danger"
+      text="Calcular Margen"
+      (handleClick)="calcularEscenario3()"
+    />
     @if (detallesGanancia) {
       <div>
         <p>Precio venta: {{ detallesGanancia.salePrice }}</p>
@@ -67,9 +80,12 @@
   <!-- Escenario 4 -->
   <mat-card>
     <h3>Escenario 4: Factura con múltiples líneas</h3>
-    <button mat-raised-button color="primary" (click)="calcularEscenario4()">
-      Calcular Totales
-    </button>
+    <acp-button
+      matStyle="elevated"
+      variant="primary"
+      text="Calcular Totales"
+      (handleClick)="calcularEscenario4()"
+    />
     @if (linea1 && linea2) {
       <div>
         <h4>Línea 1 - Laptops</h4>

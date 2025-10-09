@@ -13,8 +13,8 @@ import {
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 import { DialogWrapperConfig } from '../../services';
+import { ButtonComponent } from '../button';
 
 /**
  * A wrapper component for Angular Material dialogs that provides a consistent look and feel,
@@ -34,7 +34,7 @@ import { DialogWrapperConfig } from '../../services';
 @Component({
   selector: 'acp-dialog-wrapper',
   standalone: true,
-  imports: [CdkDrag, CdkDragHandle, MatDialogModule, MatIconModule, MatButtonModule],
+  imports: [CdkDrag, CdkDragHandle, MatDialogModule, MatIconModule, ButtonComponent],
   templateUrl: './dialog-wrapper.component.html',
   styleUrls: ['./dialog-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

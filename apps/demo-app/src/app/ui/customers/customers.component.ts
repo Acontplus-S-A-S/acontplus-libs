@@ -1,6 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { AdvancedDialogService, MatThemeButtonComponent } from '@acontplus/ng-components';
+import { AdvancedDialogService, ButtonComponent } from '@acontplus/ng-components';
 import { CustomerAddEditComponent, CustomerCardComponent } from '@acontplus/ng-customer';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -9,10 +9,10 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-customers',
   imports: [
     MatCardModule,
-    MatThemeButtonComponent,
+    ButtonComponent,
     CustomerCardComponent,
     MatButtonModule,
-    MatThemeButtonComponent,
+    ButtonComponent,
     CustomerCardComponent,
   ],
   templateUrl: './customers.component.html',

@@ -137,7 +137,7 @@ Cards should be used to group related content and actions.
 #### Usage Guidelines
 
 ```html
-<acp-mat-dynamic-card
+<acp-dynamic-card
   [cardTitle]="'Card Title'"
   [isHeaderVisible]="true"
   [contentPadding]="'1rem'"
@@ -145,7 +145,7 @@ Cards should be used to group related content and actions.
   [primaryButtonText]="'Primary Action'"
 >
   Card content goes here
-</acp-mat-dynamic-card>
+</acp-dynamic-card>
 ```
 
 ### Dialogs

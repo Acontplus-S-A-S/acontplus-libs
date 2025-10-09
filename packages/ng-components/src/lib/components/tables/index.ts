@@ -1,2 +1,2 @@
-export * from './custom-tabulator';
-export * from './mat-dynamic-table';
+export * from './tabulator-table';
+export * from './dynamic-table';
