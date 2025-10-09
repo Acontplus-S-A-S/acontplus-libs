@@ -58,7 +58,6 @@ import { ColumnDefinition, Pagination, TableContext, TableRow } from '../../../m
   ],
   templateUrl: './dynamic-table.component.html',
   styleUrl: './dynamic-table.component.scss',
-
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
@@ -76,6 +75,7 @@ export class DynamicTableComponent<T extends TableRow>
   @Input() visibleColumns: string[] = [];
   @Input() columnDefinitions: ColumnDefinition<T>[] = [];
   readonly showSelectBox = input(false);
+  readonly multipleSelection = input(true);
   readonly tableData = input<T[]>([]);
   readonly rowTemplate = input<TemplateRef<TableContext<T>> | null>(null);
   @Input() expandedDetail: TemplateRef<TableContext<T>> | null = null;
@@ -183,7 +183,7 @@ export class DynamicTableComponent<T extends TableRow>
   }
 
   private initializeSelection(): void {
-    this.selection = new SelectionModel<T>(true, []);
+    this.selection = new SelectionModel<T>(this.multipleSelection(), []);
   }
 
   private registerTableContent(): void {
@@ -209,15 +209,19 @@ export class DynamicTableComponent<T extends TableRow>
 
   isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows && numRows > 0;
+    const selectableRows = this.dataSource.data.filter(row => !row.disableSelection);
+    return numSelected === selectableRows.length && selectableRows.length > 0;
   }
 
   masterToggle(): void {
+    if (!this.multipleSelection()) return;
+
     if (this.isAllSelected()) {
       this.selection.clear();
     } else {
-      this.dataSource.data.forEach(row => this.selection.select(row));
+      this.dataSource.data
+        .filter(row => !row.disableSelection)
+        .forEach(row => this.selection.select(row));
     }
     this.rowSelected.emit(this.selection.selected);
     this.cdr.markForCheck();
@@ -231,6 +235,7 @@ export class DynamicTableComponent<T extends TableRow>
   }
 
   selectRow(row: T): void {
+    if (row.disableSelection) return;
     this.selection.toggle(row);
     this.rowSelected.emit(this.selection.selected);
     this.cdr.markForCheck();
@@ -247,8 +252,8 @@ export class DynamicTableComponent<T extends TableRow>
     this.cdr.markForCheck();
   }
 
-  getRowColor(element: T): Record<string, string> {
-    return element.colorRow ? { 'background-color': element.colorRow } : {};
+  getRowStyle(element: T): Record<string, string> {
+    return element.rowStyle || {};
   }
 
   handlePageEvent(e: PageEvent): void {

@@ -6,20 +6,23 @@
         @if (showSelectBox()) {
           <ng-container matColumnDef="select">
             <th *matHeaderCellDef mat-header-cell>
-              <mat-checkbox
-                (change)="$event ? masterToggle() : null"
-                (click)="$event.stopPropagation()"
-                [aria-label]="checkboxLabel()"
-                [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()"
-              />
+              @if (multipleSelection()) {
+                <mat-checkbox
+                  (change)="$event ? masterToggle() : null"
+                  (click)="$event.stopPropagation()"
+                  [aria-label]="checkboxLabel()"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()"
+                />
+              }
             </th>
             <td *matCellDef="let row" mat-cell>
               <mat-checkbox
-                (change)="$event ? selection.toggle(row) : null"
+                (change)="$event ? selectRow(row) : null"
                 (click)="$event.stopPropagation()"
                 [aria-label]="checkboxLabel(row)"
                 [checked]="selection.isSelected(row)"
+                [disabled]="row.disableSelection"
               />
             </td>
             <td *matFooterCellDef mat-footer-cell></td>
@@ -142,7 +145,7 @@
             *matRowDef="let row; columns: columnsToDisplayWithExpand; when: isNormalRow"
             class="acp-dynamic-table-row"
             [class.acp-dynamic-table-expanded-row]="expandedElement === row"
-            [ngStyle]="getRowColor(row)"
+            [ngStyle]="getRowStyle(row)"
             (click)="expandedElement = expandedElement === row ? null : row"
           ></tr>
 
@@ -157,7 +160,7 @@
           <tr
             mat-row
             *matRowDef="let row; columns: columnsToDisplayWithExpand"
-            [ngStyle]="getRowColor(row)"
+            [ngStyle]="getRowStyle(row)"
           ></tr>
         }
 

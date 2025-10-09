@@ -63,7 +63,3 @@ const environment: Environment = {
   loginRoute: 'login',
 };
 ```
-
-## Running unit tests
-
-Run `nx test core` to execute the unit tests.
