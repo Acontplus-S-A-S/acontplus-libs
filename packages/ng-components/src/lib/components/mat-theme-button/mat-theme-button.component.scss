@@ -1,0 +1,274 @@
+:host {
+  display: inline-block;
+  margin: 4px;
+}
+
+// Button content alignment - center icon and text vertically
+.mat-mdc-button,
+.mat-mdc-unelevated-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+button[matbutton='tonal'],
+.mat-mdc-fab.mdc-fab--extended {
+  .mdc-button__label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+// Filled buttons - target Material's generated classes
+.mat-mdc-button.mat-btn-secondary,
+.mat-mdc-unelevated-button.mat-btn-secondary {
+  background-color: var(--mat-sys-surface-container-high, #e8e8e8) !important;
+  color: var(--mat-sys-on-surface, #1c1b1f) !important;
+}
+
+.mat-mdc-button.mat-btn-success,
+.mat-mdc-unelevated-button.mat-btn-success {
+  background-color: #4caf50 !important;
+  color: #ffffff !important;
+}
+
+.mat-mdc-button.mat-btn-danger,
+.mat-mdc-unelevated-button.mat-btn-danger {
+  background-color: var(--mat-sys-error, #ba1a1a) !important;
+  color: var(--mat-sys-on-error, #ffffff) !important;
+}
+
+.mat-mdc-button.mat-btn-warning,
+.mat-mdc-unelevated-button.mat-btn-warning {
+  background-color: #ff9800 !important;
+  color: #000000 !important;
+}
+
+.mat-mdc-button.mat-btn-info,
+.mat-mdc-unelevated-button.mat-btn-info {
+  background-color: #2196f3 !important;
+  color: #ffffff !important;
+}
+
+.mat-mdc-button.mat-btn-light,
+.mat-mdc-unelevated-button.mat-btn-light {
+  background-color: var(--mat-sys-surface-container-highest, #f5f5f5) !important;
+  color: var(--mat-sys-on-surface, #1c1b1f) !important;
+}
+
+.mat-mdc-button.mat-btn-dark,
+.mat-mdc-unelevated-button.mat-btn-dark {
+  background-color: #212121 !important;
+  color: #ffffff !important;
+}
+
+// Tonal buttons - lighter background
+button[matbutton='tonal'].mat-btn-success {
+  background-color: rgba(76, 175, 80, 0.12) !important;
+  color: #4caf50 !important;
+}
+
+button[matbutton='tonal'].mat-btn-danger {
+  background-color: rgba(186, 26, 26, 0.12) !important;
+  color: var(--mat-sys-error, #ba1a1a) !important;
+}
+
+button[matbutton='tonal'].mat-btn-warning {
+  background-color: rgba(255, 152, 0, 0.12) !important;
+  color: #ff9800 !important;
+}
+
+button[matbutton='tonal'].mat-btn-info {
+  background-color: rgba(33, 150, 243, 0.12) !important;
+  color: #2196f3 !important;
+}
+
+button[matbutton='tonal'].mat-btn-dark {
+  background-color: rgba(33, 33, 33, 0.12) !important;
+  color: #212121 !important;
+}
+
+// Text buttons - only text color
+.mat-mdc-button:not(.mat-mdc-unelevated-button):not(.mat-mdc-raised-button):not(
+    .mat-mdc-outlined-button
+  ).mat-btn-secondary {
+  color: var(--mat-sys-on-surface, #1c1b1f) !important;
+}
+
+.mat-mdc-button:not(.mat-mdc-unelevated-button):not(.mat-mdc-raised-button):not(
+    .mat-mdc-outlined-button
+  ).mat-btn-success {
+  color: #4caf50 !important;
+}
+
+.mat-mdc-button:not(.mat-mdc-unelevated-button):not(.mat-mdc-raised-button):not(
+    .mat-mdc-outlined-button
+  ).mat-btn-danger {
+  color: var(--mat-sys-error, #ba1a1a) !important;
+}
+
+.mat-mdc-button:not(.mat-mdc-unelevated-button):not(.mat-mdc-raised-button):not(
+    .mat-mdc-outlined-button
+  ).mat-btn-warning {
+  color: #ff9800 !important;
+}
+
+.mat-mdc-button:not(.mat-mdc-unelevated-button):not(.mat-mdc-raised-button):not(
+    .mat-mdc-outlined-button
+  ).mat-btn-info {
+  color: #2196f3 !important;
+}
+
+.mat-mdc-button:not(.mat-mdc-unelevated-button):not(.mat-mdc-raised-button):not(
+    .mat-mdc-outlined-button
+  ).mat-btn-dark {
+  color: #212121 !important;
+}
+
+// Elevated buttons - white background with colored text, colored background on hover
+.mat-mdc-raised-button.mat-btn-secondary {
+  background-color: var(--mat-sys-surface-container-low, #ffffff) !important;
+  color: var(--mat-sys-on-surface, #1c1b1f) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-success {
+  background-color: var(--mat-sys-surface-container-low, #ffffff) !important;
+  color: #4caf50 !important;
+}
+
+.mat-mdc-raised-button.mat-btn-success:hover {
+  background-color: rgba(76, 175, 80, 0.12) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-danger {
+  background-color: var(--mat-sys-surface-container-low, #ffffff) !important;
+  color: var(--mat-sys-error, #ba1a1a) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-danger:hover {
+  background-color: rgba(186, 26, 26, 0.12) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-warning {
+  background-color: var(--mat-sys-surface-container-low, #ffffff) !important;
+  color: #ff9800 !important;
+}
+
+.mat-mdc-raised-button.mat-btn-warning:hover {
+  background-color: rgba(255, 152, 0, 0.12) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-info {
+  background-color: var(--mat-sys-surface-container-low, #ffffff) !important;
+  color: #2196f3 !important;
+}
+
+.mat-mdc-raised-button.mat-btn-info:hover {
+  background-color: rgba(33, 150, 243, 0.12) !important;
+}
+
+.mat-mdc-raised-button.mat-btn-dark {
+  background-color: var(--mat-sys-surface-container-low, #ffffff) !important;
+  color: #212121 !important;
+}
+
+.mat-mdc-raised-button.mat-btn-dark:hover {
+  background-color: rgba(33, 33, 33, 0.12) !important;
+}
+
+// Outlined buttons
+.mat-mdc-outlined-button.mat-btn-secondary {
+  border-color: var(--mat-sys-on-surface, #1c1b1f) !important;
+  color: var(--mat-sys-on-surface, #1c1b1f) !important;
+}
+
+.mat-mdc-outlined-button.mat-btn-success {
+  border-color: #4caf50 !important;
+  color: #4caf50 !important;
+}
+
+.mat-mdc-outlined-button.mat-btn-danger {
+  border-color: var(--mat-sys-error, #ba1a1a) !important;
+  color: var(--mat-sys-error, #ba1a1a) !important;
+}
+
+.mat-mdc-outlined-button.mat-btn-warning {
+  border-color: #ff9800 !important;
+  color: #ff9800 !important;
+}
+
+.mat-mdc-outlined-button.mat-btn-info {
+  border-color: #2196f3 !important;
+  color: #2196f3 !important;
+}
+
+.mat-mdc-outlined-button.mat-btn-dark {
+  border-color: #212121 !important;
+  color: #212121 !important;
+}
+
+// FAB buttons (regular, mini, and extended)
+.mat-mdc-fab.mat-btn-secondary,
+.mat-mdc-mini-fab.mat-btn-secondary {
+  background-color: var(--mat-sys-surface-container-high, #e8e8e8) !important;
+  color: var(--mat-sys-on-surface, #1c1b1f) !important;
+}
+
+.mat-mdc-fab.mat-btn-success,
+.mat-mdc-mini-fab.mat-btn-success {
+  background-color: #4caf50 !important;
+  color: #ffffff !important;
+}
+
+.mat-mdc-fab.mat-btn-danger,
+.mat-mdc-mini-fab.mat-btn-danger {
+  background-color: var(--mat-sys-error, #ba1a1a) !important;
+  color: var(--mat-sys-on-error, #ffffff) !important;
+}
+
+.mat-mdc-fab.mat-btn-warning,
+.mat-mdc-mini-fab.mat-btn-warning {
+  background-color: #ff9800 !important;
+  color: #000000 !important;
+}
+
+.mat-mdc-fab.mat-btn-info,
+.mat-mdc-mini-fab.mat-btn-info {
+  background-color: #2196f3 !important;
+  color: #ffffff !important;
+}
+
+.mat-mdc-fab.mat-btn-light,
+.mat-mdc-mini-fab.mat-btn-light {
+  background-color: var(--mat-sys-surface-container-highest, #f5f5f5) !important;
+  color: var(--mat-sys-on-surface, #1c1b1f) !important;
+}
+
+.mat-mdc-fab.mat-btn-dark,
+.mat-mdc-mini-fab.mat-btn-dark {
+  background-color: #212121 !important;
+  color: #ffffff !important;
+}
+
+// Icon buttons
+.mat-mdc-icon-button.mat-btn-secondary {
+  color: var(--mat-sys-on-surface, #1c1b1f) !important;
+}
+
+.mat-mdc-icon-button.mat-btn-success {
+  color: #4caf50 !important;
+}
+
+.mat-mdc-icon-button.mat-btn-danger {
+  color: var(--mat-sys-error, #ba1a1a) !important;
+}
+
+.mat-mdc-icon-button.mat-btn-warning {
+  color: #ff9800 !important;
+}
+
+.mat-mdc-icon-button.mat-btn-info {
+  color: #2196f3 !important;
+}
+
+.mat-mdc-icon-button.mat-btn-dark {
+  color: #212121 !important;
+}

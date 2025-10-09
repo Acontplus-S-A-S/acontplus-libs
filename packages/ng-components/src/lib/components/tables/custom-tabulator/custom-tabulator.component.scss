@@ -3,6 +3,10 @@
 // Note: Tabulator themes are imported globally in styles/index.scss
 // This component only contains custom styling enhancements
 
+:host {
+  display: block;
+}
+
 // Base container styles
 .acp-tabulator-container {
   width: 100%;
@@ -15,7 +19,7 @@
   }
 
   .tabulator-row.tabulator-selected {
-    background-color: rgba(25, 118, 210, 0.12);
+    background-color: var(--mat-sys-primary-container, rgba(25, 118, 210, 0.12));
   }
 
   // Responsive enhancements
@@ -32,7 +36,7 @@
 
   // Loading state
   .tabulator-loader {
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--mat-sys-surface-container, rgba(255, 255, 255, 0.8));
     backdrop-filter: blur(2px);
   }
 
@@ -43,16 +47,16 @@
   }
 
   .tabulator-tableholder::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--mat-sys-surface-variant, #f1f1f1);
     border-radius: 4px;
   }
 
   .tabulator-tableholder::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
+    background: var(--mat-sys-outline, #c1c1c1);
     border-radius: 4px;
 
     &:hover {
-      background: #a8a8a8;
+      background: var(--mat-sys-on-surface-variant, #a8a8a8);
     }
   }
 }

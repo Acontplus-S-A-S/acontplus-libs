@@ -33,10 +33,11 @@ export class App implements OnInit {
         setTimeout(() => {
           this.ngZone.run(() => {
             this.notificationService.snackbar.info({ message: 'App initialized' });
-            this.notificationService.sweetAlert.info({
-              message: 'App initialized',
-              config: { timer: 3000, showCancelButton: true },
-            });
+            // this.notificationService.show({
+            //   type: 'warning',
+            //   message: 'App initialized',
+            //   config: { timer: 3000, showCancelButton: true },
+            // });
             this.notificationService.show({
               type: 'info',
               message: 'App initialized via show method',

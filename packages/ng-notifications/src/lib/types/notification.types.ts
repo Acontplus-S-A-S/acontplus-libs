@@ -21,12 +21,12 @@ export interface NotificationCallProps extends BaseNotificationConfig {
 }
 
 export interface SweetAlertConfig extends BaseNotificationConfig {
+  readonly html?: string;
   readonly confirmButtonText?: string;
   readonly cancelButtonText?: string;
   readonly showCancelButton?: boolean;
   readonly allowOutsideClick?: boolean;
   readonly customClass?: string;
-  readonly html?: string;
 }
 
 export interface NotificationResult {

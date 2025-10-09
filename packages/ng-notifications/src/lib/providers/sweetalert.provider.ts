@@ -1,19 +1,41 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { NotificationProviderBase } from './notification.provider';
+import {
+  NotificationProviderBase,
+  NotificationProviderConfig,
+  NOTIFICATION_CONFIG,
+} from './notification.provider';
 import {
   NotificationCallProps,
   NotificationResult,
   NotificationType,
   SweetAlertConfig,
 } from '../types/notification.types';
+import { ThemeDetectorService } from '../services/theme-detector.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SweetAlertProvider extends NotificationProviderBase {
+  private config = inject<NotificationProviderConfig>(NOTIFICATION_CONFIG);
+  private themeDetector = inject(ThemeDetectorService);
+
+  private getTheme(): string {
+    const configTheme = (this.config.sweetalert as any)?.defaultTheme;
+
+    // Default to 'auto' if no theme specified
+    if (!configTheme || configTheme === 'auto') {
+      // Auto-detect theme based on CSS classes
+      const isDark =
+        document?.body?.classList?.contains('dark-theme') ||
+        document?.documentElement?.classList?.contains('dark-theme');
+      return isDark ? 'material-ui-dark' : 'material-ui-light';
+    }
+
+    return configTheme;
+  }
   success(props: NotificationCallProps): Observable<NotificationResult> {
     return this.showAlert({ ...props, type: 'success' });
   }
@@ -41,9 +63,10 @@ export class SweetAlertProvider extends NotificationProviderBase {
       cancelButtonText: config.cancelButtonText || 'Cancel',
       allowOutsideClick: config.allowOutsideClick !== false,
       customClass: config.customClass ? { container: config.customClass } : undefined,
+      theme: this.getTheme(),
     };
 
-    return from(Swal.fire(swalConfig)).pipe(
+    return from(Swal.fire(swalConfig as any)).pipe(
       map(result => ({
         isConfirmed: result.isConfirmed,
         isDenied: result.isDenied,
@@ -62,13 +85,12 @@ export class SweetAlertProvider extends NotificationProviderBase {
       title: props.title,
       text: props.message,
       icon: props.type as 'success' | 'error' | 'warning' | 'info',
-      timer: (duration as number) || 5000,
-      showConfirmButton: true,
-      timerProgressBar: true,
+      theme: this.getTheme(),
+      ...(duration ? { timer: duration as number, timerProgressBar: true } : {}),
       ...otherConfig,
     };
 
-    return from(Swal.fire(swalConfig)).pipe(
+    return from(Swal.fire(swalConfig as any)).pipe(
       map(result => ({
         isConfirmed: result.isConfirmed,
         isDenied: result.isDenied,
