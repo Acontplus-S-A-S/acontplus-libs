@@ -1,12 +1,12 @@
 {
   "name": "@acontplus/ng-customer",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Acontplus Angular Customer Module",
   "dependencies": {
-    "@acontplus/ng-notifications": "^1.0.9"
+    "@acontplus/ng-notifications": "^1.0.10"
   },
   "peerDependencies": {
-    "@acontplus/ng-components": "^1.0.13",
+    "@acontplus/ng-components": "^1.1.0",
     "@angular/common": "^20.3.2",
     "@angular/core": "^20.3.2"
   },
