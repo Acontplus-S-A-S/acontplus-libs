@@ -10,7 +10,6 @@ export type ButtonVariant =
   | 'danger'
   | 'warning'
   | 'info'
-  | 'light'
   | 'dark';
 
 export type ButtonType = 'button' | 'submit' | 'reset';

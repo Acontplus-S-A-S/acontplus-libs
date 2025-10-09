@@ -39,11 +39,6 @@ export class ThemeService {
 
   private applyTheme(isDark: boolean): void {
     if (!isPlatformBrowser(this.platformId)) return;
-
-    if (isDark) {
-      document.body.classList.add('dark-theme');
-    } else {
-      document.body.classList.remove('dark-theme');
-    }
+    document.documentElement.classList.toggle('dark-theme', isDark);
   }
 }
