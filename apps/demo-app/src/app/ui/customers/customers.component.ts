@@ -1,20 +1,13 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { AdvancedDialogService, ButtonComponent } from '@acontplus/ng-components';
-import { CustomerAddEditComponent, CustomerCardComponent } from '@acontplus/ng-customer';
+import { AdvancedDialogService, Button } from '@acontplus/ng-components';
+import { CustomerAddEditComponent, CustomerCard } from '@acontplus/ng-customer';
 
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-customers',
-  imports: [
-    MatCardModule,
-    ButtonComponent,
-    CustomerCardComponent,
-    MatButtonModule,
-    ButtonComponent,
-    CustomerCardComponent,
-  ],
+  imports: [MatCardModule, Button, CustomerCard, MatButtonModule, Button, CustomerCard],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.scss',
 })

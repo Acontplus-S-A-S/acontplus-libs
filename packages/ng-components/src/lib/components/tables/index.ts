@@ -1,2 +1,2 @@
-export * from './tabulator-table';
 export * from './dynamic-table';
+export * from './tabulator-table';

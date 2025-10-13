@@ -1,1 +1,1 @@
-export * from './tabulator-table.component';
+export * from './tabulator-table';

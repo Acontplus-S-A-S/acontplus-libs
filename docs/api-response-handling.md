@@ -2,44 +2,48 @@
 
 ## Overview
 
-The current implementation provides a standardized `ApiResponse<T>` interface
-for consistent API communication, but **response transformation is handled at
-the repository/use-case level** rather than automatically by interceptors. This
-approach gives more control to developers while maintaining type safety and
-consistent error handling.
+The system provides automatic API response standardization through the
+`apiInterceptor` in `@acontplus/ng-infrastructure`. All HTTP responses are
+automatically transformed to follow the `ApiResponse<T>` interface, ensuring
+consistent API communication, type safety, and automatic notification handling
+across the application.
 
 ## Current Implementation Status
 
-### What the System Currently Does
+### What the System Does
 
-1. **Defines standardized `ApiResponse<T>` interface** for type-safe API
-   communication
-2. **Provides notification handling** via interceptors for user feedback
-3. **Handles HTTP context and correlation tracking** automatically
-4. **Supports both legacy and modern API response formats**
-5. **Repository layer manages response transformation** based on backend format
+1. **Automatic Response Standardization** - All responses are transformed to
+   `ApiResponse<T>` format
+2. **Smart Notification Handling** - Automatic toast notifications based on
+   response status and request type
+3. **HTTP Context Management** - Correlation tracking and tenant management
+4. **Multi-Format Support** - Handles ApiResponse format, raw data, and legacy
+   formats
+5. **Error Handling** - Comprehensive error handling with user-friendly
+   notifications
 
-### What the Interceptor Currently Handles
+### What the Interceptor Handles
 
-The `api.interceptor.ts` in `@acontplus/core` currently handles:
+The `api-interceptor.ts` in `@acontplus/ng-infrastructure` automatically:
 
-- **Toast notifications** based on response status and request type
-- **Error handling** for critical HTTP-level errors (5xx, network errors)
-- **Success/warning/error notifications** from `ApiResponse` objects
-- **Skipping notifications** for specific requests via `HttpContext`
+- **Standardizes all responses** to `ApiResponse<T>` format
+- **Shows toast notifications** based on response status and request type
+- **Handles errors** for critical HTTP-level errors (5xx, network errors)
+- **Transforms responses** for consumers (extracts data from success responses)
+- **Supports notification control** via `HttpContext` tokens
+- **Retries failed requests** up to 2 times with 1-second delay
 
 ### Response Transformation Approach
 
-Unlike the documentation's description, the current implementation does **not**
-automatically standardize all responses. Instead:
+The interceptor automatically standardizes ALL responses:
 
-- **Backend flexibility**: Supports various response formats from different
-  backends
-- **Repository responsibility**: Each repository handles response transformation
-- **Use-case control**: Business logic layer controls data transformation
+- **ApiResponse format**: Passes through unchanged
+- **Raw data**: Wrapped in ApiResponse structure
+- **Primitive values**: Wrapped in ApiResponse structure
+- **Null/undefined**: Creates success response without data
 - **Type safety**: Strong typing with `ApiResponse<T>` interface
 
-## Current Response Handling Patterns
+## Response Handling Patterns
 
 ### 1. Backend Returns ApiResponse<T> Format
 
@@ -59,66 +63,20 @@ automatically standardize all responses. Instead:
 }
 ```
 
-**Repository Implementation:**
+**What Happens:**
 
-````typescript
-### Repository Implementation
+1. Interceptor recognizes valid ApiResponse format
+2. Shows success notification (if POST/PUT/PATCH/DELETE)
+3. Extracts and returns `data` to repository
 
-```typescript
-@Injectable()
-export class UserRepository extends GenericRepository<User, number> {
-  constructor(http: HttpClient) {
-    super(http, { baseUrl: '/api', endpoint: 'users' });
-  }
-
-  // Repository handles response transformation based on backend format
-  getAll(
-    pagination: PaginationParams,
-  ): Observable<PagedResult<User>> {
-    const params = this.buildParams(pagination);
-    return this.get<PagedResult<User>>('', params);
-  }
-
-  create(entity: Partial<User>): Observable<User> {
-    return this.post<User>('', entity);
-  }
-
-  update(id: number, entity: Partial<User>): Observable<User> {
-    return this.put<User>(id.toString(), entity);
-  }
-
-  delete(id: number): Observable<void> {
-    return this.delete<void>(id.toString());
-  }
-}
-````
-
-### Handling Different Backend Response Formats
+**BaseRepository Receives:**
 
 ```typescript
-@Injectable()
-export class LegacyUserRepository extends BaseHttpRepository {
-  protected config = { baseUrl: '/api', endpoint: 'legacy-users' };
-
-  // Handle legacy API format
-  getAll(): Observable<User[]> {
-    return this.get<LegacyApiResponse<User[]>>('').pipe(
-      map(response => response.payload), // Extract data from legacy format
-    );
-  }
-
-  // Handle modern API format
-  createModern(entity: Partial<User>): Observable<User> {
-    return this.post<ApiResponse<User>>('', entity).pipe(
-      map(response => {
-        if (response.status === 'success') {
-          return response.data;
-        }
-        throw new Error(response.message);
-      }),
-    );
-  }
-}
+// BaseRepository receives the extracted data directly
+const user: User = await this.http
+  .post<User>('/api/users', userData)
+  .toPromise();
+// user = { id: 1, name: "John Doe", email: "john@example.com" }
 ```
 
 ### 2. Backend Returns Raw Data
@@ -133,73 +91,49 @@ export class LegacyUserRepository extends BaseHttpRepository {
 }
 ```
 
-**Repository Implementation:**
+**What Happens:**
+
+1. Interceptor wraps raw data in ApiResponse structure
+2. Shows success notification (if POST/PUT/PATCH/DELETE)
+3. Returns the data directly to repository
+
+**BaseRepository Receives:**
 
 ```typescript
-// Repository receives raw data directly
-async getUser(id: number): Promise<User> {
-  return await this.http.get<User>(`/users/${id}`).toPromise();
-}
+// BaseRepository receives the data directly (interceptor unwraps it)
+const user: User = await this.http.get<User>('/api/users/1').toPromise();
+// user = { id: 1, name: "John Doe", email: "john@example.com" }
 ```
 
-### 3. Backend Returns Legacy Format
+### 3. Backend Returns Message-Only Response
 
 **Backend Response:**
 
 ```json
 {
-  "code": "0",
-  "message": "Success",
-  "payload": {
-    "id": 1,
-    "name": "John Doe"
-  }
+  "status": "success",
+  "code": "200",
+  "message": "User deleted successfully"
 }
 ```
 
-**Repository Implementation:**
+**What Happens:**
+
+1. Interceptor recognizes ApiResponse without data
+2. Shows success notification with message
+3. Returns full ApiResponse to repository
+
+**BaseRepository Receives:**
 
 ```typescript
-// Repository transforms legacy format
-async getLegacyData(): Promise<User> {
-  const response = await this.http.get<LegacyApiResponse<User>>('/legacy-endpoint').toPromise();
-
-  // Transform to current format
-  return response.payload;
-}
+// BaseRepository receives full ApiResponse when no data present
+const response: ApiResponse = await this.http
+  .delete('/api/users/1')
+  .toPromise();
+// response = { status: "success", code: "200", message: "User deleted successfully", ... }
 ```
 
-{ "status": "success", "code": "200", "message": "User deleted successfully" }
-
-````
-
-**Repository Receives:**
-
-```typescript
-// Full ApiResponse (interceptor preserves for context)
-const response = await this.userRepository.delete(userId);
-// response is ApiResponse structure with message
-````
-
-### 3. Warning Response
-
-**Backend Response:**
-
-```json
-{
-  "status": "warning",
-  "message": "Operation completed with warnings",
-  "data": { "id": 1, "name": "John" },
-  "warnings": [{ "code": "FIELD_IGNORED", "message": "Some fields ignored" }]
-}
-```
-
-**Interceptor Behavior:**
-
-- Shows warning toast notification
-- Returns data if present, otherwise full response
-
-### 4. Error Response
+### 5. Error Response
 
 **Backend Response:**
 
@@ -231,7 +165,7 @@ notifications based on HTTP method and URL patterns:
 
 ## Notification Handling
 
-The `api.interceptor.ts` automatically handles user notifications based on API
+The `api-interceptor.ts` automatically handles user notifications based on API
 responses:
 
 ### Success Notifications
@@ -267,30 +201,35 @@ this.http.post('/api/silent-operation', data, {
 
 ## Implementation Examples
 
-### Repository Pattern
+### BaseRepository Pattern
 
 ```typescript
-export class UserRepository extends BaseHttpRepository<User> {
+@Injectable()
+export class UserRepository extends GenericRepository<User, number> {
   constructor(http: HttpClient) {
-    super(http, '/api/users');
+    super(http, { baseUrl: '/api', endpoint: 'users' });
   }
 
   // The interceptor handles all standardization - repository is very simple
-  getAll(pagination: PaginationParams): Observable<PaginatedResult<User>> {
-    const params = this.buildQueryParams(pagination);
-    return this.get<PaginatedResult<User>>(this.buildUrl(''), params);
+  getAll(pagination: PaginationParams): Observable<PagedResult<User>> {
+    const params = this.buildParams(pagination);
+    return this.get<PagedResult<User>>('', params);
+    // Interceptor automatically extracts data from ApiResponse
   }
 
-  create(entity: Omit<User, 'id'>): Observable<User> {
-    return this.post<User>(this.buildUrl(''), entity);
+  create(entity: Partial<User>): Observable<User> {
+    return this.post<User>('', entity);
+    // Interceptor shows success notification and extracts data
   }
 
   update(id: number, entity: Partial<User>): Observable<User> {
-    return this.put<User>(this.buildUrl(id.toString()), entity);
+    return this.put<User>(id.toString(), entity);
+    // Interceptor shows success notification and extracts data
   }
 
-  delete(id: number): Observable<boolean> {
-    return this.deleteHttp<boolean>(this.buildUrl(id.toString()));
+  delete(id: number): Observable<void> {
+    return this.delete<void>(id.toString());
+    // Interceptor shows success notification
   }
 }
 ```
@@ -303,7 +242,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDto, User> {
   constructor(private userRepository: UserRepository) {}
 
   execute(dto: CreateUserDto): Observable<User> {
-    // Repository handles the HTTP call and response transformation
+    // BaseRepository handles the HTTP call and response transformation
     return this.userRepository.create(dto).pipe(
       // Additional business logic can be applied here
       map(user => {
@@ -348,41 +287,10 @@ export class UserFormComponent {
     });
   }
 }
-      map(response => {
-        // Handle different response scenarios
-        if (this.hasDataInResponse(response)) {
-          return {
-            success: true,
-            userId: request.id,
-            message:
-              this.extractMessageFromApiResponse(response) ||
-              'User deleted successfully',
-          };
-        } else if (this.hasMessageInResponse(response)) {
-          return {
-            success: true,
-            userId: request.id,
-            message: this.extractMessageFromApiResponse(response),
-          };
-        } else {
-          return {
-            success: true,
-            userId: request.id,
-            message: 'User deleted successfully',
-          };
-        }
-      }),
-      catchError(error => {
-        return throwError(() => this.mapRepositoryError(error, request.id));
-      }),
-    );
-  }
-}
+
 ```
 
-## Benefits of Standardization
-
-## Current Benefits
+## Benefits of Automatic Standardization
 
 ### 1. **Type Safety with ApiResponse<T>**
 
@@ -393,7 +301,7 @@ export class UserFormComponent {
 ### 2. **Flexible Response Handling**
 
 - Supports multiple backend response formats
-- Repository-level control over response transformation
+- BaseRepository-level control over response transformation
 - Backward compatibility with legacy APIs
 
 ### 3. **Automatic Notification Management**
@@ -414,36 +322,48 @@ export class UserFormComponent {
 - Detailed error information and suggested actions
 - Proper error handling at component level
 
-## Future Enhancements
+## Advanced Features
 
-### Planned Response Standardization
+### Response Standardization Logic
 
-The system is designed to eventually support automatic response transformation:
+The interceptor uses the following logic to standardize responses:
 
 ```typescript
-// Future: Automatic transformation in interceptor
-map((event: HttpEvent<any>) => {
-  if (event instanceof HttpResponse) {
-    return standardizeResponse(event);
+function standardizeApiResponse(body: unknown): ApiResponse<unknown> {
+  // If it's already a proper ApiResponse, return as is
+  if (isValidApiResponse(body)) {
+    return body;
   }
-  return event;
-});
 
-// Where standardizeResponse wraps any response format into ApiResponse<T>
-function standardizeResponse(event: HttpResponse): HttpResponse {
-  const body = event.body;
-  if (isApiResponse(body)) {
-    return event; // Already standardized
+  // If it's a raw data response (no wrapper), wrap it
+  if (body && typeof body === 'object' && !('status' in body)) {
+    return {
+      status: 'success',
+      code: '200',
+      message: 'Operation completed successfully',
+      data: body,
+      timestamp: new Date().toISOString(),
+    };
   }
-  // Wrap raw data into ApiResponse format
-  const standardized = {
+
+  // If it's a primitive value, wrap it
+  if (body !== null && body !== undefined && typeof body !== 'object') {
+    return {
+      status: 'success',
+      code: '200',
+      message: 'Operation completed successfully',
+      data: body,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  // If it's null/undefined, create a success response without data
+  return {
     status: 'success',
     code: '200',
     message: 'Operation completed successfully',
-    data: body,
     timestamp: new Date().toISOString(),
   };
-  return event.clone({ body: standardized });
 }
 ```
 
@@ -481,48 +401,96 @@ The interceptor handles various backend response formats:
 
 ## Best Practices
 
-### Current Implementation
+### Working with the Interceptor
 
-1. **Use ApiResponse<T> interface** for type-safe API communication
-2. **Handle response transformation in repositories** based on backend format
-3. **Leverage automatic notifications** from the interceptor
-4. **Use HttpContext for correlation tracking** and tenant management
-5. **Structure repositories for flexibility** to handle different backend
-   formats
-6. **Implement proper error handling** at the use case and component levels
-7. **Use SKIP_NOTIFICATION context** for silent operations when needed
+1. **Trust the interceptor** - All responses are automatically standardized
+2. **Type your responses** - Use the expected data type, not ApiResponse<T>
+3. **Leverage automatic notifications** - The interceptor handles user feedback
+4. **Use HttpContext tokens** - Control notification behavior when needed
+5. **Keep repositories simple** - Focus on business logic, not response handling
+6. **Handle errors at component level** - Interceptor shows critical errors only
 
-### Repository Patterns
+### BaseRepository Patterns
 
 ```typescript
-// Pattern 1: Modern API with ApiResponse
-export class ModernRepository extends GenericRepository<User> {
+// ✅ Correct: Type with expected data, interceptor handles unwrapping
+@Injectable()
+export class UserRepository extends GenericRepository<User, number> {
   create(user: CreateUserDto): Observable<User> {
-    return this.post<ApiResponse<User>>('', user).pipe(
-      map(response => response.data),
-    );
+    return this.post<User>('', user);
+    // Interceptor automatically:
+    // 1. Standardizes response
+    // 2. Shows success notification
+    // 3. Extracts and returns data
+  }
+
+  getAll(): Observable<User[]> {
+    return this.get<User[]>('');
+    // Interceptor automatically:
+    // 1. Standardizes response
+    // 2. Skips notification (GET request)
+    // 3. Extracts and returns data
   }
 }
 
-// Pattern 2: Legacy API transformation
-export class LegacyRepository extends BaseHttpRepository {
-  getData(): Observable<Data> {
-    return this.get<LegacyApiResponse<Data>>('').pipe(
-      map(response => response.payload),
+// ✅ Correct: Silent operation
+export class SilentRepository {
+  updateSettings(settings: Settings): Observable<Settings> {
+    return this.http.put<Settings>('/api/settings', settings, {
+      context: new HttpContext().set(SKIP_NOTIFICATION, true),
+    });
+    // Interceptor skips notification but still standardizes
+  }
+}
+
+// ❌ Incorrect: Don't manually handle ApiResponse
+export class WrongRepository {
+  create(user: CreateUserDto): Observable<User> {
+    return this.post<ApiResponse<User>>('', user).pipe(
+      map(response => response.data), // Unnecessary - interceptor does this
     );
   }
 }
 ```
 
-### Future Standardization
+### Notification Control
 
-When automatic response transformation is implemented:
+```typescript
+// Skip notifications for specific requests
+import { SKIP_NOTIFICATION } from '@acontplus/ng-infrastructure';
 
-1. **Trust the interceptor** - All responses will be standardized automatically
-2. **Simplify repositories** - Focus purely on business logic
-3. **Use consistent HTTP methods** - Follow REST conventions
-4. **Handle special cases at use case level** - For custom messaging
-   requirements
-5. **Structure APIs consistently** - Use standard URL patterns
-6. **Let the interceptor handle errors** - Centralized error handling and
-   display
+this.http.post('/api/silent-operation', data, {
+  context: new HttpContext().set(SKIP_NOTIFICATION, true),
+});
+
+// Force notifications for GET requests
+import { SHOW_NOTIFICATIONS } from '@acontplus/ng-infrastructure';
+
+this.http.get('/api/important-data', {
+  context: new HttpContext().set(SHOW_NOTIFICATIONS, true),
+});
+```
+
+### Error Handling
+
+```typescript
+// Component handles business logic errors
+@Component({...})
+export class UserFormComponent {
+  onSubmit(userData: CreateUserDto) {
+    this.createUserUseCase.execute(userData).subscribe({
+      next: (user) => {
+        // Success - notification already shown by interceptor
+        this.router.navigate(['/users', user.id]);
+      },
+      error: (error) => {
+        // Handle business logic errors
+        // Critical errors already shown by interceptor
+        if (error.status === 400) {
+          this.form.setErrors({ validation: error.message });
+        }
+      }
+    });
+  }
+}
+```

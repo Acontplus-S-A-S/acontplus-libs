@@ -1,4 +1,4 @@
-import { GetTotalPipe } from './get-total.pipe';
+import { GetTotalPipe } from './get-total-pipe';
 
 describe('GetTotalPipe', () => {
   it('create an instance', () => {

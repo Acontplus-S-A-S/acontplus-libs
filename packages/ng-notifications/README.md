@@ -87,6 +87,16 @@ export const appConfig: ApplicationConfig = {
       sweetalert: {
         defaultTheme: 'auto', // auto-detects light/dark theme
       },
+      toastr: {
+        timeOut: 5000,
+        positionClass: 'toast-top-right',
+        preventDuplicates: true,
+      },
+      snackbar: {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+      },
     }),
   ],
 };
@@ -275,7 +285,3 @@ this.notificationService.quickSave(); // "Data saved successfully"
 this.notificationService.quickDelete(); // "Item deleted"
 this.notificationService.networkError(); // "Network connection error"
 ```
-
-## Running unit tests
-
-Run `nx test ng-notifications` to execute the unit tests.

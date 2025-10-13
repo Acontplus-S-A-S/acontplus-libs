@@ -72,7 +72,7 @@ npm start
 
 - **Clean Architecture**: Proper separation of concerns with distinct layers
 - **CQRS Pattern**: Command Query Responsibility Segregation implementation
-- **Repository Pattern**: Generic, extensible data access layer with factory
+- **BaseRepository Pattern**: Generic, extensible data access layer with factory
   pattern
 - **Use Case Pattern**: Business logic components with validation and
   authorization
@@ -86,7 +86,7 @@ npm start
 
 - **Consistent Architecture**: Same patterns across all applications
 - **Easy Configuration**: Environment-specific settings and runtime updates
-- **Scalable Repository Management**: Centralized registration and dynamic
+- **Scalable BaseRepository Management**: Centralized registration and dynamic
   creation
 - **Better Testing**: Dependency injection for mocking and isolated components
 - **Developer Experience**: Clear patterns, consistent API design, better error
@@ -327,7 +327,7 @@ acontplus-libs/
 │   │   │   ├── environments/   # Environment configuration
 │   │   │   ├── interceptors/   # HTTP interceptors
 │   │   │   ├── models/         # Data models and interfaces
-│   │   │   ├── repositories/   # Repository pattern implementation
+│   │   │   ├── repositories/   # BaseRepository pattern implementation
 │   │   │   ├── services/       # Core services
 │   │   │   ├── use-cases/      # Use case pattern implementation
 │   │   │   └── utils/          # Utility functions
@@ -552,7 +552,7 @@ Angular ecosystem.** 🚀
 
 - **Consistent Architecture**: Same patterns across all applications
 - **Easy Configuration**: Environment-specific settings and runtime updates
-- **Scalable Repository Management**: Centralized registration and dynamic
+- **Scalable BaseRepository Management**: Centralized registration and dynamic
   creation
 - **Better Testing**: Dependency injection for mocking and isolated components
 - **Developer Experience**: Clear patterns, consistent API design, better error
@@ -651,7 +651,7 @@ acontplus-libs/
 │   │   │   ├── environments/   # Environment configuration
 │   │   │   ├── interceptors/   # HTTP interceptors
 │   │   │   ├── models/         # Data models and interfaces
-│   │   │   ├── repositories/   # Repository pattern implementation
+│   │   │   ├── repositories/   # BaseRepository pattern implementation
 │   │   │   ├── services/       # Core services
 │   │   │   ├── use-cases/      # Use case pattern implementation
 │   │   │   └── utils/          # Utility functions

@@ -23,11 +23,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {
   ColumnDefinition,
-  DynamicTableComponent,
+  DynamicTable,
   Pagination,
   AdvancedDialogService,
   TableContext,
-  ButtonComponent,
+  Button,
 } from '@acontplus/ng-components';
 import { NotificationService } from '@acontplus/ng-notifications';
 import { ApplicationRepository } from '../../data';
@@ -54,8 +54,8 @@ import { ApplicationAddEditComponent } from './application-add-edit/application-
     MatChipsModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
-    DynamicTableComponent,
-    ButtonComponent,
+    DynamicTable,
+    Button,
   ],
   templateUrl: './application.component.html',
   styleUrls: ['./application.component.scss'],
@@ -96,17 +96,26 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
   applicationColumns: ColumnDefinition<Application>[] = [];
 
   // Status options
-  statusOptions: Application['status'][] = ['active', 'inactive', 'maintenance', 'deprecated'];
+  statusOptions: Application['status'][] = [
+    'pending',
+    'processing',
+    'completed',
+    'failed',
+    'active',
+    'inactive',
+    'maintenance',
+    'deprecated',
+  ];
   environmentOptions: Application['environment'][] = ['development', 'staging', 'production'];
 
   ngOnInit() {
     this.initializeColumns();
     this.loadApplications();
-    this.notificationService.toastr.show({
-      type: 'info',
-      message: 'Bulk operations not yet implemented',
-      title: 'Info',
-    });
+    // this.notificationService.toastr.show({
+    //   type: 'info',
+    //   message: 'Bulk operations not yet implemented',
+    //   title: 'Info',
+    // });
   }
 
   ngAfterViewInit() {
@@ -205,7 +214,11 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.applicationRepository.getAll(this.pagination).subscribe({
       next: (result: PagedResult<Application>) => {
-        this.applications = result.items;
+        this.applications = result.items.map(app => ({
+          ...app,
+          rowStyle: this.getRowStyleForStatus(app.status),
+          disableSelection: app.status === 'processing' || app.status === 'maintenance',
+        }));
         this.applicationPaginationConfig.totalRecords = result.totalCount;
         this.applicationPaginationConfig.pageIndex = result.pageIndex - 1;
         this.applicationPaginationConfig.pageSize = result.pageSize;
@@ -218,6 +231,39 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
         this.cdr.markForCheck();
       },
     });
+  }
+
+  private getRowStyleForStatus(status: Application['status']): Record<string, string> {
+    const isDark = document.documentElement.classList.contains('dark-theme');
+
+    switch (status) {
+      case 'pending':
+        return isDark
+          ? { backgroundColor: '#3d2914', color: '#ffb74d' }
+          : { backgroundColor: '#fff3e0', color: '#e65100' };
+      case 'processing':
+        return isDark
+          ? { backgroundColor: '#1a237e', color: '#90caf9' }
+          : { backgroundColor: '#e3f2fd', color: '#1565c0' };
+      case 'completed':
+        return isDark
+          ? { backgroundColor: '#1b5e20', color: '#81c784' }
+          : { backgroundColor: '#e8f5e8', color: '#2e7d32' };
+      case 'failed':
+        return isDark
+          ? { backgroundColor: '#b71c1c', color: '#ffcdd2' }
+          : { backgroundColor: '#ffebee', color: '#c62828' };
+      case 'maintenance':
+        return isDark
+          ? { backgroundColor: '#4a148c', color: '#ce93d8' }
+          : { backgroundColor: '#fce4ec', color: '#ad1457' };
+      case 'deprecated':
+        return isDark
+          ? { backgroundColor: '#424242', color: '#bdbdbd' }
+          : { backgroundColor: '#f3e5f5', color: '#6a1b9a' };
+      default:
+        return {};
+    }
   }
 
   onPageChange(event: PageEvent): void {
@@ -311,6 +357,8 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
 
   onRowSelected(selectedRows: Application[]): void {
     this.selectedApplications = selectedRows.map(application => application.id);
+    console.info('Selected Applications:', selectedRows);
+    console.info('Selected Application IDs:', this.selectedApplications);
     this.cdr.markForCheck();
   }
 
@@ -354,6 +402,14 @@ export class ApplicationComponent implements OnInit, AfterViewInit {
 
   getStatusColor(status: Application['status']): string {
     switch (status) {
+      case 'pending':
+        return 'accent';
+      case 'processing':
+        return 'primary';
+      case 'completed':
+        return 'primary';
+      case 'failed':
+        return 'warn';
       case 'active':
         return 'primary';
       case 'inactive':

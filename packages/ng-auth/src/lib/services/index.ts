@@ -1,2 +1,2 @@
-export * from './url-redirect.service';
-export * from './csrf.service';
+export * from './auth-url-redirect';
+export * from './csrf-api';

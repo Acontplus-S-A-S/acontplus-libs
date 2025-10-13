@@ -12,7 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { JsonPipe } from '@angular/common';
 import { DecimalConverter, DecimalError } from '@acontplus/utils';
-import { ButtonComponent } from '@acontplus/ng-components';
+import { Button } from '@acontplus/ng-components';
 
 @Component({
   selector: 'app-decimal-demo',
@@ -30,7 +30,7 @@ import { ButtonComponent } from '@acontplus/ng-components';
     MatTabGroup,
     MatTab,
     JsonPipe,
-    ButtonComponent,
+    Button,
   ],
   templateUrl: './decimal-demo.component.html',
 })

@@ -1,1 +1,1 @@
-export * from './dynamic-card.component';
+export * from './dynamic-card';

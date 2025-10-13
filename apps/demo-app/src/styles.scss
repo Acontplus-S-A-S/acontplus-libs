@@ -11,6 +11,7 @@
 @use 'ngx-toastr/toastr';
 @use 'node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import 'sweetalert2/themes/material-ui.css';
+@import 'tabulator-tables/dist/css/tabulator_materialize.min.css';
 
 // Include Angular Material Core foundational styles
 @include mat.core();
@@ -73,4 +74,36 @@ body {
 // Dark theme
 html.dark-theme {
   @include mat.all-component-colors($dark-theme);
+}
+
+// Tabulator Material theme adjustments
+.tabulator {
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  border: 1px solid var(--mat-sys-outline-variant);
+
+  .tabulator-header {
+    background: var(--mat-sys-surface-container);
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+    .tabulator-col {
+      background: transparent;
+      border-right: 1px solid var(--mat-sys-outline-variant);
+      color: var(--mat-sys-on-surface-variant);
+    }
+  }
+
+  .tabulator-row {
+    background: var(--mat-sys-surface);
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+    &:hover {
+      background: var(--mat-sys-surface-container-hover, var(--mat-sys-surface-container));
+    }
+
+    .tabulator-cell {
+      border-right: 1px solid var(--mat-sys-outline-variant);
+      color: var(--mat-sys-on-surface);
+    }
+  }
 }

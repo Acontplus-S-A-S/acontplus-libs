@@ -1,7 +1,7 @@
 # @acontplus/ui-kit
 
 UI Kit library for AcontPlus applications, providing reusable UI components and
-styles.
+design system elements.
 
 ## Installation
 
@@ -11,19 +11,39 @@ npm install @acontplus/ui-kit
 
 ## Features
 
-- **UI Components**: Reusable UI components (under development)
-- **Styling**: Consistent styling and theming
-- **TypeScript Support**: Full type safety
+- **Design System**: Consistent UI components and styling patterns
+- **Reusable Components**: Common UI elements for enterprise applications
+- **Theme Support**: Integration with Angular Material theming
+- **TypeScript Support**: Full type safety with comprehensive interfaces
 
 ## Status
 
-This library is currently under development. More components and features will
-be added in future releases.
+🚧 **Under Development** - This library is currently being developed. More
+components and features will be added in future releases.
 
-## Building
+## Planned Components
 
-Run `nx build ui-kit` to build the library.
+- Form controls and inputs
+- Data display components
+- Navigation elements
+- Layout components
+- Interactive widgets
 
-## Running unit tests
+## Development
 
-Run `nx test ui-kit` to execute the unit tests via [Jest](https://jestjs.io).
+```bash
+# Build the library
+nx build ui-kit
+
+# Run tests
+nx test ui-kit
+
+# Lint code
+nx lint ui-kit
+```
+
+## Contributing
+
+This library follows the same patterns and conventions as other packages in the
+AcontPlus monorepo. Please refer to the main project documentation for
+contribution guidelines.

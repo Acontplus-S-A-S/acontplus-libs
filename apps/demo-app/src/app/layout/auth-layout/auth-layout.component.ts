@@ -1,6 +1,6 @@
 import { Component, ViewChild, TemplateRef, AfterViewInit, signal } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { LoginComponent } from '@acontplus/ng-auth';
+import { Login } from '@acontplus/ng-auth';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -9,7 +9,7 @@ import { MatOptionModule } from '@angular/material/core';
 @Component({
   selector: 'app-auth-layout',
   imports: [
-    LoginComponent,
+    Login,
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,

@@ -1,1 +1,1 @@
-export * from './to-upper-case.directive';
+export * from './to-upper-case';

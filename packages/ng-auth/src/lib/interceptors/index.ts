@@ -1,2 +1,2 @@
-export * from './auth-redirect.interceptor';
-export * from './csrf.interceptor';
+export * from './auth-redirect-interceptor';
+export * from './csrf-interceptor';

@@ -1,4 +1,4 @@
-// src/lib/models/jwt.ts
+// src/lib/repositories/jwt.ts
 export interface DecodedToken {
   // Standard JWT claims
   exp: number; // Expiration time

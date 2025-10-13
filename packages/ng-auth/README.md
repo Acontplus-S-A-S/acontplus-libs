@@ -18,8 +18,8 @@ npm install @acontplus/ng-auth
 - **Session Expiry Handling**: Manages session expiry during HTTP requests with
   automatic redirection
 - **CSRF Protection**: Built-in CSRF token management for secure API requests
-- **Token Repository**: Secure token storage and retrieval with local storage
-  support
+- **Token BaseRepository**: Secure token storage and retrieval with local
+  storage support
 - **Authentication Use Cases**: Login, register, refresh token, and logout
   functionality
 - **Domain Models**: User domain models and value objects
@@ -37,7 +37,7 @@ sessions expire.
 
 ### Components
 
-1. **UrlRedirectService** - Manages URL storage and redirection logic
+1. **AuthUrlRedirect** - Manages URL storage and redirection logic
 2. **Enhanced Auth Guard** - Captures URLs before redirecting to login
 3. **Enhanced Login Use Case** - Redirects to stored URLs after successful
    authentication
@@ -63,13 +63,14 @@ const routes: Routes = [
 
 ```typescript
 // app.config.ts
-import { authRedirectInterceptor } from '@acontplus/ng-auth';
+import { authRedirectInterceptor, csrfInterceptor } from '@acontplus/ng-auth';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(
       withInterceptors([
         authRedirectInterceptor, // Handles session expiry during API calls
+        csrfInterceptor, // CSRF protection
       ]),
     ),
   ],
@@ -93,11 +94,11 @@ User on /reports → API Call → 401 Error → Store URL → Login → Success 
 ### Manual Usage
 
 ```typescript
-import { UrlRedirectService } from '@acontplus/ng-auth';
+import { AuthUrlRedirect } from '@acontplus/ng-auth';
 
 @Component({...})
 export class MyComponent {
-  constructor(private urlRedirectService: UrlRedirectService) {}
+  constructor(private urlRedirectService: AuthUrlRedirect) {}
 
   navigateToForm() {
     // Store current URL before potentially losing session
@@ -157,9 +158,9 @@ styling.
 
 ### Core Services
 
-- **UrlRedirectService**: URL storage and redirection management
-- **CsrfService**: CSRF token management for secure API requests
-- **TokenRepository**: Secure token storage and retrieval
+- **AuthUrlRedirect**: URL storage and redirection management
+- **CsrfApi**: CSRF token management for secure API requests
+- **AuthTokenRepositoryImpl**: Secure token storage and retrieval
 
 ### Guards and Interceptors
 
@@ -201,11 +202,11 @@ export class MyComponent {
 ### CSRF Protection
 
 ```typescript
-import { CsrfService } from '@acontplus/ng-auth';
+import { CsrfApi } from '@acontplus/ng-auth';
 
 @Component({...})
-export class LoginComponent {
-  constructor(private csrfService: CsrfService) {}
+export class Login {
+  constructor(private csrfService: CsrfApi) {}
 
   async login(credentials: LoginCredentials) {
     const csrfToken = await this.csrfService.getCsrfToken();
@@ -259,25 +260,21 @@ import { authProviders } from '@acontplus/ng-auth';
 export class AppModule {}
 ```
 
-## Running unit tests
-
-Run `nx test ng-auth` to execute the unit tests.
-
 ## Login Component
 
-The `LoginComponent` provides a flexible, themeable authentication UI component
-with support for custom fields and dynamic content.
+The `Login` provides a flexible, themeable authentication UI component with
+support for custom fields and dynamic content.
 
 ### Basic Usage
 
 ```typescript
-import { LoginComponent } from '@acontplus/ng-auth/ui/login';
+import { Login } from '@acontplus/ng-auth/ui/login';
 
 @Component({
   template: `
     <acp-login title="Welcome Back" [showRegisterButton]="true"> </acp-login>
   `,
-  imports: [LoginComponent],
+  imports: [Login],
 })
 export class AuthPageComponent {}
 ```

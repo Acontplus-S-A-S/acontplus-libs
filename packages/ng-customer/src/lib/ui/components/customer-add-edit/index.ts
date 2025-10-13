@@ -1,1 +1,1 @@
-export * from './customer-add-edit.component';
+export * from './customer-add-edit-dialog';
