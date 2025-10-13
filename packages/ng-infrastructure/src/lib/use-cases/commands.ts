@@ -1,8 +1,8 @@
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { inject } from '@angular/core';
-import { BaseUseCase } from './base.use-case';
-import { LoggingService } from '../services/logging.service';
+import { BaseUseCase } from './base-use-case';
+import { LoggingService } from '../services/logging-service';
 
 // Only create commands if you have complex validation logic
 export abstract class Command<TRequest, TResponse = void> extends BaseUseCase<TRequest, TResponse> {

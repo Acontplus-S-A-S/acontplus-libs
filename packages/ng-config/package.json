@@ -1,9 +1,9 @@
 {
   "name": "@acontplus/ng-config",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Angular configuration management library providing environment tokens, application settings, dependency injection patterns, and runtime configuration services for enterprise applications.",
   "peerDependencies": {
-    "@acontplus/core": "^1.0.17",
+    "@acontplus/core": "^1.1.0",
     "@angular/common": "^20.3.2",
     "@angular/core": "^20.3.2"
   },
@@ -28,14 +28,17 @@
     "acontplus",
     "angular",
     "configuration",
-    "environment",
+    "environment-tokens",
     "app-config",
-    "settings",
-    "tokens",
+    "runtime-configuration",
+    "settings-management",
+    "injection-tokens",
     "dependency-injection",
+    "config-services",
+    "environment-management",
     "typescript",
-    "frontend",
-    "library"
+    "enterprise",
+    "frontend"
   ],
   "author": "Ivan Paz <ifer343@gmail.com>",
   "license": "MIT",

@@ -24,7 +24,7 @@ across the application.
 
 ### What the Interceptor Handles
 
-The `api.interceptor.ts` in `@acontplus/ng-infrastructure` automatically:
+The `api-interceptor.ts` in `@acontplus/ng-infrastructure` automatically:
 
 - **Standardizes all responses** to `ApiResponse<T>` format
 - **Shows toast notifications** based on response status and request type
@@ -69,10 +69,10 @@ The interceptor automatically standardizes ALL responses:
 2. Shows success notification (if POST/PUT/PATCH/DELETE)
 3. Extracts and returns `data` to repository
 
-**Repository Receives:**
+**BaseRepository Receives:**
 
 ```typescript
-// Repository receives the extracted data directly
+// BaseRepository receives the extracted data directly
 const user: User = await this.http
   .post<User>('/api/users', userData)
   .toPromise();
@@ -97,10 +97,10 @@ const user: User = await this.http
 2. Shows success notification (if POST/PUT/PATCH/DELETE)
 3. Returns the data directly to repository
 
-**Repository Receives:**
+**BaseRepository Receives:**
 
 ```typescript
-// Repository receives the data directly (interceptor unwraps it)
+// BaseRepository receives the data directly (interceptor unwraps it)
 const user: User = await this.http.get<User>('/api/users/1').toPromise();
 // user = { id: 1, name: "John Doe", email: "john@example.com" }
 ```
@@ -123,10 +123,10 @@ const user: User = await this.http.get<User>('/api/users/1').toPromise();
 2. Shows success notification with message
 3. Returns full ApiResponse to repository
 
-**Repository Receives:**
+**BaseRepository Receives:**
 
 ```typescript
-// Repository receives full ApiResponse when no data present
+// BaseRepository receives full ApiResponse when no data present
 const response: ApiResponse = await this.http
   .delete('/api/users/1')
   .toPromise();
@@ -165,7 +165,7 @@ notifications based on HTTP method and URL patterns:
 
 ## Notification Handling
 
-The `api.interceptor.ts` automatically handles user notifications based on API
+The `api-interceptor.ts` automatically handles user notifications based on API
 responses:
 
 ### Success Notifications
@@ -201,7 +201,7 @@ this.http.post('/api/silent-operation', data, {
 
 ## Implementation Examples
 
-### Repository Pattern
+### BaseRepository Pattern
 
 ```typescript
 @Injectable()
@@ -242,7 +242,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDto, User> {
   constructor(private userRepository: UserRepository) {}
 
   execute(dto: CreateUserDto): Observable<User> {
-    // Repository handles the HTTP call and response transformation
+    // BaseRepository handles the HTTP call and response transformation
     return this.userRepository.create(dto).pipe(
       // Additional business logic can be applied here
       map(user => {
@@ -301,7 +301,7 @@ export class UserFormComponent {
 ### 2. **Flexible Response Handling**
 
 - Supports multiple backend response formats
-- Repository-level control over response transformation
+- BaseRepository-level control over response transformation
 - Backward compatibility with legacy APIs
 
 ### 3. **Automatic Notification Management**
@@ -410,7 +410,7 @@ The interceptor handles various backend response formats:
 5. **Keep repositories simple** - Focus on business logic, not response handling
 6. **Handle errors at component level** - Interceptor shows critical errors only
 
-### Repository Patterns
+### BaseRepository Patterns
 
 ```typescript
 // ✅ Correct: Type with expected data, interceptor handles unwrapping

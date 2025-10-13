@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { PagedResult, PaginationParams } from '@acontplus/core';
-import { Repository, RepositoryConfig } from './interfaces';
+import { PagedResult, PaginationParams, RepositoryConfig } from '@acontplus/core';
+import { BaseRepository } from '@acontplus/ng-config';
 
 @Injectable({ providedIn: 'root' })
 export class RepositoryFactory {
@@ -9,7 +9,7 @@ export class RepositoryFactory {
 
   create<TEntity, TId extends string | number = number>(
     config: RepositoryConfig,
-  ): Repository<TEntity, TId> {
+  ): BaseRepository<TEntity, TId> {
     const buildUrl = (path = '') => {
       const baseUrl = config.baseUrl || '/api';
       const version = config.version ? `/v${config.version}` : '';

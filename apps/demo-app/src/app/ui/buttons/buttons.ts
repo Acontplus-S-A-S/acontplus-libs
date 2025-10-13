@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { ButtonComponent, DynamicCardComponent } from '@acontplus/ng-components';
+import { Button, DynamicCard } from '@acontplus/ng-components';
 
 @Component({
   selector: 'app-buttons',
-  imports: [ButtonComponent, DynamicCardComponent],
+  imports: [Button, DynamicCard],
   templateUrl: './buttons.html',
   styleUrl: './buttons.css',
 })

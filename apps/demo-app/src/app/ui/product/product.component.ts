@@ -22,12 +22,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {
-  ColumnDefinition,
-  DynamicTableComponent,
-  Pagination,
-  ButtonComponent,
-} from '@acontplus/ng-components';
+import { ColumnDefinition, DynamicTable, Pagination, Button } from '@acontplus/ng-components';
 import { ProductRepository } from '../../data';
 import { Product } from '../../domain';
 import { PaginationParams, PagedResult } from '@acontplus/core';
@@ -63,10 +58,10 @@ interface ProductFilters {
     MatChipsModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
-    DynamicTableComponent,
+    DynamicTable,
     CurrencyPipe,
     DatePipe,
-    ButtonComponent,
+    Button,
   ],
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss',

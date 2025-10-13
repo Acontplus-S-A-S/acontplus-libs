@@ -14,7 +14,7 @@ npm install @acontplus/ng-customer
 - **Customer Components**: Card display and add/edit form components
 - **SRI Integration**: External customer data validation and retrieval
 - **Use Cases**: Business logic for customer operations (CRUD)
-- **Repository Pattern**: Data access abstractions with HTTP implementations
+- **BaseRepository Pattern**: Data access abstractions with HTTP implementations
 - **DTOs and Mappers**: Data transformation and mapping utilities
 - **Form Validation**: Comprehensive validation including Ecuadorian ID/RUC
 - **Angular Material**: Consistent Material Design components
@@ -24,11 +24,11 @@ npm install @acontplus/ng-customer
 ### 1. Import Components
 
 ```typescript
-import { CustomerCardComponent, CustomerAddEditComponent } from '@acontplus/ng-customer';
+import { CustomerCard, CustomerAddEditComponent } from '@acontplus/ng-customer';
 
 @Component({
   selector: 'app-customers',
-  imports: [CustomerCardComponent],
+  imports: [CustomerCard],
   template: `
     <acp-customer-card
       [customer]="customer"
@@ -118,7 +118,7 @@ export class CustomerExternal {
 }
 ```
 
-**Repository Interfaces:**
+**BaseRepository Interfaces:**
 
 ```typescript
 export interface CustomerRepository {
@@ -267,7 +267,7 @@ export class CustomerMapper {
     </mat-card>
   `,
 })
-export class CustomerCardComponent {
+export class CustomerCard {
   customer = input.required<CustomerListItemDto>();
   editCustomer = output<CustomerListItemDto>();
   deleteCustomer = output<CustomerListItemDto>();
@@ -371,7 +371,7 @@ onSave() {
 
 ### Components
 
-- **CustomerCardComponent**: Display customer information in card format
+- **CustomerCard**: Display customer information in card format
 - **CustomerAddEditComponent**: Form for creating/editing customers
 
 ### Use Cases

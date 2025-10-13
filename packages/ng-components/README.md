@@ -25,18 +25,57 @@ npm install @acontplus/ng-components
 
 ### Cards
 
-- **DynamicCardComponent**: Flexible card component for displaying content
+#### DynamicCard
+
+Versatile card component wrapping Angular Material's mat-card with additional functionality.
 
 ```typescript
-import { DynamicCardComponent } from '@acontplus/ng-components';
+import { DynamicCard } from '@acontplus/ng-components';
+
+@Component({
+  template: `
+    <acp-dynamic-card
+      [cardTitle]="'Product Details'"
+      [cardSubtitle]="'Premium Package'"
+      [isHeaderVisible]="true"
+      [areActionsVisible]="true"
+      [primaryButtonText]="'Buy Now'"
+      [secondaryButtonText]="'Learn More'"
+      (primaryButtonClicked)="onPurchase()"
+      (secondaryButtonClicked)="onLearnMore()"
+    >
+      <p>Card content goes here</p>
+    </acp-dynamic-card>
+  `,
+  imports: [DynamicCard],
+})
+export class ProductComponent {}
 ```
 
 ### Buttons
 
-- **ButtonComponent**: Themed button component with Material Design
+#### Button
+
+Flexible button component with multiple Material Design variants.
 
 ```typescript
-import { ButtonComponent } from '@acontplus/ng-components';
+import { Button } from '@acontplus/ng-components';
+
+@Component({
+  template: `
+    <acp-button
+      [variant]="'primary'"
+      [text]="'Save'"
+      [icon]="'save'"
+      [matStyle]="'elevated'"
+      [disabled]="false"
+      (handleClick)="onSave()"
+    >
+    </acp-button>
+  `,
+  imports: [Button],
+})
+export class FormComponent {}
 ```
 
 ### Dialog Wrapper
@@ -44,15 +83,17 @@ import { ButtonComponent } from '@acontplus/ng-components';
 Enhanced dialog components with wrapper functionality for consistent dialog management.
 
 ```typescript
-import { DialogWrapperComponent } from '@acontplus/ng-components';
+import { DialogWrapper } from '@acontplus/ng-components';
 ```
 
 ### Icons
 
-Icon components for consistent iconography across the application.
+#### UserIcon & SvgIcon
+
+Icon components for consistent iconography.
 
 ```typescript
-import { IconsComponent } from '@acontplus/ng-components';
+import { UserIcon, SvgIcon } from '@acontplus/ng-components';
 ```
 
 ### Input Chip
@@ -60,7 +101,7 @@ import { IconsComponent } from '@acontplus/ng-components';
 Chip input components integrated with Angular Material for tag/chip selection.
 
 ```typescript
-import { InputChipComponent } from '@acontplus/ng-components';
+import { InputChip } from '@acontplus/ng-components';
 ```
 
 ### Spinner
@@ -68,16 +109,16 @@ import { InputChipComponent } from '@acontplus/ng-components';
 Loading spinner components for async operations.
 
 ```typescript
-import { SpinnerComponent } from '@acontplus/ng-components';
+import { Spinner } from '@acontplus/ng-components';
 ```
 
 ### Tables
 
-- **DynamicTableComponent**: Angular Material-based dynamic table with advanced features
-- **TabulatorTableComponent**: Advanced table with Tabulator.js integration
+- **DynamicTable**: Angular Material-based dynamic table with advanced features
+- **TabulatorTable**: Advanced table with Tabulator.js integration
 
 ```typescript
-import { DynamicTableComponent, TabulatorTableComponent } from '@acontplus/ng-components';
+import { DynamicTable, TabulatorTable } from '@acontplus/ng-components';
 ```
 
 #### Dynamic Table Features
@@ -164,7 +205,7 @@ Row colors automatically adapt to light/dark themes using Material Design tokens
 Dark/light mode toggle component for theme switching.
 
 ```typescript
-import { ThemeToggleComponent } from '@acontplus/ng-components';
+import { ThemeToggle } from '@acontplus/ng-components';
 ```
 
 ### Autocomplete Wrapper
@@ -177,12 +218,12 @@ import { AutocompleteWrapperComponent } from '@acontplus/ng-components';
 
 ## Directives
 
-### ToUpperCaseDirective
+### ToUpperCase
 
 Transforms input text to uppercase automatically.
 
 ```typescript
-import { ToUpperCaseDirective } from '@acontplus/ng-components';
+import { ToUpperCase } from '@acontplus/ng-components';
 ```
 
 ## Pipes
@@ -205,12 +246,12 @@ import { StatusDisplayPipe } from '@acontplus/ng-components';
 
 ## Services
 
-### DialogService
+### AdvancedDialogService
 
-Manages dialog creation and lifecycle.
+Manages dialog creation and lifecycle with advanced features.
 
 ```typescript
-import { DialogService } from '@acontplus/ng-components';
+import { AdvancedDialogService } from '@acontplus/ng-components';
 ```
 
 ### OverlayService
@@ -221,12 +262,12 @@ Manages overlay components and positioning.
 import { OverlayService } from '@acontplus/ng-components';
 ```
 
-### ThemeService
+### ThemeSwitcher
 
 Manages application theme (dark/light mode) with persistence.
 
 ```typescript
-import { ThemeService } from '@acontplus/ng-components';
+import { ThemeSwitcher } from '@acontplus/ng-components';
 ```
 
 ### AutocompleteWrapperService

@@ -1,8 +1,8 @@
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { inject } from '@angular/core';
-import { BaseUseCase } from './base.use-case';
-import { LoggingService } from '../services/logging.service';
+import { BaseUseCase } from './base-use-case';
+import { LoggingService } from '../services/logging-service';
 
 export abstract class Query<TRequest, TResponse> extends BaseUseCase<TRequest, TResponse> {
   override execute(request: TRequest): Observable<TResponse> {

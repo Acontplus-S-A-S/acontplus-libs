@@ -1,1 +1,1 @@
-export * from './angular-http.adapter';
+export * from './angular-http-adapter';

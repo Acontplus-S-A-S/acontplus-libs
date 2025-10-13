@@ -1,4 +1,4 @@
-// src/lib/models/user-data.ts
+// src/lib/repositories/user-data.ts
 export interface UserData {
   // Basic user information
   email: string;

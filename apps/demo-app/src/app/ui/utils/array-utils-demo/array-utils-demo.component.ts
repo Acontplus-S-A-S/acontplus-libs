@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
 import { ArrayHelper } from '@acontplus/utils';
-import { ButtonComponent } from '@acontplus/ng-components';
+import { Button } from '@acontplus/ng-components';
 
 @Component({
   selector: 'app-array-utils-demo',
@@ -20,7 +20,7 @@ import { ButtonComponent } from '@acontplus/ng-components';
     MatButtonModule,
     MatDividerModule,
     MatTableModule,
-    ButtonComponent,
+    Button,
   ],
   templateUrl: './array-utils-demo.component.html',
   styleUrl: './array-utils-demo.component.scss',

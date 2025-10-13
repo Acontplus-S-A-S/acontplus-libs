@@ -1,1 +1,1 @@
-export * from './user-icon.component';
+export * from './user-icon';

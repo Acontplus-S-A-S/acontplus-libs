@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 
 import { ApplicationService } from './providers';
-import { ThemeService } from '@acontplus/ng-components';
+import { ThemeSwitcher } from '@acontplus/ng-components';
 import { NotificationService } from '@acontplus/ng-notifications';
 import { AuthStore } from '@acontplus/ng-auth';
 
@@ -17,7 +17,7 @@ export class App implements OnInit {
   protected title = 'demo-app';
   isActive = true;
   private readonly _appService = inject(ApplicationService);
-  private readonly themeService = inject(ThemeService);
+  private readonly themeService = inject(ThemeSwitcher);
   private readonly notificationService = inject(NotificationService);
   private readonly authStore = inject(AuthStore);
   private readonly ngZone = inject(NgZone);

@@ -87,6 +87,16 @@ export const appConfig: ApplicationConfig = {
       sweetalert: {
         defaultTheme: 'auto', // auto-detects light/dark theme
       },
+      toastr: {
+        timeOut: 5000,
+        positionClass: 'toast-top-right',
+        preventDuplicates: true,
+      },
+      snackbar: {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+      },
     }),
   ],
 };

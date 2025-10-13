@@ -1,1 +1,1 @@
-export * from './input-chip.component';
+export * from './input-chip';

@@ -1,1 +1,2 @@
-export * from './tabulator.types';
+export * from './button-type';
+export * from './tabulator-type';
