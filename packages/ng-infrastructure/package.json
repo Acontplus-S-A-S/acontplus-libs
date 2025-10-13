@@ -1,6 +1,6 @@
 {
   "name": "@acontplus/ng-infrastructure",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Angular infrastructure library implementing clean architecture patterns with HTTP interceptors, repository implementations, adapters, dependency injection providers, and core infrastructure services for enterprise applications.",
   "peerDependencies": {
     "@acontplus/core": "^1.1.0",

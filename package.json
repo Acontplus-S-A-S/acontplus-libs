@@ -32,7 +32,7 @@
     "@acontplus/ng-components": "^1.3.0",
     "@acontplus/ng-config": "^1.1.0",
     "@acontplus/ng-customer": "^1.1.0",
-    "@acontplus/ng-infrastructure": "^1.1.0",
+    "@acontplus/ng-infrastructure": "^1.1.1",
     "@acontplus/ng-notifications": "^1.1.0",
     "@acontplus/utils": "^1.0.10",
     "@angular/animations": "20.3.2",
