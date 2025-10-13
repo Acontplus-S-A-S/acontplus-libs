@@ -49,7 +49,7 @@ export interface MatCustomDialogConfig<T = unknown> {
 }
 
 /**
- * Configuration interface for opening a dialog inside the custom `DialogWrapperComponent`.
+ * Configuration interface for opening a dialog inside the custom `DialogWrapper`.
  * This interface defines the properties needed to configure the dialog wrapper.
  *
  * @interface DialogWrapperConfig

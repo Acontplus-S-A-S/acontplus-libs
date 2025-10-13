@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { MatCustomDialogConfig, DialogSize, DialogWrapperConfig } from './dialog.interfaces';
-import { DialogWrapperComponent } from '../../components/dialog-wrapper/dialog-wrapper.component';
+import { DialogWrapper } from '../../components/dialog-wrapper/dialog-wrapper';
 
 @Injectable({
   providedIn: 'root',
@@ -46,17 +46,14 @@ export class AdvancedDialogService {
   async openInWrapper<T, R = unknown>(
     wrapperConfig: DialogWrapperConfig<T>,
     matDialogConfig: MatCustomDialogConfig<T> = {},
-  ): Promise<MatDialogRef<DialogWrapperComponent, R>> {
-    // Package the wrapper config into the `data` property for the DialogWrapperComponent to consume.
+  ): Promise<MatDialogRef<DialogWrapper, R>> {
+    // Package the wrapper config into the `data` property for the DialogWrapper to consume.
     const configWithWrapperData: MatCustomDialogConfig<DialogWrapperConfig<T>> = {
       ...matDialogConfig,
       data: wrapperConfig,
     } as MatCustomDialogConfig<DialogWrapperConfig<T>>;
     const dialogConfig = await this.buildDialogConfig(configWithWrapperData);
-    return this.dialog.open<DialogWrapperComponent, DialogWrapperConfig<T>, R>(
-      DialogWrapperComponent,
-      dialogConfig,
-    );
+    return this.dialog.open<DialogWrapper, DialogWrapperConfig<T>, R>(DialogWrapper, dialogConfig);
   }
 
   /**

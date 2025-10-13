@@ -22,12 +22,18 @@
   "keywords": [
     "acontplus",
     "ui-kit",
-    "components",
-    "reusable",
     "design-system",
+    "design-tokens",
+    "reusable-components",
+    "ui-elements",
+    "standardized-ui",
+    "consistent-interfaces",
+    "component-library",
+    "design-patterns",
     "typescript",
-    "library",
-    "development"
+    "under-development",
+    "enterprise",
+    "frontend"
   ],
   "author": "Ivan Paz <ifer343@gmail.com>",
   "license": "MIT",

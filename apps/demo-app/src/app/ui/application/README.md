@@ -7,7 +7,7 @@ This example demonstrates a complete implementation of an Application entity usi
 The Application entity represents a software application with properties like name, version, status, environment, and deployment information. This example showcases:
 
 - **Domain Model**: Clean entity definition extending BaseEntity
-- **Repository Pattern**: HTTP-based repository extending BaseHttpRepository
+- **BaseRepository Pattern**: HTTP-based repository extending BaseHttpRepository
 - **Use Case Pattern**: Business logic using CompositeUseCase
 - **UI Components**: Modern Angular Material-based interface
 - **Mock Service**: Demonstration data without external dependencies
@@ -41,7 +41,7 @@ export interface Application extends BaseEntity {
 - Flexible arrays for dependencies and tags
 - Optional fields for URLs and deployment info
 
-### 2. Repository Layer (`application.repository.interface.ts`)
+### 2. BaseRepository Layer (`application.base-repository.ts`)
 
 ```typescript
 export class ApplicationRepository extends BaseHttpRepository<Application> {
@@ -187,7 +187,7 @@ const updatedApp = await this.applicationUseCase
 
 ## Features Demonstrated
 
-### 1. Base Repository Pattern
+### 1. Base BaseRepository Pattern
 
 - **Inheritance**: Extends `BaseHttpRepository<T>` for consistent CRUD operations
 - **URL Building**: Dynamic endpoint construction using `entityName`
@@ -206,7 +206,7 @@ const updatedApp = await this.applicationUseCase
 - **Entity Definition**: Clear domain model with business rules
 - **Value Objects**: Strong typing for status, environment, and other enums
 - **Business Logic**: Centralized in use case layer
-- **Repository Abstraction**: Clean separation of concerns
+- **BaseRepository Abstraction**: Clean separation of concerns
 
 ### 4. Modern Angular Patterns
 
@@ -228,7 +228,7 @@ const updatedApp = await this.applicationUseCase
 2. **Maintainability**: Clear separation of concerns
 3. **Testability**: Easy to mock and test individual layers
 4. **Scalability**: Easy to extend with new features
-5. **Reusability**: Repository and use case patterns can be applied to other entities
+5. **Reusability**: BaseRepository and use case patterns can be applied to other entities
 
 ## Next Steps
 

@@ -1,0 +1,163 @@
+@switch (matStyle()) { @case ('text') {
+<button
+  matButton
+  [ngClass]="getButtonClasses()"
+  [disabled]="disabled()"
+  [type]="type()"
+  [title]="title()"
+  [attr.aria-label]="ariaLabel() || title()"
+  [attr.name]="name()"
+  [attr.id]="id()"
+  [attr.form]="form()"
+  [attr.tabindex]="tabIndex()"
+  [attr.data-testid]="testId()"
+  (click)="handleClick.emit($event)"
+>
+  <ng-container [ngTemplateOutlet]="buttonContent" />
+</button>
+} @case ('elevated') {
+<button
+  matButton="elevated"
+  [ngClass]="getButtonClasses()"
+  [disabled]="disabled()"
+  [type]="type()"
+  [title]="title()"
+  [attr.aria-label]="ariaLabel() || title()"
+  [attr.name]="name()"
+  [attr.id]="id()"
+  [attr.form]="form()"
+  [attr.tabindex]="tabIndex()"
+  [attr.data-testid]="testId()"
+  (click)="handleClick.emit($event)"
+>
+  <ng-container [ngTemplateOutlet]="buttonContent" />
+</button>
+} @case ('outlined') {
+<button
+  matButton="outlined"
+  [ngClass]="getButtonClasses()"
+  [disabled]="disabled()"
+  [type]="type()"
+  [title]="title()"
+  [attr.aria-label]="ariaLabel() || title()"
+  [attr.name]="name()"
+  [attr.id]="id()"
+  [attr.form]="form()"
+  [attr.tabindex]="tabIndex()"
+  [attr.data-testid]="testId()"
+  (click)="handleClick.emit($event)"
+>
+  <ng-container [ngTemplateOutlet]="buttonContent" />
+</button>
+} @case ('tonal') {
+<button
+  matButton="tonal"
+  [ngClass]="getButtonClasses()"
+  [disabled]="disabled()"
+  [type]="type()"
+  [title]="title()"
+  [attr.aria-label]="ariaLabel() || title()"
+  [attr.name]="name()"
+  [attr.id]="id()"
+  [attr.form]="form()"
+  [attr.tabindex]="tabIndex()"
+  [attr.data-testid]="testId()"
+  (click)="handleClick.emit($event)"
+>
+  <ng-container [ngTemplateOutlet]="buttonContent" />
+</button>
+} @case ('icon') {
+<button
+  matIconButton
+  [ngClass]="getButtonClasses()"
+  [disabled]="disabled()"
+  [type]="type()"
+  [title]="title()"
+  [attr.aria-label]="ariaLabel() || title()"
+  [attr.name]="name()"
+  [attr.id]="id()"
+  [attr.form]="form()"
+  [attr.tabindex]="tabIndex()"
+  [attr.data-testid]="testId()"
+  (click)="handleClick.emit($event)"
+>
+  <ng-container [ngTemplateOutlet]="buttonContent" />
+</button>
+} @case ('fab') {
+<button
+  matFab
+  [ngClass]="getButtonClasses()"
+  [disabled]="disabled()"
+  [type]="type()"
+  [title]="title()"
+  [attr.aria-label]="ariaLabel() || title()"
+  [attr.name]="name()"
+  [attr.id]="id()"
+  [attr.form]="form()"
+  [attr.tabindex]="tabIndex()"
+  [attr.data-testid]="testId()"
+  (click)="handleClick.emit($event)"
+>
+  <ng-container [ngTemplateOutlet]="buttonContent" />
+</button>
+} @case ('mini-fab') {
+<button
+  matMiniFab
+  [ngClass]="getButtonClasses()"
+  [disabled]="disabled()"
+  [type]="type()"
+  [title]="title()"
+  [attr.aria-label]="ariaLabel() || title()"
+  [attr.name]="name()"
+  [attr.id]="id()"
+  [attr.form]="form()"
+  [attr.tabindex]="tabIndex()"
+  [attr.data-testid]="testId()"
+  (click)="handleClick.emit($event)"
+>
+  <ng-container [ngTemplateOutlet]="buttonContent" />
+</button>
+} @case ('extended-fab') {
+<button
+  matFab
+  extended
+  [ngClass]="getButtonClasses()"
+  [disabled]="disabled()"
+  [type]="type()"
+  [title]="title()"
+  [attr.aria-label]="ariaLabel() || title()"
+  [attr.name]="name()"
+  [attr.id]="id()"
+  [attr.form]="form()"
+  [attr.tabindex]="tabIndex()"
+  [attr.data-testid]="testId()"
+  (click)="handleClick.emit($event)"
+>
+  <ng-container [ngTemplateOutlet]="buttonContent" />
+</button>
+} @default {
+<button
+  matButton="filled"
+  [ngClass]="getButtonClasses()"
+  [disabled]="disabled()"
+  [type]="type()"
+  [title]="title()"
+  [attr.aria-label]="ariaLabel() || title()"
+  [attr.name]="name()"
+  [attr.id]="id()"
+  [attr.form]="form()"
+  [attr.tabindex]="tabIndex()"
+  [attr.data-testid]="testId()"
+  (click)="handleClick.emit($event)"
+>
+  <ng-container [ngTemplateOutlet]="buttonContent" />
+</button>
+} }
+
+<ng-template #buttonContent>
+  @if (icon()) {
+  <mat-icon>{{ icon() }}</mat-icon>
+  } @if (getDisplayText()) { {{ getDisplayText() }} }
+
+  <ng-content />
+</ng-template>

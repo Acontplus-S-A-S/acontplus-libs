@@ -6,7 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { ButtonComponent } from '@acontplus/ng-components';
+import { Button } from '@acontplus/ng-components';
 
 @Component({
   selector: 'app-pricing-demo',
@@ -17,7 +17,7 @@ import { ButtonComponent } from '@acontplus/ng-components';
     FormsModule,
     DecimalPipe,
     MatButtonModule,
-    ButtonComponent,
+    Button,
   ],
   templateUrl: './pricing-demo.component.html',
   styleUrl: './pricing-demo.component.scss',

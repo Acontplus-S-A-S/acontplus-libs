@@ -1,2 +1,2 @@
-// src/lib/domain/models/index.ts
+// src/lib/domain/repositories/index.ts
 export * from './auth';

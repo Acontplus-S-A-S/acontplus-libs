@@ -1,3 +1,3 @@
 export * from './lib/constants';
-export * from './lib/environment.token';
-export * from './lib/services';
+export * from './lib/repositories';
+export * from './lib/tokens';

@@ -1,0 +1,62 @@
+/* tabulator-table.scss */
+
+// Note: Tabulator themes are imported globally in styles/index.scss
+// This component only contains custom styling enhancements
+
+.acp-tabulator-table {
+  display: block;
+}
+
+// Base container styles
+.acp-tabulator-table-container {
+  width: 100%;
+
+  // Custom enhancements that work across all themes
+  .tabulator-row.tabulator-selectable:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .tabulator-row.tabulator-selected {
+    background-color: var(--mat-sys-primary-container, rgba(25, 118, 210, 0.12));
+  }
+
+  // Responsive enhancements
+  @media (max-width: 768px) {
+    .tabulator-header {
+      font-size: 0.875rem;
+    }
+
+    .tabulator-cell {
+      font-size: 0.875rem;
+      padding: 8px 6px;
+    }
+  }
+
+  // Loading state
+  .tabulator-loader {
+    background: var(--mat-sys-surface-container, rgba(255, 255, 255, 0.8));
+    backdrop-filter: blur(2px);
+  }
+
+  // Enhanced scrollbar styling
+  .tabulator-tableholder::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .tabulator-tableholder::-webkit-scrollbar-track {
+    background: var(--mat-sys-surface-variant, #f1f1f1);
+    border-radius: 4px;
+  }
+
+  .tabulator-tableholder::-webkit-scrollbar-thumb {
+    background: var(--mat-sys-outline, #c1c1c1);
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--mat-sys-on-surface-variant, #a8a8a8);
+    }
+  }
+}

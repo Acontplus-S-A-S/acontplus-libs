@@ -1,10 +1,10 @@
 import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
 import { provideToastr, GlobalConfig } from 'ngx-toastr';
-import { NotificationService } from './services/notification.service';
-import { NOTIFICATION_CONFIG, NotificationProviderConfig } from './providers/notification.provider';
-import { ToastrProvider } from './providers/toastr.provider';
-import { SnackbarProvider } from './providers/snackbar.provider';
-import { SweetAlertProvider } from './providers/sweetalert.provider';
+import { NotificationService } from './services/notification-service';
+import { NOTIFICATION_CONFIG, NotificationProviderConfig } from './providers/notification-provider';
+import { ToastrProvider } from './providers/toastr-provider';
+import { SnackbarProvider } from './providers/snackbar-provider';
+import { SweetalertProvider } from './providers/sweetalert-provider';
 
 // Default toastr config (can be overridden)
 const DEFAULT_TOASTR_CONFIG: Partial<GlobalConfig> = {
@@ -30,7 +30,7 @@ export function provideNotifications(
     // Notification providers
     ToastrProvider,
     SnackbarProvider,
-    SweetAlertProvider,
+    SweetalertProvider,
 
     // Configuration
     {

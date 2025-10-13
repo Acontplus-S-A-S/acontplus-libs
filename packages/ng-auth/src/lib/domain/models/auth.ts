@@ -1,4 +1,4 @@
-// src/lib/domain/models/auth.ts
+// src/lib/domain/repositories/auth.ts
 
 export interface LoginRequest {
   email: string;

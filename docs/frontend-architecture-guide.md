@@ -200,7 +200,7 @@ packages/core/src/lib/
 │   │   │   ├── error.interceptor.ts
 │   │   │   └── logging.interceptor.ts
 │   │   └── adapters/          // Adaptadores HTTP
-│   │       ├── angular-http.adapter.ts
+│   │       ├── angular-http-adapter.ts
 │   │       ├── axios.adapter.ts
 │   │       └── fetch.adapter.ts
 │   ├── config/
@@ -232,7 +232,7 @@ packages/core/src/lib/
     │   ├── phone.validator.ts
     │   └── id.validator.ts
     ├── guards/                // Guards reutilizables
-    │   ├── auth.guard.ts
+    │   ├── auth-guard.ts
     │   └── role.guard.ts
     └── pipes/                 // Pipes personalizados
         ├── date.pipe.ts
@@ -299,7 +299,7 @@ export interface HttpAdapter {
   delete<T>(url: string, options?: HttpOptions): Promise<T>;
 }
 
-// core/http/adapters/angular-http.adapter.ts
+// core/http/adapters/angular-http-adapter.ts
 export class AngularHttpAdapter implements HttpAdapter {
   constructor(
     private readonly http: HttpClient,
@@ -340,9 +340,9 @@ export class AngularHttpAdapter implements HttpAdapter {
 // core/config/config.service.ts
 @Injectable({ providedIn: 'root' })
 export class ConfigService {
-  private config = signal<AppConfig | null>(null);
+  private config = signal<AppConfigModel | null>(null);
 
-  initialize(config: AppConfig): void {
+  initialize(config: AppConfigModel): void {
     this.config.set(config);
     console.log('Acontplus Core initialized with config:', config);
   }
@@ -645,7 +645,7 @@ export class TokenService {
 
 ```typescript
 // core/types/config.types.ts
-export interface AppConfig {
+export interface AppConfigModel {
   apiUrl: string;
   environment: Environment;
   theme?: string;
@@ -1168,7 +1168,7 @@ export class ValidationUtils {
 ### 3. Guards and Pipes
 
 ```typescript
-// shared/guards/auth.guard.ts
+// shared/guards/auth-guard.ts
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
   private tokenService = inject(TokenService);
@@ -1260,7 +1260,7 @@ export class AcpTruncatePipe implements PipeTransform {
 ### 4. Shared Models
 
 ```typescript
-// shared/models/base.models.ts
+// shared/repositories/base.repositories.ts
 export interface BaseEntity {
   id: string;
   createdAt: Date;
@@ -1273,7 +1273,7 @@ export interface AuditableEntity extends BaseEntity {
   version: number;
 }
 
-// shared/models/pagination.models.ts
+// shared/repositories/pagination.repositories.ts
 export interface PaginatedResult<T> {
   items: T[];
   meta: PaginationMeta;
@@ -1293,7 +1293,7 @@ export interface PaginationParams {
   pageSize: number;
 }
 
-// shared/models/response.models.ts
+// shared/repositories/response.repositories.ts
 export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;
@@ -1399,12 +1399,12 @@ export * from './lib/core/config/config.service';
 export * from './lib/core/types/common.types';
 
 // Shared
-export * from './lib/shared/models/base.models';
+export * from './lib/shared/repositories/base.repositories';
 export * from './lib/shared/validators/customer.validator';
 export * from './lib/shared/utils/error.handler';
 
 // Features - Customers
-export * from './lib/features/customers/domain/models/customer.model';
+export * from './lib/features/customers/domain/repositories/customer.model';
 export * from './lib/features/customers/domain/usecases/get-customers.usecase';
 export * from './lib/features/customers/domain/usecases/create-customer.usecase';
 export * from './lib/features/customers/presentation/services/customer.service';
@@ -1413,7 +1413,7 @@ export * from './lib/features/customers/presentation/services/customer.service';
 export * from './lib/adapters';
 export * from './lib/constants';
 export * from './lib/environments';
-export * from './lib/models';
+export * from './lib/repositories';
 export * from './lib/ports';
 export * from './lib/pricing';
 export * from './lib/types';
@@ -1446,7 +1446,9 @@ export * from './lib/value-objects';
   ],
 })
 export class AcontplusCoreModule {
-  static forRoot(config: AppConfig): ModuleWithProviders<AcontplusCoreModule> {
+  static forRoot(
+    config: AppConfigModel,
+  ): ModuleWithProviders<AcontplusCoreModule> {
     return {
       ngModule: AcontplusCoreModule,
       providers: [{ provide: 'APP_CONFIG', useValue: config }],
@@ -1771,7 +1773,7 @@ describe('CustomerService', () => {
 import { Injectable, computed, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
-import { Customer, CustomerFilters } from '../models';
+import { Customer, CustomerFilters } from '../repositories';
 import { CustomerRepository } from '../repositories';
 
 // ✅ Correcto - Service con Signals

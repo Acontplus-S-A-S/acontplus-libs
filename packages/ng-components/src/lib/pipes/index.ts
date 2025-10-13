@@ -1,2 +1,2 @@
-export * from './get-total.pipe';
-export * from './status-display.pipe';
+export * from './get-total-pipe';
+export * from './status-display-pipe';
