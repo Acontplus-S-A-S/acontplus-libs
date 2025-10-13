@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { DEFAULT_CONFIG, ENVIRONMENT } from '@acontplus/ng-config';
+import { CORE_CONFIG, DEFAULT_CONFIG, ENVIRONMENT } from '@acontplus/ng-config';
 import { CoreConfig } from '@acontplus/core';
-import { CORE_CONFIG } from '@acontplus/ng-config/src/lib/tokens/core-config-token';
 
 @Injectable({
   providedIn: 'root',
