@@ -45,7 +45,7 @@
     "@angular/platform-browser": "^20.3.2",
     "@angular/platform-server": "^20.3.0",
     "@angular/router": "^20.3.2",
-    "@angular/ssr": "20.3.3",
+    "@angular/ssr": "20.3.6",
     "@jsverse/transloco": "^8.0.2",
     "bootstrap": "^5.3.8",
     "decimal.js": "^10.6.0",
