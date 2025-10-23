@@ -45,6 +45,6 @@ workspaces.forEach(workspace => {
 
 console.log('🎉 Workspace verification complete!');
 console.log('\n📋 Next steps:');
-console.log('   1. Run: npm install');
-console.log('   2. Run: npm run workspace:build');
-console.log('   3. Test: npm run workspace:check');
+console.log('   1. Run: pnpm install');
+console.log('   2. Run: pnpm run workspace:build');
+console.log('   3. Test: pnpm run workspace:check');

@@ -5,7 +5,11 @@ Angular customer management library following clean architecture principles. Pro
 ## Installation
 
 ```bash
+# Using npm
 npm install @acontplus/ng-customer
+
+# Using pnpm
+pnpm add @acontplus/ng-customer
 ```
 
 ## Features

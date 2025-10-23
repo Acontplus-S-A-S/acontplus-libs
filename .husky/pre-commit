@@ -1,5 +1,5 @@
 # Run linting
-npm run lint
+pnpm run lint
 
 # Run formatting check
-npm run format:check
+pnpm run format:check
