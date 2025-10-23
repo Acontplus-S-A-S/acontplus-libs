@@ -5,7 +5,11 @@ Core library for AcontPlus applications, providing essential utilities, domain m
 ## Installation
 
 ```bash
+# Using npm
 npm install @acontplus/core
+
+# Using pnpm
+pnpm add @acontplus/core
 ```
 
 ## Features

@@ -6,7 +6,11 @@ interfaces, and configuration constants for AcontPlus applications.
 ## Installation
 
 ```bash
+# Using npm
 npm install @acontplus/ng-config
+
+# Using pnpm
+pnpm add @acontplus/ng-config
 ```
 
 ## Features

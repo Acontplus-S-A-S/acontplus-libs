@@ -30,7 +30,7 @@ participating in this project.
    ```
 3. **Install dependencies**:
    ```bash
-   npm install
+   pnpm install
    ```
 4. **Set up the upstream remote**:
    ```bash

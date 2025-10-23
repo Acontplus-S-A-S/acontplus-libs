@@ -5,7 +5,11 @@ Angular Material UI component library with dynamic tables, theming support, dial
 ## Installation
 
 ```bash
+# Using npm
 npm install @acontplus/ng-components
+
+# Using pnpm
+pnpm add @acontplus/ng-components
 ```
 
 ## Features
@@ -186,7 +190,11 @@ const data = [
 **Note**: Tabulator tables require `tabulator-tables` as a peer dependency:
 
 ```bash
+# Using npm
 npm install tabulator-tables
+
+# Using pnpm
+pnpm add tabulator-tables
 ```
 
 #### Theme Integration

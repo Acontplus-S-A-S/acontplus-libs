@@ -52,7 +52,7 @@ for enterprise applications.
 ### Prerequisites
 
 - Node.js 18+
-- npm
+- pnpm
 
 ### Installation
 
@@ -62,10 +62,10 @@ git clone https://github.com/Acontplus-S-A-S/acontplus-libs.git
 cd acontplus-libs
 
 # Install dependencies
-npm install
+pnpm install
 
 # Start demo app
-npm start
+pnpm start
 ```
 
 ## 🏗️ **Enterprise Features**
@@ -98,41 +98,41 @@ npm start
 
 ### Available Scripts
 
-- `npm start` - Start the demo application with SSL
-- `npm run build` - Build the demo application
-- `npm run watch` - Build demo app in watch mode
-- `npm run test` - Run tests for all projects
-- `npm run test:watch` - Run tests in watch mode
-- `npm run test:coverage` - Run tests with coverage
-- `npm run build:all` - Build all projects
-- `npm run build:libs` - Build all library packages
-- `npm run lint` - Lint all projects
-- `npm run lint:fix` - Lint and auto-fix issues
-- `npm run format` - Format all code with Prettier
-- `npm run format:check` - Check code formatting
-- `npm run clean` - Reset Nx cache
-- `npm run local-registry` - Start local npm registry for development
-- `npm run e2e` - Run end-to-end tests
+- `pnpm start` - Start the demo application with SSL
+- `ppnpm run build` - Build the demo application
+- `ppnpm run watch` - Build demo app in watch mode
+- `ppnpm run test` - Run tests for all projects
+- `ppnpm run test:watch` - Run tests in watch mode
+- `ppnpm run test:coverage` - Run tests with coverag
+- `ppnpm run build:all` - Build all projects
+- `ppnpm run build:libs` - Build all library packages
+- `ppnpm run lint` - Lint all projects
+- `ppnpm run lint:fix` - Lint and auto-fix issues
+- `ppnpm run format` - Format all code with Prettie
+- `ppnpm run format:check` - Check code formatting
+- `ppnpm run clean` - Reset Nx cache
+- `ppnpm run local-registry` - Start local npm registry for development
+- `ppnpm run e2e` - Run end-to-end tests
 
 ### Nx Commands
 
 ```bash
 # Build specific project
-npx nx build core
-npx nx build ng-components
+pnpm exec nx build core
+pnpm exec nx build ng-components
 
 # Test specific project
-npx nx test core
-npx nx test ng-components
+pnpm exec nx test core
+pnpm exec nx test ng-components
 
 # Lint specific project
-npx nx lint core
+pnpm exec nx lint core
 
 # Show project graph
-npx nx show projects
+pnpm exec nx show projects
 
 # Show dependency graph
-npx nx graph
+pnpm exec nx graph
 ```
 
 ## 🔧 Nx Development Guide
@@ -166,18 +166,18 @@ Always build dependencies before dependents:
 
 #### 1. Use Nx Commands
 
-Always use `npx nx` commands instead of direct tool execution for consistency
-and caching.
+Always use `pnpm exec nx` commands instead of direct tool execution for
+consistency and caching.
 
 #### 2. Leverage Affected Commands
 
-Use `npx nx affected:*` commands to only run operations on projects affected by
-your changes:
+Use `pnpm exec nx affected:*` commands to only run operations on projects
+affected by your changes:
 
 ```bash
-npx nx affected:build
-npx nx affected:test
-npx nx affected:lint
+pnpm exec nx affected:build
+pnpm exec nx affected:test
+pnpm exec nx affected:lint
 ```
 
 #### 3. Cache Management
@@ -185,7 +185,7 @@ npx nx affected:lint
 Nx automatically caches build and test results. Clear cache when needed:
 
 ```bash
-npm run clean  # Resets Nx cache
+ppnpm run clean  # Resets Nx cache
 ```
 
 #### 4. Local Registry for Development
@@ -194,10 +194,10 @@ For testing library changes in applications:
 
 ```bash
 # Start local npm registry
-npm run local-registry
+ppnpm run local-registry
 
 # Build and publish libraries locally
-npx nx release --local
+pnpm exec nx release --local
 
 # Use local versions in applications
 ```
@@ -208,10 +208,10 @@ Use Nx generators for consistent project structure:
 
 ```bash
 # Generate new library
-npx nx g @nx/angular:library my-lib
+pnpm exec nx g @nx/angular:library my-lib
 
 # Generate component in specific library
-npx nx g @nx/angular:component my-component --project=ng-components
+pnpm exec nx g @nx/angular:component my-component --project=ng-components
 ```
 
 ### Nx Configuration
@@ -237,12 +237,12 @@ npx nx g @nx/angular:component my-component --project=ng-components
 #### Build Issues
 
 - Ensure dependencies are built first
-- Check `npx nx graph` for dependency relationships
-- Use `npx nx reset` to clear cache
+- Check `pnpm exec nx graph` for dependency relationships
+- Use `pnpm exec nx reset` to clear cache
 
 #### Test Issues
 
-- Run tests individually: `npx nx test <project>`
+- Run tests individually: `pnpm exec nx test <project>`
 - Check test configuration in `project.json`
 - Ensure proper imports in test setup
 
@@ -259,7 +259,7 @@ This workspace was migrated from npm workspaces to Nx monorepo:
 - **Before**: Manual dependency management with npm workspaces
 - **After**: Automated dependency management with Nx
 - **Benefits**: Better caching, affected commands, visual tools
-- **Commands**: Updated to use `npx nx` instead of npm scripts
+- **Commands**: Updated to use `pnpm exec nx` instead of npm scripts
 
 ### Code Quality Tools
 
@@ -406,17 +406,17 @@ excellent Angular support.
 
 ```bash
 # Run all tests
-npm run test
+pnpm run test
 
 # Run tests in watch mode (automatically re-runs on file changes)
-npm run test:watch
+pnpm run test:watch
 
 # Run tests with coverage report
-npm run test:coverage
+pnpm run test:coverage
 
 # Run tests for specific project
-npx nx test core
-npx nx test ng-components
+pnpm exec nx test core
+pnpm exec nx test ng-components
 ```
 
 ### Jest Configuration
@@ -446,20 +446,20 @@ Coverage reports are generated in the `coverage/` directory with:
 
 ```bash
 # Build all libraries
-npm run build:libs
+pnpm run build:libs
 
 # Build specific library
-npx nx build core
-npx nx build ng-components
+pnpm exec nx build core
+pnpm exec nx build ng-components
 
 # Build demo app
-npm run build
+pnpm run build
 
 # Start local registry for development
-npm run local-registry
+pnpm run local-registry
 
 # Publish libraries (handled by Nx release)
-npx nx release
+pnpm exec nx release
 ```
 
 ## 📚 **Documentation**
@@ -483,9 +483,9 @@ Comprehensive documentation is available across the project:
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Run linting and formatting: `npm run lint:all`
-5. Fix any issues: `npm run lint:fix` and `npm run format`
-6. Run tests: `npm run test`
+4. Run linting and formatting: `pnpm run lint:all`
+5. Fix any issues: `pnpm run lint:fix` and `pnpm run format`
+6. Run tests: `pnpm run test`
 7. Submit a pull request
 
 ### Development Workflow
@@ -493,25 +493,25 @@ Comprehensive documentation is available across the project:
 ```bash
 # 1. Make code changes
 # 2. Check formatting
-npm run format:check
+pnpm run format:check
 
 # 3. Format code if needed
-npm run format
+pnpm run format
 
 # 4. Check linting
-npm run lint
+pnpm run lint
 
 # 5. Fix auto-fixable issues
-npm run lint:fix
+pnpm run lint:fix
 
 # 6. Run tests
-npm run test
+pnpm run test
 
 # 7. Build affected projects
-npx nx affected:build
+pnpm exec nx affected:build
 
 # 8. Run affected tests
-npx nx affected:test
+pnpm exec nx affected:test
 ```
 
 ## 📄 License
@@ -564,25 +564,25 @@ Angular ecosystem.** 🚀
 
 #### Root Level
 
-- `npm run build` - Build all projects
-- `npm run build-library` - Build core and UI component libraries
-- `npm run test` - Run Jest tests for all projects
-- `npm run test:watch` - Run Jest tests in watch mode
-- `npm run test:coverage` - Run Jest tests with coverage report
-- `npm run lint` - Lint all projects
-- `npm run lint:fix` - Lint and auto-fix issues
-- `npm run format` - Format all code with Prettier
-- `npm run format:check` - Check code formatting
-- `npm run format:fix` - Format code (alias for format)
-- `npm run lint:all` - Run both linting and format checking
+- `pnpm run build` - Build all projects
+- `pnpm run build-library` - Build core and UI component libraries
+- `pnpm run test` - Run Jest tests for all projects
+- `pnpm run test:watch` - Run Jest tests in watch mode
+- `pnpm run test:coverage` - Run Jest tests with coverage report
+- `pnpm run lint` - Lint all projects
+- `pnpm run lint:fix` - Lint and auto-fix issues
+- `pnpm run format` - Format all code with Prettier
+- `pnpm run format:check` - Check code formatting
+- `pnpm run format:fix` - Format code (alias for format)
+- `pnpm run lint:all` - Run both linting and format checking
 
 #### Individual Projects
 
 Each project has its own format scripts:
 
-- `npm run format` - Format project code
-- `npm run format:check` - Check project formatting
-- `npm run format:fix` - Format project code (alias)
+- `pnpm run format` - Format project code
+- `pnpm run format:check` - Check project formatting
+- `pnpm run format:fix` - Format project code (alias)
 
 ### Code Quality Tools
 
@@ -730,17 +730,17 @@ excellent Angular support.
 
 ```bash
 # Run all tests
-npm run test
+pnpm run test
 
 # Run tests in watch mode (automatically re-runs on file changes)
-npm run test:watch
+pnpm run test:watch
 
 # Run tests with coverage report
-npm run test:coverage
+pnpm run test:coverage
 
 # Run tests for specific project
-npx nx test core
-npx nx test ng-components
+pnpm exec nx test core
+pnpm exec nx test ng-components
 ```
 
 ### Jest Configuration
@@ -770,20 +770,20 @@ Coverage reports are generated in the `coverage/` directory with:
 
 ```bash
 # Build all libraries
-npm run build:libs
+pnpm run build:libs
 
 # Build specific library
-npx nx build core
-npx nx build ng-components
+pnpm exec nx build core
+pnpm exec nx build ng-components
 
 # Build demo app
-npm run build
+pnpm run build
 
 # Start local registry for development
-npm run local-registry
+pnpm run local-registry
 
 # Publish libraries (handled by Nx release)
-npx nx release
+pnpm exec nx release
 ```
 
 ## 📚 **Documentation**
@@ -807,9 +807,9 @@ Comprehensive documentation is available across the project:
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Run linting and formatting: `npm run lint:all`
-5. Fix any issues: `npm run lint:fix` and `npm run format`
-6. Run tests: `npm run test`
+4. Run linting and formatting: `pnpm run lint:all`
+5. Fix any issues: `pnpm run lint:fix` and `pnpm run format`
+6. Run tests: `pnpm run test`
 7. Submit a pull request
 
 ### Development Workflow
@@ -817,25 +817,25 @@ Comprehensive documentation is available across the project:
 ```bash
 # 1. Make code changes
 # 2. Check formatting
-npm run format:check
+pnpm run format:check
 
 # 3. Format code if needed
-npm run format
+pnpm run format
 
 # 4. Check linting
-npm run lint
+pnpm run lint
 
 # 5. Fix auto-fixable issues
-npm run lint:fix
+pnpm run lint:fix
 
 # 6. Run tests
-npm run test
+pnpm run test
 
 # 7. Build affected projects
-npx nx affected:build
+pnpm exec nx affected:build
 
 # 8. Run affected tests
-npx nx affected:test
+pnpm exec nx affected:test
 ```
 
 ## 📄 License

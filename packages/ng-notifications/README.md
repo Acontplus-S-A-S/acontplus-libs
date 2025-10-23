@@ -7,7 +7,11 @@ SweetAlert2.
 ## Installation
 
 ```bash
+# Using npm
 npm install @acontplus/ng-notifications
+
+# Using pnpm
+pnpm add @acontplus/ng-notifications
 ```
 
 ## Features
@@ -58,7 +62,11 @@ interface NotificationProviderConfig {
 ### 1. Install Dependencies
 
 ```bash
+# Using npm
 npm install @acontplus/ng-notifications ngx-toastr sweetalert2
+
+# Using pnpm
+pnpm add @acontplus/ng-notifications ngx-toastr sweetalert2
 ```
 
 ### 2. Import CSS (in styles.scss)

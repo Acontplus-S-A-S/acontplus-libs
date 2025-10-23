@@ -6,7 +6,11 @@ design system elements.
 ## Installation
 
 ```bash
+# Using npm
 npm install @acontplus/ui-kit
+
+# Using pnpm
+pnpm add @acontplus/ui-kit
 ```
 
 ## Features

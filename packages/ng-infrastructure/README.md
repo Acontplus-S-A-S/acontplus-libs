@@ -7,7 +7,11 @@ enterprise applications.
 ## Installation
 
 ```bash
+# Using npm
 npm install @acontplus/ng-infrastructure
+
+# Using pnpm
+pnpm add @acontplus/ng-infrastructure
 ```
 
 ## Features

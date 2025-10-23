@@ -2,10 +2,6 @@
   "name": "acontplus-libs",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "apps",
-    "packages/*"
-  ],
   "scripts": {
     "start": "nx serve demo-app --ssl true --hmr",
     "build": "nx build demo-app",
@@ -19,8 +15,8 @@
     "lint:fix": "nx run-many --target=lint --all --fix",
     "format": "prettier --write \"**/*.{ts,js,html,css,scss,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,js,html,css,scss,json,md}\"",
-    "format:fix": "npm run format",
-    "lint:all": "npm run lint && npm run format:check",
+    "format:fix": "pnpm run format",
+    "lint:all": "pnpm run lint && pnpm run format:check",
     "clean": "nx reset",
     "local-registry": "nx run acontplus-libs:local-registry",
     "e2e": "nx run demo-app-e2e:e2e",

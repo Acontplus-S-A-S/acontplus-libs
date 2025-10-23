@@ -96,14 +96,14 @@ We have implemented a robust code quality system that includes:
 
 ```bash
 # Linting
-npm run lint              # Lint all projects
-npm run lint:fix          # Lint and auto-fix issues
-npm run lint:all          # Lint + format check
+pnpm run lint              # Lint all projects
+pnpm run lint:fix          # Lint and auto-fix issues
+pnpm run lint:all          # Lint + format check
 
 # Formatting
-npm run format            # Format all code
-npm run format:check      # Check formatting without changes
-npm run format:fix        # Alias for format
+pnpm run format            # Format all code
+pnpm run format:check      # Check formatting without changes
+pnpm run format:fix        # Alias for format
 ```
 
 ### Project-level Scripts
@@ -112,9 +112,9 @@ Each project has its own formatting scripts:
 
 ```bash
 # In any project directory
-npm run format            # Format project code
-npm run format:check      # Check project formatting
-npm run format:fix        # Format project code
+pnpm run format            # Format project code
+pnpm run format:check      # Check project formatting
+pnpm run format:fix        # Format project code
 ```
 
 ## 🚀 Development Workflow
@@ -123,19 +123,19 @@ npm run format:fix        # Format project code
 
 ```bash
 # 1. Check formatting
-npm run format:check
+pnpm run format:check
 
 # 2. Format if needed
-npm run format
+pnpm run format
 
 # 3. Check linting
-npm run lint
+pnpm run lint
 
 # 4. Fix auto-fixable issues
-npm run lint:fix
+pnpm run lint:fix
 
 # 5. Run tests
-npm run test
+pnpm run test
 ```
 
 ### 2. Continuous Integration
@@ -143,9 +143,9 @@ npm run test
 The CI pipeline should run:
 
 ```bash
-npm run lint:all          # Lint + format check
-npm run test              # Run all tests
-npm run build:all         # Build verification
+pnpm run lint:all          # Lint + format check
+pnpm run test              # Run all tests
+pnpm run build:all         # Build verification
 ```
 
 ## 📊 Current Status
@@ -239,7 +239,7 @@ npm run build:all         # Build verification
 2. **Prettier Conflicts**
    - Check `.prettierignore` file
    - Verify file extensions are included
-   - Run `npm run format:check` to identify issues
+   - Run `pnpm run format:check` to identify issues
 
 3. **Editor Integration**
    - Install ESLint and Prettier extensions
@@ -265,7 +265,7 @@ npm run build:all         # Build verification
 
 ### Regular Maintenance
 
-- **Weekly**: Run `npm run lint:all` to check status
+- **Weekly**: Run `pnpm run lint:all` to check status
 - **Monthly**: Review and update configuration rules
 - **Quarterly**: Assess new ESLint/Prettier features
 - **Annually**: Major configuration review and updates

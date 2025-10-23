@@ -6,7 +6,11 @@ and authorization features for Angular applications.
 ## Installation
 
 ```bash
+# Using npm
 npm install @acontplus/ng-auth
+
+# Using pnpm
+pnpm add @acontplus/ng-auth
 ```
 
 ## Features

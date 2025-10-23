@@ -5,7 +5,11 @@ Comprehensive utility library providing converters, formatters, helpers, validat
 ## Installation
 
 ```bash
+# Using npm
 npm install @acontplus/utils
+
+# Using pnpm
+pnpm add @acontplus/utils
 ```
 
 ## Features
